@@ -1,14 +1,14 @@
-const {Op} = require("sequelize")
+const { Op } = require('sequelize');
 class HospitalRepository {
     constructor(HospitalModel) {
         this.hospitalModel = HospitalModel;
     }
-
-    findNearHospitals = async (location) => {
+    // location.coordinates
+    findNearHospitals = async (longitude, latitude) => {
         const hospitals = await this.hospitalModel.findAll({
-            where: { location: { [Op.in]: location } },
+            where: { longitude : {[Op.between] : longitude},  latitude : {[Op.between] : latitude}},
         });
-        return hospitals
+        return hospitals;
     };
 }
 

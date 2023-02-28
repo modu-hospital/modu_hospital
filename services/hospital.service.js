@@ -4,8 +4,14 @@ const { Hospital } = require('../models/index');
 class HospitalService {
     hospitalRepository = new HospitalRepository(Hospital);
 
-    findNearHospital = async (location) => {
-      const hospitals = await this.hospitalRepository.findNearHospitals(location)
+    findNearHospital = async (right, left, right1, left1) => {
+      const longitude = []
+      const latitude = []
+      longitude.push(left)
+      longitude.push(right)
+      latitude.push(right1)
+      latitude.push(left1)
+      const hospitals = await this.hospitalRepository.findNearHospitals(longitude, latitude)
 
       return hospitals
     }

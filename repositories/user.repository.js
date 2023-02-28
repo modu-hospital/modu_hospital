@@ -3,7 +3,14 @@ class UserRepository {
         this.userModel = UserModel
     }
 
-    // 여기에 함수 작성해주세요
+    signup = async (name, phone, loginId, password, idNumber) => {
+        return await this.userModel.create({name, phone, loginId, password, idNumber})
+    }
+
+    findUser = async (loginId) => {
+        return await this.userModel.findAll({where: {loginId}})
+    }
+
 }
 
 module.exports = UserRepository;

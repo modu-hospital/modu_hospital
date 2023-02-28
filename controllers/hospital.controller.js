@@ -4,9 +4,9 @@ class HospitalController {
     hospitalService = new HospitalService()
 
     findNearHospital = async (req,res) => {
-      const {location} = req.body
+      const {right, left, right1, left1} = req.body
 
-      const hospitals = this.hospitalService.findNearHospital(location)
+      const hospitals = await this.hospitalService.findNearHospital(right, left, right1, left1)
 
       res.json({hospitals})
     }
