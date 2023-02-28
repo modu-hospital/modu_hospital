@@ -3,8 +3,8 @@ class UserRepository {
         this.userModel = UserModel
     }
 
-    signup = async (name, phone, loginId, password, idNumber) => {
-        return await this.userModel.create({name, phone, loginId, password, idNumber})
+    signup = async (name, phone, loginId, password, idNumber, role) => {
+        return await this.userModel.create({name, phone, loginId, password, idNumber, role})
     }
 
     findUser = async (loginId) => {
