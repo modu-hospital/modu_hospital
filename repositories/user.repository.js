@@ -31,6 +31,7 @@ class UserRepository {
     findUser = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
+
     findUsers = async () => {
         const users = await this.userModel.findAll();
         return users;
