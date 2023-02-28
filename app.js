@@ -4,12 +4,12 @@ const dotenv = require('dotenv')
 const { createServer } = require('http');
 
 const app = express();
-
 dotenv.config();
-
 
 const http = createServer(app);
 const router = require('./routes');
+
+const userRouter = require('./routes/user.routes')
 
 
 app.use(cookieParser());
@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', router)
 
+app.use('/users', userRouter);
 
 
 app.get('/', (req, res) => {

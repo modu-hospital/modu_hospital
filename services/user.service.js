@@ -1,10 +1,38 @@
-const UserRepository = require('../services/user.repository.js')
-const {Users} = require('../models/index.js')
+const UserRepository = require('../repositories/user.repository');
 
 class UserService {
-    userRepository = new UserRepository(Users)
+    userRepository = new UserRepository();
 
-    // 여기에 함수 작성해주세요
+    // filterReservationsForUserProfile = (reservations) => {
+    //     if (isarray(reservations)) {
+    //         reservations.map(reservations => {
+    //             return{
+                    
+
+    //             }
+
+    //         })
+    //     } else {
+        
+    //     }
+    // };
+
+    
+
+    makeUserProfile = async (userId) => {
+        const user = await this.userRepository.findUserById(userId);
+        const reservations = await this.userRepository.findReservationsByUserId(
+            userId
+        );
+
+        const userData = {
+            name: user.name,
+            phone: user.phone,
+            address: user.address,
+        };
+
+        return reservations
+    };
 }
 
 module.exports = UserService;

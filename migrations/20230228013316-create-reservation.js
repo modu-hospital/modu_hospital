@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       hospitalId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       userId: {
         type: Sequelize.INTEGER
