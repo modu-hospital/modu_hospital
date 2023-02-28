@@ -3,14 +3,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        /**
-         * Add altering commands here.
-         *
-         * Example:
-         * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-         */
-
-        return Promise.all([queryInterface.removeColumn('hospitals', 'location')]);
+        await queryInterface.changeColumn('reservations', 'status', {
+            type: Sequelize.STRING,
+        });
     },
 
     async down(queryInterface, Sequelize) {
