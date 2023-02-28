@@ -25,4 +25,6 @@ router.post('/register');
 //병원 정보 수정
 router.put('/:id');
 
+router.get('/around', hospitalController.findNearHospital);
+
 module.exports = router;
