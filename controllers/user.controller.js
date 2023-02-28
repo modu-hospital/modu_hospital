@@ -2,7 +2,19 @@ const UserService = require('../services/user.service.js');
 const {sighupValidation} = require("../middleware/validation")
 
 class UserController {
-    userService = new UserService()
+    userService = new UserService();
+    
+    //mypage 구현중
+
+    getUserProfile = async (req, res) => {
+        const userId = req.params
+        console.log(userId.userId)
+        const userProfile = await this.userService.makeUserProfile(userId.userId);
+
+        return res.json({userProfile})
+    };
+    
+    
 
     signup = async (req, res) => {
         try { 
@@ -44,6 +56,7 @@ class UserController {
     logout = async (req, res) => {
 
     }
+
 }
 
 module.exports = UserController;
