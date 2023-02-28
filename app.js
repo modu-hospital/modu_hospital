@@ -5,7 +5,6 @@ const { createServer } = require('http');
 const path = require('path');
 
 const app = express();
-
 dotenv.config();
 
 const http = createServer(app);
@@ -14,12 +13,19 @@ const http = createServer(app);
 const router = require('./routes');
 const ejsRouter = require('./routes/ejs.routers');
 
+const userRouter = require('./routes/user.routes');
+
 /* router */
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
+app.use('/users', userRouter);
+
+app.get('/', (req, res) => {
+    res.send('hello node');
+});
 /* ejs setting */
 app.use(ejsRouter);
 app.set('view engine', 'ejs');
