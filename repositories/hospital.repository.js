@@ -1,4 +1,5 @@
 const { where } = require("sequelize");
+const { sequelize } = require("../models");
 
 class HospitalRepository {
     constructor(ReservationModel, HospitalModel) {
@@ -10,7 +11,20 @@ class HospitalRepository {
     //예약관리 조회
     findAllReservation = async () => {
         try {
-            const data = await this.reservationModel.findAll();
+            const data = await this.reservationModel.findAll({
+                attributes: {
+                    include: [
+                        "id",
+                        [
+                            sequelize.fn("DATE_FORMAT",
+                            sequelize.col("date"),
+                            "%d-%m-%Y %H:%i:%s"
+                            ),
+                            "date",
+                        ],
+                    ],
+                }
+            });
             return data;
         } catch (error) {
             throw new Error(error); 
@@ -21,19 +35,17 @@ class HospitalRepository {
     editReservation =async (id, date, status) => {
         try {
             const updated = await this.reservationModel.update(
-                { date: date, status: status },
-                { where: { id: id } }
+                { date, status },
+                { where: { id } }
             );
-            // if (updated) {
-            //     const updateReservation = await this.reservationModel.findByPk(id);
-            //     return updateReservation;
-            // }
-
-            // throw new Error("Reservation not found");
-            return updated;
+            if (updated) {
+                const updateReservation = await this.reservationModel.findByPk(id);
+                return updateReservation;
+            }
+            throw new Error("Reservation not found");
         } catch (error) {
             throw new Error(error.message);
-        };
+        }
     };
 
     //예약관리 삭제 

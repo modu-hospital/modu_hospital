@@ -15,17 +15,20 @@ class HospitalController {
 
     // 예약관리 수정
     editReservation = async (req, res, next) => {
-        const {id} = req.params;
-        console.log(id);
-        const { date, status } = req.body;
         try {
-            const updated = await this.hospitalService.editReservation(id,status, date);
-            
-            res.status(200).json({ updated: updated  });
+            const { id } = req.params;
+            const { date, status } = req.body;
+            const updateReservation = await this.hospitalService.editReservation(
+                id, 
+                date,
+                status
+            );
+            res.status(200).json({ data: updateReservation  });
         } catch (err) {
             res.status(500).json({message: err.message})
         }
     };
+
 }
 
 module.exports = HospitalController;

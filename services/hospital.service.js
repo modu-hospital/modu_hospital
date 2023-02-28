@@ -13,23 +13,19 @@ class HospitalService {
         }
     };
 
-    editReservation = async(id, date, status )=> {
+    editReservation = async(id, date, status ) => {
         try {
-            const updated = await this.hospitalRepository.editReservation(
+            const updateReservation = await this.hospitalRepository.editReservation(
                 id,
                 date, 
                 status
             );
-            return {
-                id: updated.id,
-                date: updated.date,
-                status: updated.status,
-            }; 
+            return updateReservation;
         } catch (err) {
             throw err;
         }
     };
-    
+
 }
 
 module.exports = HospitalService;

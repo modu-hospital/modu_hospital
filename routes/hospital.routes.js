@@ -8,7 +8,7 @@ const hospitalController = new HospitalController;
 router.get('/reservation', hospitalController.findAllReservation);
 
 //예약관리 수정
-router.post('/reservation/:id', hospitalController.editReservation);
+router.put('/reservation/:id', hospitalController.editReservation);
 
 //예약관리 삭제 
 router.delete('/reservation/:id')
