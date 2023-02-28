@@ -1,15 +1,23 @@
-const HospitalService = require('../services/hospital.service')
+const HospitalService = require('../services/hospital.service');
 
 class HospitalController {
-    hospitalService = new HospitalService()
+    hospitalService = new HospitalService();
 
-    // 예약관리 조회 
-    findAllReservation = async (req, res, next)=> {
+    findNearHospital = async (req, res) => {
+        const { right, left, right1, left1 } = req.body;
+
+        const hospitals = await this.hospitalService.findNearHospital(right, left, right1, left1);
+
+        res.json({ hospitals });
+    };
+
+    // 예약관리 조회
+    findAllReservation = async (req, res, next) => {
         try {
             const data = await this.hospitalService.findAllReservation();
             res.status(200).json(data);
         } catch (error) {
-            res.status(500).json({message: error.message}) 
+            res.status(500).json({ message: error.message });
         }
     };
 
@@ -18,17 +26,12 @@ class HospitalController {
         try {
             const { id } = req.params;
             const { date, status } = req.body;
-            const updateReservation = await this.hospitalService.editReservation(
-                id, 
-                date,
-                status
-            );
-            res.status(200).json({ data: updateReservation  });
+            const updateReservation = await this.hospitalService.editReservation(id, date, status);
+            res.status(200).json({ data: updateReservation });
         } catch (err) {
-            res.status(500).json({message: err.message})
+            res.status(500).json({ message: err.message });
         }
     };
-
 }
 
 module.exports = HospitalController;
