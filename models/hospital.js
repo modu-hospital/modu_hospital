@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(Doctor, {foreignKey: 'doctorId', as: 'doctors'});
       this.belongsTo(User, { foreignKey: 'userId', as:'users'});
       this.belongsTo(Review, {foreignKey: 'hospitalId', as:'reviews'});
-      this.belongsTo(Reservation, {foreignKey:'hospitalId', as:'reservations'});
+      this.belongsTo(Reservation, {foreignKey:'doctorId', as:'reservations'});
       this.belongsTo(HospitalImageFile, {foreignKey:'hospitalId', as:'hospitalImageFiles'});
 
     }
@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     address: DataTypes.STRING,
-    phone: DataTypes.STRING
+    phone: DataTypes.STRING,
+    location: DataTypes.GEOMETRY('POINT')
   }, {
     sequelize,
     tableName:'hospitals',
