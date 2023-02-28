@@ -1,8 +1,8 @@
-const UserRepository = require('../services/user.repository.js')
-const {Users} = require('../models/index.js')
+const UserRepository = require('../repositories/user.repository.js')
+const {User} = require('../models/index.js')
 
 class UserService {
-    userRepository = new UserRepository(Users)
+    userRepository = new UserRepository(User)
 
     // 여기에 함수 작성해주세요
 }
