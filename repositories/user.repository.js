@@ -7,6 +7,7 @@ class UserRepository {
         this.userModel = UserModel;
     }
 
+
     findUserById = async (userId) => {
         const user = await db.User.findOne({
             where: { userId: userId },
@@ -24,6 +25,16 @@ class UserRepository {
         const reservations = sequelize.query(query, {type:QueryTypes.SELECT})
         return reservations;
     };
+
+    signup = async (name, phone, loginId, password, idNumber) => {
+        return await this.userModel.create({name, phone, loginId, password, idNumber})
+    }
+
+    findUser = async (loginId) => {
+        return await this.userModel.findAll({where: {loginId}})
+    }
+
+
 }
 
 module.exports = UserRepository;

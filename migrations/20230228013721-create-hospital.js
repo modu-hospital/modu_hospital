@@ -21,6 +21,9 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      location: {
+        type: Sequelize.GEOMETRY('POINT')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
