@@ -6,5 +6,7 @@ const userRouter = require('./user.route');
 
 router.use('/users', userRouter);
 router.use('/hospitals', hospitalRouter);
+const adminRouter = require('./admin.routes');
+router.use('/admin', adminRouter);
 
 module.exports = router;

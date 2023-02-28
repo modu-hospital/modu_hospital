@@ -31,6 +31,12 @@ class UserRepository {
     findUser = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
+
+    findUsers = async () => {
+        const users = await this.userModel.findAll();
+        return users;
+    };
+    // 여기에 함수 작성해주세요
 }
 
 module.exports = UserRepository;
