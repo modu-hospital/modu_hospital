@@ -9,8 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
       doctorId: {
         type: Sequelize.INTEGER
+
       },
       userId: {
         type: Sequelize.INTEGER
