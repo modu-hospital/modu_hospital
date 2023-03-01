@@ -5,15 +5,9 @@ class HospitalRepository {
     constructor(
         ReservationModel,
         HospitalModel,
-        DoctorModel,
-        CategoryModel,
-        DoctorCategoryMappingModel
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
-        this.doctorModel = DoctorModel;
-        this.categoryModel = CategoryModel;
-        this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
     }
 
     //병원페이지 전체 예약관리 조회
