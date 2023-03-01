@@ -16,7 +16,7 @@ class HospitalRepository {
         this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
     }
 
-    //예약관리 조회
+    //병원페이지 전체 예약관리 조회
     findAllReservation = async () => {
         try {
             const data = await this.reservationModel.findAll({
@@ -24,8 +24,24 @@ class HospitalRepository {
                     include: [
                         'id',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%d-%m-%Y %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
                 },
@@ -36,58 +52,106 @@ class HospitalRepository {
         }
     };
 
-    //예약관리 수정
-    editReservation = async (id, date, status) => {
+    //병원페이지 예약 승인대기 목록 불러오기
+    getWaitedReservation = async (doctorId) => {
         try {
-            const updated = await this.reservationModel.update({ date, status }, { where: { id } });
-            if (updated) {
-                const updateReservation = await this.reservationModel.findByPk(id);
-                return updateReservation;
-            }
-            throw new Error('Reservation not found');
+            const waitdata = await this.reservationModel.findAll({
+                order: [['createdAt', 'DESC']],
+                where: {
+                    doctorId,
+                    status: 'waiting',
+                },
+                attributes: {
+                    include: [
+                        'doctorId',
+                        [
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
+                            'date',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
+                        ],
+                    ],
+                },
+            });
+            return waitdata;
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
+
+    //병원페이지 예약관리 날짜 변경
+    editReservation = async (id, date) => {
+        try {
+            await this.reservationModel.update({ date }, { where: { id } });
+            return { status: 200, success: true, message: '예약이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
     };
 
-    //예약관리 삭제
-    deleteReservation = async (id) => {
+    //병원페이지 예약관리 승인하기
+    approvedReservation = async (id, status) => {
         try {
-            const deleted = await this.reservationModel.destroy({ where: { id } });
-            if (deleted) {
-                return true;
-            }
-            throw new Error('Reservation not Found');
+            await this.reservationModel.update({ status }, { where: { id } });
+            return { status: 200, success: true, message: '승인이 변경되었습니다.' };
         } catch (error) {
-            throw new Error(error);
+            throw new Error(error.message);
         }
     };
 
-    //예약 승인대기 목록 불러오기
-    getWaitedReservation = async () => {
+    //해당 예약이 존재하는지 찾기
+    findOneReservation = async (id) => {
         try {
-            const waitdata = await this.reservationModel.findByPk(id);
-            return waitdata;
+            const finddata = await this.reservationModel.findByPk(id);
+            return finddata;
         } catch (error) {
-            throw new Error(error);
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
         }
     };
 
     //리뷰 조회
 
     //병원 정보 등록
-    registerHospital = async (userId, name, address, phone, location) => {
+    registerHospital = async (userId, name, address, phone, longitude, latitude) => {
         try {
-            const hospitaldata = await this.hospitalModel.create({
+            await this.hospitalModel.create({
                 userId,
                 name,
                 address,
                 phone,
-                location,
+                longitude,
+                latitude,
             });
-            return hospitaldata;
+            return {
+                status: 200,
+                success: true,
+                message: '병원 등록을 하였습니다.',
+            };
         } catch (error) {
-            throw new Error(error);
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
         }
     };
 
