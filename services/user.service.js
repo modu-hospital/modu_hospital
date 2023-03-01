@@ -89,6 +89,7 @@ class UserService {
         const user = await this.userRepository.findUser(loginId);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+    };
 
     findUsers = async () => {
         const allUser = await this.userRepository.findUsers();
