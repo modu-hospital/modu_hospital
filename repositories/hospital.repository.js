@@ -2,9 +2,10 @@ const { Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
-    constructor(ReservationModel, HospitalModel) {
+    constructor(ReservationModel, HospitalModel, ReviewsModel) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
+        this.reviewsModel = ReviewsModel;
     }
 
     findHospitalIdAndUserIdByReservationId = async (reservationid) => {
@@ -134,6 +135,36 @@ class HospitalRepository {
     };
 
     //리뷰 조회
+    getAllreviews = async () => {
+        try {
+            const data = await this.reviewsModel.findAll({
+                attributes: {
+                    include: [
+                        'id',
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
+                        ],
+                    ],
+                },
+            });
+            return data;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
 
     //병원 정보 등록
     registerHospital = async (userId, name, address, phone, longitude, latitude) => {
@@ -160,6 +191,39 @@ class HospitalRepository {
     };
 
     //병원 정보 수정
+    registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
+        try {
+            await this.hospitalModel.update(
+                {
+                    name,
+                    address,
+                    phone,
+                    longitude,
+                    latitude,
+                },
+                { where: { userId } }
+            );
+            return { status: 200, success: true, message: '병원 정보를 수정했습니다.' };
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
+
+    // 해당 병원 찾기
+    findOneHospital = async (userId) => {
+        try {
+            const findData = await this.hospitalModel.findOne({ where: { userId } });
+            return findData;
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {

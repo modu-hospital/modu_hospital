@@ -5,6 +5,7 @@ const {
     reservationWaitingGetValidation,
     doctoerIdValidateSchema,
     hospitalRegisterValidateSchema,
+    hospitalRegisterUpdateValidateSchema,
 } = require('../middleware/validation');
 
 class HospitalController {
@@ -146,6 +147,16 @@ class HospitalController {
             return res
                 .status(error.status)
                 .json({ success: error.success, message: error.message });
+        }
+    };
+
+    //리뷰 전체 조회
+    getAllreviews = async (req, res, next) => {
+        try {
+            const data = await this.hospitalService.getAllreviews();
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
     };
 }

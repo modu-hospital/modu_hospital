@@ -17,13 +17,13 @@ router.patch('/reservation/status/:id', hospitalController.approvedReservation);
 router.get('/reservation/status/:doctorId', hospitalController.getWaitedReservation);
 
 //리뷰 조회
-router.get('/reviews');
+router.get('/reviews', hospitalController.getAllreviews);
 
 //병원 정보 등록
 router.post('/register', hospitalController.registerHospital);
 
 //병원 정보 수정
-router.put('/:id');
+router.patch('/register/edit', hospitalController.registerEditHospital);
 
 router.post('/around', hospitalController.findNearHospital);
 

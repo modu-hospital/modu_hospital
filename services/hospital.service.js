@@ -1,8 +1,8 @@
 const HospitalRepository = require('../repositories/hospital.repository');
-const { Reservation, Hospital } = require('../models/index.js');
+const { Reservation, Hospital, Review } = require('../models/index.js');
 
 class HospitalService {
-    hospitalRepository = new HospitalRepository(Reservation, Hospital);
+    hospitalRepository = new HospitalRepository(Reservation, Hospital, Review);
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         const longitude = [];
@@ -89,6 +89,37 @@ class HospitalService {
             };
         } catch (error) {
             throw error;
+        }
+    };
+
+    registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
+        try {
+            const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
+            if (!findOneHospital) {
+                const error = new Error('해당 병원이 존재하지 않습니다.');
+                error.name = 'Hospital Not found';
+                error.status = 400;
+                throw error;
+            }
+            return await this.hospitalRepository.registerEditHospital(
+                userId,
+                name,
+                address,
+                phone,
+                longitude,
+                latitude
+            );
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    getAllreviews = async () => {
+        try {
+            const data = await this.hospitalRepository.getAllreviews();
+            return data;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 }
