@@ -17,9 +17,9 @@ class UserRepository {
     findReservationsByUserId = async (userId) => {
         const query = `SELECT h.name as hospitalName ,d.name as doctorName, r.date,r.id,r.status  FROM reservations AS r 
         inner join doctors AS d on r.doctorId =d.doctorId
-        inner join hospitals AS h on d.hospitalId = d.hospitalId 
-        
-        `;
+        inner join hospitals AS h on d.hospitalId = d.hospitalId`;
+
+
         const reservations = sequelize.query(query, { type: QueryTypes.SELECT });
         return reservations;
     };
@@ -36,7 +36,6 @@ class UserRepository {
         const users = await this.userModel.findAll();
         return users;
     };
-    // 여기에 함수 작성해주세요
 }
 
 module.exports = UserRepository;
