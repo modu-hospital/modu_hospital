@@ -1,10 +1,19 @@
-const { where, Op } = require('sequelize');
+const { Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
-    constructor(ReservationModel, HospitalModel) {
+    constructor(
+        ReservationModel,
+        HospitalModel,
+        DoctorModel,
+        CategoryModel,
+        DoctorCategoryMappingModel
+    ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
+        this.doctorModel = DoctorModel;
+        this.categoryModel = CategoryModel;
+        this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
     }
 
     //예약관리 조회
@@ -88,6 +97,7 @@ class HospitalRepository {
     findNearHospitals = async (longitude, latitude) => {
         const hospitals = await this.hospitalModel.findAll({
             where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
+            attributes: ['name', 'address', 'longitude', 'latitude'],
         });
         return hospitals;
     };

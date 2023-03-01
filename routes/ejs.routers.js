@@ -9,4 +9,8 @@ router.get('/', (req, res) => {
 //     res.render('admin.ejs');
 // });
 
+router.get('/hospital/map', (req, res) => {
+    res.render('map.ejs', { components: 'map' });
+});
+
 module.exports = router;

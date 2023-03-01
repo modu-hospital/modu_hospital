@@ -1,16 +1,32 @@
 const HospitalRepository = require('../repositories/hospital.repository');
-const { Reservation, Hospital } = require('../models/index.js');
+const {
+    Reservation,
+    Hospital,
+    Doctor,
+    Category,
+    DoctorCategoryMapping,
+} = require('../models/index.js');
 
 class HospitalService {
-    hospitalRepository = new HospitalRepository(Reservation, Hospital);
+    hospitalRepository = new HospitalRepository(
+        Reservation,
+        Hospital,
+        Doctor,
+        Category,
+        DoctorCategoryMapping
+    );
 
-    findNearHospital = async (right, left, right1, left1) => {
+    findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         const longitude = [];
         const latitude = [];
-        longitude.push(left);
-        longitude.push(right);
-        latitude.push(right1);
-        latitude.push(left1);
+        longitude.push(leftLongitude, rightLongitude);
+        latitude.push(rightLatitude, leftLatitude);
+        longitude.sort((a, b) => {
+            return a - b;
+        });
+        latitude.sort((a, b) => {
+            return a - b;
+        });
         const hospitals = await this.hospitalRepository.findNearHospitals(longitude, latitude);
 
         return hospitals;

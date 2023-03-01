@@ -5,7 +5,7 @@ const hospitalRouter = require('./hospital.routes');
 const userRouter = require('./user.route');
 
 router.use('/users', userRouter);
-router.use('/hospital', hospitalRouter);
+router.use('/hospitals', hospitalRouter);
 const adminRouter = require('./admin.routes');
 router.use('/admin', adminRouter);
 
