@@ -20,7 +20,6 @@ class UserService {
     //     }
     // };
 
-
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
@@ -34,16 +33,13 @@ class UserService {
         const user = this.findAUser(userId);
         const reservations = this.findReservationsByUserId(userId);
 
-
         const userData = {
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
-        
         // if (isarray(reservations)) {
-
 
         // } else {
         //     switch (reservations) {
@@ -61,7 +57,7 @@ class UserService {
         //         case reservations.status == 'canceled':
         //             const canceledReservations = reservations
         //         default:
-                    
+
         //     }
         // }
 
@@ -79,11 +75,9 @@ class UserService {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-
         await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber);
         return { message: '회원가입이 완료되었습니다' };
     };
-
 
     login = async (loginId, password) => {
         const user = await this.userRepository.findUser(loginId);
@@ -108,7 +102,6 @@ class UserService {
                 role: users.role,
             };
         });
-
     };
 }
 

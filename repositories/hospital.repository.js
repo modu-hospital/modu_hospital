@@ -2,9 +2,10 @@ const { where, Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
-    constructor(ReservationModel, HospitalModel) {
+    constructor(ReservationModel, HospitalModel, ReviewsModel) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
+        this.reviewsModel = ReviewsModel;
     }
 
     //병원페이지 전체 예약관리 조회
@@ -15,16 +16,24 @@ class HospitalRepository {
                     include: [
                         'id',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'),'%Y-%m-%d %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('updatedAt'),'%Y-%m-%d %H:%i:%s'),
-                            'updatedAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'),'%Y-%m-%d %H:%i:%s'),
-                            'createdAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
                 },
@@ -42,31 +51,39 @@ class HospitalRepository {
                 order: [['createdAt', 'DESC']],
                 where: {
                     doctorId,
-                    status: 'waiting'
+                    status: 'waiting',
                 },
-                attributes:{
+                attributes: {
                     include: [
                         'doctorId',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'),'%Y-%m-%d %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('updatedAt'),'%Y-%m-%d %H:%i:%s'),
-                            'updatedAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'),'%Y-%m-%d %H:%i:%s'),
-                            'createdAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
-                }
-            })
+                },
+            });
             return waitdata;
         } catch (error) {
-            error.name = 'DB 에러',
-            error.message = '해당 요청을 처리하지 못했습니다.',
-            error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
     };
@@ -74,8 +91,8 @@ class HospitalRepository {
     //병원페이지 예약관리 날짜 변경
     editReservation = async (id, date) => {
         try {
-            await this.reservationModel.update({ date}, { where: { id } });
-            return { status: 200, success:true, message: '예약이 변경되었습니다.'}; 
+            await this.reservationModel.update({ date }, { where: { id } });
+            return { status: 200, success: true, message: '예약이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
@@ -85,27 +102,56 @@ class HospitalRepository {
     approvedReservation = async (id, status) => {
         try {
             await this.reservationModel.update({ status }, { where: { id } });
-            return { status: 200, success: true, message: '승인이 변경되었습니다.'}
+            return { status: 200, success: true, message: '승인이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
     };
-    
 
     //해당 예약이 존재하는지 찾기
     findOneReservation = async (id) => {
         try {
             const finddata = await this.reservationModel.findByPk(id);
-            return finddata; 
+            return finddata;
         } catch (error) {
-            error.name = 'DB 에러',
-            error.message = '해당 요청을 처리하지 못했습니다.',
-            error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
-    } 
+    };
 
     //리뷰 조회
+    getAllreviews = async () => {
+        try {
+            const data = await this.reviewsModel.findAll({
+                attributes: {
+                    include: [
+                        'id',
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
+                        ],
+                        [
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
+                        ],
+                    ],
+                },
+            });
+            return data;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
 
     //병원 정보 등록
     registerHospital = async (userId, name, address, phone, longitude, latitude) => {
@@ -119,19 +165,52 @@ class HospitalRepository {
                 latitude,
             });
             return {
-                status:200,
-                success:true,
-                message:'병원 등록을 하였습니다.',
-            }
+                status: 200,
+                success: true,
+                message: '병원 등록을 하였습니다.',
+            };
         } catch (error) {
-             error.name = 'DB 에러',
-             error.message = '해당 요청을 처리하지 못했습니다.',
-             error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
     };
 
     //병원 정보 수정
+    registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
+        try {
+            await this.hospitalModel.update(
+                {
+                    name,
+                    address,
+                    phone,
+                    longitude,
+                    latitude,
+                },
+                { where: { userId } }
+            );
+            return { status: 200, success: true, message: '병원 정보를 수정했습니다.' };
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
+
+    // 해당 병원 찾기
+    findOneHospital = async (userId) => {
+        try {
+            const findData = await this.hospitalModel.findOne({ where: { userId } });
+            return findData;
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {

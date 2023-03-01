@@ -19,7 +19,6 @@ class UserRepository {
         inner join doctors AS d on r.doctorId =d.doctorId
         inner join hospitals AS h on d.hospitalId = d.hospitalId`;
 
-
         const reservations = sequelize.query(query, { type: QueryTypes.SELECT });
         return reservations;
     };
