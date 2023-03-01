@@ -1,35 +1,37 @@
-
-const UserRepository = require('../repositories/user.repository.js')
-const {User} = require('../models')
-const bcrypt = require("bcrypt")
-
+const UserRepository = require('../repositories/user.repository.js');
+const { User } = require('../models');
+const bcrypt = require('bcrypt');
 
 class UserService {
-    userRepository = new UserRepository(User)
-    
-        userRepository = new UserRepository();
+    userRepository = new UserRepository(User);
+
+    userRepository = new UserRepository();
 
     // filterReservationsForUserProfile = (reservations) => {
     //     if (isarray(reservations)) {
     //         reservations.map(reservations => {
     //             return{
-                    
 
     //             }
 
     //         })
     //     } else {
-        
+
     //     }
     // };
 
-    
+    findAUserByUserId = async (userId) => {
+        const user = await this.userRepository.findUserById(userId);
+        return user;
+    };
+    findReservationsByUserId = async (userId) => {
+        const reservations = await this.userRepository.findReservationsByUserId(userId);
+        return reservations;
+    };
 
     makeUserProfile = async (userId) => {
-        const user = await this.userRepository.findUserById(userId);
-        const reservations = await this.userRepository.findReservationsByUserId(
-            userId
-        );
+        const user = this.findAUser(userId);
+        const reservations = this.findReservationsByUserId(userId);
 
         const userData = {
             name: user.name,
@@ -37,32 +39,53 @@ class UserService {
             address: user.address,
         };
 
-        return reservations
         
-        }
+        // if (isarray(reservations)) {
+
+
+        // } else {
+        //     switch (reservations) {
+        //         case reservations.status == 'waiting':
+        //             const waitingReservations = reservations
+
+        //         case reservations.status == 'approved':
+        //             const upcomingReservations = reservations;
+        //             return upcomingReservations
+        //         case reservations.status == 'done':
+        //             const passedReservations = reservations;
+        //             return passedReservations
+        //         case reservations.status == 'reviewed':
+        //             const reviewedReservations = reservations;
+        //         case reservations.status == 'canceled':
+        //             const canceledReservations = reservations
+        //         default:
+                    
+        //     }
+        // }
+
+        return reservations;
+    };
 
     signup = async (name, phone, loginId, password, idNumber) => {
-        const existUser = await this.userRepository.findUser(loginId)
+        const existUser = await this.userRepository.findUser(loginId);
 
-        console.log(existUser)
-        
+        console.log(existUser);
+
         if (existUser[0]) {
-            return{message: "이미 존재하는 아이디 입니다"}
+            return { message: '이미 존재하는 아이디 입니다' };
         }
 
-        const hashedPassword = await bcrypt.hash(password, 12)
+        const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber)
-        return {message:"회원가입이 완료되었습니다"}
-    }
+        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber);
+        return { message: '회원가입이 완료되었습니다' };
+    };
 
-    // login = async (loginId, password) => {
-    //     const user = await this.userRepository.findUser(loginId)
+    login = async (loginId, password) => {
+        const user = await this.userRepository.findUser(loginId);
 
-    //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-    // }
-    
-
+        const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+    };
 }
 
 module.exports = UserService;
