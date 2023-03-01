@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
@@ -7,16 +7,15 @@ class HospitalRepository {
         this.hospitalModel = HospitalModel;
     }
 
-
-    findHospitalIdAndUserIdByReservationId = async(reservationid) => {
+    findHospitalIdAndUserIdByReservationId = async (reservationid) => {
         const query = `SELECT h.hospitalId, r.userId  FROM reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId 
         inner join hospitals as h on d.hospitalId  = h.hospitalId 
-        `
+        `;
         const hospitalIdAndUserId = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-        return hospitalIdAndUserId
-    }
+        return hospitalIdAndUserId;
+    };
 
     //예약관리 조회
 
@@ -29,16 +28,24 @@ class HospitalRepository {
                     include: [
                         'id',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'),'%Y-%m-%d %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('updatedAt'),'%Y-%m-%d %H:%i:%s'),
-                            'updatedAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'),'%Y-%m-%d %H:%i:%s'),
-                            'createdAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
                 },
@@ -56,31 +63,39 @@ class HospitalRepository {
                 order: [['createdAt', 'DESC']],
                 where: {
                     doctorId,
-                    status: 'waiting'
+                    status: 'waiting',
                 },
-                attributes:{
+                attributes: {
                     include: [
                         'doctorId',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'),'%Y-%m-%d %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('updatedAt'),'%Y-%m-%d %H:%i:%s'),
-                            'updatedAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'),'%Y-%m-%d %H:%i:%s'),
-                            'createdAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
-                }
-            })
+                },
+            });
             return waitdata;
         } catch (error) {
-            error.name = 'DB 에러',
-            error.message = '해당 요청을 처리하지 못했습니다.',
-            error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
     };
@@ -88,8 +103,8 @@ class HospitalRepository {
     //병원페이지 예약관리 날짜 변경
     editReservation = async (id, date) => {
         try {
-            await this.reservationModel.update({ date}, { where: { id } });
-            return { status: 200, success:true, message: '예약이 변경되었습니다.'}; 
+            await this.reservationModel.update({ date }, { where: { id } });
+            return { status: 200, success: true, message: '예약이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
@@ -99,25 +114,24 @@ class HospitalRepository {
     approvedReservation = async (id, status) => {
         try {
             await this.reservationModel.update({ status }, { where: { id } });
-            return { status: 200, success: true, message: '승인이 변경되었습니다.'}
+            return { status: 200, success: true, message: '승인이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
     };
-    
 
     //해당 예약이 존재하는지 찾기
     findOneReservation = async (id) => {
         try {
             const finddata = await this.reservationModel.findByPk(id);
-            return finddata; 
+            return finddata;
         } catch (error) {
-            error.name = 'DB 에러',
-            error.message = '해당 요청을 처리하지 못했습니다.',
-            error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
-    } 
+    };
 
     //리뷰 조회
 
@@ -133,14 +147,14 @@ class HospitalRepository {
                 latitude,
             });
             return {
-                status:200,
-                success:true,
-                message:'병원 등록을 하였습니다.',
-            }
+                status: 200,
+                success: true,
+                message: '병원 등록을 하였습니다.',
+            };
         } catch (error) {
-             error.name = 'DB 에러',
-             error.message = '해당 요청을 처리하지 못했습니다.',
-             error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
     };
@@ -151,6 +165,7 @@ class HospitalRepository {
     findNearHospitals = async (longitude, latitude) => {
         const hospitals = await this.hospitalModel.findAll({
             where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
+            attributes: ['name', 'address', 'longitude', 'latitude'],
         });
         return hospitals;
     };

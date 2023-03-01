@@ -26,12 +26,16 @@ const reservationWaitingGetValidation = Joi.string().required();
 
 const hospitalRegisterValidateSchema = Joi.object({
     userId: Joi.number().required(),
-    name:Joi.string().min(3).max(20).required(),
-    address:Joi.string().required(),
-    phone:Joi.string().pattern(/^[0-9]+$/).min(7).max(16).required(),
-    longitude:Joi.number().required(),
-    latitude:Joi.number().required(),
-})
+    name: Joi.string().min(3).max(20).required(),
+    address: Joi.string().required(),
+    phone: Joi.string()
+        .pattern(/^[0-9]+$/)
+        .min(7)
+        .max(16)
+        .required(),
+    longitude: Joi.number().required(),
+    latitude: Joi.number().required(),
+});
 
 module.exports = {
     sighupValidation,

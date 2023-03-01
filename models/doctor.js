@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate({ DoctorCategoryMapping, Hospital, WorkingTime }) {
             // define association here
             this.hasMany(DoctorCategoryMapping, {
-                foreignKey: 'DoctorCategoryMappingId',
+                foreignKey: 'doctorId',
                 as: 'doctorCategoryMappings',
             });
             this.belongsTo(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
@@ -19,7 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     }
     Doctor.init(
         {
-            doctorId: DataTypes.INTEGER,
+            doctorId: {
+                primaryKey: true,
+                type: DataTypes.INTEGER,
+            },
             hospitalId: DataTypes.INTEGER,
             name: DataTypes.STRING,
             image: DataTypes.STRING,

@@ -12,15 +12,15 @@ class ReservationRepository {
         return reservations;
     };
 
-    findHospitalIdAndUserIdByReservationId = async(reservationid) => {
+    findHospitalIdAndUserIdByReservationId = async (reservationid) => {
         const query = `SELECT DISTINCT h.hospitalId, r.userId  FROM reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId 
         inner join hospitals as h on d.hospitalId  = h.hospitalId 
-        `
+        `;
         const hospitalIdAndUserId = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-        return hospitalIdAndUserId[0]
-    }
+        return hospitalIdAndUserId[0];
+    };
 
     cancelReservationById = async (id) => {
         const canceledReservation = db.Reservation.update(
@@ -36,14 +36,15 @@ class ReservationRepository {
             star,
             contents,
         });
-        const reviewedReservation = db.Reservation.update({
-            status:"reviewed"
-        },{where:{id:reservationId}})
+        const reviewedReservation = db.Reservation.update(
+            {
+                status: 'reviewed',
+            },
+            { where: { id: reservationId } }
+        );
 
         return review;
     };
-
-
 }
 
 module.exports = ReservationRepository;

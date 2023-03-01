@@ -19,23 +19,23 @@ class UserRepository {
         inner join doctors AS d on r.doctorId =d.doctorId
         inner join hospitals AS h on d.hospitalId = d.hospitalId`;
 
-
         const reservations = await sequelize.query(query, { type: QueryTypes.SELECT });
         return reservations;
     };
 
-    editUserProfile = async(userId, address, phone, name) => {
-        const editedProfile = await db.User.update({
-            address:address,
-            phone:phone,
-            name:name
-        },
-        {
-        where : ({userId:userId})
-        })
-        return editedProfile
-
-    }
+    editUserProfile = async (userId, address, phone, name) => {
+        const editedProfile = await db.User.update(
+            {
+                address: address,
+                phone: phone,
+                name: name,
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+        return editedProfile;
+    };
 
     signup = async (name, phone, loginId, password, idNumber) => {
         return await this.userModel.create({ name, phone, loginId, password, idNumber });

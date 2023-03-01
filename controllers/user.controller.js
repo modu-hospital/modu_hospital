@@ -39,16 +39,22 @@ class UserController {
 
     cancelReservation = async (req, res) => {
         const reservationId = req.params;
-        const canceledReservation = await this.reservationService.cancelReservation(reservationId.id);
+        const canceledReservation = await this.reservationService.cancelReservation(
+            reservationId.id
+        );
         return res.json(canceledReservation);
     };
 
-    createReview = async(req,res) =>{
-        const reservationId = req.params
-        const {star, contents} = req.body
-        const reviewedReservation = await this.reservationService.createReview(reservationId.id, star, contents)
-        return res.json(reviewedReservation)
-    }
+    createReview = async (req, res) => {
+        const reservationId = req.params;
+        const { star, contents } = req.body;
+        const reviewedReservation = await this.reservationService.createReview(
+            reservationId.id,
+            star,
+            contents
+        );
+        return res.json(reviewedReservation);
+    };
 
     signup = async (req, res) => {
         try {

@@ -1,12 +1,11 @@
 const UserRepository = require('../repositories/user.repository.js');
-const ReservationRepository = require('../repositories/reservation.repository')
+const ReservationRepository = require('../repositories/reservation.repository');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 class UserService {
     userRepository = new UserRepository();
     reservationRepository = new ReservationRepository();
-
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
@@ -75,24 +74,24 @@ class UserService {
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
     };
 
-        findUsers = async () => {
-            const allUser = await this.userRepository.findUsers();
+    findUsers = async () => {
+        const allUser = await this.userRepository.findUsers();
 
-            //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-            // }
-            return allUser.map((users) => {
-                return {
-                    userId: users.userId,
-                    name: users.name,
-                    loginId: users.loginId,
-                    password: users.password,
-                    phone: users.phone,
-                    idNumber: users.idNumber,
-                    address: users.address,
-                    role: users.role,
-                };
-            });
-        };
+        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
+        // }
+        return allUser.map((users) => {
+            return {
+                userId: users.userId,
+                name: users.name,
+                loginId: users.loginId,
+                password: users.password,
+                phone: users.phone,
+                idNumber: users.idNumber,
+                address: users.address,
+                role: users.role,
+            };
+        });
     };
 }
+
 module.exports = UserService;
