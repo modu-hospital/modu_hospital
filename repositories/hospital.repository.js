@@ -7,6 +7,16 @@ class HospitalRepository {
         this.hospitalModel = HospitalModel;
     }
 
+    findHospitalIdAndUserIdByReservationId = async(reservationid) => {
+        const query = `SELECT h.hospitalId, r.userId  FROM reservations as r 
+        inner join doctors as d on r.doctorId = d.doctorId 
+        inner join hospitals as h on d.hospitalId  = h.hospitalId 
+        `
+        const hospitalIdAndUserId = await sequelize.query(query, { type: QueryTypes.SELECT });
+
+        return hospitalIdAndUserId
+    }
+
     //예약관리 조회
     findAllReservation = async () => {
         try {

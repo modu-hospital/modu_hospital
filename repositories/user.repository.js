@@ -15,14 +15,27 @@ class UserRepository {
     };
 
     findReservationsByUserId = async (userId) => {
-        const query = `SELECT h.name as hospitalName ,d.name as doctorName, r.date,r.id,r.status  FROM reservations AS r 
+        const query = `SELECT h.name as hospitalName ,d.name as doctorName, r.date,r.id,r.status FROM reservations AS r 
         inner join doctors AS d on r.doctorId =d.doctorId
         inner join hospitals AS h on d.hospitalId = d.hospitalId`;
 
 
-        const reservations = sequelize.query(query, { type: QueryTypes.SELECT });
+        const reservations = await sequelize.query(query, { type: QueryTypes.SELECT });
         return reservations;
     };
+
+    editUserProfile = async(userId, address, phone, name) => {
+        const editedProfile = await db.User.update({
+            address:address,
+            phone:phone,
+            name:name
+        },
+        {
+        where : ({userId:userId})
+        })
+        return editedProfile
+
+    }
 
     signup = async (name, phone, loginId, password, idNumber) => {
         return await this.userModel.create({ name, phone, loginId, password, idNumber });

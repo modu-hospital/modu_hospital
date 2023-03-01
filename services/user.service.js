@@ -1,71 +1,57 @@
 const UserRepository = require('../repositories/user.repository.js');
+const ReservationRepository = require('../repositories/reservation.repository')
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 class UserService {
-    userRepository = new UserRepository(User);
-
     userRepository = new UserRepository();
-
-    // filterReservationsForUserProfile = (reservations) => {
-    //     if (isarray(reservations)) {
-    //         reservations.map(reservations => {
-    //             return{
-
-    //             }
-
-    //         })
-    //     } else {
-
-    //     }
-    // };
+    reservationRepository = new ReservationRepository();
 
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
-    findReservationsByUserId = async (userId) => {
-        const reservations = await this.userRepository.findReservationsByUserId(userId);
-        return reservations;
-    };
 
     makeUserProfile = async (userId) => {
-        const user = this.findAUser(userId);
-        const reservations = this.findReservationsByUserId(userId);
-
-
+        const user = await this.findAUserByUserId(userId);
         const userData = {
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
-        
-        // if (isarray(reservations)) {
+        let reservations = await this.reservationRepository.findReservationsByUserId(userId);
 
+        const waiting = reservations.filter((e) => e.status == 'waiting');
+        const approved = reservations.filter((e) => e.status == 'approved');
+        const done = reservations.filter((e) => e.status == 'done');
+        const reviewed = reservations.filter((e) => e.status == 'reviewed');
+        const canceled = reservations.filter((e) => e.status == 'canceled');
 
-        // } else {
-        //     switch (reservations) {
-        //         case reservations.status == 'waiting':
-        //             const waitingReservations = reservations
+        const profileData = {
+            userData: userData,
+            reservations: {
+                waiting: waiting,
+                approved: approved,
+                done: done,
+                reviewed: reviewed,
+                canceled: canceled,
+            },
+        };
 
-        //         case reservations.status == 'approved':
-        //             const upcomingReservations = reservations;
-        //             return upcomingReservations
-        //         case reservations.status == 'done':
-        //             const passedReservations = reservations;
-        //             return passedReservations
-        //         case reservations.status == 'reviewed':
-        //             const reviewedReservations = reservations;
-        //         case reservations.status == 'canceled':
-        //             const canceledReservations = reservations
-        //         default:
-                    
-        //     }
-        // }
+        return profileData;
+    };
 
-        return reservations;
+    editUserProfile = async (userId, address, phone, name) => {
+        const editedProfile = await this.userRepository.editUserProfile(
+            userId,
+            address,
+            phone,
+            name
+        );
+        const response = { status: 201 };
+        return response;
     };
 
     signup = async (name, phone, loginId, password, idNumber) => {
@@ -79,36 +65,33 @@ class UserService {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-
         await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber);
         return { message: '회원가입이 완료되었습니다' };
     };
-
 
     login = async (loginId, password) => {
         const user = await this.userRepository.findUser(loginId);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
-    findUsers = async () => {
-        const allUser = await this.userRepository.findUsers();
+        findUsers = async () => {
+            const allUser = await this.userRepository.findUsers();
 
-        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-        // }
-        return allUser.map((users) => {
-            return {
-                userId: users.userId,
-                name: users.name,
-                loginId: users.loginId,
-                password: users.password,
-                phone: users.phone,
-                idNumber: users.idNumber,
-                address: users.address,
-                role: users.role,
-            };
-        });
-
+            //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
+            // }
+            return allUser.map((users) => {
+                return {
+                    userId: users.userId,
+                    name: users.name,
+                    loginId: users.loginId,
+                    password: users.password,
+                    phone: users.phone,
+                    idNumber: users.idNumber,
+                    address: users.address,
+                    role: users.role,
+                };
+            });
+        };
     };
 }
-
 module.exports = UserService;
