@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            tableName: 'doctorCategoryMappings',
+            tableName: 'doctors_categories_mappings',
             modelName: 'DoctorCategoryMapping',
         }
     );

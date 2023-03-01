@@ -12,9 +12,14 @@ class HospitalController {
     hospitalService = new HospitalService();
 
     findNearHospital = async (req, res) => {
-        const { right, left, right1, left1 } = req.body;
+        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-        const hospitals = await this.hospitalService.findNearHospital(right, left, right1, left1);
+        const hospitals = await this.hospitalService.findNearHospital(
+            rightLongitude,
+            rightLatitude,
+            leftLongitude,
+            leftLatitude
+        );
 
         res.json({ hospitals });
     };
@@ -104,64 +109,6 @@ class HospitalController {
             );
 
             return res.status(201).json({ data: registerdata });
-        } catch (error) {
-            if (error.name === 'ValidationError') {
-                error.status = 412;
-                error.message = error.details[0].message;
-                error.type = error.details[0].type;
-                error.path = error.details[0].path[0];
-                error.success = false;
-
-                if (error.path === 'phone') {
-                    switch (error.type) {
-                        case 'string.pattern.base':
-                            error.message = '숫자만 입력이 가능합니다. ';
-                            break;
-                        case 'string.max':
-                        case 'string.min':
-                            error.message =
-                                '전화번호는 숫자 10자 이상과 16자 이하로만 입력 가능합니다';
-                            break;
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '전화번호를 적어주세요';
-                            break;
-                    }
-                }
-
-                if (error.path === 'address') {
-                    switch (error.type) {
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '주소를 적어주세요.';
-                            break;
-                    }
-                }
-            }
-            console.log(error);
-            return res
-                .status(error.status)
-                .json({ success: error.success, message: error.message });
-        }
-    };
-
-    //병원 정보 수정
-    registerEditHospital = async (req, res, next) => {
-        // const { currentUser } = res.locals;
-        // cosnt userId = currentUser.id;
-
-        try {
-            const { userId, name, address, phone, longitude, latitude } =
-                await hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
-            const registerEditdata = await this.hospitalService.registerEditHospital(
-                userId,
-                name,
-                address,
-                phone,
-                longitude,
-                latitude
-            );
-            res.status(201).json({ data: registerEditdata });
         } catch (error) {
             if (error.name === 'ValidationError') {
                 error.status = 412;

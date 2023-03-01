@@ -1,8 +1,10 @@
 const UserService = require('../services/user.service.js');
+const ReservationService = require('../services/reservation.service');
 const { sighupValidation } = require('../middleware/validation');
 
 class UserController {
     userService = new UserService();
+    reservationService = new ReservationService();
 
     // 서비스관리자의 회원 정보 조회
     getUserInfo = async (req, res) => {
@@ -13,14 +15,45 @@ class UserController {
             return res.status(error.status).json({ message: error.message });
         }
     };
-    //mypage 구현중
+
+    //mypage
 
     getUserProfile = async (req, res) => {
         const userId = req.params;
-        console.log(userId.userId);
         const userProfile = await this.userService.makeUserProfile(userId.userId);
 
         return res.json({ userProfile });
+    };
+
+    editUserProfile = async (req, res) => {
+        const userId = req.params;
+        const { address, phone, name } = req.body;
+        const editedProfile = await this.userService.editUserProfile(
+            userId.userId,
+            address,
+            phone,
+            name
+        );
+        return res.json(editedProfile);
+    };
+
+    cancelReservation = async (req, res) => {
+        const reservationId = req.params;
+        const canceledReservation = await this.reservationService.cancelReservation(
+            reservationId.id
+        );
+        return res.json(canceledReservation);
+    };
+
+    createReview = async (req, res) => {
+        const reservationId = req.params;
+        const { star, contents } = req.body;
+        const reviewedReservation = await this.reservationService.createReview(
+            reservationId.id,
+            star,
+            contents
+        );
+        return res.json(reviewedReservation);
     };
 
     signup = async (req, res) => {

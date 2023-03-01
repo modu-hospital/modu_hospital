@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
@@ -8,7 +8,20 @@ class HospitalRepository {
         this.reviewsModel = ReviewsModel;
     }
 
+    findHospitalIdAndUserIdByReservationId = async (reservationid) => {
+        const query = `SELECT h.hospitalId, r.userId  FROM reservations as r 
+        inner join doctors as d on r.doctorId = d.doctorId 
+        inner join hospitals as h on d.hospitalId  = h.hospitalId 
+        `;
+        const hospitalIdAndUserId = await sequelize.query(query, { type: QueryTypes.SELECT });
+
+        return hospitalIdAndUserId;
+    };
+
+    //예약관리 조회
+
     //병원페이지 전체 예약관리 조회
+
     findAllReservation = async () => {
         try {
             const data = await this.reservationModel.findAll({
@@ -216,6 +229,7 @@ class HospitalRepository {
     findNearHospitals = async (longitude, latitude) => {
         const hospitals = await this.hospitalModel.findAll({
             where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
+            attributes: ['name', 'address', 'longitude', 'latitude'],
         });
         return hospitals;
     };
