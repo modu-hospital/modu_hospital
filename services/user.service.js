@@ -4,7 +4,7 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 class UserService {
-    userRepository = new UserRepository();
+    userRepository = new UserRepository(User);
     reservationRepository = new ReservationRepository();
 
     findAUserByUserId = async (userId) => {
@@ -57,23 +57,29 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser[0]) {
-            return { message: '이미 존재하는 아이디 입니다' };
+            res.status(400).json({ message: '이미 존재하는 아이디 입니다' }); 
+            return;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber);
-        return { message: '회원가입이 완료되었습니다' };
+        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber, role);
+
+        res.status(201).json({ message: '회원가입이 완료되었습니다' });
     };
 
     login = async (loginId, password) => {
         const userCheck = await this.userRepository.findUser(loginId);
+
+        console.log(userCheck[0].password)
 
         const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
 
         if (!userCheck || !passwordCheck) {
             return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' });
         }
+
+        res.status(200).json({ message: '로그인' });
 
         // const cookie = jwt.sign({
         //     loginId: userCheck[0].loginId,
