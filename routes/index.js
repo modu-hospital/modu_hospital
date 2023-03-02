@@ -10,4 +10,5 @@ router.use('/users', userRouter);
 router.use('/hospitals', hospitalRouter);
 router.use('/admin', adminRouter);
 
+
 module.exports = router;
