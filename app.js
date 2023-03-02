@@ -23,6 +23,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
 
+
+// app.get('/', (req, res) => {
+//     res.send('hello node');
+// });
+
 /* ejs setting */
 app.use(ejsRouter);
 app.use(errorHandler)

@@ -3,6 +3,7 @@ const { Validation } = require('../lib/validation');
 
 class HospitalController {
     hospitalService = new HospitalService();
+    validation = new Validation();
 
     findNearHospital = async (req, res) => {
         const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
@@ -31,7 +32,7 @@ class HospitalController {
     editReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { date } = await reservationDateUpdateValidation.validateAsync(req.body);
+            const { date } = await this.validation.reservationDateUpdateValidation.validateAsync(req.body);
             const updateDateReservation = await this.hospitalService.editReservation(id, date);
             res.status(200).json({ data: updateDateReservation });
         } catch (error) {
@@ -50,7 +51,7 @@ class HospitalController {
     approvedReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { status } = await reservationStatusUpdateValidation.validateAsync(req.body);
+            const { status } = await this.validation.reservationStatusUpdateValidation.validateAsync(req.body);
             const updateTimeReservation = await this.hospitalService.approvedReservation(
                 id,
                 status
@@ -71,7 +72,7 @@ class HospitalController {
     //예약 승인대기 목록 불러오기
     getWaitedReservation = async (req, res, next) => {
         try {
-            const doctorId = await doctoerIdValidateSchema.validateAsync(req.params.doctorId);
+            const doctorId = await this.validation.doctoerIdValidateSchema.validateAsync(req.params.doctorId);
             const waitingdata = await this.hospitalService.getWaitedReservation(doctorId);
             res.status(200);
             if (waitingdata.length === 0) {
@@ -90,7 +91,7 @@ class HospitalController {
         // cosnt userId = currentUser.id;
         const { userId, name, address, phone, longitude, latitude } = req.body;
         try {
-            await hospitalRegisterValidateSchema.validateAsync(req.body);
+            await this.validation.hospitalRegisterValidateSchema.validateAsync(req.body);
 
             const registerdata = await this.hospitalService.registerHospital(
                 userId,
@@ -150,7 +151,7 @@ class HospitalController {
 
         try {
             const { userId, name, address, phone, longitude, latitude } =
-                await hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
+                await this.validation.hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
             const registerEditdata = await this.hospitalService.registerEditHospital(
                 userId,
                 name,
