@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 // });
 
 router.get('/hospital/map', (req, res) => {
-    res.render('map.ejs', { components: 'map' });
+    res.render('map.ejs', { compnents: 'map' });
 });
 
 //원장님의 공간

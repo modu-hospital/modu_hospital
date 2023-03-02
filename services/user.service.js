@@ -4,15 +4,34 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 class UserService {
-    userRepository = new UserRepository();
+    userRepository = new UserRepository(User);
     reservationRepository = new ReservationRepository();
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
+    sortReservationsByStatus = (reservations) => {
+        if(reservations.length == 0){
+            return reservations
+        }
+        const waiting = reservations.filter((e) => e.status == 'waiting');
+        const approved = reservations.filter((e) => e.status == 'approved');
+        const done = reservations.filter((e) => e.status == 'done');
+        const reviewed = reservations.filter((e) => e.status == 'reviewed');
+        const canceled = reservations.filter((e) => e.status == 'canceled');
+        const sortedReservations = {
+                waiting: waiting,
+                approved: approved,
+                done: done,
+                reviewed: reviewed,
+                canceled: canceled,
+        };
+        return sortedReservations
 
-    makeUserProfile = async (userId) => {
+    }
+
+    showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
             name: user.name,
@@ -21,23 +40,13 @@ class UserService {
         };
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-
-        const waiting = reservations.filter((e) => e.status == 'waiting');
-        const approved = reservations.filter((e) => e.status == 'approved');
-        const done = reservations.filter((e) => e.status == 'done');
-        const reviewed = reservations.filter((e) => e.status == 'reviewed');
-        const canceled = reservations.filter((e) => e.status == 'canceled');
-
+        const sortedReservations = this.sortReservationsByStatus(reservations)
+        
         const profileData = {
-            userData: userData,
-            reservations: {
-                waiting: waiting,
-                approved: approved,
-                done: done,
-                reviewed: reviewed,
-                canceled: canceled,
-            },
-        };
+            userData : userData,
+            reservations : sortedReservations
+
+        }
 
         return profileData;
     };
@@ -49,31 +58,39 @@ class UserService {
             phone,
             name
         );
-        const response = { status: 201 };
-        return response;
+        return editedProfile
     };
 
-    signup = async (name, phone, loginId, password, idNumber, role) => {
+
+    signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
 
+        console.log(existUser);
+
         if (existUser[0]) {
-            return { message: '이미 존재하는 아이디 입니다' };
+            res.status(400).json({ message: '이미 존재하는 아이디 입니다' }); 
+            return;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber);
-        return { message: '회원가입이 완료되었습니다' };
+        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber, role);
+
+        res.status(201).json({ message: '회원가입이 완료되었습니다' });
     };
 
     login = async (loginId, password) => {
         const userCheck = await this.userRepository.findUser(loginId);
+
+        console.log(userCheck[0].password)
 
         const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
 
         if (!userCheck || !passwordCheck) {
             return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' });
         }
+
+        res.status(200).json({ message: '로그인' });
 
         // const cookie = jwt.sign({
         //     loginId: userCheck[0].loginId,
@@ -99,6 +116,7 @@ class UserService {
                 idNumber: users.idNumber,
                 address: users.address,
                 role: users.role,
+                createdAt: users.createdAt,
             };
         });
     };
