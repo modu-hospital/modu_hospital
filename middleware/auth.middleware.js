@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken')
-const {JWT_SECRET_KEY } = process.env
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET_KEY } = process.env;
 
-const authMiddleware = async(req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     // const {authorization = ''} =req.headers
 
     // const [tokenType, token] = authorization.split('')
@@ -26,27 +26,18 @@ const authMiddleware = async(req, res, next) => {
     //     })
     // }
 
-    const accessToken = jwt.sign(
-        {loginId : user},
-        JWT_SECRET_KEY,
-        { expiresIn:'30m'}
-        )
+    const accessToken = jwt.sign({ loginId: user }, JWT_SECRET_KEY, { expiresIn: '30m' });
 
-    const refreshToken = jwt.sign(
-        {},
-        JWT_SECRET_KEY,
-        {expiresIn:'7d'}
-        )
+    const refreshToken = jwt.sign({}, JWT_SECRET_KEY, { expiresIn: '7d' });
 
     if (!accessToken) {
-        return res.status(400).json*{"message":"accessToken 존재 안함"}
+        return res.status(400).json * { message: 'accessToken 존재 안함' };
     }
-    if(! refreshToken) {
-        return res.status(400).json*{"message":"refreshToken 존재 안함"}
+    if (!refreshToken) {
+        return res.status(400).json * { message: 'refreshToken 존재 안함' };
     }
 
-    // const validateAccessToken = 
-}
+    // const validateAccessToken =
+};
 
-
-module.exports = authMiddleware
+module.exports = authMiddleware;
