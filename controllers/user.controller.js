@@ -12,7 +12,7 @@ class UserController {
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
-            return res.status(error.status).json({ message: error.message });
+            return res.json({ message: error.message });
         }
     };
 
