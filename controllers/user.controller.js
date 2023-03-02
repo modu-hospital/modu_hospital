@@ -1,10 +1,11 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const { Validation } = require('../lib/validation');
+const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
+    validation = new Validation();
 
     // 서비스관리자의 회원 정보 조회
     getUserInfo = async (req, res) => {
@@ -19,41 +20,68 @@ class UserController {
     //mypage
 
     getUserProfile = async (req, res) => {
-        const userId = req.params;
-        const userProfile = await this.userService.makeUserProfile(userId.userId);
+        try {
+            const userId = req.params;
+            const userProfile = await this.userService.showUserProfile(userId.userId);
 
-        return res.json({ userProfile });
+            return res.status(200).json({ userProfile });
+        } catch (err) {
+            return res.status(err.status).json({ success: err.success, message: err.message})
+        }
     };
 
     editUserProfile = async (req, res) => {
-        const userId = req.params;
-        const { address, phone, name } = req.body;
-        const editedProfile = await this.userService.editUserProfile(
-            userId.userId,
-            address,
-            phone,
-            name
-        );
-        return res.json(editedProfile);
+        try {
+            const userId = req.params;
+            const { address, phone, name } = await this.validation.editProfile.validateAsync(
+                req.body
+            );
+            const editedProfile = await this.userService.editUserProfile(
+                userId.userId,
+                address,
+                phone,
+                name
+            );
+            return res.status(201).json(editedProfile);
+        } catch (err) {
+            if (err.name === 'ValidationError') {
+                err.status = 412;
+                err.success = false;
+                err.message = '데이터 형식이 올바르지 않습니다.';
+            }
+            return res
+                .status(err.status)
+                .json({ success: err.success, message: err.message });
+        }
     };
 
     cancelReservation = async (req, res) => {
+        try{
         const reservationId = req.params;
+        // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
         const canceledReservation = await this.reservationService.cancelReservation(
             reservationId.id
         );
-        return res.json(canceledReservation);
+        return res.status(201).json(canceledReservation);
+        }catch{
+            res.status(err.status).json({ message: err.message });
+        }
     };
 
     createReview = async (req, res) => {
+        try{
         const reservationId = req.params;
-        const { star, contents } = req.body;
+        // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
+        const { star, contents } = this.validation.createReview.validateAsync(req.body)
         const reviewedReservation = await this.reservationService.createReview(
             reservationId.id,
             star,
             contents
         );
-        return res.json(reviewedReservation);
+        return res.status(201).json(reviewedReservation);
+        }catch(err){
+            res.status(err.status).json({ message: err.message });
+        }
     };
 
     partnerSignup = async (req, res) => {

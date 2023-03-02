@@ -21,7 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
-app.use('/users', userRouter);
 
 app.get('/', (req, res) => {
     res.send('hello node');
