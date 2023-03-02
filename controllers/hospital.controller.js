@@ -1,12 +1,5 @@
 const HospitalService = require('../services/hospital.service');
-const {
-    reservationDateUpdateValidation,
-    reservationStatusUpdateValidation,
-    reservationWaitingGetValidation,
-    doctoerIdValidateSchema,
-    hospitalRegisterValidateSchema,
-    hospitalRegisterUpdateValidateSchema,
-} = require('../middleware/validation');
+const { Validation } = require('../lib/validation');
 
 class HospitalController {
     hospitalService = new HospitalService();
@@ -150,8 +143,8 @@ class HospitalController {
         }
     };
 
-     //병원 정보 수정
-     registerEditHospital = async (req, res, next) => {
+    //병원 정보 수정
+    registerEditHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
 
