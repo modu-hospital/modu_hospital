@@ -1,5 +1,5 @@
 const HospitalService = require('../services/hospital.service');
-const { Validation } = require('../lib/validation');
+const  Validation  = require('../lib/validation');
 
 class HospitalController {
     hospitalService = new HospitalService();
@@ -151,7 +151,7 @@ class HospitalController {
 
         try {
             const { userId, name, address, phone, longitude, latitude } =
-                await this.validation.hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
+                await hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
             const registerEditdata = await this.hospitalService.registerEditHospital(
                 userId,
                 name,

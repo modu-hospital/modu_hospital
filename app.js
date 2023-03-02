@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
-const errorHandler = require('./middleware/errorhandler')
+// const errorHandler = require('./middleware/errorhandler')
 
 const app = express();
 dotenv.config();
@@ -30,7 +30,7 @@ app.use('/api', router);
 
 /* ejs setting */
 app.use(ejsRouter);
-app.use(errorHandler)
+// app.use(errorHandler)
 
 
 app.set('view engine', 'ejs');
