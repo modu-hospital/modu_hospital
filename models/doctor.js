@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             this.hasMany(DoctorCategoryMapping, {
                 foreignKey: 'doctorId',
-                as: 'doctors',
+                as: 'doctorCategoryMappings',
             });
             this.belongsTo(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
             this.hasMany(WorkingTime, { foreignKey: 'doctorId', as: 'workingTimes' });
