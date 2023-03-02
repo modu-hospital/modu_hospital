@@ -23,9 +23,6 @@ app.use('/api', router);
 
 app.use('/users', userRouter);
 
-app.get('/', (req, res) => {
-    res.send('hello node');
-});
 /* ejs setting */
 app.use(ejsRouter);
 app.set('view engine', 'ejs');

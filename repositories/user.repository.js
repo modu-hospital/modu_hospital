@@ -50,7 +50,7 @@ class UserRepository {
     };
 
     findUsers = async () => {
-        const users = await this.userModel.findAll();
+        const users = await this.userModel.findAll({});
         return users;
     };
 }

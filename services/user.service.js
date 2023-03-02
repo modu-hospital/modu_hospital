@@ -4,7 +4,7 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
 class UserService {
-    userRepository = new UserRepository();
+    userRepository = new UserRepository(User);
     reservationRepository = new ReservationRepository();
 
     findAUserByUserId = async (userId) => {
@@ -99,6 +99,7 @@ class UserService {
                 idNumber: users.idNumber,
                 address: users.address,
                 role: users.role,
+                createdAt: users.createdAt,
             };
         });
     };
