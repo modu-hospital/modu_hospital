@@ -8,7 +8,11 @@ class UserRepository {
     }
 
     findUser = async (loginId) => {
-        return await this.userModel.findAll({where: {loginId}})
+        return await this.userModel.findOne({loginId})
+    }
+
+    findUserRole = async(role) => {
+        return await this.userModel.findAll({where:{role}})
     }
 
 }

@@ -5,8 +5,8 @@ const auth = require("../middleware/auth.middleware")
 const UserController = require('../controllers/user.controller')
 const userController = new UserController
 
-router.post("/hospitalsignup", userController.hospitalsignup)
-router.post("/usersignup", userController.usersignup)
+router.post("/signup/partner", userController.partnerSignup)
+router.post("/signup/customer", userController.customerSignup)
 router.post("/login", userController.login)
 router.post("/logout", userController.logout)
 router.get("/accesstoken", userController.accessToken)

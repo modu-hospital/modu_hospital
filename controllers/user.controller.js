@@ -4,10 +4,16 @@ const {sighupValidation} = require("../middleware/validation")
 class UserController {
     userService = new UserService()
 
-    hospitalsignup = async (req, res) => {
-        try { 
+    partnerSignup = async (req, res) => {
+        //role을 관리자가 지정해준다
+        //그러면 role 값은 어떻게 받아야하는지
+        //이것는 waiting 이라는 값을 받아야함
+        try {
+
+
+            const role = "waiting"
             const {name, phone, loginId, password, idNumber} = await sighupValidation.validateAsync(req.body)
-            const user = await this.userService.signup(name, phone, loginId, password, idNumber)
+            const user = await this.userService.signup(name, phone, loginId, password, idNumber, role)
             res.json(user)
             
         } catch (err) {
@@ -20,10 +26,24 @@ class UserController {
             res.status(500).json({ message: err.message })
         }
     }
-    usersignup = async (req, res) => {
-        try { 
+    customerSignup = async (req, res) => {
+        //role 기본값이 waiting
+
+        //role 값을 어떻게 받아야하는지?(req.params 로 받는건 알겠는데)
+
+        // /:customer
+        // const {customer: role} = req.params 
+
+        // /customer
+        // const role = req.params.id
+
+        const role = "customer"
+
+        console.log(req.params) 
+        try {            
+
             const {name, phone, loginId, password, idNumber} = await sighupValidation.validateAsync(req.body)
-            const user = await this.userService.signup(name, phone, loginId, password, idNumber)
+            const user = await this.userService.signup(name, phone, loginId, password, idNumber, role)
             res.json(user)
             
         } catch (err) {
@@ -36,29 +56,40 @@ class UserController {
             res.status(500).json({ message: err.message })
         }
     }
+
+
 
     login = async(req, res) => {
         const {loginId, password} = req.body
 
-        const userInfo = user
+        
+
+        const loginCheck = await idPasswordCheck(loginId, password)
+
+        if (!loginCheck) {
+            return res.status(404).json({message: "없는 계정입니다. 회원가입 해주세요"})
+        }
+
+        // const token = jwt.sign({id:loginCheck.id})
 
     
     }
 
-    accessToken = async(req, res) => {
+    // accessToken = async(req, res) => {
         
-    }
+    // }
 
-    refreshToken = async(req, res) => {
+    // refreshToken = async(req, res) => {
 
-    }
+    // }
 
-    loginSuccess = async(req, res) => {
+    // loginSuccess = async(req, res) => {
 
-    }
+    // }
 
-    logout = async (req, res) => {
-
+    logout = async (req,res) => {
+        res.clearCookie()
+        return res.status(200).json({ message: '로그아웃 되었습니다.' });
     }
 }
 
