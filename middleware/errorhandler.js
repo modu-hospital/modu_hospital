@@ -66,11 +66,11 @@ const errorHandler = (err, req, res) => {
     }
     // key = 에러처리할 url, value = 알 수 없는 에러 시 반환할 메세지
     // 파라미터는 제거 후 입력 ex):userId
-    const errorList = {   
+    const errorList = {
         '/api/users/mypage/cancel/': '예약 취소에 실패했습니다',
-        '/api/users/mypage/editprofile/':'프로필 수정이 실패했습니다.',
-        '/api/users/mypage/review/':'리뷰 작성이 실패했습니다.',
-        '/api/users/mypage/':'마이페이지 불러오기에 실패했습니다.'
+        '/api/users/mypage/editprofile/': '프로필 수정이 실패했습니다.',
+        '/api/users/mypage/review/': '리뷰 작성이 실패했습니다.',
+        '/api/users/mypage/': '마이페이지 불러오기에 실패했습니다.',
     };
     // lib/errors.js 에서 작성된 에러 먼저 출력, 그 후 errorList의 value 출력
     for (let i = 0; i < Object.keys(errorList).length; i++) {
@@ -82,7 +82,6 @@ const errorHandler = (err, req, res) => {
             }
         }
     }
-
 };
 
 module.exports = errorHandler;
