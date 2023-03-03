@@ -50,7 +50,7 @@ class UserController {
         }
     };
 
-    cancelReservation = async (req, res) => {
+    cancelReservation = async (req, res, next) => {
         try{
         const reservationId = req.params;
         // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
@@ -58,8 +58,9 @@ class UserController {
             reservationId.id
         );
         return res.status(201).json(canceledReservation);
-        }catch{
-            res.status(err.status).json({ message: err.message });
+        }catch(err){
+            console.log("실행중")
+            next(err)
         }
     };
 
