@@ -1,0 +1,40 @@
+body {
+    margin-top: 100px;
+    line-height: 1.6;
+}
+
+.container1 {
+    font-family: 'Trebuchet MS', serif;
+    width: 100%;
+    margin: 0 auto;
+}
+
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+ul.tabs li {
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+    font-weight: bold;
+    background: none;
+    color: #222;
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+ul.tabs li.current {
+    background: #ededed;
+    color: #222;
+}
+
+.tab-content {
+    display: none;
+    background: #ededed;
+    padding: 15px;
+}
+
+.tab-content.current {
+    display: inherit;
+}
