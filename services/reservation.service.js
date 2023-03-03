@@ -22,8 +22,10 @@ class ReservationService {
     };
 
     createReview = async (reservationId, star, contents) => {
+        try{
         const reservation = await this.reservationRepository.findReservationById(reservationId);
-        if (!reservation.status === 'done') {
+        console.log(reservation.status)
+        if (reservation.status != 'done') {
             return { message: '진료가 완료되지 않은 예약입니다.' };
         }
         //추가예정 : token의 userId와 reservation.userId가 일치하는지 확인
@@ -41,6 +43,9 @@ class ReservationService {
             contents
         );
         return review;
+        }catch(err){
+            return err
+        }
     };
 }
 

@@ -3,7 +3,8 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
-// const errorHandler = require('./middleware/errorhandler')
+
+const errorHandler = require('./middleware/errorhandler')
 
 const app = express();
 dotenv.config();
@@ -13,8 +14,7 @@ const http = createServer(app);
 /* define router */
 const router = require('./routes');
 const ejsRouter = require('./routes/ejs.routers');
-
-const userRouter = require('./routes/user.routes');
+const errorHandler = require('./middleware/errorhandler')
 
 /* router */
 app.use(cookieParser());
@@ -23,15 +23,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
 
-
-// app.get('/', (req, res) => {
-//     res.send('hello node');
-// });
-
+app.get('/', (req, res) => {
+    res.send('hello node');
+});
 /* ejs setting */
 app.use(ejsRouter);
-// app.use(errorHandler)
 
+app.use(errorHandler);
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');

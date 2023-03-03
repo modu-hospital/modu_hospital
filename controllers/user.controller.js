@@ -1,14 +1,14 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const Validation = require('../lib/validation');
+const Validation= require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
-    validation = new Validation();
-
+    validation = new Validation()
+    
     // 서비스관리자의 회원 정보 조회
-    getUserInfo = async (req, res) => {
+    getUserInfo = async (req , res) => {
         try {
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
@@ -44,11 +44,6 @@ class UserController {
             );
             return res.status(201).json(editedProfile);
         } catch (err) {
-            if (err.name === 'ValidationError') {
-                err.status = 412;
-                err.success = false;
-                err.message = '데이터 형식이 올바르지 않습니다.';
-            }
             return res
                 .status(err.status)
                 .json({ success: err.success, message: err.message });
@@ -68,11 +63,13 @@ class UserController {
         }
     };
 
-    createReview = async (req, res) => {
+    createReview = async (req, res, next) => {
         try{
+        console.log('asdfjwejfnjwe')
         const reservationId = req.params;
+
         // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
-        const { star, contents } = this.validation.createReview.validateAsync(req.body)
+        const { star, contents } = await this.validation.createReview.validateAsync(req.body)
         const reviewedReservation = await this.reservationService.createReview(
             reservationId.id,
             star,
@@ -80,7 +77,7 @@ class UserController {
         );
         return res.status(201).json(reviewedReservation);
         }catch(err){
-            res.status(err.status).json({ message: err.message });
+           next(err)
         }
     };
 
