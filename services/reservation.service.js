@@ -1,14 +1,27 @@
 const ReservationRepository = require('../repositories/reservation.repository');
 const HospitalRepository = require('../repositories/hospital.repository');
+const CreateError = require('../lib/errors')
+
 
 class ReservationService {
     reservationRepository = new ReservationRepository();
     hospitalRepository = new HospitalRepository();
-
+    createError = new CreateError()
+    
     cancelReservation = async (id) => {
         const reservation = await this.reservationRepository.findReservationById(id);
         if (reservation.status == 'done' || reservation.status == 'reviewed') {
-            return { message: '이미 진료가 완료된 예약건입니다' };
+            // return { message: '이미 진료가 완료된 예약건입니다' };
+
+            // const a = Error('이미 진료 완료됨')
+            // a.name = "ReservationAlreadyDone"
+            // a.status = 412
+            // console.log(a)
+
+
+            const err = await this.createError.reservationAlreadyDone()
+            console.log(err)
+            throw err
         }
         if (reservation.status == 'canceled') {
             return { message: '이미 취소가 완료된 예약건입니다' };
@@ -22,7 +35,6 @@ class ReservationService {
     };
 
     createReview = async (reservationId, star, contents) => {
-        try{
         const reservation = await this.reservationRepository.findReservationById(reservationId);
         console.log(reservation.status)
         if (reservation.status != 'done') {
@@ -43,9 +55,6 @@ class ReservationService {
             contents
         );
         return review;
-        }catch(err){
-            return err
-        }
     };
 }
 
