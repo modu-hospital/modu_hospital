@@ -42,11 +42,15 @@ class HospitalService {
         try {
             const longitude = [];
             const latitude = [];
+
             longitude.push(leftLongitude, rightLongitude);
+
             latitude.push(rightLatitude, leftLatitude);
+
             longitude.sort((a, b) => {
                 return a - b;
             });
+
             latitude.sort((a, b) => {
                 return a - b;
             });
