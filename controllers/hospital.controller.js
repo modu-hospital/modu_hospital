@@ -1,5 +1,5 @@
 const HospitalService = require('../services/hospital.service');
-const { Validation } = require('../lib/validation');
+const Validation = require('../lib/validation');
 
 class HospitalController {
     hospitalService = new HospitalService();
