@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
 
-const errorHandler = require('./middleware/errorhandler')
-
 const app = express();
 dotenv.config();
 
