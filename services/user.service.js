@@ -79,6 +79,8 @@ class UserService {
             return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' });
         }
 
+        const token = jwt.sign({loginId: user.loginId}, JWT_SECRET_KEY)
+
         res.status(200).json({ message: '로그인' });
 
         // const cookie = jwt.sign({

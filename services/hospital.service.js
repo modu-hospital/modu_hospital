@@ -1,5 +1,6 @@
 const HospitalRepository = require('../repositories/hospital.repository');
 const { Reservation, Hospital, Review } = require('../models/index.js');
+const {User} = require('../models/')
 
 class HospitalService {
     hospitalRepository = new HospitalRepository(Reservation, Hospital, Review);

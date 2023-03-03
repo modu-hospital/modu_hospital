@@ -111,6 +111,10 @@ class UserController {
     login = async (req, res) => {
         const { loginId, password } = req.body;
 
+        const userInfo = await this.UserService.findAUserByUserId(loginId)
+
+        
+
         res.json({message: "d"})
 
         // const loginCheck = await idPasswordCheck(loginId, password);
