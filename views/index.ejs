@@ -175,5 +175,11 @@
         <script src="./js/breakpoints.min.js"></script>
         <script src="./js/util.js"></script>
         <script src="./js/main.js"></script>
+
+
+        <!-- page -->
+        <% if (components === "map") { %> <%- include('map.ejs') %> <% } %> <% (components === "main")  %>
+        <% if (components === "hospital") { %> <%- include('hospital.ejs') %> <% } %>
+
     </body>
 </html>
