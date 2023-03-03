@@ -16,8 +16,8 @@ router.get('/hospital/map', (req, res) => {
 });
 
 //원장님의 공간
-router.get('/hospital/office', (req, res) => {
-    res.render('hospital.ejs', { components: 'hospital' });
+router.get('/hospital', (req, res) => {
+    res.render('index.ejs', { components: 'hospital' });
 });
 
 module.exports = router;

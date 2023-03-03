@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
 
-const errorHandler = require('./middleware/errorhandler')
-
 const app = express();
 dotenv.config();
 
@@ -23,9 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
 
-app.get('/', (req, res) => {
-    res.send('hello node');
-});
 /* ejs setting */
 app.use(ejsRouter);
 
