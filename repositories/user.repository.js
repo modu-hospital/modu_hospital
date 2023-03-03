@@ -14,19 +14,19 @@ class UserRepository {
         return user;
     };
 
-
-    editUserProfile = async(userId, address, phone, name) => {
-        const editedProfile = await db.User.update({
-            address:address,
-            phone:phone,
-            name:name
-        },
-        {
-        where : ({userId:userId})
-        })
-        return editedProfile
-
-    }
+    editUserProfile = async (userId, address, phone, name) => {
+        const editedProfile = await db.User.update(
+            {
+                address: address,
+                phone: phone,
+                name: name,
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+        return editedProfile;
+    };
 
     signup = async (name, phone, loginId, password, idNumber, role) => {
         return await this.userModel.create({ name, phone, loginId, password, idNumber, role });

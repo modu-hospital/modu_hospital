@@ -27,7 +27,6 @@ router.patch('/register/edit', hospitalController.registerEditHospital);
 
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
-router.get("/info/:id", hospitalController.searchHospitalInfo)
-router.get("/search", hospitalController.findHospitalsThatFitsDepartment)
+router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 module.exports = router;
