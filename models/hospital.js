@@ -36,12 +36,13 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             tableName: 'hospitals',
             modelName: 'Hospital',
-            indexes: [ // 인덱스 설정
-               {
-                  name: 'hospitals_longitude_latitude', // 이름을 지정해주지 않으면 기본 인덱스명은 [table]_[fields]
-                  unique: false,
-                  fields: ['longitude', 'latitude'],
-               }
+            indexes: [
+                // 인덱스 설정
+                {
+                    name: 'hospitals_longitude_latitude', // 이름을 지정해주지 않으면 기본 인덱스명은 [table]_[fields]
+                    unique: false,
+                    fields: ['longitude', 'latitude'],
+                },
             ],
         }
     );

@@ -1,17 +1,22 @@
 const ReservationRepository = require('../repositories/reservation.repository');
 const HospitalRepository = require('../repositories/hospital.repository');
+const CreateError = require('../lib/errors');
 
 class ReservationService {
     reservationRepository = new ReservationRepository();
     hospitalRepository = new HospitalRepository();
+    createError = new CreateError();
 
     cancelReservation = async (id) => {
         const reservation = await this.reservationRepository.findReservationById(id);
         if (reservation.status == 'done' || reservation.status == 'reviewed') {
-            return { message: '이미 진료가 완료된 예약건입니다' };
+            const err = await this.createError.reservationAlreadyDone();
+            console.log('sdf');
+            throw err;
         }
         if (reservation.status == 'canceled') {
-            return { message: '이미 취소가 완료된 예약건입니다' };
+            const err = await this.createError.reservationAlreadyCanceled();
+            throw err;
         }
         //추가예정 : token의 userId와 reservation.userId가 일치하는지 확인
         const canceledReservation = await this.reservationRepository.editReservationStatusById(
@@ -22,11 +27,15 @@ class ReservationService {
     };
 
     createReview = async (reservationId, star, contents) => {
-        try{
         const reservation = await this.reservationRepository.findReservationById(reservationId);
-        console.log(reservation.status)
+        console.log(reservation.status);
+        if (reservation.status === 'reviewed') {
+            const err = this.createError.reviewAlreadyCreated();
+            throw err;
+        }
         if (reservation.status != 'done') {
-            return { message: '진료가 완료되지 않은 예약입니다.' };
+            const err = this.createError.reservationStatusIsNotDone();
+            throw err;
         }
         //추가예정 : token의 userId와 reservation.userId가 일치하는지 확인
         const hospital = await this.reservationRepository.findHospitalByReservationId(
@@ -43,9 +52,6 @@ class ReservationService {
             contents
         );
         return review;
-        }catch(err){
-            return err
-        }
     };
 }
 

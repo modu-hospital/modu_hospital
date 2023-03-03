@@ -19,54 +19,71 @@ class HospitalService {
     );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
-        const longitude = [];
-        const latitude = [];
-        longitude.push(leftLongitude, rightLongitude);
-        latitude.push(rightLatitude, leftLatitude);
-        longitude.sort((a, b) => {
-            return a - b;
-        });
-        latitude.sort((a, b) => {
-            return a - b;
-        });
-        const hospitals = await this.hospitalRepository.findNearHospitals(longitude, latitude);
+        try {
+            const longitude = [];
+            const latitude = [];
+            longitude.push(leftLongitude, rightLongitude);
+            latitude.push(rightLatitude, leftLatitude);
+            longitude.sort((a, b) => {
+                return a - b;
+            });
+            latitude.sort((a, b) => {
+                return a - b;
+            });
+            const hospitals = await this.hospitalRepository.findNearHospitals(longitude, latitude);
 
-        return hospitals;
+            return hospitals;
+        } catch (err) {
+            throw err;
+        }
     };
 
     findNearHospitalsInfo = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
-        const longitude = [];
-        const latitude = [];
-        longitude.push(leftLongitude, rightLongitude);
-        latitude.push(rightLatitude, leftLatitude);
-        longitude.sort((a, b) => {
-            return a - b;
-        });
-        latitude.sort((a, b) => {
-            return a - b;
-        });
-        const hospitals = await this.hospitalRepository.findNearHospitalsInfo(longitude, latitude);
+        try {
+            const longitude = [];
+            const latitude = [];
 
-        const infos = hospitals.map((hospital) => {
-            const doctors = hospital.doctors.map((doctor) => {
-                const department = doctor.doctorCategoryMappings.map((category) => {
-                    return { department: category.categories.department };
-                });
-                return { doctor: doctor.name, department };
+            longitude.push(leftLongitude, rightLongitude);
+
+            latitude.push(rightLatitude, leftLatitude);
+
+            longitude.sort((a, b) => {
+                return a - b;
             });
-            return {
-                name: hospital.name,
-                address: hospital.address,
-                doctors,
-            };
-        });
 
-        return infos;
+            latitude.sort((a, b) => {
+                return a - b;
+            });
+            const hospitals = await this.hospitalRepository.findNearHospitalsInfo(
+                longitude,
+                latitude
+            );
+
+            const infos = hospitals.map((hospital) => {
+                const doctors = hospital.doctors.map((doctor) => {
+                    const department = doctor.doctorCategoryMappings.map((category) => {
+                        return { department: category.categories.department };
+                    });
+                    return { doctor: doctor.name, department };
+                });
+                return {
+                    name: hospital.name,
+                    address: hospital.address,
+                    doctors,
+                };
+            });
+            return infos;
+        } catch (err) {
+            throw err;
+        }
     };
 
     searchHospitalInfo = async (id) => {
-        const hospital = await this.hospitalRepository.searchHospitalInfo(id)
-
+        try {
+            const hospital = await this.hospitalRepository.searchHospitalInfo(id);
+            if (!hospital) {
+                return {};
+            }
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
@@ -75,20 +92,17 @@ class HospitalService {
                 return { doctor: doctor.name, department };
             });
 
-        return {
-            hospitalId : hospital.hospitalId,
-            hospitalName : hospital.name,
-            hospitalAddress : hospital.address,
-            hospitalphone : hospital.phone,
-            doctors
+            return {
+                hospitalId: hospital.hospitalId,
+                hospitalName: hospital.name,
+                hospitalAddress: hospital.address,
+                hospitalphone: hospital.phone,
+                doctors,
+            };
+        } catch (err) {
+            throw err;
         }
-    }
-
-    findHospitalsThatFitsDepartment = async (department) => {
-        const hospitals = await this.hospitalRepository.findHospitalsThatFitsDepartment(department)
-
-        return hospitals
-    }
+    };
 
     findAllReservation = async () => {
         try {
