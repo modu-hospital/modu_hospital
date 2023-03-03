@@ -1,5 +1,7 @@
 const HospitalService = require('../services/hospital.service');
+
 const Validation = require('../lib/validation');
+
 
 class HospitalController {
     hospitalService = new HospitalService();
@@ -14,9 +16,36 @@ class HospitalController {
             leftLongitude,
             leftLatitude
         );
+        res.json({hospitals});
+    };
 
+    findNearHospitalsInfo = async (req, res) => {
+        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
+
+        const hospitals = await this.hospitalService.findNearHospitalsInfo(
+            rightLongitude,
+            rightLatitude,
+            leftLongitude,
+            leftLatitude
+        );
         res.json({ hospitals });
     };
+
+    searchHospitalInfo = async (req, res) => {
+        const {id} = req.params
+
+        const info = await this.hospitalService.searchHospitalInfo(id)
+
+        res.json(info)
+    }
+
+    findHospitalsThatFitsDepartment = async (req, res) => {
+        const {department} = req.query
+        const hospitals = await this.hospitalService.findHospitalsThatFitsDepartment(department)
+
+        res.json(hospitals)
+    }
+
 
     // 예약관리 조회
     findAllReservation = async (req, res, next) => {
@@ -151,7 +180,7 @@ class HospitalController {
 
         try {
             const { userId, name, address, phone, longitude, latitude } =
-                await this.validation.hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
+                await hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
             const registerEditdata = await this.hospitalService.registerEditHospital(
                 userId,
                 name,

@@ -1,8 +1,22 @@
 const HospitalRepository = require('../repositories/hospital.repository');
-const { Reservation, Hospital, Review } = require('../models/index.js');
+const {
+    Reservation,
+    Hospital,
+    Review,
+    Doctor,
+    Category,
+    DoctorCategoryMapping,
+} = require('../models/index.js');
 
 class HospitalService {
-    hospitalRepository = new HospitalRepository(Reservation, Hospital, Review);
+    hospitalRepository = new HospitalRepository(
+        Reservation,
+        Hospital,
+        Review,
+        Doctor,
+        Category,
+        DoctorCategoryMapping
+    );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         const longitude = [];
@@ -19,6 +33,62 @@ class HospitalService {
 
         return hospitals;
     };
+
+    findNearHospitalsInfo = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
+        const longitude = [];
+        const latitude = [];
+        longitude.push(leftLongitude, rightLongitude);
+        latitude.push(rightLatitude, leftLatitude);
+        longitude.sort((a, b) => {
+            return a - b;
+        });
+        latitude.sort((a, b) => {
+            return a - b;
+        });
+        const hospitals = await this.hospitalRepository.findNearHospitalsInfo(longitude, latitude);
+
+        const infos = hospitals.map((hospital) => {
+            const doctors = hospital.doctors.map((doctor) => {
+                const department = doctor.doctorCategoryMappings.map((category) => {
+                    return { department: category.categories.department };
+                });
+                return { doctor: doctor.name, department };
+            });
+            return {
+                name: hospital.name,
+                address: hospital.address,
+                doctors,
+            };
+        });
+
+        return infos;
+    };
+
+    searchHospitalInfo = async (id) => {
+        const hospital = await this.hospitalRepository.searchHospitalInfo(id)
+
+
+            const doctors = hospital.doctors.map((doctor) => {
+                const department = doctor.doctorCategoryMappings.map((category) => {
+                    return { department: category.categories.department };
+                });
+                return { doctor: doctor.name, department };
+            });
+
+        return {
+            hospitalId : hospital.hospitalId,
+            hospitalName : hospital.name,
+            hospitalAddress : hospital.address,
+            hospitalphone : hospital.phone,
+            doctors
+        }
+    }
+
+    findHospitalsThatFitsDepartment = async (department) => {
+        const hospitals = await this.hospitalRepository.findHospitalsThatFitsDepartment(department)
+
+        return hospitals
+    }
 
     findAllReservation = async () => {
         try {

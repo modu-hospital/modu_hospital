@@ -2,10 +2,20 @@ const { where, Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
-    constructor(ReservationModel, HospitalModel, ReviewsModel) {
+    constructor(
+        ReservationModel,
+        HospitalModel,
+        ReviewsModel,
+        DoctorModel,
+        CategoryModel,
+        DoctorCategoryMappingModel
+    ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
         this.reviewsModel = ReviewsModel;
+        this.doctorModel = DoctorModel;
+        this.categoryModel = CategoryModel;
+        this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
     }
 
 
@@ -109,8 +119,82 @@ class HospitalRepository {
     findNearHospitals = async (longitude, latitude) => {
         const hospitals = await this.hospitalModel.findAll({
             where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
+            attributes: ['hospitalId', 'address'],
         });
         return hospitals;
+    };
+
+    findNearHospitalsInfo = async (longitude, latitude) => {
+        const hospitals = await this.hospitalModel.findAll({
+            where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
+            attributes: ['name', 'address', 'longitude', 'latitude'],
+            include: [
+                {
+                    model: this.doctorModel,
+                    as: 'doctors',
+                    attributes: ['name'],
+                    include: [
+                        {
+                            model: this.doctorCategoryMappingModel,
+                            as: 'doctorCategoryMappings',
+                            include: [
+                                {
+                                    model: this.categoryModel,
+                                    as: 'categories',
+                                    attributes: ['department'],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+        return hospitals;
+    };
+
+    searchHospitalInfo = async (id) => {
+        return await this.hospitalModel.findByPk(id, {
+            include: [
+                {
+                    model: this.doctorModel,
+                    as: 'doctors',
+                    attributes: ['name'],
+                    include: [
+                        {
+                            model: this.doctorCategoryMappingModel,
+                            as: 'doctorCategoryMappings',
+                            include: [
+                                {
+                                    model: this.categoryModel,
+                                    as: 'categories',
+                                    attributes: ['department'],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+    };
+
+    findHospitalsThatFitsDepartment = async (department) => {
+        return await this.categoryModel.findAll({
+            where: { department },
+            include: [
+                {
+                    model: this.doctorCategoryMappingModel,
+                    as: 'categories',
+                    include: [
+                        {
+                            model: this.doctorModel,
+                            as: 'doctors',
+                            attributes: ['name'],
+                            include: [{ model: this.hospitalModel, as: 'hospitals' }],
+                        },
+                    ],
+                },
+            ],
+        });
     };
 }
 
