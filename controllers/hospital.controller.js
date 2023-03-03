@@ -2,50 +2,56 @@ const HospitalService = require('../services/hospital.service');
 
 const Validation = require('../lib/validation');
 
-
 class HospitalController {
     hospitalService = new HospitalService();
     validation = new Validation();
 
-    findNearHospital = async (req, res) => {
-        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
+    // 화면 기준 근처 병원
+    findNearHospital = async (req, res, next) => {
+        try {
+            const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-        const hospitals = await this.hospitalService.findNearHospital(
-            rightLongitude,
-            rightLatitude,
-            leftLongitude,
-            leftLatitude
-        );
-        res.json({hospitals});
+            const hospitals = await this.hospitalService.findNearHospital(
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
+            res.json({ hospitals });
+        } catch (err) {
+            next(err);
+        }
     };
 
-    findNearHospitalsInfo = async (req, res) => {
-        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
+    // 화면 기준 근처 병원 정보
+    findNearHospitalsInfo = async (req, res, next) => {
+        try {
+            const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-        const hospitals = await this.hospitalService.findNearHospitalsInfo(
-            rightLongitude,
-            rightLatitude,
-            leftLongitude,
-            leftLatitude
-        );
-        res.json({ hospitals });
+            const hospitals = await this.hospitalService.findNearHospitalsInfo(
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
+            res.json({ hospitals });
+        } catch (err) {
+            next(err);
+        }
     };
 
-    searchHospitalInfo = async (req, res) => {
-        const {id} = req.params
+    // 클릭한 병원의 정보
+    searchHospitalInfo = async (req, res, next) => {
+        try {
+            const { id } = req.params;
 
-        const info = await this.hospitalService.searchHospitalInfo(id)
+            const info = await this.hospitalService.searchHospitalInfo(id);
 
-        res.json(info)
-    }
-
-    findHospitalsThatFitsDepartment = async (req, res) => {
-        const {department} = req.query
-        const hospitals = await this.hospitalService.findHospitalsThatFitsDepartment(department)
-
-        res.json(hospitals)
-    }
-
+            res.json(info);
+        } catch (err) {
+            next(err);
+        }
+    };
 
     // 예약관리 조회
     findAllReservation = async (req, res, next) => {
@@ -61,7 +67,9 @@ class HospitalController {
     editReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { date } = await this.validation.reservationDateUpdateValidation.validateAsync(req.body);
+            const { date } = await this.validation.reservationDateUpdateValidation.validateAsync(
+                req.body
+            );
             const updateDateReservation = await this.hospitalService.editReservation(id, date);
             res.status(200).json({ data: updateDateReservation });
         } catch (error) {
@@ -80,7 +88,8 @@ class HospitalController {
     approvedReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { status } = await this.validation.reservationStatusUpdateValidation.validateAsync(req.body);
+            const { status } =
+                await this.validation.reservationStatusUpdateValidation.validateAsync(req.body);
             const updateTimeReservation = await this.hospitalService.approvedReservation(
                 id,
                 status
@@ -101,7 +110,9 @@ class HospitalController {
     //예약 승인대기 목록 불러오기
     getWaitedReservation = async (req, res, next) => {
         try {
-            const doctorId = await this.validation.doctoerIdValidateSchema.validateAsync(req.params.doctorId);
+            const doctorId = await this.validation.doctoerIdValidateSchema.validateAsync(
+                req.params.doctorId
+            );
             const waitingdata = await this.hospitalService.getWaitedReservation(doctorId);
             res.status(200);
             if (waitingdata.length === 0) {

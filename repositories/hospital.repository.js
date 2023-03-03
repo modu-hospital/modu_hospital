@@ -18,7 +18,6 @@ class HospitalRepository {
         this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
     }
 
-
     //예약관리 조회
 
     //병원페이지 전체 예약관리 조회
@@ -117,84 +116,81 @@ class HospitalRepository {
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {
-        const hospitals = await this.hospitalModel.findAll({
-            where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
-            attributes: ['hospitalId', 'address'],
-        });
-        return hospitals;
+        try {
+            const hospitals = await this.hospitalModel.findAll({
+                where: {
+                    longitude: { [Op.between]: longitude },
+                    latitude: { [Op.between]: latitude },
+                },
+                attributes: ['hospitalId', 'address'],
+            });
+            return hospitals;
+        } catch (err) {
+            throw err;
+        }
     };
 
     findNearHospitalsInfo = async (longitude, latitude) => {
-        const hospitals = await this.hospitalModel.findAll({
-            where: { longitude: { [Op.between]: longitude }, latitude: { [Op.between]: latitude } },
-            attributes: ['name', 'address', 'longitude', 'latitude'],
-            include: [
-                {
-                    model: this.doctorModel,
-                    as: 'doctors',
-                    attributes: ['name'],
-                    include: [
-                        {
-                            model: this.doctorCategoryMappingModel,
-                            as: 'doctorCategoryMappings',
-                            include: [
-                                {
-                                    model: this.categoryModel,
-                                    as: 'categories',
-                                    attributes: ['department'],
-                                },
-                            ],
-                        },
-                    ],
+        try {
+            const hospitals = await this.hospitalModel.findAll({
+                where: {
+                    longitude: { [Op.between]: longitude },
+                    latitude: { [Op.between]: latitude },
                 },
-            ],
-        });
-        return hospitals;
+                attributes: ['name', 'address', 'longitude', 'latitude'],
+                include: [
+                    {
+                        model: this.doctorModel,
+                        as: 'doctors',
+                        attributes: ['name'],
+                        include: [
+                            {
+                                model: this.doctorCategoryMappingModel,
+                                as: 'doctorCategoryMappings',
+                                include: [
+                                    {
+                                        model: this.categoryModel,
+                                        as: 'categories',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+            return hospitals;
+        } catch (err) {
+            throw err;
+        }
     };
 
     searchHospitalInfo = async (id) => {
-        return await this.hospitalModel.findByPk(id, {
-            include: [
-                {
-                    model: this.doctorModel,
-                    as: 'doctors',
-                    attributes: ['name'],
-                    include: [
-                        {
-                            model: this.doctorCategoryMappingModel,
-                            as: 'doctorCategoryMappings',
-                            include: [
-                                {
-                                    model: this.categoryModel,
-                                    as: 'categories',
-                                    attributes: ['department'],
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        });
-    };
-
-    findHospitalsThatFitsDepartment = async (department) => {
-        return await this.categoryModel.findAll({
-            where: { department },
-            include: [
-                {
-                    model: this.doctorCategoryMappingModel,
-                    as: 'categories',
-                    include: [
-                        {
-                            model: this.doctorModel,
-                            as: 'doctors',
-                            attributes: ['name'],
-                            include: [{ model: this.hospitalModel, as: 'hospitals' }],
-                        },
-                    ],
-                },
-            ],
-        });
+        try {
+            return await this.hospitalModel.findByPk(id, {
+                include: [
+                    {
+                        model: this.doctorModel,
+                        as: 'doctors',
+                        attributes: ['name'],
+                        include: [
+                            {
+                                model: this.doctorCategoryMappingModel,
+                                as: 'doctorCategoryMappings',
+                                include: [
+                                    {
+                                        model: this.categoryModel,
+                                        as: 'categories',
+                                        attributes: ['department'],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+        } catch (err) {
+            throw err;
+        }
     };
 }
 
