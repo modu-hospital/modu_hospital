@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <title>Generic - Phantom by HTML5 UP</title>
+        <title>서비스관리자</title>
 
         <!-- Bootstrap CSS -->
         <link
@@ -18,11 +18,8 @@
             crossorigin="anonymous"
         />
 
-        <script
-            src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-            crossorigin="anonymous"
-        ></script>
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
         <link rel="stylesheet" href="./css/main.css" />
         <link rel="stylesheet" href="./css/tabmenu.css" />
@@ -31,50 +28,31 @@
     <body class="is-preload">
         <!-- Wrapper -->
         <div id="wrapper">
-            <!-- Header -->
-            <header id="header">
-                <div class="inner">
-                    <!-- Logo -->
-                    <a href="" onclick="location.href='/admin'" class="logo">
-                        <span class="symbol"><img src="images/healing.png" alt="" /></span
-                        ><span class="title">모두의 병원</span>
-                    </a>
-
-                    <!-- Nav -->
-                    <nav>
-                        <ul>
-                            <li><a href="#menu">Menu</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-
-            <!-- Menu -->
-            <nav id="menu">
-                <h2>Menu</h2>
-                <ul>
-                    <li><a href="" onclick="location.href='/'">Home</a></li>
-                    <li><a href="generic.html">로그인</a></li>
-                    <li><a href="generic.html">회원가입</a></li>
-                    <li><a href="generic.html">원장님의 공간</a></li>
-                    <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-                </ul>
-            </nav>
-
+            <%- include('header.ejs') %>
             <!-- Main -->
             <div id="main">
                 <div class="inner">
                     <h1>회원관리실</h1>
-
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-sm-5" id="filter-content">
+                                <input
+                                    id="filter-value"
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="검색"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     <section class="ftco-section">
                         <div class="container1">
                             <ul class="tabs">
                                 <li class="tab-link current" data-tab="tab-1">전체회원</li>
-                                <li class="tab-link" data-tab="tab-2">일반회원</li>
-                                <li class="tab-link" data-tab="tab-3">파트너회원</li>
-                                <li class="tab-link" data-tab="tab-4">승인대기</li>
+                                <li class="tab-link" data-tab="tab-2" id="customer">일반회원</li>
+                                <li class="tab-link" data-tab="tab-3" id="partner">파트너회원</li>
+                                <li class="tab-link" data-tab="tab-4" id="waiting">승인대기</li>
                             </ul>
-
                             <div id="tab-1" class="tab-content current">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -82,93 +60,18 @@
                                             <table class="table">
                                                 <thead class="thead-primary">
                                                     <tr>
-                                                        <th>TLD</th>
-                                                        <th>Duration</th>
-                                                        <th>Registration</th>
-                                                        <th>Renewal</th>
-                                                        <th>Transfer</th>
-                                                        <th>Register</th>
+                                                        <th>번호</th>
+                                                        <th>이름</th>
+                                                        <th>성별</th>
+                                                        <th>아이디</th>
+                                                        <th>연락처</th>
+                                                        <th>주민등록번호</th>
+                                                        <th>주소</th>
+                                                        <th>가입일</th>
+                                                        <th>비고</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.com</th>
-                                                        <td>1 Year</td>
-                                                        <td>$70.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.net</th>
-                                                        <td>1 Year</td>
-                                                        <td>$75.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.org</th>
-                                                        <td>1 Year</td>
-                                                        <td>$65.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.biz</th>
-                                                        <td>1 Year</td>
-                                                        <td>$60.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.info</th>
-                                                        <td>1 Year</td>
-                                                        <td>$50.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th
-                                                            scope="row"
-                                                            class="scope border-bottom-0"
-                                                        >
-                                                            .me
-                                                        </th>
-                                                        <td class="border-bottom-0">1 Year</td>
-                                                        <td class="border-bottom-0">$45.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                <tbody class="userList" id="allUserList"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -181,93 +84,18 @@
                                             <table class="table">
                                                 <thead class="thead-primary">
                                                     <tr>
-                                                        <th>TLD</th>
-                                                        <th>Duration</th>
-                                                        <th>Registration</th>
-                                                        <th>Renewal</th>
-                                                        <th>Transfer</th>
-                                                        <th>Register</th>
+                                                        <th>번호</th>
+                                                        <th>이름</th>
+                                                        <th>성별</th>
+                                                        <th>아이디</th>
+                                                        <th>연락처</th>
+                                                        <th>주민등록번호</th>
+                                                        <th>주소</th>
+                                                        <th>가입일</th>
+                                                        <th>비고</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.com</th>
-                                                        <td>1 Year</td>
-                                                        <td>$70.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.net</th>
-                                                        <td>1 Year</td>
-                                                        <td>$75.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.org</th>
-                                                        <td>1 Year</td>
-                                                        <td>$65.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.biz</th>
-                                                        <td>1 Year</td>
-                                                        <td>$60.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.info</th>
-                                                        <td>1 Year</td>
-                                                        <td>$50.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th
-                                                            scope="row"
-                                                            class="scope border-bottom-0"
-                                                        >
-                                                            .me
-                                                        </th>
-                                                        <td class="border-bottom-0">1 Year</td>
-                                                        <td class="border-bottom-0">$45.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                <tbody class="userList" id="customUserList"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -280,93 +108,21 @@
                                             <table class="table">
                                                 <thead class="thead-primary">
                                                     <tr>
-                                                        <th>TLD</th>
-                                                        <th>Duration</th>
-                                                        <th>Registration</th>
-                                                        <th>Renewal</th>
-                                                        <th>Transfer</th>
-                                                        <th>Register</th>
+                                                        <th>번호</th>
+                                                        <th>이름</th>
+                                                        <th>성별</th>
+                                                        <th>아이디</th>
+                                                        <th>연락처</th>
+                                                        <th>주민등록번호</th>
+                                                        <th>주소</th>
+                                                        <th>가입일</th>
+                                                        <th>비고</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.com</th>
-                                                        <td>1 Year</td>
-                                                        <td>$70.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.net</th>
-                                                        <td>1 Year</td>
-                                                        <td>$75.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.org</th>
-                                                        <td>1 Year</td>
-                                                        <td>$65.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.biz</th>
-                                                        <td>1 Year</td>
-                                                        <td>$60.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.info</th>
-                                                        <td>1 Year</td>
-                                                        <td>$50.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th
-                                                            scope="row"
-                                                            class="scope border-bottom-0"
-                                                        >
-                                                            .me
-                                                        </th>
-                                                        <td class="border-bottom-0">1 Year</td>
-                                                        <td class="border-bottom-0">$45.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                <tbody
+                                                    class="userList"
+                                                    id="partnerUserList"
+                                                ></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -379,93 +135,21 @@
                                             <table class="table">
                                                 <thead class="thead-primary">
                                                     <tr>
-                                                        <th>TLD</th>
-                                                        <th>Duration</th>
-                                                        <th>Registration</th>
-                                                        <th>Renewal</th>
-                                                        <th>Transfer</th>
-                                                        <th>Register</th>
+                                                        <th>번호</th>
+                                                        <th>이름</th>
+                                                        <th>성별</th>
+                                                        <th>아이디</th>
+                                                        <th>연락처</th>
+                                                        <th>주민등록번호</th>
+                                                        <th>주소</th>
+                                                        <th>가입일</th>
+                                                        <th>비고</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.com</th>
-                                                        <td>1 Year</td>
-                                                        <td>$70.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.net</th>
-                                                        <td>1 Year</td>
-                                                        <td>$75.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.org</th>
-                                                        <td>1 Year</td>
-                                                        <td>$65.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.biz</th>
-                                                        <td>1 Year</td>
-                                                        <td>$60.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="scope">.info</th>
-                                                        <td>1 Year</td>
-                                                        <td>$50.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>$5.00</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th
-                                                            scope="row"
-                                                            class="scope border-bottom-0"
-                                                        >
-                                                            .me
-                                                        </th>
-                                                        <td class="border-bottom-0">1 Year</td>
-                                                        <td class="border-bottom-0">$45.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">$5.00</td>
-                                                        <td class="border-bottom-0">
-                                                            <a href="#" class="btn btn-secondary"
-                                                                >Sign Up</a
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                <tbody
+                                                    class="userList"
+                                                    id="waitingUserList"
+                                                ></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -475,89 +159,7 @@
                     </section>
                 </div>
             </div>
-
-            <!-- Footer -->
-            <footer id="footer">
-                <div class="inner">
-                    <section>
-                        <h2>Get in touch</h2>
-                        <form method="post" action="#">
-                            <div class="fields">
-                                <div class="field half">
-                                    <input type="text" name="name" id="name" placeholder="Name" />
-                                </div>
-                                <div class="field half">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        placeholder="Email"
-                                    />
-                                </div>
-                                <div class="field">
-                                    <textarea
-                                        name="message"
-                                        id="message"
-                                        placeholder="Message"
-                                    ></textarea>
-                                </div>
-                            </div>
-                            <ul class="actions">
-                                <li><input type="submit" value="Send" class="primary" /></li>
-                            </ul>
-                        </form>
-                    </section>
-                    <section>
-                        <h2>Follow</h2>
-                        <ul class="icons">
-                            <li>
-                                <a href="#" class="icon brands style2 fa-twitter"
-                                    ><span class="label">Twitter</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon brands style2 fa-facebook-f"
-                                    ><span class="label">Facebook</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon brands style2 fa-instagram"
-                                    ><span class="label">Instagram</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon brands style2 fa-dribbble"
-                                    ><span class="label">Dribbble</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon brands style2 fa-github"
-                                    ><span class="label">GitHub</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon brands style2 fa-500px"
-                                    ><span class="label">500px</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon solid style2 fa-phone"
-                                    ><span class="label">Phone</span></a
-                                >
-                            </li>
-                            <li>
-                                <a href="#" class="icon solid style2 fa-envelope"
-                                    ><span class="label">Email</span></a
-                                >
-                            </li>
-                        </ul>
-                    </section>
-                    <ul class="copyright">
-                        <li>&copy; Untitled. All rights reserved</li>
-                        <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-                    </ul>
-                </div>
-            </footer>
+            <%- include('footer.ejs') %>
         </div>
 
         <!-- Scripts -->
@@ -567,5 +169,6 @@
         <script src="./js/util.js"></script>
         <script src="./js/main.js"></script>
         <script src="./js/tabmenu.js"></script>
+        <script src="./js/admin.js"></script>
     </body>
 </html>

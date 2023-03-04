@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
 
-const errorHandler = require('./middleware/errorhandler')
-
 const app = express();
 dotenv.config();
 
@@ -14,7 +12,7 @@ const http = createServer(app);
 /* define router */
 const router = require('./routes');
 const ejsRouter = require('./routes/ejs.routers');
-const errorHandler = require('./middleware/errorhandler')
+const errorHandler = require('./middleware/errorhandler');
 
 /* router */
 app.use(cookieParser());
@@ -22,10 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
-
-app.get('/', (req, res) => {
-    res.send('hello node');
-});
 /* ejs setting */
 app.use(ejsRouter);
 

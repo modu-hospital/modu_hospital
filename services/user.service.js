@@ -12,8 +12,8 @@ class UserService {
         return user;
     };
     sortReservationsByStatus = (reservations) => {
-        if(reservations.length == 0){
-            return reservations
+        if (reservations.length == 0) {
+            return reservations;
         }
         const waiting = reservations.filter((e) => e.status == 'waiting');
         const approved = reservations.filter((e) => e.status == 'approved');
@@ -21,15 +21,14 @@ class UserService {
         const reviewed = reservations.filter((e) => e.status == 'reviewed');
         const canceled = reservations.filter((e) => e.status == 'canceled');
         const sortedReservations = {
-                waiting: waiting,
-                approved: approved,
-                done: done,
-                reviewed: reviewed,
-                canceled: canceled,
+            waiting: waiting,
+            approved: approved,
+            done: done,
+            reviewed: reviewed,
+            canceled: canceled,
         };
-        return sortedReservations
-
-    }
+        return sortedReservations;
+    };
 
     showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
@@ -40,13 +39,12 @@ class UserService {
         };
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-        const sortedReservations = this.sortReservationsByStatus(reservations)
-        
-        const profileData = {
-            userData : userData,
-            reservations : sortedReservations
+        const sortedReservations = this.sortReservationsByStatus(reservations);
 
-        }
+        const profileData = {
+            userData: userData,
+            reservations: sortedReservations,
+        };
 
         return profileData;
     };
@@ -58,9 +56,8 @@ class UserService {
             phone,
             name
         );
-        return editedProfile
+        return editedProfile;
     };
-
 
     signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
@@ -68,7 +65,7 @@ class UserService {
         console.log(existUser);
 
         if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' }); 
+            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             return;
         }
 
@@ -82,7 +79,7 @@ class UserService {
     login = async (loginId, password) => {
         const userCheck = await this.userRepository.findUser(loginId);
 
-        console.log(userCheck[0].password)
+        console.log(userCheck[0].password);
 
         const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
 
@@ -107,6 +104,26 @@ class UserService {
         //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
         // }
         return allUser.map((users) => {
+            return {
+                userId: users.userId,
+                name: users.name,
+                loginId: users.loginId,
+                password: users.password,
+                phone: users.phone,
+                idNumber: users.idNumber,
+                address: users.address,
+                role: users.role,
+                createdAt: users.createdAt,
+            };
+        });
+    };
+
+    findRoleUsers = async (role) => {
+        const roleUsers = await this.userRepository.findRoleUsers(role);
+
+        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
+        // }
+        return roleUsers.map((users) => {
             return {
                 userId: users.userId,
                 name: users.name,

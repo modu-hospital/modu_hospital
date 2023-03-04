@@ -1,19 +1,29 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const Validation= require('../lib/validation');
+const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
-    validation = new Validation()
-    
+    validation = new Validation();
+
     // 서비스관리자의 회원 정보 조회
-    getUserInfo = async (req , res) => {
+    getUserInfo = async (req, res) => {
         try {
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
-            return res.json({ message: error.message });
+            return res.status(err.status).json({ message: error.message });
+        }
+    };
+
+    getRoleUserInfo = async (req, res) => {
+        try {
+            const { role } = req.params;
+            const roleUserInfo = await this.userService.findRoleUsers(role);
+            res.status(200).send(roleUserInfo);
+        } catch (error) {
+            return res.status(error.status).json({ message: error.message });
         }
     };
 
@@ -26,7 +36,7 @@ class UserController {
 
             return res.status(200).json({ userProfile });
         } catch (err) {
-            return res.status(err.status).json({ success: err.success, message: err.message})
+            return res.status(err.status).json({ success: err.success, message: err.message });
         }
     };
 
@@ -44,45 +54,42 @@ class UserController {
             );
             return res.status(201).json(editedProfile);
         } catch (err) {
-            return res
-                .status(err.status)
-                .json({ success: err.success, message: err.message });
+            return res.status(err.status).json({ success: err.success, message: err.message });
         }
     };
 
     cancelReservation = async (req, res) => {
-        try{
-        const reservationId = req.params;
-        // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
-        const canceledReservation = await this.reservationService.cancelReservation(
-            reservationId.id
-        );
-        return res.status(201).json(canceledReservation);
-        }catch{
+        try {
+            const reservationId = req.params;
+            // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
+            const canceledReservation = await this.reservationService.cancelReservation(
+                reservationId.id
+            );
+            return res.status(201).json(canceledReservation);
+        } catch {
             res.status(err.status).json({ message: err.message });
         }
     };
 
     createReview = async (req, res, next) => {
-        try{
-        console.log('asdfjwejfnjwe')
-        const reservationId = req.params;
+        try {
+            console.log('asdfjwejfnjwe');
+            const reservationId = req.params;
 
-        // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
-        const { star, contents } = await this.validation.createReview.validateAsync(req.body)
-        const reviewedReservation = await this.reservationService.createReview(
-            reservationId.id,
-            star,
-            contents
-        );
-        return res.status(201).json(reviewedReservation);
-        }catch(err){
-           next(err)
+            // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
+            const { star, contents } = await this.validation.createReview.validateAsync(req.body);
+            const reviewedReservation = await this.reservationService.createReview(
+                reservationId.id,
+                star,
+                contents
+            );
+            return res.status(201).json(reviewedReservation);
+        } catch (err) {
+            next(err);
         }
     };
 
     partnerSignup = async (req, res) => {
-
         const role = 'waiting';
         try {
             const { name, phone, loginId, password, confirm, idNumber } =
@@ -107,7 +114,6 @@ class UserController {
         }
     };
     customerSignup = async (req, res) => {
-
         const role = 'customer';
         try {
             const { name, phone, loginId, password, confirm, idNumber } =
@@ -135,7 +141,7 @@ class UserController {
     login = async (req, res) => {
         const { loginId, password } = req.body;
 
-        res.json({message: "d"})
+        res.json({ message: 'd' });
 
         // const loginCheck = await idPasswordCheck(loginId, password);
 
