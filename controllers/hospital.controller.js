@@ -56,10 +56,15 @@ class HospitalController {
     // 예약관리 조회
     findAllReservation = async (req, res, next) => {
         try {
-            const data = await this.hospitalService.findAllReservation();
-            res.status(200).json(data);
+            const reservationdata = await this.hospitalService.findAllReservation();
+            res.status(200).json({
+                reservationdata: reservationdata,
+            });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({
+                success: true,
+                message: error.message,
+            });
         }
     };
 

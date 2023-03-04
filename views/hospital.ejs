@@ -5,9 +5,9 @@
         <div class="container1">
             <ul class="tabs">
                 <li class="tab-link current" data-tab="tab-1">전체 예약관리</li>
-                <li class="tab-link" data-tab="tab-2">실시간 채팅</li>
-                <li class="tab-link" data-tab="tab-3">리뷰관리</li>
-                <li class="tab-link" data-tab="tab-4">환자관리</li>
+                <li class="tab-link" data-tab="tab-2">예약확정</li>
+                <li class="tab-link" data-tab="tab-3">예약대기</li>
+                <li class="tab-link" data-tab="tab-4">리뷰관리</li>
                 <li class="tab-link" data-tab="tab-5">우리 병원 정보</li>
             </ul>
 
@@ -15,23 +15,20 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-wrap">
-                            <table class="table" id="tab-1">
+                            <table class="table" id="reservationList">
                                 <thead class="thead-primary">
                                     <div class="management-button">
-                                        <button type="button" class="btn btn-danger" onclick="reservationList()">난
-                                            돌이다</button>
-                                        <button type="button" class="btn btn-primary">예약확정</button>
-                                        <button type="button" class="btn btn-warning">예약대기</button>
-                                    </div>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">이름</th>
-                                        <th scope="col">주민번호</th>
-                                        <th scope="col">전화</th>
-                                        <th scope="col">증상</th>
-                                        <th scope="col">예약날짜</th>
-                                        <th scope="col">승인</th>
-                                    </tr>
+                                        </div>
+                                             <tr>
+                                                <th scope="col">#</th>                                                                           
+                                                <th scope="col">이름</th>
+                                                <th scope="col">주민번호</th>
+                                                <th scope="col">전화</th>
+                                                <th scope="col">증상</th>
+                                                <th scope="col">예약날짜</th>                                                                                          
+                                                <th scope="col">신청날짜</th>
+                                                <th scope="col">승인</th>                                               
+                                            </tr>
                                 </thead>
                             </table>
                         </div>
@@ -122,220 +119,10 @@
                     </div>
                 </div>
             </div>
-            <div id="tab-3" class="tab-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table">
-                                <thead class="thead-primary">
-                                    <tr>
-                                        <th>TLD</th>
-                                        <th>Duration</th>
-                                        <th>Registration</th>
-                                        <th>Renewal</th>
-                                        <th>Transfer</th>
-                                        <th>Register</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" class="scope">.com</th>
-                                        <td>1 Year</td>
-                                        <td>$70.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.net</th>
-                                        <td>1 Year</td>
-                                        <td>$75.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.org</th>
-                                        <td>1 Year</td>
-                                        <td>$65.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.biz</th>
-                                        <td>1 Year</td>
-                                        <td>$60.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.info</th>
-                                        <td>1 Year</td>
-                                        <td>$50.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope border-bottom-0">
-                                            .me
-                                        </th>
-                                        <td class="border-bottom-0">1 Year</td>
-                                        <td class="border-bottom-0">$45.00</td>
-                                        <td class="border-bottom-0">$5.00</td>
-                                        <td class="border-bottom-0">$5.00</td>
-                                        <td class="border-bottom-0">
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="tab-4" class="tab-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table">
-                                <thead class="thead-primary">
-                                    <tr>
-                                        <th>TLD</th>
-                                        <th>Duration</th>
-                                        <th>Registration</th>
-                                        <th>Renewal</th>
-                                        <th>Transfer</th>
-                                        <th>Register</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" class="scope">.com</th>
-                                        <td>1 Year</td>
-                                        <td>$70.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.net</th>
-                                        <td>1 Year</td>
-                                        <td>$75.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.org</th>
-                                        <td>1 Year</td>
-                                        <td>$65.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.biz</th>
-                                        <td>1 Year</td>
-                                        <td>$60.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope">.info</th>
-                                        <td>1 Year</td>
-                                        <td>$50.00</td>
-                                        <td>$5.00</td>
-                                        <td>$5.00</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="scope border-bottom-0">
-                                            .me
-                                        </th>
-                                        <td class="border-bottom-0">1 Year</td>
-                                        <td class="border-bottom-0">$45.00</td>
-                                        <td class="border-bottom-0">$5.00</td>
-                                        <td class="border-bottom-0">$5.00</td>
-                                        <td class="border-bottom-0">
-                                            <a href="#" class="btn btn-secondary">Sign Up</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </section>
 </div>
-<script>
-
-    function open_reservationList(){
-        $('#tab-1').show()
-    }
-
-    $(document).ready(function () {
-        reservationList();
-      });
-
-    function reservationList() {
-        $.ajax({
-          type: 'GET',
-          url: '/api/hospitals/reservation',
-          data: {},
-          success: function (response) {
-            let rows = response['reservations'];
-            console.log(rows)
-            for (let i = 0; i < rows.length; i++) {
-              let id = rows[i]['id'];
-              let name = rows[i]['name'];
-              let phone = rows[i]['phone'];
-              let date = rows[i]['date'];
-              let contents = rows[i]['contents'];
-              let idNumber = rows[i]['idNumber'];
-              let status = rows[i]['status'];
-              let temp_html = `<tbody>
-                                <tr>
-                                  <th scope="row">${id}</th>
-                                  <td>${name}</td>
-                                  <td>${phone}</td>
-                                  <td>${date}</td>
-                                  <td>${contents}</td>
-                                  <td>${idNumber}</td>
-                                  <td>${status}</td>
-                                  </tr>
-                              </tbody>`;
-              $('#tab-1').append(temp_html);
-            }
-          },
-        });
-      }
-</script>
 
 
 
