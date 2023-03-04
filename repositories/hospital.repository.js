@@ -231,6 +231,7 @@ class HospitalRepository {
         }
     };
 
+    // 화면 위치 기준 병원 정보
     findNearHospitalsInfo = async (longitude, latitude) => {
         try {
             const hospitals = await this.hospitalModel.findAll({
@@ -238,7 +239,7 @@ class HospitalRepository {
                     longitude: { [Op.between]: longitude },
                     latitude: { [Op.between]: latitude },
                 },
-                attributes: ['name', 'address', 'longitude', 'latitude'],
+                attributes: ['name', 'address', "phone"],
                 include: [
                     {
                         model: this.doctorModel,
@@ -265,6 +266,7 @@ class HospitalRepository {
         }
     };
 
+    // id 값에 해당하는 병원 정보
     searchHospitalInfo = async (id) => {
         try {
             return await this.hospitalModel.findByPk(id, {
@@ -272,7 +274,7 @@ class HospitalRepository {
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        attributes: ['name'],
+                        attributes: ['name', "image"],
                         include: [
                             {
                                 model: this.doctorCategoryMappingModel,

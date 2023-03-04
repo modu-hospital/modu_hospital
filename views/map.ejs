@@ -26,7 +26,6 @@
     src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1&libraries=services"></script>
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1"></script>
   <script>
-
     // 동의
     function successCallback(position) {
       // 현재 좌표 중심좌표
@@ -42,39 +41,12 @@
 
       var geocoder = new kakao.maps.services.Geocoder();
 
-      // 영역의 좌표를 얻어옵니다.
-      var bounds = map.getBounds();
-
-      // 영역의 남서쪽 좌표를 얻어옵니다
-      var swLatLng = bounds.getSouthWest();
-
-      // 영역의 북동쪽 좌표를 얻어옵니다
-      var neLatLng = bounds.getNorthEast();
-
-      const data = {
-        rightLatitude: neLatLng.getLat(),
-        rightLongitude: neLatLng.getLng(),
-        leftLatitude: swLatLng.getLat(),
-        leftLongitude: swLatLng.getLng(),
-      };
+      const data = getData(map)
 
       document.getElementById('listBtn').addEventListener('click', (event) => {
         event.preventDefault();
 
-        var bounds = map.getBounds();
-
-        // 영역의 남서쪽 좌표를 얻어옵니다
-        var swLatLng = bounds.getSouthWest();
-
-        // 영역의 북동쪽 좌표를 얻어옵니다
-        var neLatLng = bounds.getNorthEast();
-
-        const data = {
-          rightLatitude: neLatLng.getLat(),
-          rightLongitude: neLatLng.getLng(),
-          leftLatitude: swLatLng.getLat(),
-          leftLongitude: swLatLng.getLng(),
-        };
+        const data = getData(map)
 
         fetch(`http://localhost:3000/api/hospitals/around/info`, {
           method: 'POST',
@@ -87,22 +59,18 @@
           .then((data) => {
             document.getElementById('list').innerHTML = ``
             for (let i = 0; i < data.hospitals.length; i++) {
-              const a = 
-              `
+              const a =
+                `
               <div>${data.hospitals[i].name}</div>
               <div>${data.hospitals[i].address}</div>
               `
-                
-                const div = document.createElement('li');
-                div.innerHTML = a;
-                document.getElementById('list').appendChild(div);
+
+              const li = document.createElement('li');
+              li.innerHTML = a;
+              document.getElementById('list').appendChild(li);
             }
-
-
-
           })
       })
-
 
       fetch(`http://localhost:3000/api/hospitals/around`, {
         method: 'POST',
@@ -118,21 +86,8 @@
           if (!data.hospitals[0]) {
             kakao.maps.event.addListener(map, "zoom_changed", function () {
 
-              // 영역의 좌표를 얻어옵니다.
-              var bounds = map.getBounds();
+              const data = getData(map)
 
-              // 영역의 남서쪽 좌표를 얻어옵니다
-              var swLatLng = bounds.getSouthWest();
-
-              // 영역의 북동쪽 좌표를 얻어옵니다
-              var neLatLng = bounds.getNorthEast();
-
-              const data = {
-                rightLatitude: neLatLng.getLat(),
-                rightLongitude: neLatLng.getLng(),
-                leftLatitude: swLatLng.getLat(),
-                leftLongitude: swLatLng.getLng(),
-              };
               fetch(`http://localhost:3000/api/hospitals/around`, {
                 method: 'POST',
                 headers: {
@@ -144,87 +99,12 @@
                 .then((data) => {
                   const a = document.getElementById("listBtn")
                   a.innerText = `근처 ${data.hospitals.length}개의 병원`
-                  for (let i = 0; i < data.hospitals.length; i++) {
-                    geocoder.addressSearch(
-                      data.hospitals[i].address,
-                      function (result, status) {
-                        // 정상적으로 검색이 완료됐으면
-                        if (status === kakao.maps.services.Status.OK) {
-                          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                          // 결과값으로 받은 위치를 마커로 표시합니다
-                          var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords,
-                          });
-                          marker.id = data.hospitals[i].hospitalId
-
-                          // 마커에 클릭이벤트를 등록합니다
-                          kakao.maps.event.addListener(marker, 'click', function() {
-                                // 마커 위에 인포윈도우를 표시합니다
-                                const id = marker.id
-                                console.log(id)
-                                fetch(`http://localhost:3000/api/hospitals/info/${id}`)
-                                .then((response) => response.json())
-                                .then((data) => {
-                                  console.log(data)
-                                  document.getElementById('list').innerHTML = ``
-
-                                  const a = 
-                                      `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
-                                        `
-                                  const div = document.createElement('li');
-                                  div.innerHTML = a;
-                                  document.getElementById('list').appendChild(div);  
-                                  
-                                  for (let i = 0; i < data.doctors.length; i++) {
-                                      for (let j = 0; j < data.doctors[i].department.length; j++) {
-                                        const b = `<div>${data.doctors[i].doctor}</div>`
-                                    
-                                    const li = document.createElement('li');
-                                    li.innerHTML = b;
-                                    document.getElementById('list').appendChild(li);
-
-                                          const c = 
-                                          `
-                                          <div>${data.doctors[i].department[j].department}</div>
-                                            `
-                                          const div = document.createElement('li');
-                                          div.innerHTML = c;
-                                          document.getElementById('list').appendChild(div);
-
-                                          }
-                                  }
-                                })
-                          });
-
-                        }
-                      }
-                    );
-                  }
                 })
             });
 
             kakao.maps.event.addListener(map, 'dragend', function () {
 
-              // 영역의 좌표를 얻어옵니다.
-              var bounds = map.getBounds();
-
-              // 영역의 남서쪽 좌표를 얻어옵니다
-              var swLatLng = bounds.getSouthWest();
-
-              // 영역의 북동쪽 좌표를 얻어옵니다
-              var neLatLng = bounds.getNorthEast();
-
-              const data = {
-                rightLatitude: neLatLng.getLat(),
-                rightLongitude: neLatLng.getLng(),
-                leftLatitude: swLatLng.getLat(),
-                leftLongitude: swLatLng.getLng(),
-              };
+              const data = getData(map)
 
               fetch(`http://localhost:3000/api/hospitals/around`, {
                 method: 'POST',
@@ -249,6 +129,37 @@
                           var marker = new kakao.maps.Marker({
                             map: map,
                             position: coords,
+                          });
+
+                          marker.id = data.hospitals[i].hospitalId
+                          // 마커에 클릭이벤트를 등록합니다
+                          kakao.maps.event.addListener(marker, 'click', function () {
+                            // 마커 위에 인포윈도우를 표시합니다
+                            const id = marker.id
+                            fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                              .then((response) => response.json())
+                              .then((data) => {
+                                document.getElementById('list').innerHTML = ``
+
+                                const a =
+                                  `
+                                      <div>${data.hospitalName}</div>
+                                      <div>${data.hospitalphone}</div>
+                                      <div>${data.hospitalAddress}</div>
+                                        `
+                                const li = document.createElement('li');
+                                li.innerHTML = a;
+                                document.getElementById('list').appendChild(li);
+
+                                for (let i = 0; i < data.doctors.length; i++) {
+                                  const b = `<div>${data.doctors[i].doctor}</div>
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <div>${data.doctors[i].department}</div>`
+                                  const doctorLi = document.createElement('li');
+                                  doctorLi.innerHTML = b;
+                                  document.getElementById('list').appendChild(doctorLi);
+                                }
+                              })
                           });
                         }
                       }
@@ -256,127 +167,167 @@
                   }
                 })
             })
-          }
-          for (let i = 0; i < data.hospitals.length; i++) {
-            geocoder.addressSearch(
-              data.hospitals[i].address,
-              function (result, status) {
-                // 정상적으로 검색이 완료됐으면
-                if (status === kakao.maps.services.Status.OK) {
-                  var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                  
-                  // 결과값으로 받은 위치를 마커로 표시합니다
-                  var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords,
+          } else {
+            for (let i = 0; i < data.hospitals.length; i++) {
+              geocoder.addressSearch(
+                data.hospitals[i].address,
+                function (result, status) {
+                  // 정상적으로 검색이 완료됐으면
+                  if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 결과값으로 받은 위치를 마커로 표시합니다
+                    var marker = new kakao.maps.Marker({
+                      map: map,
+                      position: coords,
+                    });
+                  }
+
+                  kakao.maps.event.addListener(map, "zoom_changed", function () {
+
+                    marker.setMap(null);
+
+                    const data = getData(map)
+                    fetch(`http://localhost:3000/api/hospitals/around`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        const a = document.getElementById("listBtn")
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          geocoder.addressSearch(
+                            data.hospitals[i].address,
+                            function (result, status) {
+                              // 정상적으로 검색이 완료됐으면
+                              if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                                // 결과값으로 받은 위치를 마커로 표시합니다
+                                var marker = new kakao.maps.Marker({
+                                  map: map,
+                                  position: coords,
+                                });
+
+                                marker.id = data.hospitals[i].hospitalId
+                                // 마커에 클릭이벤트를 등록합니다
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                  console.log(data.doctors[0].doctor)
+                                  // 마커 위에 인포윈도우를 표시합니다
+                                  const id = marker.id
+                                  fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      console.log(data)
+                                      document.getElementById('list').innerHTML = ``
+
+                                      const a =
+                                        `
+                                      <div>${data.hospitalName}</div>
+                                      <div>${data.hospitalphone}</div>
+                                      <div>${data.hospitalAddress}</div>
+                                        `
+                                      const li = document.createElement('li');
+                                      li.innerHTML = a;
+                                      document.getElementById('list').appendChild(li);
+
+
+                                      for (let i = 0; i < data.doctors.length; i++) {
+                                        const b = `<div>${data.doctors[i].doctor}</div>
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <div>${data.doctors[i].department}</div>`
+                                        const doctorLi = document.createElement('li');
+                                        doctorLi.innerHTML = b;
+                                        document.getElementById('list').appendChild(doctorLi);
+                                      }
+                                    })
+                                });
+                              }
+                            }
+                          );
+                        }
+                      })
                   });
-                }
 
-                kakao.maps.event.addListener(map, "zoom_changed", function () {
+                  kakao.maps.event.addListener(map, 'dragend', function () {
 
-                  marker.setMap(null);
+                    marker.setMap(null);
 
-                  // 영역의 좌표를 얻어옵니다.
-                  var bounds = map.getBounds();
+                    const data = getData(map)
 
-                  // 영역의 남서쪽 좌표를 얻어옵니다
-                  var swLatLng = bounds.getSouthWest();
-
-                  // 영역의 북동쪽 좌표를 얻어옵니다
-                  var neLatLng = bounds.getNorthEast();
-
-                  const data = {
-                    rightLatitude: neLatLng.getLat(),
-                    rightLongitude: neLatLng.getLng(),
-                    leftLatitude: swLatLng.getLat(),
-                    leftLongitude: swLatLng.getLng(),
-                  };
-                  fetch(`http://localhost:3000/api/hospitals/around`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                  })
-                    .then((response) => response.json())
-                    .then((data) => {
-                      const a = document.getElementById("listBtn")
-                      a.innerText = `근처 ${data.hospitals.length}개의 병원`
-                      for (let i = 0; i < data.hospitals.length; i++) {
-                        geocoder.addressSearch(
-                          data.hospitals[i].address,
-                          function (result, status) {
-                            // 정상적으로 검색이 완료됐으면
-                            if (status === kakao.maps.services.Status.OK) {
-                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                              // 결과값으로 받은 위치를 마커로 표시합니다
-                              var marker = new kakao.maps.Marker({
-                                map: map,
-                                position: coords,
-                              });
-                            }
-                          }
-                        );
-                      }
+                    fetch(`http://localhost:3000/api/hospitals/around`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
                     })
-                });
+                      .then((response) => response.json())
+                      .then((data) => {
+                        const a = document.getElementById("listBtn")
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          geocoder.addressSearch(
+                            data.hospitals[i].address,
+                            function (result, status) {
+                              // 정상적으로 검색이 완료됐으면
+                              if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                kakao.maps.event.addListener(map, 'dragend', function () {
+                                // 결과값으로 받은 위치를 마커로 표시합니다
+                                var marker = new kakao.maps.Marker({
+                                  map: map,
+                                  position: coords,
+                                });
 
-                  marker.setMap(null);
+                                marker.id = data.hospitals[i].hospitalId
+                                // 마커에 클릭이벤트를 등록합니다
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                  // 마커 위에 인포윈도우를 표시합니다
+                                  const id = marker.id
+                                  fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      document.getElementById('list').innerHTML = ``
 
-                  // 영역의 좌표를 얻어옵니다.
-                  var bounds = map.getBounds();
+                                      const a =
+                                        `
+                                      <div>${data.hospitalName}</div>
+                                      <div>${data.hospitalphone}</div>
+                                      <div>${data.hospitalAddress}</div>
+                                        `
+                                      const li = document.createElement('li');
+                                      li.innerHTML = a;
+                                      document.getElementById('list').appendChild(li);
 
-                  // 영역의 남서쪽 좌표를 얻어옵니다
-                  var swLatLng = bounds.getSouthWest();
+                                      for (let i = 0; i < data.doctors.length; i++) {
+                                        const b = `<div>${data.doctors[i].doctor}</div>
+                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <div>${data.doctors[i].department}</div>`
+                                        const doctorLi = document.createElement('li');
+                                        doctorLi.innerHTML = b;
+                                        document.getElementById('list').appendChild(doctorLi);
+                                      }
 
-                  // 영역의 북동쪽 좌표를 얻어옵니다
-                  var neLatLng = bounds.getNorthEast();
-
-                  const data = {
-                    rightLatitude: neLatLng.getLat(),
-                    rightLongitude: neLatLng.getLng(),
-                    leftLatitude: swLatLng.getLat(),
-                    leftLongitude: swLatLng.getLng(),
-                  };
-
-                  fetch(`http://localhost:3000/api/hospitals/around`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                  })
-                    .then((response) => response.json())
-                    .then((data) => {
-                      const a = document.getElementById("listBtn")
-                      a.innerText = `근처 ${data.hospitals.length}개의 병원`
-                      for (let i = 0; i < data.hospitals.length; i++) {
-                        geocoder.addressSearch(
-                          data.hospitals[i].address,
-                          function (result, status) {
-                            // 정상적으로 검색이 완료됐으면
-                            if (status === kakao.maps.services.Status.OK) {
-                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                              // 결과값으로 받은 위치를 마커로 표시합니다
-                              var marker = new kakao.maps.Marker({
-                                map: map,
-                                position: coords,
-                              });
+                                    })
+                                });
+                              }
                             }
-                          }
-                        );
-                      }
-                    })
-                }
+                          );
+                        }
+                      })
+                  }
 
-                );
-              }
-            );
+                  );
+                }
+              );
+            }
           }
+
 
         })
 
@@ -408,20 +359,7 @@
       var geocoder = new kakao.maps.services.Geocoder();
 
       // 영역의 좌표를 얻어옵니다.
-      var bounds = map.getBounds();
-
-      // 영역의 남서쪽 좌표를 얻어옵니다
-      var swLatLng = bounds.getSouthWest();
-
-      // 영역의 북동쪽 좌표를 얻어옵니다
-      var neLatLng = bounds.getNorthEast();
-
-      const data = {
-        rightLatitude: neLatLng.getLat(),
-        rightLongitude: neLatLng.getLng(),
-        leftLatitude: swLatLng.getLat(),
-        leftLongitude: swLatLng.getLng(),
-      };
+      const data = getData(map)
 
       fetch(`http://localhost:3000/api/hospitals/around`, {
         method: 'POST',
@@ -448,25 +386,12 @@
                     position: coords,
                   });
                 }
+
                 kakao.maps.event.addListener(map, "zoom_changed", function () {
 
                   marker.setMap(null);
 
-                  // 영역의 좌표를 얻어옵니다.
-                  var bounds = map.getBounds();
-
-                  // 영역의 남서쪽 좌표를 얻어옵니다
-                  var swLatLng = bounds.getSouthWest();
-
-                  // 영역의 북동쪽 좌표를 얻어옵니다
-                  var neLatLng = bounds.getNorthEast();
-
-                  const data = {
-                    rightLatitude: neLatLng.getLat(),
-                    rightLongitude: neLatLng.getLng(),
-                    leftLatitude: swLatLng.getLat(),
-                    leftLongitude: swLatLng.getLng(),
-                  };
+                  const data = getData(map)
                   fetch(`http://localhost:3000/api/hospitals/around`, {
                     method: 'POST',
                     headers: {
@@ -491,6 +416,40 @@
                                 map: map,
                                 position: coords,
                               });
+
+                              marker.id = data.hospitals[i].hospitalId
+                              // 마커에 클릭이벤트를 등록합니다
+                              kakao.maps.event.addListener(marker, 'click', function () {
+                                console.log(data.doctors[0].doctor)
+                                // 마커 위에 인포윈도우를 표시합니다
+                                const id = marker.id
+                                fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                  .then((response) => response.json())
+                                  .then((data) => {
+                                    console.log(data)
+                                    document.getElementById('list').innerHTML = ``
+
+                                    const a =
+                                      `
+                                      <div>${data.hospitalName}</div>
+                                      <div>${data.hospitalphone}</div>
+                                      <div>${data.hospitalAddress}</div>
+                                        `
+                                    const li = document.createElement('li');
+                                    li.innerHTML = a;
+                                    document.getElementById('list').appendChild(li);
+
+
+                                    for (let i = 0; i < data.doctors.length; i++) {
+                                      const b = `<div>${data.doctors[i].doctor}</div>
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <div>${data.doctors[i].department}</div>`
+                                      const doctorLi = document.createElement('li');
+                                      doctorLi.innerHTML = b;
+                                      document.getElementById('list').appendChild(doctorLi);
+                                    }
+                                  })
+                              });
                             }
                           }
                         );
@@ -502,21 +461,7 @@
 
                   marker.setMap(null);
 
-                  // 영역의 좌표를 얻어옵니다.
-                  var bounds = map.getBounds();
-
-                  // 영역의 남서쪽 좌표를 얻어옵니다
-                  var swLatLng = bounds.getSouthWest();
-
-                  // 영역의 북동쪽 좌표를 얻어옵니다
-                  var neLatLng = bounds.getNorthEast();
-
-                  const data = {
-                    rightLatitude: neLatLng.getLat(),
-                    rightLongitude: neLatLng.getLng(),
-                    leftLatitude: swLatLng.getLat(),
-                    leftLongitude: swLatLng.getLng(),
-                  };
+                  const data = getData(map)
 
                   fetch(`http://localhost:3000/api/hospitals/around`, {
                     method: 'POST',
@@ -541,6 +486,38 @@
                               var marker = new kakao.maps.Marker({
                                 map: map,
                                 position: coords,
+                              });
+
+                              marker.id = data.hospitals[i].hospitalId
+                              // 마커에 클릭이벤트를 등록합니다
+                              kakao.maps.event.addListener(marker, 'click', function () {
+                                // 마커 위에 인포윈도우를 표시합니다
+                                const id = marker.id
+                                fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                  .then((response) => response.json())
+                                  .then((data) => {
+                                    document.getElementById('list').innerHTML = ``
+
+                                    const a =
+                                      `
+                                      <div>${data.hospitalName}</div>
+                                      <div>${data.hospitalphone}</div>
+                                      <div>${data.hospitalAddress}</div>
+                                        `
+                                    const li = document.createElement('li');
+                                    li.innerHTML = a;
+                                    document.getElementById('list').appendChild(li);
+
+                                    for (let i = 0; i < data.doctors.length; i++) {
+                                      const b = `<div>${data.doctors[i].doctor}</div>
+                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <div>${data.doctors[i].department}</div>`
+                                      const doctorLi = document.createElement('li');
+                                      doctorLi.innerHTML = b;
+                                      document.getElementById('list').appendChild(doctorLi);
+                                    }
+
+                                  })
                               });
                             }
                           }
@@ -571,6 +548,25 @@
 
       }
 
+    }
+
+    function getData(map) {
+      var bounds = map.getBounds();
+
+      // 영역의 남서쪽 좌표를 얻어옵니다
+      var swLatLng = bounds.getSouthWest();
+
+      // 영역의 북동쪽 좌표를 얻어옵니다
+      var neLatLng = bounds.getNorthEast();
+
+      const data = {
+        rightLatitude: neLatLng.getLat(),
+        rightLongitude: neLatLng.getLng(),
+        leftLatitude: swLatLng.getLat(),
+        leftLongitude: swLatLng.getLng(),
+      };
+
+      return data
     }
   </script>
 </body>
