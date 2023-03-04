@@ -2,16 +2,16 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.dropTable('pharmacies')
-  },
+    async up(queryInterface, Sequelize) {
+        await queryInterface.dropTable('pharmacies');
+    },
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-  }
+    async down(queryInterface, Sequelize) {
+        /**
+         * Add reverting commands here.
+         *
+         * Example:
+         * await queryInterface.dropTable('users');
+         */
+    },
 };

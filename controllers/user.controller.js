@@ -29,18 +29,18 @@ class UserController {
 
     //mypage
 
-    getUserProfile = async (req, res) => {
+    getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
             const userProfile = await this.userService.showUserProfile(userId.userId);
 
             return res.status(200).json({ userProfile });
         } catch (err) {
-            return res.status(err.status).json({ success: err.success, message: err.message });
+            next(err);
         }
     };
 
-    editUserProfile = async (req, res) => {
+    editUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
             const { address, phone, name } = await this.validation.editProfile.validateAsync(
@@ -54,11 +54,11 @@ class UserController {
             );
             return res.status(201).json(editedProfile);
         } catch (err) {
-            return res.status(err.status).json({ success: err.success, message: err.message });
+            next(err);
         }
     };
 
-    cancelReservation = async (req, res) => {
+    cancelReservation = async (req, res, next) => {
         try {
             const reservationId = req.params;
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
@@ -66,8 +66,8 @@ class UserController {
                 reservationId.id
             );
             return res.status(201).json(canceledReservation);
-        } catch {
-            res.status(err.status).json({ message: err.message });
+        } catch (err) {
+            next(err);
         }
     };
 
