@@ -25,31 +25,39 @@ class HospitalRepository {
                 order: [['createdAt', 'DESC']],
                 where: {
                     doctorId,
-                    status: 'waiting'
+                    status: 'waiting',
                 },
-                attributes:{
+                attributes: {
                     include: [
                         'doctorId',
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'),'%Y-%m-%d %H:%i:%s'),
+                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
                             'date',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('updatedAt'),'%Y-%m-%d %H:%i:%s'),
-                            'updatedAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('updatedAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'updatedAt',
                         ],
                         [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('createdAt'),'%Y-%m-%d %H:%i:%s'),
-                            'createdAt', 
+                            sequelize.fn(
+                                'DATE_FORMAT',
+                                sequelize.col('createdAt'),
+                                '%Y-%m-%d %H:%i:%s'
+                            ),
+                            'createdAt',
                         ],
                     ],
-                }
-            })
+                },
+            });
             return waitdata;
         } catch (error) {
-            error.name = 'DB 에러',
-            error.message = '해당 요청을 처리하지 못했습니다.',
-            error.status = 400;
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
             throw error;
         }
     };
@@ -57,7 +65,7 @@ class HospitalRepository {
     //병원페이지 전체 예약관리 조회
     findAllReservation = async () => {
         try {
-            const data = await this.reservationModel.findAll({
+            const reservationdata = await this.reservationModel.findAll({
                 attributes: {
                     include: [
                         'id',
@@ -84,7 +92,7 @@ class HospitalRepository {
                     ],
                 },
             });
-            return data;
+            return reservationdata;
         } catch (error) {
             throw new Error(error);
         }
@@ -94,13 +102,13 @@ class HospitalRepository {
     editReservation = async (id, date) => {
         try {
             const updated = await this.reservationModel.update({ date }, { where: { id } });
-            return { status:200, success: true, message: '예약이 변경되었습니다.'};
+            return { status: 200, success: true, message: '예약이 변경되었습니다.' };
         } catch (error) {
             throw new Error(error.message);
         }
     };
 
-    // 병원페이지 승인하기 
+    // 병원페이지 승인하기
     approvedReservation = async (id, status) => {
         try {
             await this.reservationModel.update({ status }, { where: { id } });
@@ -213,7 +221,6 @@ class HospitalRepository {
             throw error;
         }
     };
-
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {
