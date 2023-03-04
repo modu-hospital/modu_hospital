@@ -4,7 +4,6 @@ body {
 }
 
 .container1 {
-    font-family: 'Trebuchet MS', serif;
     width: 100%;
     margin: 0 auto;
 }
@@ -37,4 +36,39 @@ ul.tabs li.current {
 
 .tab-content.current {
     display: inherit;
+}
+
+.list-MS {
+    font-family: 'Trebuchet MS', serif;
+    font-weight: 900;
+}
+
+.list-name {
+    font-weight: 900;
+}
+
+#select {
+    width: 200px;
+}
+
+#filter-content {
+    width: 250px;
+}
+
+#filter-value {
+    border-radius: 7.5px;
+    border: 2px solid gainsboro;
+    padding-left: 20px;
+    margin: 0px 0px 20px 20px;
+}
+
+#btn_init {
+    font-size: 0.7em;
+    width: 120px;
+    height: 48px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 0px 0px 0px 0px;
+    border-color: gainsboro;
+    border-radius: 7.5px;
 }

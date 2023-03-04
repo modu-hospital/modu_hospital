@@ -13,7 +13,17 @@ class UserController {
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
-            return res.json({ message: error.message });
+            return res.status(err.status).json({ message: error.message });
+        }
+    };
+
+    getRoleUserInfo = async (req, res) => {
+        try {
+            const { role } = req.params;
+            const roleUserInfo = await this.userService.findRoleUsers(role);
+            res.status(200).send(roleUserInfo);
+        } catch (error) {
+            return res.status(error.status).json({ message: error.message });
         }
     };
 

@@ -117,6 +117,26 @@ class UserService {
             };
         });
     };
+
+    findRoleUsers = async (role) => {
+        const roleUsers = await this.userRepository.findRoleUsers(role);
+
+        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
+        // }
+        return roleUsers.map((users) => {
+            return {
+                userId: users.userId,
+                name: users.name,
+                loginId: users.loginId,
+                password: users.password,
+                phone: users.phone,
+                idNumber: users.idNumber,
+                address: users.address,
+                role: users.role,
+                createdAt: users.createdAt,
+            };
+        });
+    };
 }
 
 module.exports = UserService;
