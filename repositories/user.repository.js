@@ -36,13 +36,20 @@ class UserRepository {
         return await this.userModel.findOne({ loginId });
     };
 
-    findUserRole = async (role) => {
+    findUserRole = async () => {
         return await this.userModel.findAll({ where: { role } });
     };
 
+    // (관리자) all 유저 조회
     findUsers = async () => {
         const users = await this.userModel.findAll({});
         return users;
+    };
+
+    // (관리자) role별 유저 조회
+    findRoleUsers = async (role) => {
+        const roleUsers = await this.userModel.findAll({ where: { role } });
+        return roleUsers;
     };
 }
 

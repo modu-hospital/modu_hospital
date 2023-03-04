@@ -62,13 +62,14 @@ class HospitalService {
             const infos = hospitals.map((hospital) => {
                 const doctors = hospital.doctors.map((doctor) => {
                     const department = doctor.doctorCategoryMappings.map((category) => {
-                        return { department: category.categories.department };
+                        return category.categories.department
                     });
-                    return { doctor: doctor.name, department };
+                    return { doctor: doctor.name, department : department.join(",") };
                 });
                 return {
                     name: hospital.name,
                     address: hospital.address,
+                    phone : hospital.phone,
                     doctors,
                 };
             });
@@ -87,9 +88,9 @@ class HospitalService {
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
-                    return { department: category.categories.department };
+                    return category.categories.department
                 });
-                return { doctor: doctor.name, department };
+                return { doctor: doctor.name, doctorImage: doctor.image, department : department.join(",") };
             });
 
             return {
