@@ -1,6 +1,8 @@
 const { where, Op } = require('sequelize');
 const { sequelize } = require('../models');
 
+const formatterdDate = '%Y-%m-%d %H:%i'; // %Y-%m-%d %H:%i:%s => 원하는 날짜 형식 바꾸기 
+
 class HospitalRepository {
     constructor(
         ReservationModel,
@@ -8,7 +10,8 @@ class HospitalRepository {
         ReviewsModel,
         DoctorModel,
         CategoryModel,
-        DoctorCategoryMappingModel
+        DoctorCategoryMappingModel,
+        UserModel,
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -16,81 +19,115 @@ class HospitalRepository {
         this.doctorModel = DoctorModel;
         this.categoryModel = CategoryModel;
         this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
+        this.userModel = UserModel;
     }
 
     //병원페이지 예약 승인대기 목록 불러오기
-    getWaitedReservation = async (doctorId) => {
+    getWaitedReservation = async (hospitalId) => {
         try {
-            const waitdata = await this.reservationModel.findAll({
-                order: [['createdAt', 'DESC']],
+            const reservationwaitdata = await this.hospitalModel.findAll({
                 where: {
-                    doctorId,
-                    status: 'waiting',
+                    hospitalId,
                 },
-                attributes: {
-                    include: [
-                        'doctorId',
-                        [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
-                            'date',
-                        ],
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('updatedAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'updatedAt',
-                        ],
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('createdAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'createdAt',
-                        ],
-                    ],
-                },
+                attributes:['hospitalId','name'], 
+                include: [{
+                    model: this.doctorModel, 
+                    as: 'doctors',
+                    attributes: ['name','doctorId'], 
+                    include: [{
+                        model: this.reservationModel,
+                        as: 'reservations',
+                        where:{
+                            status: 'waiting'
+                        },
+                        order: [['date', 'DESC']],
+                        attributes:{
+                            include: [
+                                'id','name','phone','contents','idNumber','status',
+                                [
+                                    sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i'),
+                                    'date',
+                                ],
+                                
+                            ]},           
+                    }                        
+                    ]
+                }]
+         
             });
-            return waitdata;
+            return reservationwaitdata;
         } catch (error) {
-            (error.name = 'DB 에러'),
-                (error.message = '해당 요청을 처리하지 못했습니다.'),
-                (error.status = 400);
-            throw error;
+            throw new Error(error);
+        }
+    };
+
+     //병원페이지 승인 확정 목록 
+     getapprovedReservation = async (hospitalId) => {
+        try {
+            const reservationdata = await this.hospitalModel.findAll({
+                where: {
+                    hospitalId,
+                },
+                attributes:['hospitalId','name'], 
+                include: [{
+                    model: this.doctorModel, 
+                    as: 'doctors',
+                    attributes: ['name','doctorId'], 
+                    include: [{
+                        model: this.reservationModel,
+                        as: 'reservations',     
+                        where:{
+                            status: 'approved'
+                        },              
+                        attributes:{
+                            include: [
+                                'id','name','phone','contents','idNumber','status',
+                                [
+                                    sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i'),
+                                    'date',
+                                ],              
+                                
+                            ]},           
+                    }                        
+                    ]
+                }]
+         
+            });
+            return reservationdata;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
     //병원페이지 전체 예약관리 조회
-    findAllReservation = async () => {
+    findAllReservation = async (hospitalId) => {
         try {
-            const reservationdata = await this.reservationModel.findAll({
-                attributes: {
-                    include: [
-                        'id',
-                        [
-                            sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i:%s'),
-                            'date',
-                        ],
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('updatedAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'updatedAt',
-                        ],
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('createdAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'createdAt',
-                        ],
-                    ],
+            const reservationdata = await this.hospitalModel.findAll({
+                where: {
+                    hospitalId,
                 },
+                attributes:['hospitalId','name'], 
+                include: [{
+                    model: this.doctorModel, 
+                    as: 'doctors',
+                    attributes: ['name','doctorId'], 
+                    include: [{
+                        model: this.reservationModel,
+                        as: 'reservations',    
+                        order: [['date', 'DESC']],               
+                        attributes:{
+                            include: [
+                                'id','name','phone','contents','idNumber','status',
+                                [
+                                    sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m-%d %H:%i'),
+                                    'date',
+                                ],
+                                
+                            ]},           
+                    }                        
+                    ]
+                }]
+         
             });
             return reservationdata;
         } catch (error) {
@@ -132,36 +169,33 @@ class HospitalRepository {
     };
 
     //리뷰 조회
-    getAllreviews = async () => {
+    getAllreviews = async (hospitalId) => {
         try {
-            const data = await this.reviewsModel.findAll({
+          const data = await this.userModel.findAll({
+            attributes: ['userId', 'name'],
+            include: [
+              {
+                where: { hospitalId },
+                model: this.reviewsModel,
+                as: 'reviews',
                 attributes: {
-                    include: [
-                        'id',
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('createdAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'createdAt',
-                        ],
-                        [
-                            sequelize.fn(
-                                'DATE_FORMAT',
-                                sequelize.col('updatedAt'),
-                                '%Y-%m-%d %H:%i:%s'
-                            ),
-                            'updatedAt',
-                        ],
-                    ],
+                  include: [
+                    'contents',
+                    'star',
+                    [
+                      sequelize.literal(`DATE_FORMAT(reviews.createdAt, '${formatterdDate}')`),
+                      'reviewCreatedAt'
+                    ]
+                  ],
                 },
-            });
-            return data;
+              },
+            ],
+          });
+          return data;
         } catch (error) {
-            throw new Error(error);
+          throw new Error(error);
         }
-    };
+      };
 
     //병원 정보 등록
     registerHospital = async (userId, name, address, phone, longitude, latitude) => {
@@ -212,7 +246,9 @@ class HospitalRepository {
     // 해당 병원 찾기
     findOneHospital = async (userId) => {
         try {
-            const findData = await this.hospitalModel.findOne({ where: { userId } });
+            const findData = await this.hospitalModel.findOne({ 
+                where: { userId } ,
+            });
             return findData;
         } catch (error) {
             (error.name = 'DB 에러'),

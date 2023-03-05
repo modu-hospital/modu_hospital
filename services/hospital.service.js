@@ -6,6 +6,7 @@ const {
     Doctor,
     Category,
     DoctorCategoryMapping,
+    User,
 } = require('../models/index.js');
 
 class HospitalService {
@@ -15,7 +16,8 @@ class HospitalService {
         Review,
         Doctor,
         Category,
-        DoctorCategoryMapping
+        DoctorCategoryMapping,
+        User,
     );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -105,9 +107,13 @@ class HospitalService {
         }
     };
 
-    findAllReservation = async () => {
+    findAllReservation = async (userId) => {
         try {
-            const data = await this.hospitalRepository.findAllReservation();
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            console.log(hospitaldata)
+            let hospitalId = hospitaldata.hospitalId
+            console.log(hospitalId) ;
+            const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
             throw new Error(error);
@@ -144,9 +150,11 @@ class HospitalService {
         }
     };
 
-    getWaitedReservation = async (doctorId) => {
+    getWaitedReservation = async (userId) => {
         try {
-            const waitingdata = this.hospitalRepository.getWaitedReservation(doctorId);
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
             throw err;
@@ -199,12 +207,25 @@ class HospitalService {
         }
     };
 
-    getAllreviews = async () => {
+    getAllreviews = async (userId) => {
         try {
-            const data = await this.hospitalRepository.getAllreviews();
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const data = await this.hospitalRepository.getAllreviews(hospitalId);
             return data;
         } catch (error) {
             throw new Error(error);
+        }
+    };
+
+    getapprovedReservation = async (userId) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);;
+            let hospitalId = hospitaldata.hospitalId;
+            const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
+            return waitingdata;
+        } catch (err) {
+            throw err;
         }
     };
 }
