@@ -1,6 +1,7 @@
 <style>
   body {
     margin: 0;
+    list-style: none;
   }
 
   #listBtn {
@@ -11,14 +12,95 @@
     border: 3px solid #73AD21;
     z-index: 1;
   }
+
+  input[id="menuIcon"] {
+    display: none;
+  }
+
+  input[id="menuIcon"]+label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    transition: all 0.35s;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  input[id="menuIcon"]+label span {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    border-radius: 30px;
+    background: #222;
+    transition: all .35s;
+  }
+
+  input[id="menuIcon"]+label span:nth-child(1) {
+    top: 0;
+  }
+
+  input[id="menuIcon"]+label span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  input[id="menuIcon"]+label span:nth-child(3) {
+    bottom: 0;
+  }
+
+  input[id="menuIcon"]:checked+label span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  input[id="menuIcon"]:checked+label span:nth-child(2) {
+    opacity: 0;
+  }
+
+  input[id="menuIcon"]:checked+label span:nth-child(3) {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+  }
+
+  div[class="sidebar"] {
+    width: 300px;
+    height: 100%;
+    background: #dddddd;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    z-index: 2;
+    transition: all .35s;
+  }
+
+  input[id="menuIcon"]:checked+label+div {
+    right: 0;
+  }
+
+  .doctorImg {
+    width: 100px;
+    height: 100px;
+  }
 </style>
 
 <body onload="load()">
+  <input type="checkbox" name="" id="menuIcon">
+  <label for="menuIcon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <div class="sidebar">
+    <nav id="list">
+      <ul>
+      </ul>
+    </nav>
+  </div>
   <div id="map" style="width: 100%; height: 100vh;"></div>
-  <nav id="list">
-    <ul>
-    </ul>
-  </nav>
   <div>
     <button id="listBtn" type="menu"></button>
   </div>
@@ -47,6 +129,8 @@
         event.preventDefault();
 
         const data = getData(map)
+
+        document.getElementById("menuIcon").checked = true;
 
         fetch(`http://localhost:3000/api/hospitals/around/info`, {
           method: 'POST',
@@ -88,6 +172,29 @@
 
               const data = getData(map)
 
+              fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  document.getElementById('list').innerHTML = ``
+                  for (let i = 0; i < data.hospitals.length; i++) {
+                    const a =
+                      `
+              <div>${data.hospitals[i].name}</div>
+              <div>${data.hospitals[i].address}</div>
+              `
+
+                    const li = document.createElement('li');
+                    li.innerHTML = a;
+                    document.getElementById('list').appendChild(li);
+                  }
+                })
+
               fetch(`http://localhost:3000/api/hospitals/around`, {
                 method: 'POST',
                 headers: {
@@ -105,6 +212,29 @@
             kakao.maps.event.addListener(map, 'dragend', function () {
 
               const data = getData(map)
+
+              fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  document.getElementById('list').innerHTML = ``
+                  for (let i = 0; i < data.hospitals.length; i++) {
+                    const a =
+                      `
+              <div>${data.hospitals[i].name}</div>
+              <div>${data.hospitals[i].address}</div>
+              `
+
+                    const li = document.createElement('li');
+                    li.innerHTML = a;
+                    document.getElementById('list').appendChild(li);
+                  }
+                })
 
               fetch(`http://localhost:3000/api/hospitals/around`, {
                 method: 'POST',
@@ -136,6 +266,9 @@
                           kakao.maps.event.addListener(marker, 'click', function () {
                             // 마커 위에 인포윈도우를 표시합니다
                             const id = marker.id
+
+                            document.getElementById("menuIcon").checked = true;
+
                             fetch(`http://localhost:3000/api/hospitals/info/${id}`)
                               .then((response) => response.json())
                               .then((data) => {
@@ -153,7 +286,7 @@
 
                                 for (let i = 0; i < data.doctors.length; i++) {
                                   const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
                                         <div>${data.doctors[i].department}</div>`
                                   const doctorLi = document.createElement('li');
                                   doctorLi.innerHTML = b;
@@ -188,6 +321,29 @@
                     marker.setMap(null);
 
                     const data = getData(map)
+
+                    fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        document.getElementById('list').innerHTML = ``
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          const a =
+                            `
+              <div>${data.hospitals[i].name}</div>
+              <div>${data.hospitals[i].address}</div>
+              `
+
+                          const li = document.createElement('li');
+                          li.innerHTML = a;
+                          document.getElementById('list').appendChild(li);
+                        }
+                      })
                     fetch(`http://localhost:3000/api/hospitals/around`, {
                       method: 'POST',
                       headers: {
@@ -217,7 +373,8 @@
                                 // 마커에 클릭이벤트를 등록합니다
                                 kakao.maps.event.addListener(marker, 'click', function () {
                                   console.log(data.doctors[0].doctor)
-                                  // 마커 위에 인포윈도우를 표시합니다
+                                  // 마커 위에 인포윈도우를 표시합
+                                  document.getElementById("checkbox").checked = true; 니다
                                   const id = marker.id
                                   fetch(`http://localhost:3000/api/hospitals/info/${id}`)
                                     .then((response) => response.json())
@@ -238,7 +395,7 @@
 
                                       for (let i = 0; i < data.doctors.length; i++) {
                                         const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
                                         <div>${data.doctors[i].department}</div>`
                                         const doctorLi = document.createElement('li');
                                         doctorLi.innerHTML = b;
@@ -258,6 +415,29 @@
                     marker.setMap(null);
 
                     const data = getData(map)
+
+                    fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        document.getElementById('list').innerHTML = ``
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          const a =
+                            `
+              <div>${data.hospitals[i].name}</div>
+              <div>${data.hospitals[i].address}</div>
+              `
+
+                          const li = document.createElement('li');
+                          li.innerHTML = a;
+                          document.getElementById('list').appendChild(li);
+                        }
+                      })
 
                     fetch(`http://localhost:3000/api/hospitals/around`, {
                       method: 'POST',
@@ -289,6 +469,7 @@
                                 kakao.maps.event.addListener(marker, 'click', function () {
                                   // 마커 위에 인포윈도우를 표시합니다
                                   const id = marker.id
+                                  document.getElementById("checkbox").checked = true;
                                   fetch(`http://localhost:3000/api/hospitals/info/${id}`)
                                     .then((response) => response.json())
                                     .then((data) => {
@@ -306,7 +487,7 @@
 
                                       for (let i = 0; i < data.doctors.length; i++) {
                                         const b = `<div>${data.doctors[i].doctor}</div>
-                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
                                         <div>${data.doctors[i].department}</div>`
                                         const doctorLi = document.createElement('li');
                                         doctorLi.innerHTML = b;
@@ -421,7 +602,8 @@
                               // 마커에 클릭이벤트를 등록합니다
                               kakao.maps.event.addListener(marker, 'click', function () {
                                 console.log(data.doctors[0].doctor)
-                                // 마커 위에 인포윈도우를 표시합니다
+                                // 마커 위에 인포윈도우를 표시합
+                                document.getElementById("checkbox").checked = true; 니다
                                 const id = marker.id
                                 fetch(`http://localhost:3000/api/hospitals/info/${id}`)
                                   .then((response) => response.json())
@@ -442,7 +624,7 @@
 
                                     for (let i = 0; i < data.doctors.length; i++) {
                                       const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
                                         <div>${data.doctors[i].department}</div>`
                                       const doctorLi = document.createElement('li');
                                       doctorLi.innerHTML = b;
@@ -493,6 +675,7 @@
                               kakao.maps.event.addListener(marker, 'click', function () {
                                 // 마커 위에 인포윈도우를 표시합니다
                                 const id = marker.id
+                                document.getElementById("checkbox").checked = true;
                                 fetch(`http://localhost:3000/api/hospitals/info/${id}`)
                                   .then((response) => response.json())
                                   .then((data) => {
@@ -510,7 +693,7 @@
 
                                     for (let i = 0; i < data.doctors.length; i++) {
                                       const b = `<div>${data.doctors[i].doctor}</div>
-                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}">
+                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
                                         <div>${data.doctors[i].department}</div>`
                                       const doctorLi = document.createElement('li');
                                       doctorLi.innerHTML = b;
