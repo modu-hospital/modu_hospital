@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
 const formatterdDate = '%Y-%m-%d %H:%i'; // %Y-%m-%d %H:%i:%s => 원하는 날짜 형식 바꾸기

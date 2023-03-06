@@ -18,22 +18,25 @@ class UserService {
         }
         const waiting = reservations.filter((e) => e.status == 'waiting');
         const approved = reservations.filter((e) => e.status == 'approved');
-        const done = reservations.filter((e) => e.status == 'done');
-        const reviewed = reservations.filter((e) => e.status == 'reviewed');
+        const doneOrReviewed = reservations.filter((e) => e.status == 'done' || e.status =='reviewed');
+        // const done = reservations.filter((e) => e.status == 'done');
+        // const reviewed = reservations.filter((e) => e.status == 'reviewed');
         const canceled = reservations.filter((e) => e.status == 'canceled');
         const sortedReservations = {
             waiting: waiting,
             approved: approved,
-            done: done,
-            reviewed: reviewed,
+            doneOrReviewed:doneOrReviewed,
+            // done: done,
+            // reviewed: reviewed,
             canceled: canceled,
         };
         return sortedReservations;
     };
-
     showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
+            userId:user.userId,
+            loginId:user.loginId,
             name: user.name,
             phone: user.phone,
             address: user.address,
@@ -41,7 +44,6 @@ class UserService {
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
         const sortedReservations = this.sortReservationsByStatus(reservations);
-
         const profileData = {
             userData: userData,
             reservations: sortedReservations,
@@ -64,6 +66,7 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser[0]) {
+            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             return;
         }
