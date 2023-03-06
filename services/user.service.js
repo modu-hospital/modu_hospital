@@ -114,8 +114,8 @@ class UserService {
         });
     };
 
-    findRoleUsers = async (role) => {
-        const roleUsers = await this.userRepository.findRoleUsers(role);
+    findUserRole = async (role) => {
+        const roleUsers = await this.userRepository.findUserRole(role);
 
         //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
         // }
@@ -132,6 +132,12 @@ class UserService {
                 createdAt: users.createdAt,
             };
         });
+    };
+
+    roleUpdate = async (userId, role) => {
+        const roleUpdate = await this.userRepository.userRoleUpdate(userId, role);
+
+        return roleUpdate;
     };
 }
 
