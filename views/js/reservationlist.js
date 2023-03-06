@@ -1,8 +1,8 @@
 $(document).ready(function () {
     reservationList();
-    waitedreservationList()
-    approvedreservationList()
-    reviewList()
+    waitedreservationList();
+    approvedreservationList();
+    reviewList();
 });
 
 // {
@@ -76,8 +76,8 @@ function extractReservations(reservationData) {
                     idNumber: reservation['idNumber'],
                     phone: reservation['phone'],
                     contents: reservation['contents'],
-                    date: reservation['date'],                   
-                    status: reservation['status'],                   
+                    date: reservation['date'],
+                    status: reservation['status'],
                 });
             }
         }
@@ -86,9 +86,7 @@ function extractReservations(reservationData) {
     return reservations;
 }
 
-
-
-// 전체예약관리 
+// 전체예약관리
 function reservationList() {
     $.ajax({
         type: 'GET',
@@ -101,7 +99,7 @@ function reservationList() {
 
                 let temp_html = `<tbody>
                             <tr>
-                                <th scope="row">${i+1}</th>
+                                <th scope="row">${i + 1}</th>
                                 <td>${reservation.doctorName}</td>
                                 <td>${reservation.name}</td>
                                 <td>${reservation.idNumber}</td 
@@ -109,7 +107,9 @@ function reservationList() {
                                 <td>${reservation.phone}</td>
                                 <td>${reservation.contents}</td>
                                 <td>${reservation.date}</td>
-                                <td>${reservation.status}</td>                                                            
+                                <td>${
+                                    reservation.status
+                                }</td>                                                            
                             </tr>
                         </tbody>`;
                 $('#reservationList').append(temp_html);
@@ -117,10 +117,6 @@ function reservationList() {
         },
     });
 }
-
-
-
-
 
 function extractwaitedReservations(waitingdata) {
     let reservations = [];
@@ -146,8 +142,8 @@ function extractwaitedReservations(waitingdata) {
                     idNumber: reservation['idNumber'],
                     phone: reservation['phone'],
                     contents: reservation['contents'],
-                    date: reservation['date'],                   
-                    status: reservation['status'],                   
+                    date: reservation['date'],
+                    status: reservation['status'],
                 });
             }
         }
@@ -156,8 +152,7 @@ function extractwaitedReservations(waitingdata) {
     return reservations;
 }
 
-
-// 승인대기 불러오기 
+// 승인대기 불러오기
 function waitedreservationList() {
     $.ajax({
         type: 'GET',
@@ -170,7 +165,7 @@ function waitedreservationList() {
 
                 let temp_html = `<tbody>
                             <tr>
-                                <th scope="row">${i+1}</th>
+                                <th scope="row">${i + 1}</th>
                                 <td>${reservation.doctorName}</td>
                                 <td>${reservation.name}</td>
                                 <td>${reservation.idNumber}</td 
@@ -178,7 +173,9 @@ function waitedreservationList() {
                                 <td>${reservation.phone}</td>
                                 <td>${reservation.contents}</td>
                                 <td>${reservation.date}</td>
-                                <td>${reservation.status}</td>                                                            
+                                <td>${
+                                    reservation.status
+                                }</td>                                                            
                             </tr>
                         </tbody>`;
                 $('#waitingreservationList').append(temp_html);
@@ -211,8 +208,8 @@ function extractwaitedReservations(waitingdata) {
                     idNumber: reservation['idNumber'],
                     phone: reservation['phone'],
                     contents: reservation['contents'],
-                    date: reservation['date'],                   
-                    status: reservation['status'],                   
+                    date: reservation['date'],
+                    status: reservation['status'],
                 });
             }
         }
@@ -220,7 +217,6 @@ function extractwaitedReservations(waitingdata) {
 
     return reservations;
 }
-
 
 function extractapprovedReservations(approveddata) {
     let reservations = [];
@@ -246,8 +242,8 @@ function extractapprovedReservations(approveddata) {
                     idNumber: reservation['idNumber'],
                     phone: reservation['phone'],
                     contents: reservation['contents'],
-                    date: reservation['date'],                   
-                    status: reservation['status'],                   
+                    date: reservation['date'],
+                    status: reservation['status'],
                 });
             }
         }
@@ -256,7 +252,7 @@ function extractapprovedReservations(approveddata) {
     return reservations;
 }
 
-// 예약완료 불러오기 
+// 예약완료 불러오기
 function approvedreservationList() {
     $.ajax({
         type: 'GET',
@@ -269,7 +265,7 @@ function approvedreservationList() {
 
                 let temp_html = `<tbody>
                             <tr>
-                                <th scope="row">${i+1}</th>
+                                <th scope="row">${i + 1}</th>
                                 <td>${reservation.doctorName}</td>
                                 <td>${reservation.name}</td>
                                 <td>${reservation.idNumber}</td 
@@ -277,45 +273,45 @@ function approvedreservationList() {
                                 <td>${reservation.phone}</td>
                                 <td>${reservation.contents}</td>
                                 <td>${reservation.date}</td>
-                                <td>${reservation.status}</td>                                                            
+                                <td>${
+                                    reservation.status
+                                }</td>                                                            
                             </tr>
                         </tbody>`;
                 $('#approvedreservationList').append(temp_html);
             }
         },
     });
-};
+}
 
-
-
-//리뷰관리 
+//리뷰관리
 function reviewList() {
     $.ajax({
-      type: 'GET',
-      url: '/api/hospitals/reviews',
-      dataType: 'json',
-      success: function (response) {
-        let reviews = response['data'];
-  
-        for (let i = 0; i < reviews.length; i++) {
-          let userId = reviews[i]['userId'];
-          let name = reviews[i]['name'];
-          let contents = reviews[i]['reviews'][0]['contents'];
-          let star = reviews[i]['reviews'][0]['star'];
-          let reviewCreatedAt = reviews[i]['reviews'][0]['reviewCreatedAt'];
-  
-          let temp_html = `<tbody>
+        type: 'GET',
+        url: '/api/hospitals/reviews',
+        dataType: 'json',
+        success: function (response) {
+            let reviews = response['data'];
+
+            for (let i = 0; i < reviews.length; i++) {
+                let userId = reviews[i]['userId'];
+                let name = reviews[i]['name'];
+                let contents = reviews[i]['reviews'][0]['contents'];
+                let star = reviews[i]['reviews'][0]['star'];
+                let reviewCreatedAt = reviews[i]['reviews'][0]['reviewCreatedAt'];
+
+                let temp_html = `<tbody>
             <tr>
-              <th scope="row">${i+1}</th>
+              <th scope="row">${i + 1}</th>
               <td>${name}</td>
               <td>${contents}</td>
               <td>${star}</td>
               <td>${reviewCreatedAt}</td>
             </tr>
           </tbody>`;
-  
-          $('#reviewList').append(temp_html);
-        }
-      },
+
+                $('#reviewList').append(temp_html);
+            }
+        },
     });
-  }
+}

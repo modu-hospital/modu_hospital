@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
             });
             this.belongsTo(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
             this.hasMany(WorkingTime, { foreignKey: 'doctorId', as: 'workingTimes' });
-            this.belongsTo(Reservation, {foreignKey: 'doctorId', as:'reservations'})
+            this.belongsTo(Reservation, { foreignKey: 'doctorId', as: 'reservations' });
         }
     }
 
