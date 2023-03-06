@@ -36,20 +36,28 @@ class UserRepository {
         return await this.userModel.findOne({ loginId });
     };
 
-    findUserRole = async () => {
+    findUserRole = async (role) => {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    // (관리자) all 유저 조회
+    // (관리자) role = "deleted" 가 아닌 all 유저 조회
     findUsers = async () => {
-        const users = await this.userModel.findAll({});
-        return users;
+        const allUserList = await this.userModel.findAll({});
+        const filterList = await allUserList.filter((obj) => obj.role !== 'deleted');
+        return filterList;
     };
 
-    // (관리자) role별 유저 조회
-    findRoleUsers = async (role) => {
-        const roleUsers = await this.userModel.findAll({ where: { role } });
-        return roleUsers;
+    // (관리자) role 변경 (삭제 또는 수정)
+    userRoleUpdate = async (userId, role) => {
+        const userRoleUpdate = await this.userModel.update(
+            {
+                role: role,
+            },
+            {
+                where: { userId },
+            }
+        );
+        return userRoleUpdate;
     };
 }
 

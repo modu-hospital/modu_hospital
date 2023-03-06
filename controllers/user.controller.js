@@ -1,10 +1,12 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
+const HospitalService = require('../services/hospital.service');
 const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
+    hospitalService = new HospitalService();
     validation = new Validation();
 
     // 서비스관리자의 회원 정보 조회
@@ -20,8 +22,21 @@ class UserController {
     getRoleUserInfo = async (req, res) => {
         try {
             const { role } = req.params;
-            const roleUserInfo = await this.userService.findRoleUsers(role);
+            const roleUserInfo = await this.userService.findUserRole(role);
             res.status(200).send(roleUserInfo);
+        } catch (error) {
+            return res.status(error.status).json({ message: error.message });
+        }
+    };
+
+    roleUpdate = async (req, res) => {
+        try {
+            const { userId } = req.params;
+            const { role } = req.body;
+            console.log(userId, role);
+            const roleUpdate = await this.userService.roleUpdate(userId, role);
+
+            res.status(200).json(roleUpdate);
         } catch (error) {
             return res.status(error.status).json({ message: error.message });
         }
