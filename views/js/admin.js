@@ -5,15 +5,14 @@ $.ajax({
     async: false,
     success: function (response) {
         for (let i = 0; i < response.length; i++) {
-            let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+            let { userId, loginId, name, phone, idNumber, address, createdAt, role } = response[i];
 
-            let temp_html = `<tr>
-                                <th scope="row" class="list-MS" id="userId${userId}">${userId}</th>
+            let temp_html = `<tr id="userId${userId}">
+                                <th scope="row" class="list-MS">${userId}</th>
                                 <td class="list-name">${name}</td>
                                 <td class="list-name">${getGender(idNumber)}</td>
                                 <td class="list-MS">${loginId}</td>
                                 <td class="list-MS">${phone}</td>
-                                <td class="list-MS">${idNumber}</td>
                                 <td class="list-name">${editaddress(address)}</td>
                                 <td class="list-MS"">${editDate(createdAt)}</td>
                                 <td>
@@ -36,15 +35,15 @@ function getCustomUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    response[i];
 
-                let temp_html = `<tr>
-                                    <th scope="row" class="list-MS" id="userId${userId}">${userId}</th>
+                let temp_html = `<tr id="userId${userId}">
+                                    <th scope="row" class="list-MS">${userId}</th>
                                     <td class="list-name">${name}</td>
                                     <td class="list-name">${getGender(idNumber)}</td>
                                     <td class="list-MS">${loginId}</td>
                                     <td class="list-MS">${phone}</td>
-                                    <td class="list-MS">${idNumber}</td>
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
@@ -68,19 +67,19 @@ function getPartnerUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    response[i];
 
-                let temp_html = `<tr>
-                                    <th scope="row" class="list-MS" id="userId${userId}">${userId}</th>
+                let temp_html = `<tr id="userId${userId}">
+                                    <th scope="row" class="list-MS">${userId}</th>
                                     <td class="list-name">${name}</td>
                                     <td class="list-name">${getGender(idNumber)}</td>
                                     <td class="list-MS">${loginId}</td>
                                     <td class="list-MS">${phone}</td>
-                                    <td class="list-MS">${idNumber}</td>
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
+                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="partnerUserDelete(${userId})"
                                             >회원삭제</a
                                         >
                                     </td>
@@ -100,20 +99,20 @@ function getWaitingUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    response[i];
 
-                let temp_html = `<tr>
-                                    <th scope="row" class="list-MS" id="userId${userId}">${userId}</th>
+                let temp_html = `<tr id="userId${userId}">
+                                    <th scope="row" class="list-MS">${userId}</th>
                                     <td class="list-name">${name}</td>
                                     <td class="list-name">${getGender(idNumber)}</td>
                                     <td class="list-MS">${loginId}</td>
                                     <td class="list-MS">${phone}</td>
-                                    <td class="list-MS">${idNumber}</td>
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
-                                            >회원삭제</a
+                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:105px; height:35px" onclick="approveUpdate(${userId})"
+                                            >승인</a
                                         >
                                     </td>
                                 </tr>`;
@@ -121,6 +120,66 @@ function getWaitingUserInfo(role) {
             }
         },
     });
+}
+
+// 일반회원삭제 버튼을 누를 시
+function userDelete(userId) {
+    let result = confirm('정말로 삭제하시겠습니까?');
+    if (result) {
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/admin/${userId}`,
+            async: false,
+            data: { role: 'deleted' },
+            success: function (success) {
+                alert('삭제가 완료되었습니다.');
+                $(`#userId${userId}`).remove();
+                location.reload();
+            },
+        });
+    } else {
+        alert('취소합니다.');
+    }
+}
+
+// 파트너회원삭제 버튼을 누를 시
+function partnerUserDelete(userId) {
+    let result = confirm('정말로 삭제하시겠습니까?');
+    if (result) {
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/admin/partner/${userId}`,
+            async: false,
+            data: { role: 'deleted' },
+            success: function (success) {
+                alert('삭제가 완료되었습니다.');
+                $(`#userId${userId}`).remove();
+                location.reload();
+            },
+        });
+    } else {
+        alert('취소합니다.');
+    }
+}
+
+// 승인대기 파트너회원 승인 버튼 누를시
+function approveUpdate(userId) {
+    let result = confirm('해당 회원을 파트너회원으로 승인하시겠습니까?');
+    if (result) {
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/admin/${userId}`,
+            async: false,
+            data: { role: 'partner' },
+            success: function (success) {
+                alert('파트너회원으로 승인하였습니다.');
+                $(`#userId${userId}`).remove();
+                location.reload();
+            },
+        });
+    } else {
+        alert('취소합니다.');
+    }
 }
 
 // 주소가 없으면 null 이 아닌 공백으로

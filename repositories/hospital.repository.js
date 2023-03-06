@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
 const formatterdDate = '%Y-%m-%d %H:%i'; // %Y-%m-%d %H:%i:%s => 원하는 날짜 형식 바꾸기
@@ -11,7 +11,8 @@ class HospitalRepository {
         DoctorModel,
         CategoryModel,
         DoctorCategoryMappingModel,
-        UserModel
+        UserModel,
+        HospitalImageFileModel
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -20,6 +21,7 @@ class HospitalRepository {
         this.categoryModel = CategoryModel;
         this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
         this.userModel = UserModel;
+        this.hospitalImageFileModel = HospitalImageFileModel;
     }
 
     //병원페이지 예약 승인대기 목록 불러오기
@@ -317,8 +319,9 @@ class HospitalRepository {
                     longitude: { [Op.between]: longitude },
                     latitude: { [Op.between]: latitude },
                 },
-                attributes: ['name', 'address', 'phone'],
+                attributes: ['hospitalId', 'name', 'address', 'phone'],
                 include: [
+                    { model: this.hospitalImageFileModel, as: 'hospitalImageFiles' },
                     {
                         model: this.doctorModel,
                         as: 'doctors',
@@ -349,6 +352,7 @@ class HospitalRepository {
         try {
             return await this.hospitalModel.findByPk(id, {
                 include: [
+                    { model: this.hospitalImageFileModel, as: 'hospitalImageFiles' },
                     {
                         model: this.doctorModel,
                         as: 'doctors',

@@ -7,4 +7,6 @@ router.get('/', UserController.getUserInfo);
 
 router.get('/:role', UserController.getRoleUserInfo);
 
+router.patch('/:userId', UserController.roleUpdate);
+
 module.exports = router;

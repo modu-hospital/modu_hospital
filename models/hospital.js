@@ -44,8 +44,14 @@ module.exports = (sequelize, DataTypes) => {
                     name: 'hospitals_longitude_latitude', // 이름을 지정해주지 않으면 기본 인덱스명은 [table]_[fields]
                     unique: false,
                     fields: ['longitude', 'latitude'],
+                    
                 },
             ],
+            
+        },
+        {
+            timestamps: true, // createAt & updateAt 활성화
+            paranoid: true //timestamps 가 활성화 되어야 사용 가능 > deleteAt 옵션 on
         }
     );
     return Hospital;

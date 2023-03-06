@@ -1,6 +1,6 @@
 const CreateError = require('../lib/errors');
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     const createError = new CreateError();
     const makeFirstLetterLowerCase = (str) => {
         result = str[0].toLowerCase() + str.slice(1, str.length);
@@ -73,15 +73,18 @@ const errorHandler = (err, req, res) => {
         '/api/users/mypage/': '마이페이지 불러오기에 실패했습니다.',
     };
     // lib/errors.js 에서 작성된 에러 먼저 출력, 그 후 errorList의 value 출력
-    // for (let i = 0; i < Object.keys(errorList).length; i++) {
-    //     if (req.path.substr(0, Object.keys(errorList)[i].length) === Object.keys(errorList)[i]) {
-    //         if (makeFirstLetterLowerCase(err.name) in createError) {
-    //             return res.status(err.status).json({ message: err.message });
-    //         } else {
-    //             return res.status(500).json({ message: Object.values(errorList)[i] });
-    //         }
-    //     }
-    // }
+    for (let i = 0; i < Object.keys(errorList).length; i++) {
+        if (req.path.substr(0, Object.keys(errorList)[i].length) === Object.keys(errorList)[i]) {
+            if (makeFirstLetterLowerCase(err.name) in createError) {
+                return res.status(err.status).json({ message: err.message });
+            } else {
+                return res.status(500).json({ message: Object.values(errorList)[i] });
+            }
+        }
+    }
+
+    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' });
+
 };
 
 module.exports = errorHandler;
