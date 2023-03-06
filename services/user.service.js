@@ -14,8 +14,6 @@ class UserService {
     sortReservationsByStatus = (reservations) => {
         if (reservations.length == 0) {
             return reservations;
-        if (reservations.length == 0) {
-            return reservations;
         }
         const waiting = reservations.filter((e) => e.status == 'waiting');
         const approved = reservations.filter((e) => e.status == 'approved');
@@ -33,9 +31,6 @@ class UserService {
         };
         return sortedReservations;
     };
-        return sortedReservations;
-    };
-
     showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
@@ -48,13 +43,7 @@ class UserService {
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
         const sortedReservations = this.sortReservationsByStatus(reservations);
-
-        const sortedReservations = this.sortReservationsByStatus(reservations);
-
         const profileData = {
-            userData: userData,
-            reservations: sortedReservations,
-        };
             userData: userData,
             reservations: sortedReservations,
         };
@@ -69,7 +58,6 @@ class UserService {
             phone,
             name
         );
-        return editedProfile;
         return editedProfile;
     };
 
