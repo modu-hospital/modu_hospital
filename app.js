@@ -11,7 +11,7 @@ const http = createServer(app);
 
 /* define router */
 const router = require('./routes');
-const ejsRouter = require('./routes/ejs.routers');
+const ejsRouter = require('./routes/ejs.routes');
 const errorHandler = require('./middleware/errorhandler')
 
 /* router */
@@ -21,9 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', router);
 
 
-app.get('/', (req, res) => {
-    res.send('hello node');
-});
+// app.get('/', (req, res) => {
+//     res.send('hello node');
+// });
+
 /* ejs setting */
 app.use(ejsRouter);
 

@@ -63,7 +63,6 @@ class UserController {
 
     createReview = async (req, res, next) => {
         try{
-        console.log('asdfjwejfnjwe')
         const reservationId = req.params;
 
         // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인

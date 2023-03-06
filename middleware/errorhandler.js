@@ -1,6 +1,6 @@
 const CreateError = require('../lib/errors');
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     const createError = new CreateError();
     const makeFirstLetterLowerCase = (str) => {
         result = str[0].toLowerCase() + str.slice(1, str.length);
@@ -82,6 +82,8 @@ const errorHandler = (err, req, res) => {
             }
         }
     }
+
+    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' });
 
 };
 

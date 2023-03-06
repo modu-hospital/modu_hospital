@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
 class HospitalRepository {
@@ -195,6 +195,17 @@ class HospitalRepository {
                 },
             ],
         });
+
+
+
+        // const query = `SELECT DISTINCT c.department, h.hospitalId, h.name as hospitalName from categories as c
+        // inner join doctors_categories_mappings as dcm on c.id  = dcm.categoryId 
+        // inner join doctors as d on dcm.doctorId = d.doctorId 
+        // inner join hospitals as h on d.hospitalId = h.hospitalId 
+        // WHERE c.department = '${department}'`
+        // const matchedHospitals = await sequelize.query(query, { type: QueryTypes.SELECT })
+
+        // return matchedHospitals
     };
 }
 

@@ -41,6 +41,7 @@ class HospitalController {
 
     findHospitalsThatFitsDepartment = async (req, res) => {
         const {department} = req.query
+        console.log(department)
         const hospitals = await this.hospitalService.findHospitalsThatFitsDepartment(department)
 
         res.json(hospitals)
