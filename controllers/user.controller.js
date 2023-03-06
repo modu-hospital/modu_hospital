@@ -12,6 +12,7 @@ class UserController {
     // 서비스관리자의 회원 정보 조회
     getUserInfo = async (req, res) => {
         try {
+            
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
@@ -49,7 +50,7 @@ class UserController {
             const userId = req.params;
             const userProfile = await this.userService.showUserProfile(userId.userId);
 
-            return res.status(200).json({ userProfile });
+            return res.status(200).json(userProfile);
         } catch (err) {
             next(err);
         }
@@ -58,7 +59,7 @@ class UserController {
     editUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const { address, phone, name } = await this.validation.editProfile.validateAsync(
+            const { name, phone, address } = await this.validation.editProfile.validateAsync(
                 req.body
             );
             const editedProfile = await this.userService.editUserProfile(
@@ -87,9 +88,8 @@ class UserController {
     };
 
     createReview = async (req, res, next) => {
-        try {
-            console.log('asdfjwejfnjwe');
-            const reservationId = req.params;
+        try{
+        const reservationId = req.params;
 
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
             const { star, contents } = await this.validation.createReview.validateAsync(req.body);
