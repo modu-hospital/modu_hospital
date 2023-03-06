@@ -20,4 +20,9 @@ router.get('/hospital', (req, res) => {
     res.render('index.ejs', { components: 'hospital' });
 });
 
+//병원정보 등록 페이지
+router.get('/register', (req, res) => {
+    res.render('index.ejs', { components: 'hospitalRegister' });
+});
+
 module.exports = router;

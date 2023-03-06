@@ -17,7 +17,7 @@ class HospitalService {
         Doctor,
         Category,
         DoctorCategoryMapping,
-        User,
+        User
     );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -64,14 +64,14 @@ class HospitalService {
             const infos = hospitals.map((hospital) => {
                 const doctors = hospital.doctors.map((doctor) => {
                     const department = doctor.doctorCategoryMappings.map((category) => {
-                        return category.categories.department
+                        return category.categories.department;
                     });
-                    return { doctor: doctor.name, department : department.join(",") };
+                    return { doctor: doctor.name, department: department.join(',') };
                 });
                 return {
                     name: hospital.name,
                     address: hospital.address,
-                    phone : hospital.phone,
+                    phone: hospital.phone,
                     doctors,
                 };
             });
@@ -90,9 +90,13 @@ class HospitalService {
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
-                    return category.categories.department
+                    return category.categories.department;
                 });
-                return { doctor: doctor.name, doctorImage: doctor.image, department : department.join(",") };
+                return {
+                    doctor: doctor.name,
+                    doctorImage: doctor.image,
+                    department: department.join(','),
+                };
             });
 
             return {
@@ -110,9 +114,9 @@ class HospitalService {
     findAllReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            console.log(hospitaldata)
-            let hospitalId = hospitaldata.hospitalId
-            console.log(hospitalId) ;
+            console.log(hospitaldata);
+            let hospitalId = hospitaldata.hospitalId;
+            console.log(hospitalId);
             const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
@@ -220,10 +224,19 @@ class HospitalService {
 
     getapprovedReservation = async (userId) => {
         try {
-            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);;
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
             return waitingdata;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    findOneHospital = async (userId) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            return hospitaldata;
         } catch (err) {
             throw err;
         }
