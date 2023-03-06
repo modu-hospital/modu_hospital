@@ -10,6 +10,7 @@ class UserController {
     // 서비스관리자의 회원 정보 조회
     getUserInfo = async (req , res) => {
         try {
+            
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
@@ -24,7 +25,7 @@ class UserController {
             const userId = req.params;
             const userProfile = await this.userService.showUserProfile(userId.userId);
 
-            return res.status(200).json({ userProfile });
+            return res.status(200).json(userProfile);
         } catch (err) {
             next(err)
         }
@@ -33,7 +34,7 @@ class UserController {
     editUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const { address, phone, name } = await this.validation.editProfile.validateAsync(
+            const { name, phone, address } = await this.validation.editProfile.validateAsync(
                 req.body
             );
             const editedProfile = await this.userService.editUserProfile(

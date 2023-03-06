@@ -11,7 +11,6 @@ class ReservationService {
         const reservation = await this.reservationRepository.findReservationById(id);
         if (reservation.status == 'done' || reservation.status == 'reviewed') {
             const err = await this.createError.reservationAlreadyDone();
-            console.log('sdf')
             throw err;
         }
         if (reservation.status == 'canceled') {

@@ -12,41 +12,43 @@ class UserService {
         return user;
     };
     sortReservationsByStatus = (reservations) => {
-        if(reservations.length == 0){
-            return reservations
+        if (reservations.length == 0) {
+            return reservations;
         }
         const waiting = reservations.filter((e) => e.status == 'waiting');
         const approved = reservations.filter((e) => e.status == 'approved');
-        const done = reservations.filter((e) => e.status == 'done');
-        const reviewed = reservations.filter((e) => e.status == 'reviewed');
+        const doneOrReviewed = reservations.filter((e) => e.status == 'done' || e.status =='reviewed');
+        // const done = reservations.filter((e) => e.status == 'done');
+        // const reviewed = reservations.filter((e) => e.status == 'reviewed');
         const canceled = reservations.filter((e) => e.status == 'canceled');
         const sortedReservations = {
-                waiting: waiting,
-                approved: approved,
-                done: done,
-                reviewed: reviewed,
-                canceled: canceled,
+            waiting: waiting,
+            approved: approved,
+            doneOrReviewed:doneOrReviewed,
+            // done: done,
+            // reviewed: reviewed,
+            canceled: canceled,
         };
-        return sortedReservations
-
-    }
+        return sortedReservations;
+    };
 
     showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
+            userId:user.userId,
+            loginId:user.loginId,
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-        const sortedReservations = this.sortReservationsByStatus(reservations)
-        
-        const profileData = {
-            userData : userData,
-            reservations : sortedReservations
+        const sortedReservations = this.sortReservationsByStatus(reservations);
 
-        }
+        const profileData = {
+            userData: userData,
+            reservations: sortedReservations,
+        };
 
         return profileData;
     };
@@ -58,9 +60,8 @@ class UserService {
             phone,
             name
         );
-        return editedProfile
+        return editedProfile;
     };
-
 
     signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
@@ -68,7 +69,7 @@ class UserService {
         console.log(existUser);
 
         if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' }); 
+            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             return;
         }
 
@@ -82,7 +83,7 @@ class UserService {
     login = async (loginId, password) => {
         const userCheck = await this.userRepository.findUser(loginId);
 
-        console.log(userCheck[0].password)
+        console.log(userCheck[0].password);
 
         const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
 

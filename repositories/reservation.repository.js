@@ -10,7 +10,7 @@ class ReservationRepository {
     }
 
     findReservationsByUserId = async (userId) => {
-        const query = `SELECT h.name as hospitalName ,d.name as doctorName, r.date,r.id,r.status FROM reservations AS r 
+        const query = `SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status FROM reservations AS r 
         inner join doctors AS d on r.doctorId =d.doctorId
         inner join hospitals AS h on d.hospitalId = h.hospitalId
         WHERE r.userId = ${userId}`;
