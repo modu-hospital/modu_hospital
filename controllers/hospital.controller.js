@@ -58,11 +58,11 @@ class HospitalController {
         try {
             // 로그인시 미들웨어 통해서 userId 정보를 받고
             // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
-           //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
-           // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
-           // const { currentUser } = res.locals;
-           // const userId = currentUser.id;
-            const userId = 2; // 현재 임시로 들어간 값 
+            //  hospitalId를 통해 해당 병원의 예약목록을 가져옴
+            // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
+            // const { currentUser } = res.locals;
+            // const userId = currentUser.id;
+            const userId = 2; // 현재 임시로 들어간 값
             const reservationdata = await this.hospitalService.findAllReservation(userId);
             res.status(200).json({
                 reservationdata: reservationdata,
@@ -124,10 +124,10 @@ class HospitalController {
         try {
             // 로그인시 미들웨어 통해서 userId 정보를 받고
             // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
-           //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
-           // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
-           // const { currentUser } = res.locals;
-           // const userId = currentUser.id;
+            //  hospitalId를 통해 해당 병원의 예약목록을 가져옴
+            // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
+            // const { currentUser } = res.locals;
+            // const userId = currentUser.id;
             const userId = 2;
             const waitingdata = await this.hospitalService.getWaitedReservation(userId);
             res.status(200);
@@ -141,22 +141,22 @@ class HospitalController {
         }
     };
 
-        //예약 승인완료 목록 불러오기
-        getapprovedReservation = async (req, res, next) => {
-            try {
-                // 로그인시 미들웨어 통해서 userId 정보를 받고
-                // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
-               //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
-               // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
-               // const { currentUser } = res.locals;
-               // const userId = currentUser.id;
-                const userId = 2;
-                const approveddata = await this.hospitalService.getapprovedReservation(userId);
-                res.status(200).json({ success: true, approveddata: approveddata });            
-            } catch (error) {
-                res.status(500).json({ message: error.message });
-            }
-        };
+    //예약 승인완료 목록 불러오기
+    getapprovedReservation = async (req, res, next) => {
+        try {
+            // 로그인시 미들웨어 통해서 userId 정보를 받고
+            // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
+            //  hospitalId를 통해 해당 병원의 예약목록을 가져옴
+            // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
+            // const { currentUser } = res.locals;
+            // const userId = currentUser.id;
+            const userId = 2;
+            const approveddata = await this.hospitalService.getapprovedReservation(userId);
+            res.status(200).json({ success: true, approveddata: approveddata });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
 
     //병원 정보 등록
     registerHospital = async (req, res, next) => {
@@ -282,7 +282,7 @@ class HospitalController {
             // const userId = currentUser.id;
             const userId = 2;
             const data = await this.hospitalService.getAllreviews(userId);
-            res.status(200).json({data:data});
+            res.status(200).json({ data: data });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

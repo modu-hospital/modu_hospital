@@ -2,6 +2,7 @@ const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 class UserService {
     userRepository = new UserRepository(User);
@@ -64,8 +65,6 @@ class UserService {
     signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
 
-        console.log(existUser);
-
         if (existUser[0]) {
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
@@ -80,33 +79,26 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-        const userCheck = await this.userRepository.findUser(loginId);
 
-        console.log(userCheck[0].password);
-        console.log(userCheck[0].password);
+        const user = await this.userRepository.emailPasswordCheck(loginId, password)
 
-        const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
+        const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
-        if (!userCheck || !passwordCheck) {
-            return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' });
+        if (!user || !isPasswordCorrect) {
+            return 
         }
 
-        res.status(200).json({ message: '로그인' });
+        const accessToken =jwt.sign({loginId: user[0].loginId}, process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
+        const refreshToken =jwt.sign({}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
 
-        // const cookie = jwt.sign({
-        //     loginId: userCheck[0].loginId,
-        // },
-        // jwt)
+        // tokenObject[refreshToken] = loginId
+        
+        return {accessToken, refreshToken}       
     };
-
-    //role = 서비스 관리자일 때"manager" , 환자일 때"customer",  승인대기 파트너 일 때?"waiting", 승인완료 파트너 일 때?"partner"
-    //message만 다르게 주면 되나? role에 manager인지 환자인지 데이터 create하고
 
     findUsers = async () => {
         const allUser = await this.userRepository.findUsers();
 
-        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-        // }
         return allUser.map((users) => {
             return {
                 userId: users.userId,
