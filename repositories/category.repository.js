@@ -1,12 +1,18 @@
 const { Op } = require('sequelize');
 
 class CategoryRepository {
-    constructor(HospitalModel, DoctorModel, CategoryModel, DoctorCategoryMappingModel, HospitalImageFileModel) {
+    constructor(
+        HospitalModel,
+        DoctorModel,
+        CategoryModel,
+        DoctorCategoryMappingModel,
+        HospitalImageFileModel
+    ) {
         this.hospitalModel = HospitalModel;
         this.doctorModel = DoctorModel;
         this.categoryModel = CategoryModel;
         this.doctorCategoryMappingModel = DoctorCategoryMappingModel;
-        this.hospitalImageFileModel = HospitalImageFileModel
+        this.hospitalImageFileModel = HospitalImageFileModel;
     }
 
     findHospitalsThatFitsDepartment = async (department, longitude, latitude) => {
@@ -29,8 +35,13 @@ class CategoryRepository {
                                         longitude: { [Op.between]: longitude },
                                         latitude: { [Op.between]: latitude },
                                     },
-                                    include: [{ model: this.hospitalImageFileModel, as: "hospitalImageFiles" }],
-                                    required: false
+                                    include: [
+                                        {
+                                            model: this.hospitalImageFileModel,
+                                            as: 'hospitalImageFiles',
+                                        },
+                                    ],
+                                    required: false,
                                 },
                             ],
                         },
@@ -38,7 +49,6 @@ class CategoryRepository {
                 },
             ],
         });
-
     };
 }
 
