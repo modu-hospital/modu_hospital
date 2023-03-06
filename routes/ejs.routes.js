@@ -11,7 +11,7 @@ router.get('/admin', (req, res) => {
     res.render('admin.ejs');
 });
 
-router.get('/hospital/map', (req, res) => {
+router.get('/map/hospital', (req, res) => {
     res.render('map.ejs', { compnents: 'map' });
 });
 

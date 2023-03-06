@@ -121,9 +121,7 @@ class UserController {
             res.json(user);
         } catch (err) {
             if (err.isJoi) {
-                //joi에서 받아온 에러 메세지를 처리할 수 있도록
                 return res.status(422).json({ message: err.details[0].message });
-                //joi가 에러를 보낼 때 err에 details라는 배열 안에 첫번째 값의 message
             }
             res.status(500).json({ message: err.message });
         }
@@ -145,9 +143,7 @@ class UserController {
             res.json(user);
         } catch (err) {
             if (err.isJoi) {
-                //joi에서 받아온 에러 메세지를 처리할 수 있도록
                 return res.status(422).json({ message: err.details[0].message });
-                //joi가 에러를 보낼 때 err에 details라는 배열 안에 첫번째 값의 message
             }
             res.status(500).json({ message: err.message });
         }
@@ -156,31 +152,23 @@ class UserController {
     login = async (req, res) => {
         const { loginId, password } = req.body;
 
-        res.json({ message: 'd' });
+        //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
+        const {accessToken, refreshToken} = await this.userService.login(loginId, password)
 
-        // const loginCheck = await idPasswordCheck(loginId, password);
+        // tokenObject[refreshToken] = loginId
 
-        // if (!loginCheck) {
-        //     return res.status(404).json({ message: '없는 계정입니다. 회원가입 해주세요' });
-        // }
+        res.cookie('accessToken', accessToken)
+        res.cookie('refreshToken', refreshToken)
 
-        // const token = jwt.sign({id:loginCheck.id})
+        res.json({accessToken, refreshToken})
+
+
     };
 
-    // accessToken = async(req, res) => {
 
-    // }
-
-    // refreshToken = async(req, res) => {
-
-    // }
-
-    // loginSuccess = async(req, res) => {
-
-    // }
 
     logout = async (req, res) => {
-        res.clearCookie();
+        res.clearCookie(); //res.cookie('accessToken', '')
         return res.status(200).json({ message: '로그아웃 되었습니다.' });
     };
 }

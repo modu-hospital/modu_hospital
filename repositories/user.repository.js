@@ -59,6 +59,12 @@ class UserRepository {
         );
         return userRoleUpdate;
     };
+
+    emailPasswordCheck = async (loginId)=> {
+        return await this.userModel.findAll({ where: {loginId}})
+    }
+
+    
 }
 
 module.exports = UserRepository;

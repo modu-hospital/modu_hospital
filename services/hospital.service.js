@@ -6,6 +6,8 @@ const {
     Doctor,
     Category,
     DoctorCategoryMapping,
+    User,
+    HospitalImageFile,
 } = require('../models/index.js');
 
 class HospitalService {
@@ -15,7 +17,9 @@ class HospitalService {
         Review,
         Doctor,
         Category,
-        DoctorCategoryMapping
+        DoctorCategoryMapping,
+        User,
+        HospitalImageFile
     );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -59,18 +63,16 @@ class HospitalService {
                 latitude
             );
 
+            // return hospitals
             const infos = hospitals.map((hospital) => {
-                const doctors = hospital.doctors.map((doctor) => {
-                    const department = doctor.doctorCategoryMappings.map((category) => {
-                        return category.categories.department;
-                    });
-                    return { doctor: doctor.name, department: department.join(',') };
-                });
                 return {
+                    hospitalId: hospital.hospitalId,
                     name: hospital.name,
                     address: hospital.address,
                     phone: hospital.phone,
-                    doctors,
+                    hospitalImage: !hospital.hospitalImageFiles[0]
+                        ? '이미지 준비중'
+                        : hospital.hospitalImageFiles[0].url,
                 };
             });
             return infos;
@@ -102,6 +104,9 @@ class HospitalService {
                 hospitalName: hospital.name,
                 hospitalAddress: hospital.address,
                 hospitalphone: hospital.phone,
+                hospitalImage: !hospital.hospitalImageFiles[0]
+                    ? '이미지 준비중'
+                    : hospital.hospitalImageFiles[0].url,
                 doctors,
             };
         } catch (err) {
@@ -109,9 +114,13 @@ class HospitalService {
         }
     };
 
-    findAllReservation = async () => {
+    findAllReservation = async (userId) => {
         try {
-            const data = await this.hospitalRepository.findAllReservation();
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            console.log(hospitaldata);
+            let hospitalId = hospitaldata.hospitalId;
+            console.log(hospitalId);
+            const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
             throw new Error(error);
@@ -148,9 +157,11 @@ class HospitalService {
         }
     };
 
-    getWaitedReservation = async (doctorId) => {
+    getWaitedReservation = async (userId) => {
         try {
-            const waitingdata = this.hospitalRepository.getWaitedReservation(doctorId);
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
             throw err;
@@ -203,12 +214,25 @@ class HospitalService {
         }
     };
 
-    getAllreviews = async () => {
+    getAllreviews = async (userId) => {
         try {
-            const data = await this.hospitalRepository.getAllreviews();
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const data = await this.hospitalRepository.getAllreviews(hospitalId);
             return data;
         } catch (error) {
             throw new Error(error);
+        }
+    };
+
+    getapprovedReservation = async (userId) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
+            return waitingdata;
+        } catch (err) {
+            throw err;
         }
     };
 }
