@@ -2,58 +2,76 @@ const HospitalService = require('../services/hospital.service');
 
 const Validation = require('../lib/validation');
 
-
 class HospitalController {
     hospitalService = new HospitalService();
     validation = new Validation();
 
-    findNearHospital = async (req, res) => {
-        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
+    // 화면 기준 근처 병원
+    findNearHospital = async (req, res, next) => {
+        try {
+            const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-        const hospitals = await this.hospitalService.findNearHospital(
-            rightLongitude,
-            rightLatitude,
-            leftLongitude,
-            leftLatitude
-        );
-        res.json({hospitals});
+            const hospitals = await this.hospitalService.findNearHospital(
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
+            res.json({ hospitals });
+        } catch (err) {
+            next(err);
+        }
     };
 
-    findNearHospitalsInfo = async (req, res) => {
-        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
+    // 화면 기준 근처 병원 정보
+    findNearHospitalsInfo = async (req, res, next) => {
+        try {
+            const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-        const hospitals = await this.hospitalService.findNearHospitalsInfo(
-            rightLongitude,
-            rightLatitude,
-            leftLongitude,
-            leftLatitude
-        );
-        res.json({ hospitals });
+            const hospitals = await this.hospitalService.findNearHospitalsInfo(
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
+            res.json({ hospitals });
+        } catch (err) {
+            next(err);
+        }
     };
 
-    searchHospitalInfo = async (req, res) => {
-        const {id} = req.params
+    // 클릭한 병원의 정보
+    searchHospitalInfo = async (req, res, next) => {
+        try {
+            const { id } = req.params;
 
-        const info = await this.hospitalService.searchHospitalInfo(id)
+            const info = await this.hospitalService.searchHospitalInfo(id);
 
-        res.json(info)
-    }
-
-    findHospitalsThatFitsDepartment = async (req, res) => {
-        const {department} = req.query
-        const hospitals = await this.hospitalService.findHospitalsThatFitsDepartment(department)
-
-        res.json(hospitals)
-    }
-
+            res.json(info);
+        } catch (err) {
+            next(err);
+        }
+    };
 
     // 예약관리 조회
     findAllReservation = async (req, res, next) => {
         try {
-            const data = await this.hospitalService.findAllReservation();
-            res.status(200).json(data);
+            // 로그인시 미들웨어 통해서 userId 정보를 받고
+            // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
+           //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
+           // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
+           // const { currentUser } = res.locals;
+           // const userId = currentUser.id;
+            const userId = 2; // 현재 임시로 들어간 값 
+            const reservationdata = await this.hospitalService.findAllReservation(userId);
+            res.status(200).json({
+                reservationdata: reservationdata,
+            });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({
+                success: true,
+                message: error.message,
+            });
         }
     };
 
@@ -61,7 +79,9 @@ class HospitalController {
     editReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { date } = await this.validation.reservationDateUpdateValidation.validateAsync(req.body);
+            const { date } = await this.validation.reservationDateUpdateValidation.validateAsync(
+                req.body
+            );
             const updateDateReservation = await this.hospitalService.editReservation(id, date);
             res.status(200).json({ data: updateDateReservation });
         } catch (error) {
@@ -80,7 +100,8 @@ class HospitalController {
     approvedReservation = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { status } = await this.validation.reservationStatusUpdateValidation.validateAsync(req.body);
+            const { status } =
+                await this.validation.reservationStatusUpdateValidation.validateAsync(req.body);
             const updateTimeReservation = await this.hospitalService.approvedReservation(
                 id,
                 status
@@ -101,18 +122,41 @@ class HospitalController {
     //예약 승인대기 목록 불러오기
     getWaitedReservation = async (req, res, next) => {
         try {
-            const doctorId = await this.validation.doctoerIdValidateSchema.validateAsync(req.params.doctorId);
-            const waitingdata = await this.hospitalService.getWaitedReservation(doctorId);
+            // 로그인시 미들웨어 통해서 userId 정보를 받고
+            // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
+           //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
+           // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
+           // const { currentUser } = res.locals;
+           // const userId = currentUser.id;
+            const userId = 2;
+            const waitingdata = await this.hospitalService.getWaitedReservation(userId);
             res.status(200);
             if (waitingdata.length === 0) {
                 return res.json({ success: true, message: '예약 대기중인 목록이 없습니다.' });
             }
 
-            return res.json({ success: true, data: waitingdata });
+            return res.json({ success: true, waitingdata: waitingdata });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     };
+
+        //예약 승인완료 목록 불러오기
+        getapprovedReservation = async (req, res, next) => {
+            try {
+                // 로그인시 미들웨어 통해서 userId 정보를 받고
+                // userId를 통해서 hospitals테이블에서 hospitalId를 가져옴(서비스에서 구현)
+               //  hospitalId를 통해 해당 병원의 예약목록을 가져옴 
+               // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기 
+               // const { currentUser } = res.locals;
+               // const userId = currentUser.id;
+                const userId = 2;
+                const approveddata = await this.hospitalService.getapprovedReservation(userId);
+                res.status(200).json({ success: true, approveddata: approveddata });            
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        };
 
     //병원 정보 등록
     registerHospital = async (req, res, next) => {
@@ -180,7 +224,7 @@ class HospitalController {
 
         try {
             const { userId, name, address, phone, longitude, latitude } =
-                await hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
+                await this.validation.hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
             const registerEditdata = await this.hospitalService.registerEditHospital(
                 userId,
                 name,
@@ -234,8 +278,11 @@ class HospitalController {
     //리뷰 전체 조회
     getAllreviews = async (req, res, next) => {
         try {
-            const data = await this.hospitalService.getAllreviews();
-            res.status(200).json(data);
+            // const { currentUser } = res.locals;
+            // const userId = currentUser.id;
+            const userId = 2;
+            const data = await this.hospitalService.getAllreviews(userId);
+            res.status(200).json({data:data});
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
