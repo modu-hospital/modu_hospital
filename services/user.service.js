@@ -11,8 +11,27 @@ class UserService {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
+    sortReservationsByStatus = (reservations) => {
+        if(reservations.length == 0){
+            return reservations
+        }
+        const waiting = reservations.filter((e) => e.status == 'waiting');
+        const approved = reservations.filter((e) => e.status == 'approved');
+        const done = reservations.filter((e) => e.status == 'done');
+        const reviewed = reservations.filter((e) => e.status == 'reviewed');
+        const canceled = reservations.filter((e) => e.status == 'canceled');
+        const sortedReservations = {
+                waiting: waiting,
+                approved: approved,
+                done: done,
+                reviewed: reviewed,
+                canceled: canceled,
+        };
+        return sortedReservations
 
-    makeUserProfile = async (userId) => {
+    }
+
+    showUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
             name: user.name,
@@ -21,23 +40,13 @@ class UserService {
         };
 
         let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-
-        const waiting = reservations.filter((e) => e.status == 'waiting');
-        const approved = reservations.filter((e) => e.status == 'approved');
-        const done = reservations.filter((e) => e.status == 'done');
-        const reviewed = reservations.filter((e) => e.status == 'reviewed');
-        const canceled = reservations.filter((e) => e.status == 'canceled');
-
+        const sortedReservations = this.sortReservationsByStatus(reservations)
+        
         const profileData = {
-            userData: userData,
-            reservations: {
-                waiting: waiting,
-                approved: approved,
-                done: done,
-                reviewed: reviewed,
-                canceled: canceled,
-            },
-        };
+            userData : userData,
+            reservations : sortedReservations
+
+        }
 
         return profileData;
     };
@@ -49,12 +58,14 @@ class UserService {
             phone,
             name
         );
-        const response = { status: 201 };
-        return response;
+        return editedProfile
     };
 
-    signup = async (name, phone, loginId, password, idNumber, role) => {
+
+    signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
+
+        console.log(existUser);
 
         if (existUser[0]) {
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' }); 
@@ -69,34 +80,26 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-        const userCheck = await this.userRepository.findUser(loginId);
 
-        console.log(userCheck[0].password)
+        const user = await this.userRepository.emailPasswordCheck(loginId, password)
 
-        const passwordCheck = await bcrypt.compare(password, userCheck[0].password);
+        console.log(user)
 
-        if (!userCheck || !passwordCheck) {
-            return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' });
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+        if (!user || !isPasswordCorrect) {
+            return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' }); 
         }
+        //ReferenceError: res is not defined
+        //return res.status(400).json({ message: '이메일 또는 비밀번호가 틀렸습니다' })
 
-        const token = jwt.sign({loginId: user.loginId}, JWT_SECRET_KEY)
-
-        res.status(200).json({ message: '로그인' });
-
-        // const cookie = jwt.sign({
-        //     loginId: userCheck[0].loginId,
-        // },
-        // jwt)
+        res.status(200).json({ message: '로그인 완료' }) 
+        
     };
-
-    //role = 서비스 관리자일 때"manager" , 환자일 때"customer",  승인대기 파트너 일 때?"waiting", 승인완료 파트너 일 때?"partner"
-    //message만 다르게 주면 되나? role에 manager인지 환자인지 데이터 create하고
 
     findUsers = async () => {
         const allUser = await this.userRepository.findUsers();
 
-        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-        // }
         return allUser.map((users) => {
             return {
                 userId: users.userId,
@@ -107,6 +110,7 @@ class UserService {
                 idNumber: users.idNumber,
                 address: users.address,
                 role: users.role,
+                createdAt: users.createdAt,
             };
         });
     };

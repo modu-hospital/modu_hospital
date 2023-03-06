@@ -1,16 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
+// 메인페이지
 router.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render('index.ejs', { components: 'main' });
 });
 
-// router.get('/admin/users', (req, res) => {
-//     res.render('admin.ejs');
-// });
+// 서비스관리자 페이지
+router.get('/admin', (req, res) => {
+    res.render('admin.ejs');
+});
 
 router.get('/hospital/map', (req, res) => {
-    res.render('map.ejs', { components: 'map' });
+    res.render('map.ejs', { compnents: 'map' });
+});
+
+//원장님의 공간
+router.get('/hospital/office', (req, res) => {
+    res.render('hospital.ejs', { components: 'hospital' });
 });
 
 module.exports = router;

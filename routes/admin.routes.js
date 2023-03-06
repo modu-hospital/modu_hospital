@@ -3,7 +3,7 @@ const userController = require('../controllers/user.controller.js');
 const UserController = new userController();
 const router = express.Router();
 
-router.get('/admin', UserController.getUserInfo);
+router.get('/', UserController.getUserInfo);
 
 // const users = [
 //     {
