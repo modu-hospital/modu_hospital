@@ -3,11 +3,10 @@ const { sequelize } = require('../models');
 const db = require('../models');
 
 class ReservationRepository {
-
     findReservationById = async (id) => {
-        const reservation = await db.Reservation.findOne({where:{id}})
-        return reservation
-    }
+        const reservation = await db.Reservation.findOne({ where: { id } });
+        return reservation;
+    };
 
     findReservationsByUserId = async (userId) => {
         const query = `SELECT h.name as hospitalName ,d.name as doctorName, r.date,r.id,r.status FROM reservations AS r 
@@ -29,11 +28,8 @@ class ReservationRepository {
         return hospitalIdAndUserId[0];
     };
 
-    editReservationStatusById = async (id,status) => {
-        const editedReservation = db.Reservation.update(
-            { status: status },
-            { where: { id: id } }
-        );
+    editReservationStatusById = async (id, status) => {
+        const editedReservation = db.Reservation.update({ status: status }, { where: { id: id } });
         return editedReservation;
     };
     createReview = async (reservationId, hospitalId, userId, star, contents) => {

@@ -14,7 +14,10 @@ router.patch('/reservation/date/:id', hospitalController.editReservation);
 router.patch('/reservation/status/:id', hospitalController.approvedReservation);
 
 //예약관리 승인대기 목록 가져오기
-router.get('/reservation/status/:doctorId', hospitalController.getWaitedReservation);
+router.get('/reservation/status', hospitalController.getWaitedReservation);
+
+//예약관리 승인완료 목록 가져오기
+router.get('/reservation/approved', hospitalController.getapprovedReservation);
 
 //리뷰 조회
 router.get('/reviews', hospitalController.getAllreviews);
@@ -27,7 +30,6 @@ router.patch('/register/edit', hospitalController.registerEditHospital);
 
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
-router.get("/info/:id", hospitalController.searchHospitalInfo)
-router.get("/search", hospitalController.findHospitalsThatFitsDepartment)
+router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 module.exports = router;

@@ -5,18 +5,6 @@ const router = express.Router();
 
 router.get('/', UserController.getUserInfo);
 
-// const users = [
-//     {
-//         userId: 1,
-//         name: 'mei',
-//     },
-// ];
-
-// router.get('/admin', (req, res) => {
-//     const params = req.params;
-//     console.log('params', params);
-
-//     res.status(200).json({ users });
-// });
+router.get('/:role', UserController.getRoleUserInfo);
 
 module.exports = router;
