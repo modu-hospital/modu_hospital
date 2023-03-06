@@ -5,17 +5,16 @@ const db = require('../models');
 class RefreshTokenRepository {
     constructor(UserModel, RefreshTokenModel) {
         this.userModel = UserModel;
-        this.refreshTokenModel = RefreshTokenModel
+        this.refreshTokenModel = RefreshTokenModel;
     }
 
-    findUserId = async(userId) => {
-        return await this.userModel.findOne({userId})
-    }
+    findUserId = async (userId) => {
+        return await this.userModel.findOne({ userId });
+    };
 
-    createRefreshToken = async(userId, token) => {
-        return await this.refreshTokenModel.create({userId, token})
-    }
- 
+    createRefreshToken = async (userId, token) => {
+        return await this.refreshTokenModel.create({ userId, token });
+    };
 }
 
 module.exports = RefreshTokenRepository;

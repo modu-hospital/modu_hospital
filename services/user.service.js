@@ -2,7 +2,7 @@ const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 class UserService {
     userRepository = new UserRepository(User);
@@ -76,21 +76,22 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-
-        const user = await this.userRepository.emailPasswordCheck(loginId, password)
+        const user = await this.userRepository.emailPasswordCheck(loginId, password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
         if (!user || !isPasswordCorrect) {
-            return 
+            return;
         }
 
-        const accessToken =jwt.sign({loginId: user[0].loginId}, process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
-        const refreshToken =jwt.sign({}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
+        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '1m',
+        });
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         // tokenObject[refreshToken] = loginId
-        
-        return {accessToken, refreshToken}       
+
+        return { accessToken, refreshToken };
     };
 
     findUsers = async () => {

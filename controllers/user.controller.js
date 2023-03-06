@@ -138,19 +138,15 @@ class UserController {
         const { loginId, password } = req.body;
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const {accessToken, refreshToken} = await this.userService.login(loginId, password)
+        const { accessToken, refreshToken } = await this.userService.login(loginId, password);
 
         // tokenObject[refreshToken] = loginId
 
-        res.cookie('accessToken', accessToken)
-        res.cookie('refreshToken', refreshToken)
+        res.cookie('accessToken', accessToken);
+        res.cookie('refreshToken', refreshToken);
 
-        res.json({accessToken, refreshToken})
-
-
+        res.json({ accessToken, refreshToken });
     };
-
-
 
     logout = async (req, res) => {
         res.clearCookie(); //res.cookie('accessToken', '')
