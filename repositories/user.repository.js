@@ -51,6 +51,12 @@ class UserRepository {
         const roleUsers = await this.userModel.findAll({ where: { role } });
         return roleUsers;
     };
+
+    emailPasswordCheck = async (loginId)=> {
+        return await this.userModel.findAll({ where: {loginId}})
+    }
+
+    
 }
 
 module.exports = UserRepository;
