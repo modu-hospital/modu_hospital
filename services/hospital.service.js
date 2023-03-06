@@ -7,6 +7,7 @@ const {
     Category,
     DoctorCategoryMapping,
     User,
+    HospitalImageFile
 } = require('../models/index.js');
 
 class HospitalService {
@@ -18,6 +19,7 @@ class HospitalService {
         Category,
         DoctorCategoryMapping,
         User,
+        HospitalImageFile,
     );
 
     findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -61,18 +63,14 @@ class HospitalService {
                 latitude
             );
 
+            // return hospitals
             const infos = hospitals.map((hospital) => {
-                const doctors = hospital.doctors.map((doctor) => {
-                    const department = doctor.doctorCategoryMappings.map((category) => {
-                        return category.categories.department
-                    });
-                    return { doctor: doctor.name, department : department.join(",") };
-                });
                 return {
+                    hospitalId : hospital.hospitalId,
                     name: hospital.name,
                     address: hospital.address,
                     phone : hospital.phone,
-                    doctors,
+                    hospitalImage : !hospital.hospitalImageFiles[0]? "이미지 준비중" : hospital.hospitalImageFiles[0].url,
                 };
             });
             return infos;
@@ -100,6 +98,7 @@ class HospitalService {
                 hospitalName: hospital.name,
                 hospitalAddress: hospital.address,
                 hospitalphone: hospital.phone,
+                hospitalImage : !hospital.hospitalImageFiles[0]? "이미지 준비중" : hospital.hospitalImageFiles[0].url,
                 doctors,
             };
         } catch (err) {

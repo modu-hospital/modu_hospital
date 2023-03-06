@@ -9,6 +9,7 @@
     bottom: 10vh;
     right: 43vw;
     width: 300px;
+    height: 50px;
     border: 3px solid #73AD21;
     z-index: 1;
   }
@@ -22,7 +23,7 @@
     width: 30px;
     height: 20px;
     position: fixed;
-    right: 10px;
+    right: 15px;
     top: 10px;
     transition: all 0.35s;
     cursor: pointer;
@@ -67,27 +68,281 @@
   }
 
   div[class="sidebar"] {
-    width: 300px;
+    width: 400px;
     height: 100%;
-    background: #dddddd;
+    background: #ffffff;
     position: fixed;
     top: 0;
-    right: -300px;
+    right: -400px;
     z-index: 2;
     transition: all .35s;
+    overflow: scroll;
   }
 
   input[id="menuIcon"]:checked+label+div {
     right: 0;
   }
 
-  .doctorImg {
+  img {
     width: 100px;
     height: 100px;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar {
+    -ms-overflow-style: none;
+    /* 인터넷 익스플로러 */
+    scrollbar-width: none;
+    /* 파이어폭스 */
+  }
+
+  input[id="departmentCheckbox"] {
+    display: none;
+  }
+
+  input[id="departmentCheckbox"]+label {
+    display: block;
+    width: 30px;
+    height: 20px;
+    position: fixed;
+    left: 15px;
+    top: 10px;
+    transition: all 0.35s;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  input[id="departmentCheckbox"]+label span {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    border-radius: 30px;
+    background: #222;
+    transition: all .35s;
+  }
+
+  input[id="departmentCheckbox"]+label span:nth-child(1) {
+    top: 0;
+  }
+
+  input[id="departmentCheckbox"]+label span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  input[id="departmentCheckbox"]+label span:nth-child(3) {
+    bottom: 0;
+  }
+
+  input[id="departmentCheckbox"]:checked+label span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  input[id="departmentCheckbox"]:checked+label span:nth-child(2) {
+    opacity: 0;
+  }
+
+  input[id="departmentCheckbox"]:checked+label span:nth-child(3) {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+  }
+
+  div[class="boxwrap"] {
+    width: 400px;
+    height: 100%;
+    background: #ffffff;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    z-index: 2;
+    transition: all .35s;
+    overflow: scroll;
+  }
+
+  input[id="departmentCheckbox"]:checked+label+div {
+    left: 0;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .boxwrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .boxwrap {
+    -ms-overflow-style: none;
+    /* 인터넷 익스플로러 */
+    scrollbar-width: none;
+    /* 파이어폭스 */
+  }
+
+  li {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  li:last-child {
+    margin-bottom: 20px;
+  }
+
+  .info {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hospitalImage {
+    width: 380px;
+    height: 200px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  #departmentwrap {
+    display: flex;
+    justify-content:space-between
+  }
+  .division {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column-reverse;
+justify-content: space-between;
+  }
+  #departmentBtn {
+    width: 380px;
+    height: 50px;
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+  #resetBtn {
+    width: 380px;
+    height: 50px;
+    margin-top: 20px;
+    margin-left: 10px;
   }
 </style>
 
 <body onload="load()">
+  <input type="checkbox" name="departmentCheckbox" id="departmentCheckbox">
+  <label for="departmentCheckbox">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <div class="boxwrap">
+    <div id="departmentwrap">
+      <div class="division">
+        <div>
+          감염내과<input type="checkbox" name="department" value="감염내과"/>
+        </div>
+        <div>
+          내분비내과<input type="checkbox" name="department" value="내분비내과"/>
+        </div>
+        <div>
+          류마티스내과<input type="checkbox" name="department" value="내분비내과"/>
+        </div>
+        <div>
+          순환기내과<input type="checkbox" name="department" value="순환기내과"/>
+        </div>
+        <div>
+          신장내과<input type="checkbox" name="department" value="신장내과"/>
+        </div>
+        <div>
+          알레르기내과<input type="checkbox" name="department" value="알레르기내과"/>
+        </div>
+        <div>
+          혈액종양내과<input type="checkbox" name="department" value="혈액종양내과"/>
+        </div>
+        <div>
+          호흡기내과<input type="checkbox" name="department" value="호흡기내과"/>
+        </div>
+      </div>
+      <div class="division">
+        <div>
+          대장항문<input type="checkbox" name="department" value="대장항문"/>
+        </div>
+        <div>
+          성형외과<input type="checkbox" name="department" value="성형외과"/>
+        </div>
+        <div>
+          신경외과<input type="checkbox" name="department" value="신경외과"/>
+        </div>
+        <div>
+          외과<input type="checkbox" name="department" value="외과"/>
+        </div>
+        <div>
+          정형외과<input type="checkbox" name="department" value="정형외과"/>
+        </div>
+        <div>
+          흉부외과<input type="checkbox" name="department" value="흉부외과"/>
+        </div>
+      </div>
+      <div class="division">
+        <div>
+          산부인과<input type="checkbox" name="department" value="산부인과"/>
+        </div>
+        <div>
+          피부과<input type="checkbox" name="department" value="피부과"/>
+        </div>
+        <div>
+          비뇨기과<input type="checkbox" name="department" value="비뇨기과"/>
+        </div>
+        <div>
+          안과<input type="checkbox" name="department" value="안과"/>
+        </div>
+        <div>
+          이비인후과<input type="checkbox" name="department" value="이비인후과"/>
+        </div>
+        <div>
+          정신과<input type="checkbox" name="department" value="정신과"/>
+        </div>
+        <div>
+          마취통증의학과<input type="checkbox" name="department" value="마취통증의학과"/>
+        </div>
+        <div>
+          가정의학과<input type="checkbox" name="department" value="가정의학과"/>
+        </div>
+        <div>
+          응급의학과<input type="checkbox" name="department" value="응급의학과"/>
+        </div>
+        <div>
+          재활의학과<input type="checkbox" name="department" value="재활의학과"/>
+        </div>
+        <div>
+          영상의학과<input type="checkbox" name="department" value="영상의학과"/>
+        </div>
+        <div>
+          방사선종양학과<input type="checkbox" name="department" value="방사선종양학과"/>
+        </div>
+        <div>
+          핵의학과<input type="checkbox" name="department" value="핵의학과"/>
+        </div>
+        <div>
+          진단검사의학과<input type="checkbox" name="department" value="진단검사의학과"/>
+        </div>
+        <div>
+          병리과<input type="checkbox" name="department" value="병리과"/>
+        </div>
+        <div>
+          의공학과<input type="checkbox" name="department" value="의공학과"/>
+        </div>
+        <div>
+          한방과<input type="checkbox" name="department" value="한방과"/>
+        </div>
+      </div>
+    </div>
+    <button id="departmentBtn" style="display: block;">적용하기</button>
+    <button id="resetBtn" style="display: block;">초기화</button>
+  </div>
   <input type="checkbox" name="" id="menuIcon">
   <label for="menuIcon">
     <span></span>
@@ -125,6 +380,39 @@
 
       const data = getData(map)
 
+      document.getElementById('departmentBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+
+        let data = getData(map)
+        let checkDepartment = clickBtn()
+
+        data.department = checkDepartment
+
+        fetch(`http://localhost:3000/api/categories/search`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+          })
+      })
+
+      document.getElementById('resetBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        const department = document.getElementsByName("department");
+        for (let i = 0; i < department.length; i++) {
+      // 속성중에 체크 된 항목이 있을 경우
+      department[i].checked = false
+
+      origin(map)
+      
+    }
+      })
+
       document.getElementById('listBtn').addEventListener('click', (event) => {
         event.preventDefault();
 
@@ -145,8 +433,12 @@
             for (let i = 0; i < data.hospitals.length; i++) {
               const a =
                 `
-              <div>${data.hospitals[i].name}</div>
-              <div>${data.hospitals[i].address}</div>
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
               `
 
               const li = document.createElement('li');
@@ -156,7 +448,9 @@
           })
       })
 
-      fetch(`http://localhost:3000/api/hospitals/around`, {
+      origin(map)
+      function origin(map) {
+        fetch(`http://localhost:3000/api/hospitals/around`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -185,8 +479,12 @@
                   for (let i = 0; i < data.hospitals.length; i++) {
                     const a =
                       `
-              <div>${data.hospitals[i].name}</div>
-              <div>${data.hospitals[i].address}</div>
+                      <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
               `
 
                     const li = document.createElement('li');
@@ -226,8 +524,12 @@
                   for (let i = 0; i < data.hospitals.length; i++) {
                     const a =
                       `
-              <div>${data.hospitals[i].name}</div>
-              <div>${data.hospitals[i].address}</div>
+                      <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
               `
 
                     const li = document.createElement('li');
@@ -274,20 +576,31 @@
                               .then((data) => {
                                 document.getElementById('list').innerHTML = ``
 
+                                const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                const imagewrap = document.createElement("div")
+                                imagewrap.innerHTML = image
+                                document.getElementById("list").appendChild(imagewrap)
                                 const a =
                                   `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
+                                  
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
                                         `
                                 const li = document.createElement('li');
                                 li.innerHTML = a;
                                 document.getElementById('list').appendChild(li);
 
                                 for (let i = 0; i < data.doctors.length; i++) {
-                                  const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                        <div>${data.doctors[i].department}</div>`
+                                  const b = `
+                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>
+                                        `
                                   const doctorLi = document.createElement('li');
                                   doctorLi.innerHTML = b;
                                   document.getElementById('list').appendChild(doctorLi);
@@ -335,8 +648,12 @@
                         for (let i = 0; i < data.hospitals.length; i++) {
                           const a =
                             `
-              <div>${data.hospitals[i].name}</div>
-              <div>${data.hospitals[i].address}</div>
+                            <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
               `
 
                           const li = document.createElement('li');
@@ -382,11 +699,18 @@
                                       console.log(data)
                                       document.getElementById('list').innerHTML = ``
 
+                                      const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                      const imagewrap = document.createElement("div")
+                                      imagewrap.innerHTML = image
+                                      document.getElementById("list").appendChild(imagewrap)
                                       const a =
                                         `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
+                                        
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
                                         `
                                       const li = document.createElement('li');
                                       li.innerHTML = a;
@@ -394,9 +718,11 @@
 
 
                                       for (let i = 0; i < data.doctors.length; i++) {
-                                        const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                        <div>${data.doctors[i].department}</div>`
+                                        const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
                                         const doctorLi = document.createElement('li');
                                         doctorLi.innerHTML = b;
                                         document.getElementById('list').appendChild(doctorLi);
@@ -429,8 +755,12 @@
                         for (let i = 0; i < data.hospitals.length; i++) {
                           const a =
                             `
-              <div>${data.hospitals[i].name}</div>
-              <div>${data.hospitals[i].address}</div>
+                            <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
               `
 
                           const li = document.createElement('li');
@@ -475,20 +805,430 @@
                                     .then((data) => {
                                       document.getElementById('list').innerHTML = ``
 
+                                      const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                      const imagewrap = document.createElement("div")
+                                      imagewrap.innerHTML = image
+                                      document.getElementById("list").appendChild(imagewrap)
                                       const a =
                                         `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
+                                        
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
                                         `
                                       const li = document.createElement('li');
                                       li.innerHTML = a;
                                       document.getElementById('list').appendChild(li);
 
                                       for (let i = 0; i < data.doctors.length; i++) {
-                                        const b = `<div>${data.doctors[i].doctor}</div>
+                                        const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
+                                        const doctorLi = document.createElement('li');
+                                        doctorLi.innerHTML = b;
+                                        document.getElementById('list').appendChild(doctorLi);
+                                      }
+
+                                    })
+                                });
+                              }
+                            }
+                          );
+                        }
+                      })
+                  }
+
+                  );
+                }
+              );
+            }
+          }
+
+
+        })
+      }
+      fetch(`http://localhost:3000/api/hospitals/around`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const a = document.getElementById("listBtn")
+          a.innerText = `근처 ${data.hospitals.length}개의 병원`
+          if (!data.hospitals[0]) {
+            kakao.maps.event.addListener(map, "zoom_changed", function () {
+
+              const data = getData(map)
+
+              fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  document.getElementById('list').innerHTML = ``
+                  for (let i = 0; i < data.hospitals.length; i++) {
+                    const a =
+                      `
+                      <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
+              `
+
+                    const li = document.createElement('li');
+                    li.innerHTML = a;
+                    document.getElementById('list').appendChild(li);
+                  }
+                })
+
+              fetch(`http://localhost:3000/api/hospitals/around`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  const a = document.getElementById("listBtn")
+                  a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                })
+            });
+
+            kakao.maps.event.addListener(map, 'dragend', function () {
+
+              const data = getData(map)
+
+              fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  document.getElementById('list').innerHTML = ``
+                  for (let i = 0; i < data.hospitals.length; i++) {
+                    const a =
+                      `
+                      <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
+              `
+
+                    const li = document.createElement('li');
+                    li.innerHTML = a;
+                    document.getElementById('list').appendChild(li);
+                  }
+                })
+
+              fetch(`http://localhost:3000/api/hospitals/around`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  const a = document.getElementById("listBtn")
+                  a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                  for (let i = 0; i < data.hospitals.length; i++) {
+                    geocoder.addressSearch(
+                      data.hospitals[i].address,
+                      function (result, status) {
+                        // 정상적으로 검색이 완료됐으면
+                        if (status === kakao.maps.services.Status.OK) {
+                          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                          // 결과값으로 받은 위치를 마커로 표시합니다
+                          var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: coords,
+                          });
+
+                          marker.id = data.hospitals[i].hospitalId
+                          // 마커에 클릭이벤트를 등록합니다
+                          kakao.maps.event.addListener(marker, 'click', function () {
+                            // 마커 위에 인포윈도우를 표시합니다
+                            const id = marker.id
+
+                            document.getElementById("menuIcon").checked = true;
+
+                            fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                              .then((response) => response.json())
+                              .then((data) => {
+                                document.getElementById('list').innerHTML = ``
+
+                                const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                const imagewrap = document.createElement("div")
+                                imagewrap.innerHTML = image
+                                document.getElementById("list").appendChild(imagewrap)
+                                const a =
+                                  `
+                                  
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
+                                        `
+                                const li = document.createElement('li');
+                                li.innerHTML = a;
+                                document.getElementById('list').appendChild(li);
+
+                                for (let i = 0; i < data.doctors.length; i++) {
+                                  const b = `
                                   <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                        <div>${data.doctors[i].department}</div>`
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>
+                                        `
+                                  const doctorLi = document.createElement('li');
+                                  doctorLi.innerHTML = b;
+                                  document.getElementById('list').appendChild(doctorLi);
+                                }
+                              })
+                          });
+                        }
+                      }
+                    );
+                  }
+                })
+            })
+          } else {
+            for (let i = 0; i < data.hospitals.length; i++) {
+              geocoder.addressSearch(
+                data.hospitals[i].address,
+                function (result, status) {
+                  // 정상적으로 검색이 완료됐으면
+                  if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 결과값으로 받은 위치를 마커로 표시합니다
+                    var marker = new kakao.maps.Marker({
+                      map: map,
+                      position: coords,
+                    });
+                  }
+
+                  kakao.maps.event.addListener(map, "zoom_changed", function () {
+
+                    marker.setMap(null);
+
+                    const data = getData(map)
+
+                    fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        document.getElementById('list').innerHTML = ``
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          const a =
+                            `
+                            <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
+              `
+
+                          const li = document.createElement('li');
+                          li.innerHTML = a;
+                          document.getElementById('list').appendChild(li);
+                        }
+                      })
+                    fetch(`http://localhost:3000/api/hospitals/around`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        const a = document.getElementById("listBtn")
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          geocoder.addressSearch(
+                            data.hospitals[i].address,
+                            function (result, status) {
+                              // 정상적으로 검색이 완료됐으면
+                              if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                                // 결과값으로 받은 위치를 마커로 표시합니다
+                                var marker = new kakao.maps.Marker({
+                                  map: map,
+                                  position: coords,
+                                });
+
+                                marker.id = data.hospitals[i].hospitalId
+                                // 마커에 클릭이벤트를 등록합니다
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                  console.log(data.doctors[0].doctor)
+                                  // 마커 위에 인포윈도우를 표시합
+                                  document.getElementById("checkbox").checked = true; 니다
+                                  const id = marker.id
+                                  fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      console.log(data)
+                                      document.getElementById('list').innerHTML = ``
+
+                                      const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                      const imagewrap = document.createElement("div")
+                                      imagewrap.innerHTML = image
+                                      document.getElementById("list").appendChild(imagewrap)
+                                      const a =
+                                        `
+                                        
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
+                                        `
+                                      const li = document.createElement('li');
+                                      li.innerHTML = a;
+                                      document.getElementById('list').appendChild(li);
+
+
+                                      for (let i = 0; i < data.doctors.length; i++) {
+                                        const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
+                                        const doctorLi = document.createElement('li');
+                                        doctorLi.innerHTML = b;
+                                        document.getElementById('list').appendChild(doctorLi);
+                                      }
+                                    })
+                                });
+                              }
+                            }
+                          );
+                        }
+                      })
+                  });
+
+                  kakao.maps.event.addListener(map, 'dragend', function () {
+
+                    marker.setMap(null);
+
+                    const data = getData(map)
+
+                    fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        document.getElementById('list').innerHTML = ``
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          const a =
+                            `
+                            <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data.hospitals[i].name}</span>
+              <span style="position:static">${data.hospitals[i].address}</span>
+              <span style="position:static">${data.hospitals[i].phone}</span>
+              </div>
+              `
+
+                          const li = document.createElement('li');
+                          li.innerHTML = a;
+                          document.getElementById('list').appendChild(li);
+                        }
+                      })
+
+                    fetch(`http://localhost:3000/api/hospitals/around`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
+                        const a = document.getElementById("listBtn")
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                        for (let i = 0; i < data.hospitals.length; i++) {
+                          geocoder.addressSearch(
+                            data.hospitals[i].address,
+                            function (result, status) {
+                              // 정상적으로 검색이 완료됐으면
+                              if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                                // 결과값으로 받은 위치를 마커로 표시합니다
+                                var marker = new kakao.maps.Marker({
+                                  map: map,
+                                  position: coords,
+                                });
+
+                                marker.id = data.hospitals[i].hospitalId
+                                // 마커에 클릭이벤트를 등록합니다
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                  // 마커 위에 인포윈도우를 표시합니다
+                                  const id = marker.id
+                                  document.getElementById("checkbox").checked = true;
+                                  fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      document.getElementById('list').innerHTML = ``
+
+                                      const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                      const imagewrap = document.createElement("div")
+                                      imagewrap.innerHTML = image
+                                      document.getElementById("list").appendChild(imagewrap)
+                                      const a =
+                                        `
+                                        
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
+                                        `
+                                      const li = document.createElement('li');
+                                      li.innerHTML = a;
+                                      document.getElementById('list').appendChild(li);
+
+                                      for (let i = 0; i < data.doctors.length; i++) {
+                                        const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
                                         const doctorLi = document.createElement('li');
                                         doctorLi.innerHTML = b;
                                         document.getElementById('list').appendChild(doctorLi);
@@ -611,11 +1351,18 @@
                                     console.log(data)
                                     document.getElementById('list').innerHTML = ``
 
+                                    const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                    const imagewrap = document.createElement("div")
+                                    imagewrap.innerHTML = image
+                                    document.getElementById("list").appendChild(imagewrap)
                                     const a =
                                       `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
+                                      
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
                                         `
                                     const li = document.createElement('li');
                                     li.innerHTML = a;
@@ -623,9 +1370,11 @@
 
 
                                     for (let i = 0; i < data.doctors.length; i++) {
-                                      const b = `<div>${data.doctors[i].doctor}</div>
-                                        <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                        <div>${data.doctors[i].department}</div>`
+                                      const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
                                       const doctorLi = document.createElement('li');
                                       doctorLi.innerHTML = b;
                                       document.getElementById('list').appendChild(doctorLi);
@@ -681,20 +1430,29 @@
                                   .then((data) => {
                                     document.getElementById('list').innerHTML = ``
 
+                                    const  image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+                                    const imagewrap = document.createElement("div")
+                                    imagewrap.innerHTML = image
+                                    document.getElementById("list").appendChild(imagewrap)
                                     const a =
                                       `
-                                      <div>${data.hospitalName}</div>
-                                      <div>${data.hospitalphone}</div>
-                                      <div>${data.hospitalAddress}</div>
+                                      
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
                                         `
                                     const li = document.createElement('li');
                                     li.innerHTML = a;
                                     document.getElementById('list').appendChild(li);
 
                                     for (let i = 0; i < data.doctors.length; i++) {
-                                      const b = `<div>${data.doctors[i].doctor}</div>
-                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                        <div>${data.doctors[i].department}</div>`
+                                      const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
                                       const doctorLi = document.createElement('li');
                                       doctorLi.innerHTML = b;
                                       document.getElementById('list').appendChild(doctorLi);
@@ -751,6 +1509,21 @@
 
       return data
     }
+
+    function clickBtn() {
+    // 체크한 데이터를 담을 배열 선언
+    const arr = [];
+    // Name이 Color인 속성 취득
+    const department = document.getElementsByName("department");
+    // 취득한 속성 만큼 루프
+    for (let i = 0; i < department.length; i++) {
+      // 속성중에 체크 된 항목이 있을 경우
+      if (department[i].checked == true) {
+      	arr.push(department[i].value);
+      }
+    }
+    return arr.join(",")
+  }
   </script>
 </body>
 

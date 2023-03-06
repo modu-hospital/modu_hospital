@@ -1,6 +1,6 @@
 const CreateError = require('../lib/errors');
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     const createError = new CreateError();
     const makeFirstLetterLowerCase = (str) => {
         result = str[0].toLowerCase() + str.slice(1, str.length);
