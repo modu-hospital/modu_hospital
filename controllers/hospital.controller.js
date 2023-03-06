@@ -1,5 +1,8 @@
 const HospitalService = require('../services/hospital.service');
 
+const axios = require('axios');
+const env = process.env;
+
 const Validation = require('../lib/validation');
 
 class HospitalController {
@@ -159,63 +162,63 @@ class HospitalController {
     };
 
     //병원 정보 등록
-    registerHospital = async (req, res, next) => {
-        // const { currentUser } = res.locals;
-        // cosnt userId = currentUser.id;
-        const { userId, name, address, phone, longitude, latitude } = req.body;
-        try {
-            await this.validation.hospitalRegisterValidateSchema.validateAsync(req.body);
+    // registerHospital = async (req, res, next) => {
+    //     // const { currentUser } = res.locals;
+    //     // cosnt userId = currentUser.id;
+    //     const { userId, name, address, phone, longitude, latitude } = req.body;
+    //     try {
+    //         await this.validation.hospitalRegisterValidateSchema.validateAsync(req.body);
 
-            const registerdata = await this.hospitalService.registerHospital(
-                userId,
-                name,
-                address,
-                phone,
-                longitude,
-                latitude
-            );
+    //         const registerdata = await this.hospitalService.registerHospital(
+    //             userId,
+    //             name,
+    //             address,
+    //             phone,
+    //             longitude,
+    //             latitude
+    //         );
 
-            return res.status(201).json({ data: registerdata });
-        } catch (error) {
-            if (error.name === 'ValidationError') {
-                error.status = 412;
-                error.message = error.details[0].message;
-                error.type = error.details[0].type;
-                error.path = error.details[0].path[0];
-                error.success = false;
+    //         return res.status(201).json({ data: registerdata });
+    //     } catch (error) {
+    //         if (error.name === 'ValidationError') {
+    //             error.status = 412;
+    //             error.message = error.details[0].message;
+    //             error.type = error.details[0].type;
+    //             error.path = error.details[0].path[0];
+    //             error.success = false;
 
-                if (error.path === 'phone') {
-                    switch (error.type) {
-                        case 'string.pattern.base':
-                            error.message = '숫자만 입력이 가능합니다. ';
-                            break;
-                        case 'string.max':
-                        case 'string.min':
-                            error.message =
-                                '전화번호는 숫자 10자 이상과 16자 이하로만 입력 가능합니다';
-                            break;
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '전화번호를 적어주세요';
-                            break;
-                    }
-                }
+    //             if (error.path === 'phone') {
+    //                 switch (error.type) {
+    //                     case 'string.pattern.base':
+    //                         error.message = '숫자만 입력이 가능합니다. ';
+    //                         break;
+    //                     case 'string.max':
+    //                     case 'string.min':
+    //                         error.message =
+    //                             '전화번호는 숫자 10자 이상과 16자 이하로만 입력 가능합니다';
+    //                         break;
+    //                     case 'any.required':
+    //                     case 'string.empty':
+    //                         error.message = '전화번호를 적어주세요';
+    //                         break;
+    //                 }
+    //             }
 
-                if (error.path === 'address') {
-                    switch (error.type) {
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '주소를 적어주세요.';
-                            break;
-                    }
-                }
-            }
-            console.log(error);
-            return res
-                .status(error.status)
-                .json({ success: error.success, message: error.message });
-        }
-    };
+    //             if (error.path === 'address') {
+    //                 switch (error.type) {
+    //                     case 'any.required':
+    //                     case 'string.empty':
+    //                         error.message = '주소를 적어주세요.';
+    //                         break;
+    //                 }
+    //             }
+    //         }
+    //         console.log(error);
+    //         return res
+    //             .status(error.status)
+    //             .json({ success: error.success, message: error.message });
+    //     }
+    // };
 
     //병원 정보 수정
     registerEditHospital = async (req, res, next) => {
@@ -282,9 +285,77 @@ class HospitalController {
             // const userId = currentUser.id;
             const userId = 2;
             const data = await this.hospitalService.getAllreviews(userId);
+            res.status(200).json({data:data});
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
+
+    //내 병원 정보
+    findOneHospital = async (req, res, next) => {
+        try {
+            // const { currentUser } = res.locals;
+            // const userId = currentUser.id;
+            const userId = 2;
+            const data = await this.hospitalService.findOneHospital(userId);
             res.status(200).json({ data: data });
         } catch (error) {
             res.status(500).json({ message: error.message });
+        }
+    };
+
+    // 병원지도 검색 api
+    findHospitalLocation = async (req, res, next) => {
+        try {
+            const { address } = req.body;
+
+            const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`;
+            const headers = { Authorization: env.KAKAO_REST_API_KEY };
+            const response = await axios.get(url, { headers });
+            const api_json = response.data;
+            const documents = api_json.documents;
+            const address_info = documents[0].address;
+            const location = {
+                latitude: address_info.y,
+                longitude: address_info.x,
+            };
+            const address_name = address_info.address_name;
+
+            req.hospitalLocation = { location, address_name }; // 중요 부분!
+
+            return next(); // 다음 미들웨어로 넘어감
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    };
+
+    // 병원 정보 등록api
+    registerHospital = async (req, res, next) => {
+        // const { currentUser } = res.locals;
+        // cosnt userId = currentUser.id;
+        const userId = 15;
+        const { name, address, phone } = req.body;
+        const { location, address_name } = req.hospitalLocation; // 중요 부분!
+        const longitude = location.longitude;
+        const latitude = location.latitude;
+
+        try {
+            const registerdata = await this.hospitalService.registerHospital(
+                userId,
+                name,
+                address,
+                phone,
+                longitude,
+                latitude
+            );
+
+            return res.status(201).json({ data: registerdata });
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(error.status)
+                .json({ success: error.success, message: error.message });
         }
     };
 }

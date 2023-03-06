@@ -34,6 +34,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
+            timestamps: true, // createAt & updateAt 활성화
+            paranoid: true,
             tableName: 'hospitals',
             modelName: 'Hospital',
             indexes: [
