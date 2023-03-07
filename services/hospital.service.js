@@ -67,9 +67,9 @@ class HospitalService {
             const infos = hospitals.map((hospital) => {
                 const doctors = hospital.doctors.map((doctor) => {
                     const department = doctor.doctorCategoryMappings.map((category) => {
-                        return category.categories.department
+                        return category.categories.department;
                     });
-                    return { doctor: doctor.name, department : department.join(",") };
+                    return { doctor: doctor.name, department: department.join(',') };
                 });
                 return {
                     hospitalId: hospital.hospitalId,

@@ -2,7 +2,7 @@ const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 class UserService {
     userRepository = new UserRepository(User);
@@ -12,44 +12,18 @@ class UserService {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
-    sortReservationsByStatus = (reservations) => {
-        if (reservations.length == 0) {
-            return reservations;
-        }
-        const waiting = reservations.filter((e) => e.status == 'waiting');
-        const approved = reservations.filter((e) => e.status == 'approved');
-        const doneOrReviewed = reservations.filter((e) => e.status == 'done' || e.status =='reviewed');
-        // const done = reservations.filter((e) => e.status == 'done');
-        // const reviewed = reservations.filter((e) => e.status == 'reviewed');
-        const canceled = reservations.filter((e) => e.status == 'canceled');
-        const sortedReservations = {
-            waiting: waiting,
-            approved: approved,
-            doneOrReviewed:doneOrReviewed,
-            // done: done,
-            // reviewed: reviewed,
-            canceled: canceled,
-        };
-        return sortedReservations;
-    };
-    showUserProfile = async (userId) => {
+
+    getUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
-            userId:user.userId,
-            loginId:user.loginId,
+            userId: user.userId,
+            loginId: user.loginId,
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
-        let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-        const sortedReservations = this.sortReservationsByStatus(reservations);
-        const profileData = {
-            userData: userData,
-            reservations: sortedReservations,
-        };
-
-        return profileData;
+        return userData;
     };
 
     editUserProfile = async (userId, address, phone, name) => {
@@ -60,6 +34,21 @@ class UserService {
             name
         );
         return editedProfile;
+    };
+    getApprovedReservation = async (userId, page) => {
+        const approved = await this.reservationRepository.getApprovedReservation(userId, page);
+        return approved;
+    };
+    getWaitingReservation = async (userId, page) => {
+        const waiting = await this.reservationRepository.getWaitingReservation(userId, page);
+        return waiting;
+    };
+    getDoneOrReviewedReservation = async (userId, page) => {
+        const doneOrReviewed = await this.reservationRepository.getDoneOrReviewedReservation(
+            userId,
+            page
+        );
+        return doneOrReviewed;
     };
 
     signup = async (name, phone, loginId, password, idNumber) => {
@@ -79,21 +68,22 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-
-        const user = await this.userRepository.emailPasswordCheck(loginId, password)
+        const user = await this.userRepository.emailPasswordCheck(loginId, password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
         if (!user || !isPasswordCorrect) {
-            return 
+            return;
         }
 
-        const accessToken =jwt.sign({loginId: user[0].loginId}, process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
-        const refreshToken =jwt.sign({}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
+        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '1m',
+        });
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         // tokenObject[refreshToken] = loginId
-        
-        return {accessToken, refreshToken}       
+
+        return { accessToken, refreshToken };
     };
 
     findUsers = async () => {
