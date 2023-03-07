@@ -1,12 +1,14 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
+const HospitalRepository = require('../repositories/hospital.repository');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 class UserService {
     userRepository = new UserRepository(User);
     reservationRepository = new ReservationRepository();
+    hospitalRepository = new HospitalRepository();
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
@@ -76,25 +78,26 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-
-        const user = await this.userRepository.emailPasswordCheck(loginId, password)
+        const user = await this.userRepository.emailPasswordCheck(loginId, password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
         if (!user || !isPasswordCorrect) {
-            return 
+            return;
         }
 
-        const accessToken =jwt.sign({loginId: user[0].loginId}, process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
-        const refreshToken =jwt.sign({}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
+        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '1m',
+        });
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         // tokenObject[refreshToken] = loginId
-        
-        return {accessToken, refreshToken}       
+
+        return { accessToken, refreshToken };
     };
 
     findUsers = async () => {
-        const allUser = await this.userRepository.findUsers();
+        const allUser = await this.userRepository.findAllUser();
 
         return allUser.map((users) => {
             return {
@@ -131,10 +134,23 @@ class UserService {
         });
     };
 
-    roleUpdate = async (userId, role) => {
-        const roleUpdate = await this.userRepository.userRoleUpdate(userId, role);
+    defalutRoleDelete = async (userId) => {
+        const userDelete = await this.userRepository.userDeleteOne(userId);
+        if (userId.role === 'partner') {
+            const hospitalDelete = await this.hospitalRepository.hospitalDeleteOne(userId);
 
-        return roleUpdate;
+            return {
+                userDelete: userDelete,
+                hospitalDelete: hospitalDelete,
+            };
+        } else {
+            return userDelete;
+        }
+    };
+
+    // Id로 회원찾기
+    findUserId = async (userId) => {
+        return await this.userRepostirory.findUserId(userId);
     };
 }
 

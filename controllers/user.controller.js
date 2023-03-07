@@ -9,7 +9,7 @@ class UserController {
     hospitalService = new HospitalService();
     validation = new Validation();
 
-    // 서비스관리자의 회원 정보 조회
+    // (admin) all 조회
     getUserInfo = async (req, res) => {
         try {
             const UserInfo = await this.userService.findUsers();
@@ -19,7 +19,8 @@ class UserController {
         }
     };
 
-    getRoleUserInfo = async (req, res) => {
+    // (admin) role별 조회
+    getRoleUser = async (req, res) => {
         try {
             const { role } = req.params;
             const roleUserInfo = await this.userService.findUserRole(role);
@@ -29,18 +30,32 @@ class UserController {
         }
     };
 
-    roleUpdate = async (req, res) => {
-        try {
-            const { userId } = req.params;
-            const { role } = req.body;
-            console.log(userId, role);
-            const roleUpdate = await this.userService.roleUpdate(userId, role);
+    // (admin) defalutDelete
+    defalutDelete = async (req, res) => {
+        const { userId } = req.params;
+        const getUserId = await this.userService.findUserId(userId);
+        console.log(getUserId);
 
-            res.status(200).json(roleUpdate);
-        } catch (error) {
-            return res.status(error.status).json({ message: error.message });
+        const defalutRoleDelete = await this.userService.defalutRoleDelete(userId);
+        console.log(userId.role);
+        if (userId.role === 'partner') {
+            const hospitalDelete = await this.hospitalService.hospitalDelete(userId);
+            res.status(200).json(defalutRoleDelete, hospitalDelete);
         }
+        res.status(200).json(defalutRoleDelete);
     };
+
+    // partnerDelete = async (req, res) => {
+    //     try {
+    //         const { userId } = req.params;
+    //         const partnerDelete = await this.userService.partnerDelete(userId);
+    //         const hospitalDelete = await this.hospitalService.hospitalDelete(userId);
+
+    //         res.status(200).json(partnerDelete);
+    //     } catch (error) {
+    //         return res.status(error.status).json({ message: error.message });
+    //     }
+    // };
 
     //mypage
 
@@ -153,19 +168,15 @@ class UserController {
         const { loginId, password } = req.body;
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const {accessToken, refreshToken} = await this.userService.login(loginId, password)
+        const { accessToken, refreshToken } = await this.userService.login(loginId, password);
 
         // tokenObject[refreshToken] = loginId
 
-        res.cookie('accessToken', accessToken)
-        res.cookie('refreshToken', refreshToken)
+        res.cookie('accessToken', accessToken);
+        res.cookie('refreshToken', refreshToken);
 
-        res.json({accessToken, refreshToken})
-
-
+        res.json({ accessToken, refreshToken });
     };
-
-
 
     logout = async (req, res) => {
         res.clearCookie(); //res.cookie('accessToken', '')

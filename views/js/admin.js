@@ -5,7 +5,7 @@ $.ajax({
     async: false,
     success: function (response) {
         for (let i = 0; i < response.length; i++) {
-            let { userId, loginId, name, phone, idNumber, address, createdAt, role } = response[i];
+            let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
 
             let temp_html = `<tr id="userId${userId}">
                                 <th scope="row" class="list-MS">${userId}</th>
@@ -35,8 +35,7 @@ function getCustomUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -67,8 +66,7 @@ function getPartnerUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -79,7 +77,7 @@ function getPartnerUserInfo(role) {
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="partnerUserDelete(${userId})"
+                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
                                             >회원삭제</a
                                         >
                                     </td>
@@ -99,8 +97,7 @@ function getWaitingUserInfo(role) {
         async: false,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    response[i];
+                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -113,6 +110,9 @@ function getWaitingUserInfo(role) {
                                     <td>
                                         <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:105px; height:35px" onclick="approveUpdate(${userId})"
                                             >승인</a
+                                        >
+                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:105px; height:35px" onclick="unapproveUpdate(${userId})"
+                                            >미승인</a
                                         >
                                     </td>
                                 </tr>`;
@@ -127,10 +127,9 @@ function userDelete(userId) {
     let result = confirm('정말로 삭제하시겠습니까?');
     if (result) {
         $.ajax({
-            type: 'PATCH',
+            type: 'DELETE',
             url: `/api/admin/${userId}`,
             async: false,
-            data: { role: 'deleted' },
             success: function (success) {
                 alert('삭제가 완료되었습니다.');
                 $(`#userId${userId}`).remove();
@@ -143,24 +142,23 @@ function userDelete(userId) {
 }
 
 // 파트너회원삭제 버튼을 누를 시
-function partnerUserDelete(userId) {
-    let result = confirm('정말로 삭제하시겠습니까?');
-    if (result) {
-        $.ajax({
-            type: 'PATCH',
-            url: `/api/admin/partner/${userId}`,
-            async: false,
-            data: { role: 'deleted' },
-            success: function (success) {
-                alert('삭제가 완료되었습니다.');
-                $(`#userId${userId}`).remove();
-                location.reload();
-            },
-        });
-    } else {
-        alert('취소합니다.');
-    }
-}
+// function partnerUserDelete(userId) {
+//     let result = confirm('정말로 삭제하시겠습니까?');
+//     if (result) {
+//         $.ajax({
+//             type: 'DELETE',
+//             url: `/api/admin/partner/${userId}`,
+//             async: false,
+//             success: function (success) {
+//                 alert('삭제가 완료되었습니다.');
+//                 $(`#userId${userId}`).remove();
+//                 location.reload();
+//             },
+//         });
+//     } else {
+//         alert('취소합니다.');
+//     }
+// }
 
 // 승인대기 파트너회원 승인 버튼 누를시
 function approveUpdate(userId) {

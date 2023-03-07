@@ -235,6 +235,15 @@ class HospitalService {
             throw err;
         }
     };
+
+    hospitalDelete = async (userId) => {
+        try {
+            const hospitalDelete = await this.hospitalRepository.deleteOneHospital(userId);
+            return hospitalDelete;
+        } catch (err) {
+            console.error(err);
+        }
+    };
 }
 
 module.exports = HospitalService;

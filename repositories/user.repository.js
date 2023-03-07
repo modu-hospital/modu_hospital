@@ -40,31 +40,23 @@ class UserRepository {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    // (관리자) role = "deleted" 가 아닌 all 유저 조회
-    findUsers = async () => {
-        const allUserList = await this.userModel.findAll({});
-        const filterList = await allUserList.filter((obj) => obj.role !== 'deleted');
-        return filterList;
+    findAllUser = async () => {
+        return await this.userModel.findAll({});
     };
 
-    // (관리자) role 변경 (삭제 또는 수정)
-    userRoleUpdate = async (userId, role) => {
-        const userRoleUpdate = await this.userModel.update(
-            {
-                role: role,
-            },
-            {
-                where: { userId },
-            }
-        );
-        return userRoleUpdate;
+    userDeleteOne = async (userId) => {
+        return await this.userModel.destroy({ where: { userId } });
     };
 
-    emailPasswordCheck = async (loginId)=> {
-        return await this.userModel.findAll({ where: {loginId}})
-    }
+    findUserId = async (userId) => {
+        const a = await this.userModel.findOne({ where: { userId } });
+        console.log(a);
+        return a;
+    };
 
-    
+    // emailPasswordCheck = async (loginId) => {
+    //     return await this.userModel.findAll({ where: { loginId } });
+    // };
 }
 
 module.exports = UserRepository;
