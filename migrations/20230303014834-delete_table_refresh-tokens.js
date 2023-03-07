@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.dropTable('RefreshTokens');
+        await queryInterface.dropTable('refresh-tokens');
         /**
          * Add altering commands here.
          *

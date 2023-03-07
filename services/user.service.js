@@ -12,42 +12,18 @@ class UserService {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
-    sortReservationsByStatus = (reservations) => {
-        if (reservations.length == 0) {
-            return reservations;
-        }
-        const waiting = reservations.filter((e) => e.status == 'waiting');
-        const approved = reservations.filter((e) => e.status == 'approved');
-        const done = reservations.filter((e) => e.status == 'done');
-        const reviewed = reservations.filter((e) => e.status == 'reviewed');
-        const canceled = reservations.filter((e) => e.status == 'canceled');
-        const sortedReservations = {
-            waiting: waiting,
-            approved: approved,
-            done: done,
-            reviewed: reviewed,
-            canceled: canceled,
-        };
-        return sortedReservations;
-    };
 
-    showUserProfile = async (userId) => {
+    getUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
+            userId: user.userId,
+            loginId: user.loginId,
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
-        let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-        const sortedReservations = this.sortReservationsByStatus(reservations);
-
-        const profileData = {
-            userData: userData,
-            reservations: sortedReservations,
-        };
-
-        return profileData;
+        return userData;
     };
 
     editUserProfile = async (userId, address, phone, name) => {
@@ -58,6 +34,21 @@ class UserService {
             name
         );
         return editedProfile;
+    };
+    getApprovedReservation = async (userId, page) => {
+        const approved = await this.reservationRepository.getApprovedReservation(userId, page);
+        return approved;
+    };
+    getWaitingReservation = async (userId, page) => {
+        const waiting = await this.reservationRepository.getWaitingReservation(userId, page);
+        return waiting;
+    };
+    getDoneOrReviewedReservation = async (userId, page) => {
+        const doneOrReviewed = await this.reservationRepository.getDoneOrReviewedReservation(
+            userId,
+            page
+        );
+        return doneOrReviewed;
     };
 
     signup = async (name, phone, loginId, password, idNumber) => {

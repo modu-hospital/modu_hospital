@@ -24,6 +24,7 @@
         />
 
         <!-- css -->
+        <link rel="stylesheet" href="./css/hospitalRegister.css" />
         <link rel="stylesheet" href="./css/main.css" />
         <link rel="stylesheet" href="./css/tabmenu.css" />
         <noscript> <link rel="stylesheet" href="./css/noscript.css" /> </noscript>
@@ -42,15 +43,16 @@
                     <li><a href="" onclick="location.href='/'">Home</a></li>
                     <li><a href="generic.html">로그인</a></li>
                     <li><a href="generic.html">회원가입</a></li>
-                    <li><a href="generic.html">원장님의 공간</a></li>
+                    <li><a href="" onclick="location.href='/hospital'">원장님의 공간</a></li>
                     <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
                 </ul>
             </nav>
 
             <!-- page -->
-            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %> <% if (components
-            === "map") { %> <%- include('map.ejs') %> <% } %> <% if (components === "hospital") { %>
-            <%- include('hospital.ejs') %> <% } %>
+            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %>
+            <% if (components === "map") { %> <%- include('map.ejs') %> <% } %> 
+            <% if (components === "hospital") { %> <%- include('hospital.ejs') %> <% } %>
+            <% if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% } %>
 
             <!-- Footer -->
             <%- include('footer.ejs') %>
@@ -63,6 +65,8 @@
         <script src="./js/util.js"></script>
         <script src="./js/main.js"></script>
         <script src="./js/tabmenu.js"></script>
-        <script src="./js/reservationlist.js"></script>
+        <script src="./js/reservationlist.js"></script>    
+        <script src="./js/hospital.js"></script>
+        <script src="./js/hospitalRegister.js"></script>
     </body>
 </html>

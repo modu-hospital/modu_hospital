@@ -12,8 +12,7 @@ const http = createServer(app);
 /* define router */
 const router = require('./routes');
 const ejsRouter = require('./routes/ejs.routes');
-
-const errorHandler = require('./middleware/errorhandler')
+const errorHandler = require('./middleware/errorhandler');
 
 /* router */
 app.use(cookieParser());

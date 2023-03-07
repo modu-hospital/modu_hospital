@@ -65,6 +65,12 @@ class HospitalService {
 
             // return hospitals
             const infos = hospitals.map((hospital) => {
+                const doctors = hospital.doctors.map((doctor) => {
+                    const department = doctor.doctorCategoryMappings.map((category) => {
+                        return category.categories.department;
+                    });
+                    return { doctor: doctor.name, department: department.join(',') };
+                });
                 return {
                     hospitalId: hospital.hospitalId,
                     name: hospital.name,
@@ -231,6 +237,15 @@ class HospitalService {
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
             return waitingdata;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    findOneHospital = async (userId) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            return hospitaldata;
         } catch (err) {
             throw err;
         }

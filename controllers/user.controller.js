@@ -40,8 +40,7 @@ class UserController {
     getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const userProfile = await this.userService.showUserProfile(userId.userId);
-
+            const userProfile = await this.userService.getUserProfile(userId.userId);
             return res.status(200).json(userProfile);
         } catch (err) {
             next(err);
@@ -61,6 +60,38 @@ class UserController {
                 name
             );
             return res.status(201).json(editedProfile);
+        } catch (err) {
+            next(err);
+        }
+    };
+    getApprovedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const approved = await this.userService.getApprovedReservation(userId, page);
+            return res.status(200).json(approved);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getWaitingReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const waiting = await this.userService.getWaitingReservation(userId, page);
+            return res.status(200).json(waiting);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getDoneOrReviewedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const doneOrReviewed = await this.userService.getDoneOrReviewedReservation(
+                userId,
+                page
+            );
+            return res.status(200).json(doneOrReviewed);
         } catch (err) {
             next(err);
         }
