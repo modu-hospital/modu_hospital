@@ -15,7 +15,7 @@ router.get('/users/mypage/:userId', (req,res) =>{
     res.render('mypage.ejs')
 })
 
-router.get('/hospital/map', (req, res) => {
+router.get('/map/hospitals', (req, res) => {
     res.render('map.ejs', { compnents: 'map' });
 });
 
