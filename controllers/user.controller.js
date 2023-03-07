@@ -1,15 +1,13 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const HospitalService = require('../services/hospital.service');
 const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
-    hospitalService = new HospitalService();
     validation = new Validation();
 
-    // 서비스관리자의 회원 정보 조회
+    // (admin) all 조회
     getUserInfo = async (req, res) => {
         try {
             const UserInfo = await this.userService.findUsers();
@@ -19,7 +17,8 @@ class UserController {
         }
     };
 
-    getRoleUserInfo = async (req, res) => {
+    // (admin) role별 조회
+    getRoleUser = async (req, res) => {
         try {
             const { role } = req.params;
             const roleUserInfo = await this.userService.findUserRole(role);
@@ -29,17 +28,11 @@ class UserController {
         }
     };
 
-    roleUpdate = async (req, res) => {
-        try {
-            const { userId } = req.params;
-            const { role } = req.body;
-            console.log(userId, role);
-            const roleUpdate = await this.userService.roleUpdate(userId, role);
-
-            res.status(200).json(roleUpdate);
-        } catch (error) {
-            return res.status(error.status).json({ message: error.message });
-        }
+    // (admin) defalutDelete
+    defalutDelete = async (req, res) => {
+        const { userId } = req.params;
+        const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
+        return res.status(200).json(sequenceDelete);
     };
 
     //mypage

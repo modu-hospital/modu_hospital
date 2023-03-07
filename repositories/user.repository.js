@@ -3,8 +3,10 @@ const { sequelize } = require('../models');
 const db = require('../models');
 
 class UserRepository {
-    constructor(UserModel) {
+    constructor(UserModel, HospitalModel, DoctorModel) {
         this.userModel = UserModel;
+        this.hospitalModel = HospitalModel;
+        this.doctorModel = DoctorModel;
     }
 
     findUserById = async (userId) => {
@@ -40,24 +42,23 @@ class UserRepository {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    // (관리자) role = "deleted" 가 아닌 all 유저 조회
-    findUsers = async () => {
-        const allUserList = await this.userModel.findAll({});
-        const filterList = await allUserList.filter((obj) => obj.role !== 'deleted');
-        return filterList;
+    findAllUser = async () => {
+        return await this.userModel.findAll({});
     };
 
-    // (관리자) role 변경 (삭제 또는 수정)
-    userRoleUpdate = async (userId, role) => {
-        const userRoleUpdate = await this.userModel.update(
-            {
-                role: role,
-            },
-            {
-                where: { userId },
-            }
-        );
-        return userRoleUpdate;
+    // 회원삭제
+    userDeleteOne = async (userId) => {
+        return await this.userModel.destroy({ where: { userId } });
+    };
+
+    // 의사삭제
+    doctorDeleteOne = async (doctorId) => {
+        return await this.doctorModel.destroy({ where: { doctorId } });
+    };
+
+    // 병원삭제
+    HospitalDeleteOne = async (userId) => {
+        return await this.hospitalModel.destroy({ where: { userId } });
     };
 
     emailPasswordCheck = async (loginId) => {
