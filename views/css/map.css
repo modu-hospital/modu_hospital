@@ -4,13 +4,14 @@ body {
 }
 
 #listBtn {
-  position: fixed;
+  position: absolute;
   bottom: 10vh;
-  right: 43vw;
+  right: 50%;
   width: 300px;
   height: 50px;
   border: 3px solid #73AD21;
   z-index: 1;
+  margin-right: -150px;
 }
 
 input[id="menuIcon"] {

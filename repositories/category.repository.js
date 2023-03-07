@@ -30,8 +30,10 @@ class CategoryRepository {
                             include: [
                                 {
                                     model: this.hospitalModel,
+                                    paranoid: false,
                                     as: 'hospitals',
                                     where: {
+                                        deletedAt: { [Op.lt]: 1 },
                                         longitude: { [Op.between]: longitude },
                                         latitude: { [Op.between]: latitude },
                                     },
