@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.middleware');
 const RefreshTokenController = require('../controllers/refreshToken.controller');
 const refreshTokenController = new RefreshTokenController();
 
-router.post("/", auth, refreshTokenController.createToken) 
+router.post('/', auth, refreshTokenController.createToken);
 //refreshtoken저장 API
 
 // router.get("/accesstoken", userController.accessToken)
