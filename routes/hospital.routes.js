@@ -39,8 +39,6 @@ router.put(
 //우리 병원 정보 조회
 router.get('/information', hospitalController.findOneHospital);
 
-
-
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
 router.get('/info/:id', hospitalController.searchHospitalInfo);

@@ -349,4 +349,3 @@ function goPage(pageNum) {
 
     getAddr();
 }
-

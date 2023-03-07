@@ -161,7 +161,6 @@ class HospitalController {
         }
     };
 
-    
     //병원 정보 수정
     registerEditHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
@@ -175,19 +174,17 @@ class HospitalController {
                     userId,
                     name,
                     address,
-                    phone,
+                    phone
                 );
                 res.status(201).json({
-                    data: registerEditdata
+                    data: registerEditdata,
                 });
             } catch (error) {
                 console.log(error);
-                return res
-                    .status(error.status)
-                    .json({
-                        success: error.success,
-                        message: error.message
-                    });
+                return res.status(error.status).json({
+                    success: error.success,
+                    message: error.message,
+                });
             }
             return;
         }
@@ -203,19 +200,17 @@ class HospitalController {
                 address,
                 phone,
                 longitude,
-                latitude,
+                latitude
             );
             res.status(201).json({
-                data: registerEditdata
+                data: registerEditdata,
             });
         } catch (error) {
             console.log(error);
-            return res
-                .status(error.status)
-                .json({
-                    success: error.success,
-                    message: error.message
-                });
+            return res.status(error.status).json({
+                success: error.success,
+                message: error.message,
+            });
         }
     };
 
@@ -248,12 +243,12 @@ class HospitalController {
     // 병원지도 검색 api
     findHospitalLocation = async (req, res, next) => {
         const { address } = req.body;
-        if(!address){
-            //address값이 없는 경우 
+        if (!address) {
+            //address값이 없는 경우
             req.hospitalLocation = null;
             return next();
         }
-        
+
         try {
             const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`;
             const headers = { Authorization: env.KAKAO_REST_API_KEY };
