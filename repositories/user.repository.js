@@ -28,12 +28,12 @@ class UserRepository {
         return editedProfile;
     };
 
-    signup = async (name, phone, loginId, password, idNumber, role) => {
-        return await this.userModel.create({ name, phone, loginId, password, idNumber, role });
+    signup = async (name, loginId, password, phone, idNumber, role) => {
+        return await this.userModel.create({ name, loginId, password, phone, idNumber, role });
     };
 
     findUser = async (loginId) => {
-        return await this.userModel.findOne({ loginId });
+        return await this.userModel.findOne({ where: { loginId } });
     };
 
     findUserRole = async () => {

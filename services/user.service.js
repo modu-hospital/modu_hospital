@@ -60,7 +60,7 @@ class UserService {
         return editedProfile;
     };
 
-    signup = async (name, phone, loginId, password, idNumber) => {
+    signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser[0]) {
@@ -70,9 +70,9 @@ class UserService {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, phone, loginId, hashedPassword, idNumber, role);
+        await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
 
-        res.status(201).json({ message: '회원가입이 완료되었습니다' });
+        return { message: '회원가입이 완료되었습니다' };
     };
 
     login = async (loginId, password) => {
@@ -85,7 +85,7 @@ class UserService {
         }
 
         const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
-            expiresIn: '1m',
+            expiresIn: '10s',
         });
         const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 

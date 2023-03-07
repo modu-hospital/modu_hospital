@@ -92,16 +92,10 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
         try {
-            const { name, phone, loginId, password, confirm, idNumber } =
+            const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
-                name,
-                phone,
-                loginId,
-                password,
-                confirm,
-                idNumber,
-                role
+                name, loginId, password, phone, idNumber, role
             );
             res.json(user);
         } catch (err) {
@@ -114,16 +108,10 @@ class UserController {
     customerSignup = async (req, res) => {
         const role = 'customer';
         try {
-            const { name, phone, loginId, password, confirm, idNumber } =
+            const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
-                name,
-                phone,
-                loginId,
-                password,
-                confirm,
-                idNumber,
-                role
+                name, loginId, password, phone, idNumber, role
             );
             res.json(user);
         } catch (err) {
@@ -139,8 +127,6 @@ class UserController {
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
         const { accessToken, refreshToken } = await this.userService.login(loginId, password);
-
-        // tokenObject[refreshToken] = loginId
 
         res.cookie('accessToken', accessToken);
         res.cookie('refreshToken', refreshToken);

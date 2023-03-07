@@ -8,19 +8,21 @@ class RefreshTokenController {
     createToken = async (req, res) => {
         //서버에 저장되어 있는 쿠키를 db에 저장???
 
-        const refreshToken = req.cookies.refreshToken;
-        console.log('refresh', refreshToken);
+        const token = req.cookies.refreshToken;
+        console.log('refresh', token);
 
         //현재 로그인되어 있는 아이디와 일치한 userId 저장
         // const {id: userId} = res.locals
 
         // console.log('payload', payload)
+       const {userId} = res.locals.user
+       console.log(userId)
 
-        console.log('userId', userId);
+        // console.log('userId', userId);
 
         await this.refreshTokenService.createToken(userId, token);
 
-        res.json(token, userId);
+        res.json(userId, token);
 
         //auth에서 토큰은 있는데 accessTokenValidate 없음
         //유효성 검사사

@@ -9,7 +9,7 @@ class RefreshTokenRepository {
     }
 
     findUserId = async (userId) => {
-        return await this.userModel.findOne({ userId });
+        return await this.userModel.findOne({ where: {userId} });
     };
 
     createRefreshToken = async (userId, token) => {
