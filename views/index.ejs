@@ -10,6 +10,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
         <!-- ajax -->
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -21,6 +26,12 @@
             rel="stylesheet"
             integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
             crossorigin="anonymous"
+        />
+        <link
+             rel="stylesheet"
+             href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjBh/nUcbJ5PFzn0UwGdKh"
+             crossorigin="anonymous"
         />
 
         <!-- css -->
@@ -53,6 +64,7 @@
             <% if (components === "map") { %> <%- include('map.ejs') %> <% } %> 
             <% if (components === "hospital") { %> <%- include('hospital.ejs') %> <% } %>
             <% if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% } %>
+            <% if (components === "hospitalEdit") { %> <%- include('hospitalEdit.ejs') %> <% } %>
 
             <!-- Footer -->
             <%- include('footer.ejs') %>
@@ -67,6 +79,7 @@
         <script src="./js/tabmenu.js"></script>
         <script src="./js/reservationlist.js"></script>    
         <script src="./js/hospital.js"></script>
+        <script src="./js/hospitalEdit.js"></script>
         <script src="./js/hospitalRegister.js"></script>
     </body>
 </html>

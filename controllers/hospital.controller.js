@@ -161,120 +161,61 @@ class HospitalController {
         }
     };
 
-    //병원 정보 등록
-    // registerHospital = async (req, res, next) => {
-    //     // const { currentUser } = res.locals;
-    //     // cosnt userId = currentUser.id;
-    //     const { userId, name, address, phone, longitude, latitude } = req.body;
-    //     try {
-    //         await this.validation.hospitalRegisterValidateSchema.validateAsync(req.body);
-
-    //         const registerdata = await this.hospitalService.registerHospital(
-    //             userId,
-    //             name,
-    //             address,
-    //             phone,
-    //             longitude,
-    //             latitude
-    //         );
-
-    //         return res.status(201).json({ data: registerdata });
-    //     } catch (error) {
-    //         if (error.name === 'ValidationError') {
-    //             error.status = 412;
-    //             error.message = error.details[0].message;
-    //             error.type = error.details[0].type;
-    //             error.path = error.details[0].path[0];
-    //             error.success = false;
-
-    //             if (error.path === 'phone') {
-    //                 switch (error.type) {
-    //                     case 'string.pattern.base':
-    //                         error.message = '숫자만 입력이 가능합니다. ';
-    //                         break;
-    //                     case 'string.max':
-    //                     case 'string.min':
-    //                         error.message =
-    //                             '전화번호는 숫자 10자 이상과 16자 이하로만 입력 가능합니다';
-    //                         break;
-    //                     case 'any.required':
-    //                     case 'string.empty':
-    //                         error.message = '전화번호를 적어주세요';
-    //                         break;
-    //                 }
-    //             }
-
-    //             if (error.path === 'address') {
-    //                 switch (error.type) {
-    //                     case 'any.required':
-    //                     case 'string.empty':
-    //                         error.message = '주소를 적어주세요.';
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         console.log(error);
-    //         return res
-    //             .status(error.status)
-    //             .json({ success: error.success, message: error.message });
-    //     }
-    // };
-
+    
     //병원 정보 수정
     registerEditHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
+        const userId = 2;
+        const { name, address, phone } = req.body;
+        // 주소 값이 없는 경우에 대한 예외 처리
+        if (!req.hospitalLocation) {
+            try {
+                const registerEditdata = await this.hospitalService.registerEditHospital(
+                    userId,
+                    name,
+                    address,
+                    phone,
+                );
+                res.status(201).json({
+                    data: registerEditdata
+                });
+            } catch (error) {
+                console.log(error);
+                return res
+                    .status(error.status)
+                    .json({
+                        success: error.success,
+                        message: error.message
+                    });
+            }
+            return;
+        }
+
+        const { location, address_name } = req.hospitalLocation;
+        const longitude = location.longitude;
+        const latitude = location.latitude;
 
         try {
-            const { userId, name, address, phone, longitude, latitude } =
-                await this.validation.hospitalRegisterUpdateValidateSchema.validateAsync(req.body);
             const registerEditdata = await this.hospitalService.registerEditHospital(
                 userId,
                 name,
                 address,
                 phone,
                 longitude,
-                latitude
+                latitude,
             );
-            res.status(201).json({ data: registerEditdata });
+            res.status(201).json({
+                data: registerEditdata
+            });
         } catch (error) {
-            if (error.name === 'ValidationError') {
-                error.status = 412;
-                error.message = error.details[0].message;
-                error.type = error.details[0].type;
-                error.path = error.details[0].path[0];
-                error.success = false;
-
-                if (error.path === 'phone') {
-                    switch (error.type) {
-                        case 'string.pattern.base':
-                            error.message = '숫자만 입력이 가능합니다. ';
-                            break;
-                        case 'string.max':
-                        case 'string.min':
-                            error.message =
-                                '전화번호는 숫자 10자 이상과 16자 이하로만 입력 가능합니다';
-                            break;
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '전화번호를 적어주세요';
-                            break;
-                    }
-                }
-
-                if (error.path === 'address') {
-                    switch (error.type) {
-                        case 'any.required':
-                        case 'string.empty':
-                            error.message = '주소를 적어주세요.';
-                            break;
-                    }
-                }
-            }
             console.log(error);
             return res
                 .status(error.status)
-                .json({ success: error.success, message: error.message });
+                .json({
+                    success: error.success,
+                    message: error.message
+                });
         }
     };
 
@@ -306,9 +247,14 @@ class HospitalController {
 
     // 병원지도 검색 api
     findHospitalLocation = async (req, res, next) => {
+        const { address } = req.body;
+        if(!address){
+            //address값이 없는 경우 
+            req.hospitalLocation = null;
+            return next();
+        }
+        
         try {
-            const { address } = req.body;
-
             const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`;
             const headers = { Authorization: env.KAKAO_REST_API_KEY };
             const response = await axios.get(url, { headers });
@@ -334,7 +280,7 @@ class HospitalController {
     registerHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
-        const userId = 15;
+        const userId = 16;
         const { name, address, phone } = req.body;
         const { location, address_name } = req.hospitalLocation; // 중요 부분!
         const longitude = location.longitude;
