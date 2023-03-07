@@ -136,8 +136,7 @@ class UserService {
                 doctorDelete: doctorDelete,
             };
         } else {
-            const userDelete = await this.userRepository.userDeleteOne(userId);
-            return userDelete;
+            return await this.userRepository.userDeleteOne(userId);
         }
     };
 }
