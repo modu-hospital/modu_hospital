@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const refreshtoken = require('./refreshtoken');
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         /**
@@ -7,11 +8,12 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        static associate({ Hospital, Review, Reservation }) {
+        static associate({ Hospital, Review, Reservation, RefreshToken}) {
             // define association here
             this.hasMany(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
             this.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
             this.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
+            this.belongsTo(RefreshToken, {foreignKey: 'userId', as: 'refreshtokens'})
         }
     }
     User.init(

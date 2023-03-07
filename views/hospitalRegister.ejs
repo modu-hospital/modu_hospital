@@ -1,0 +1,81 @@
+<div id="sform">
+    <form action="/hospital" id = "hospitalForm">
+        <h2>병원정보 등록</h2>
+        <label for="name">병원이름</label>
+        <input type="text" id="name" name="name" required>
+        <label for="address">주소</label>
+        <input type="text" id="addressInput" name="addressInput" required onclick="openModal()">
+        <label for="phone">전화번호</label>
+        <input type="text" id="phone" name="phone" required>
+        <button type="submit">등록하기</button>
+    </form>
+</div>
+
+<!-- 모달창 -->
+<div id="modal" class="modal">
+    <div class="modal-content"> 
+        <span class="close">&times;</span>
+        <!-- 주소검색 API를 삽입할 위치 -->
+        <h1>■ 행정안정부 - 주소 검색 API</h1>
+
+        <hr />
+
+        현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
+
+        <div style="height:5px;"></div>
+
+        페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
+
+        <hr /><br />
+
+        <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+
+        <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
+
+        <div id="wrap">
+
+            <div id="closeBtn" onClick="addressWindowClose();">
+                <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+            </div>
+
+            <div>
+
+                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
+                    placeholder="도로명주소, 건물명 또는 지번 입력" />
+
+                <input type="button" onClick="getAddr();" value="주소검색" />
+
+            </div>
+
+            <div>
+
+                <div id="totoalOutcome">
+
+                    검색결과 : <span id="totalCnt">0</span>
+
+                </div>
+
+                <table id="list"></table>
+
+            </div>
+
+            <div id="pagingList" style='text-align:center;'></div>
+
+        </div>
+
+        <div style="height:5px;"></div>
+
+        <input type="text" id="address" value="" placeholder="도로명 주소, 지번 주소" readonly />
+
+        <div style="height:5px;"></div>
+
+        <input type="button" value="입력" onclick="inputData()" />
+    </div>
+</div>
+
+<style type="text/css">
+   
+</style>
+
+
+

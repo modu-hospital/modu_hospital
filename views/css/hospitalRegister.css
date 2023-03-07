@@ -1,0 +1,99 @@
+table {
+    width: 100%;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #444444;
+}
+
+tr>td:first-child {
+    text-align: center;
+}
+
+div#wrap {
+    display: none;
+    border: 1px solid #DDDDDD;
+    width: 500px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+div#wrap>div {
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+
+div#wrap a:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+
+div#wrap a:hover {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+div#totoalOutcome {
+    display: none;
+}
+
+#closeBtn {
+    float: right;
+    margin-top: -5px;
+    margin-right: -5px;
+}
+
+#searchAddr {
+    width: 380px;
+}
+
+#zipCode {
+    text-align: center;
+}
+
+#address,
+#detail {
+    width: 500px;
+}
+
+#modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  #modal {
+    background-color: #fff;
+    width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

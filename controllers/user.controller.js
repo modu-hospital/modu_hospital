@@ -1,15 +1,18 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
+const HospitalService = require('../services/hospital.service');
 const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
+    hospitalService = new HospitalService();
     validation = new Validation();
 
     // 서비스관리자의 회원 정보 조회
     getUserInfo = async (req, res) => {
         try {
+            
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
@@ -20,8 +23,21 @@ class UserController {
     getRoleUserInfo = async (req, res) => {
         try {
             const { role } = req.params;
-            const roleUserInfo = await this.userService.findRoleUsers(role);
+            const roleUserInfo = await this.userService.findUserRole(role);
             res.status(200).send(roleUserInfo);
+        } catch (error) {
+            return res.status(error.status).json({ message: error.message });
+        }
+    };
+
+    roleUpdate = async (req, res) => {
+        try {
+            const { userId } = req.params;
+            const { role } = req.body;
+            console.log(userId, role);
+            const roleUpdate = await this.userService.roleUpdate(userId, role);
+
+            res.status(200).json(roleUpdate);
         } catch (error) {
             return res.status(error.status).json({ message: error.message });
         }
@@ -34,7 +50,7 @@ class UserController {
             const userId = req.params;
             const userProfile = await this.userService.showUserProfile(userId.userId);
 
-            return res.status(200).json({ userProfile });
+            return res.status(200).json(userProfile);
         } catch (err) {
             next(err);
         }
@@ -43,7 +59,7 @@ class UserController {
     editUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const { address, phone, name } = await this.validation.editProfile.validateAsync(
+            const { name, phone, address } = await this.validation.editProfile.validateAsync(
                 req.body
             );
             const editedProfile = await this.userService.editUserProfile(
@@ -72,9 +88,8 @@ class UserController {
     };
 
     createReview = async (req, res, next) => {
-        try {
-            console.log('asdfjwejfnjwe');
-            const reservationId = req.params;
+        try{
+        const reservationId = req.params;
 
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
             const { star, contents } = await this.validation.createReview.validateAsync(req.body);
@@ -106,9 +121,7 @@ class UserController {
             res.json(user);
         } catch (err) {
             if (err.isJoi) {
-                //joi에서 받아온 에러 메세지를 처리할 수 있도록
                 return res.status(422).json({ message: err.details[0].message });
-                //joi가 에러를 보낼 때 err에 details라는 배열 안에 첫번째 값의 message
             }
             res.status(500).json({ message: err.message });
         }
@@ -130,9 +143,7 @@ class UserController {
             res.json(user);
         } catch (err) {
             if (err.isJoi) {
-                //joi에서 받아온 에러 메세지를 처리할 수 있도록
                 return res.status(422).json({ message: err.details[0].message });
-                //joi가 에러를 보낼 때 err에 details라는 배열 안에 첫번째 값의 message
             }
             res.status(500).json({ message: err.message });
         }
@@ -141,31 +152,23 @@ class UserController {
     login = async (req, res) => {
         const { loginId, password } = req.body;
 
-        res.json({ message: 'd' });
+        //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
+        const {accessToken, refreshToken} = await this.userService.login(loginId, password)
 
-        // const loginCheck = await idPasswordCheck(loginId, password);
+        // tokenObject[refreshToken] = loginId
 
-        // if (!loginCheck) {
-        //     return res.status(404).json({ message: '없는 계정입니다. 회원가입 해주세요' });
-        // }
+        res.cookie('accessToken', accessToken)
+        res.cookie('refreshToken', refreshToken)
 
-        // const token = jwt.sign({id:loginCheck.id})
+        res.json({accessToken, refreshToken})
+
+
     };
 
-    // accessToken = async(req, res) => {
 
-    // }
-
-    // refreshToken = async(req, res) => {
-
-    // }
-
-    // loginSuccess = async(req, res) => {
-
-    // }
 
     logout = async (req, res) => {
-        res.clearCookie();
+        res.clearCookie(); //res.cookie('accessToken', '')
         return res.status(200).json({ message: '로그아웃 되었습니다.' });
     };
 }
