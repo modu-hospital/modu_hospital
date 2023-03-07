@@ -19,6 +19,10 @@ class CategoryController {
         );
 
         res.json(hospitals);
+
+        // const a = await this.categoryService.hospital(department)
+
+        // res.json(a)
     };
 }
 
