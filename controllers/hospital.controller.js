@@ -226,7 +226,7 @@ class HospitalController {
             // const userId = currentUser.id;
             const userId = 2;
             const data = await this.hospitalService.getAllreviews(userId);
-            res.status(200).json({data:data});
+            res.status(200).json({ data: data });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

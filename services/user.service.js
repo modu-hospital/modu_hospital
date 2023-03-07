@@ -1,55 +1,29 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User } = require('../models');
+const { User, HospitalModel, DoctorModel } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 class UserService {
-    userRepository = new UserRepository(User);
+    userRepository = new UserRepository(User, HospitalModel, DoctorModel);
     reservationRepository = new ReservationRepository();
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
     };
-    sortReservationsByStatus = (reservations) => {
-        if (reservations.length == 0) {
-            return reservations;
-        }
-        const waiting = reservations.filter((e) => e.status == 'waiting');
-        const approved = reservations.filter((e) => e.status == 'approved');
-        const doneOrReviewed = reservations.filter((e) => e.status == 'done' || e.status =='reviewed');
-        // const done = reservations.filter((e) => e.status == 'done');
-        // const reviewed = reservations.filter((e) => e.status == 'reviewed');
-        const canceled = reservations.filter((e) => e.status == 'canceled');
-        const sortedReservations = {
-            waiting: waiting,
-            approved: approved,
-            doneOrReviewed:doneOrReviewed,
-            // done: done,
-            // reviewed: reviewed,
-            canceled: canceled,
-        };
-        return sortedReservations;
-    };
-    showUserProfile = async (userId) => {
+
+    getUserProfile = async (userId) => {
         const user = await this.findAUserByUserId(userId);
         const userData = {
-            userId:user.userId,
-            loginId:user.loginId,
+            userId: user.userId,
+            loginId: user.loginId,
             name: user.name,
             phone: user.phone,
             address: user.address,
         };
 
-        let reservations = await this.reservationRepository.findReservationsByUserId(userId);
-        const sortedReservations = this.sortReservationsByStatus(reservations);
-        const profileData = {
-            userData: userData,
-            reservations: sortedReservations,
-        };
-
-        return profileData;
+        return userData;
     };
 
     editUserProfile = async (userId, address, phone, name) => {
@@ -61,12 +35,26 @@ class UserService {
         );
         return editedProfile;
     };
+    getApprovedReservation = async (userId, page) => {
+        const approved = await this.reservationRepository.getApprovedReservation(userId, page);
+        return approved;
+    };
+    getWaitingReservation = async (userId, page) => {
+        const waiting = await this.reservationRepository.getWaitingReservation(userId, page);
+        return waiting;
+    };
+    getDoneOrReviewedReservation = async (userId, page) => {
+        const doneOrReviewed = await this.reservationRepository.getDoneOrReviewedReservation(
+            userId,
+            page
+        );
+        return doneOrReviewed;
+    };
 
     signup = async (name, phone, loginId, password, idNumber) => {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             return;
         }
@@ -79,21 +67,22 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-
-        const user = await this.userRepository.emailPasswordCheck(loginId, password)
+        const user = await this.userRepository.emailPasswordCheck(loginId, password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
         if (!user || !isPasswordCorrect) {
-            return 
+            return;
         }
 
-        const accessToken =jwt.sign({loginId: user[0].loginId}, process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
-        const refreshToken =jwt.sign({}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
+        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '1m',
+        });
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         // tokenObject[refreshToken] = loginId
-        
-        return {accessToken, refreshToken}       
+
+        return { accessToken, refreshToken };
     };
 
     findUsers = async () => {
@@ -134,10 +123,21 @@ class UserService {
         });
     };
 
-    roleUpdate = async (userId, role) => {
-        const roleUpdate = await this.userRepository.userRoleUpdate(userId, role);
+    userHospitalDoctorDelete = async (userId) => {
+        const getUserById = await this.userRepository.findUserById(userId);
+        if (getUserById.role === 'partner') {
+            const userDelete = await this.userRepository.userDeleteOne(userId);
+            const hospitalDelete = await this.userRepository.HospitalDeleteOne(userId);
+            const doctorDelete = await this.userRepository.doctorDeleteOne(userId);
 
-        return roleUpdate;
+            return {
+                userDelete: userDelete,
+                hospitalDelete: hospitalDelete,
+                doctorDelete: doctorDelete,
+            };
+        } else {
+            return await this.userRepository.userDeleteOne(userId);
+        }
     };
 }
 

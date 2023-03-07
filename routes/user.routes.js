@@ -5,7 +5,13 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/:userId', userController.getUserProfile);
+router.get('/mypage/userData/:userId', userController.getUserProfile);
+
+router.get('/mypage/approved', userController.getApprovedReservation);
+
+router.get('/mypage/waiting', userController.getWaitingReservation);
+
+router.get('/mypage/doneorreviewed', userController.getDoneOrReviewedReservation);
 
 router.patch('/mypage/editprofile/:userId', userController.editUserProfile);
 

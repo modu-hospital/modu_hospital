@@ -1,18 +1,15 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const HospitalService = require('../services/hospital.service');
 const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
-    hospitalService = new HospitalService();
     validation = new Validation();
 
-    // 서비스관리자의 회원 정보 조회
+    // (admin) all 조회
     getUserInfo = async (req, res) => {
         try {
-            
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
@@ -20,7 +17,8 @@ class UserController {
         }
     };
 
-    getRoleUserInfo = async (req, res) => {
+    // (admin) role별 조회
+    getRoleUser = async (req, res) => {
         try {
             const { role } = req.params;
             const roleUserInfo = await this.userService.findUserRole(role);
@@ -30,17 +28,11 @@ class UserController {
         }
     };
 
-    roleUpdate = async (req, res) => {
-        try {
-            const { userId } = req.params;
-            const { role } = req.body;
-            console.log(userId, role);
-            const roleUpdate = await this.userService.roleUpdate(userId, role);
-
-            res.status(200).json(roleUpdate);
-        } catch (error) {
-            return res.status(error.status).json({ message: error.message });
-        }
+    // (admin) defalutDelete
+    defalutDelete = async (req, res) => {
+        const { userId } = req.params;
+        const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
+        return res.status(200).json(sequenceDelete);
     };
 
     //mypage
@@ -48,8 +40,7 @@ class UserController {
     getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const userProfile = await this.userService.showUserProfile(userId.userId);
-
+            const userProfile = await this.userService.getUserProfile(userId.userId);
             return res.status(200).json(userProfile);
         } catch (err) {
             next(err);
@@ -73,6 +64,38 @@ class UserController {
             next(err);
         }
     };
+    getApprovedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const approved = await this.userService.getApprovedReservation(userId, page);
+            return res.status(200).json(approved);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getWaitingReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const waiting = await this.userService.getWaitingReservation(userId, page);
+            return res.status(200).json(waiting);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getDoneOrReviewedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const doneOrReviewed = await this.userService.getDoneOrReviewedReservation(
+                userId,
+                page
+            );
+            return res.status(200).json(doneOrReviewed);
+        } catch (err) {
+            next(err);
+        }
+    };
 
     cancelReservation = async (req, res, next) => {
         try {
@@ -88,8 +111,8 @@ class UserController {
     };
 
     createReview = async (req, res, next) => {
-        try{
-        const reservationId = req.params;
+        try {
+            const reservationId = req.params;
 
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
             const { star, contents } = await this.validation.createReview.validateAsync(req.body);
@@ -153,19 +176,15 @@ class UserController {
         const { loginId, password } = req.body;
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const {accessToken, refreshToken} = await this.userService.login(loginId, password)
+        const { accessToken, refreshToken } = await this.userService.login(loginId, password);
 
         // tokenObject[refreshToken] = loginId
 
-        res.cookie('accessToken', accessToken)
-        res.cookie('refreshToken', refreshToken)
+        res.cookie('accessToken', accessToken);
+        res.cookie('refreshToken', refreshToken);
 
-        res.json({accessToken, refreshToken})
-
-
+        res.json({ accessToken, refreshToken });
     };
-
-
 
     logout = async (req, res) => {
         res.clearCookie(); //res.cookie('accessToken', '')

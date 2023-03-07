@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        static associate({ Hospital, Review, Reservation, RefreshToken}) {
+        static associate({ Hospital, Review, Reservation, RefreshToken }) {
             // define association here
             this.hasMany(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
             this.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
             this.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
-            this.belongsTo(RefreshToken, {foreignKey: 'userId', as: 'refreshtokens'})
+            this.belongsTo(RefreshToken, { foreignKey: 'userId', as: 'refreshtokens' });
         }
     }
     User.init(
@@ -32,6 +32,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
+            timestamps: true, // createAt & updateAt 활성화
+            paranoid: true, //timestamps 가 활성화 되어야 사용 가능 > deleteAt 옵션 on
             tableName: 'users',
             modelName: 'User',
         }
