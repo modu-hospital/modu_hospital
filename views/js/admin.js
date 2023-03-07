@@ -5,9 +5,9 @@ $.ajax({
     async: false,
     success: function (response) {
         for (let i = 0; i < response.length; i++) {
-            let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
-
-            let temp_html = `<tr id="userId${userId}">
+            let { userId, loginId, name, phone, idNumber, address, createdAt, role } = response[i];
+            if (role !== 'waiting') {
+                let temp_html = `<tr id="userId${userId}">
                                 <th scope="row" class="list-MS">${userId}</th>
                                 <td class="list-name">${name}</td>
                                 <td class="list-name">${getGender(idNumber)}</td>
@@ -15,20 +15,38 @@ $.ajax({
                                 <td class="list-MS">${phone}</td>
                                 <td class="list-name">${editaddress(address)}</td>
                                 <td class="list-MS"">${editDate(createdAt)}</td>
-                                <td>
-                                    <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
+                                <td><a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
                                         >회원삭제</a
                                     >
                                 </td>
-                            </tr>`;
-            $('#allUserList').append(temp_html);
+                                </tr>`;
+                $('#allUserList').append(temp_html);
+            } else {
+                let temp_html = `<tr id="userId${userId}">
+                                    <th scope="row" class="list-MS">${userId}</th>
+                                    <td class="list-name">${name}</td>
+                                    <td class="list-name">${getGender(idNumber)}</td>
+                                    <td class="list-MS">${loginId}</td>
+                                    <td class="list-MS">${phone}</td>
+                                    <td class="list-name">${editaddress(address)}</td>
+                                    <td class="list-MS"">${editDate(createdAt)}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
+                                            >승인</a
+                                        >
+                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
+                                            >미승인</a
+                                        >
+                                    </td>
+                                </tr>`;
+                $('#allUserList').append(temp_html);
+            }
         }
     },
 });
 
 // 일반회원목록 조회
-function getCustomUserInfo(role) {
-    console.log(role);
+function getCustomUserInfo() {
     $.ajax({
         type: 'GET',
         url: `/api/admin/customer`,
@@ -46,7 +64,7 @@ function getCustomUserInfo(role) {
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
+                                        <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
                                             >회원삭제</a
                                         >
                                     </td>
@@ -58,8 +76,7 @@ function getCustomUserInfo(role) {
 }
 
 // 파트너회원목록 조회
-function getPartnerUserInfo(role) {
-    console.log(role);
+function getPartnerUserInfo() {
     $.ajax({
         type: 'GET',
         url: `/api/admin/partner`,
@@ -77,7 +94,7 @@ function getPartnerUserInfo(role) {
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" style="width:105px; height:35px" onclick="userDelete(${userId})"
+                                        <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
                                             >회원삭제</a
                                         >
                                     </td>
@@ -89,8 +106,7 @@ function getPartnerUserInfo(role) {
 }
 
 // 승인대기회원목록 조회
-function getWaitingUserInfo(role) {
-    console.log(role);
+function getWaitingUserInfo() {
     $.ajax({
         type: 'GET',
         url: `/api/admin/waiting`,
@@ -108,10 +124,10 @@ function getWaitingUserInfo(role) {
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:105px; height:35px" onclick="approveUpdate(${userId})"
+                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
                                             >승인</a
                                         >
-                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:105px; height:35px" onclick="unapproveUpdate(${userId})"
+                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
                                             >미승인</a
                                         >
                                     </td>
@@ -140,25 +156,6 @@ function userDelete(userId) {
         alert('취소합니다.');
     }
 }
-
-// 파트너회원삭제 버튼을 누를 시
-// function partnerUserDelete(userId) {
-//     let result = confirm('정말로 삭제하시겠습니까?');
-//     if (result) {
-//         $.ajax({
-//             type: 'DELETE',
-//             url: `/api/admin/partner/${userId}`,
-//             async: false,
-//             success: function (success) {
-//                 alert('삭제가 완료되었습니다.');
-//                 $(`#userId${userId}`).remove();
-//                 location.reload();
-//             },
-//         });
-//     } else {
-//         alert('취소합니다.');
-//     }
-// }
 
 // 승인대기 파트너회원 승인 버튼 누를시
 function approveUpdate(userId) {

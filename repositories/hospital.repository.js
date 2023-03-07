@@ -377,10 +377,6 @@ class HospitalRepository {
             throw err;
         }
     };
-
-    deleteOneHospital = async (userId) => {
-        return await this.hospitalModel.destroy({ where: { userId } });
-    };
 }
 
 module.exports = HospitalRepository;

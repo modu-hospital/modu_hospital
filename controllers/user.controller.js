@@ -1,18 +1,15 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
-const HospitalService = require('../services/hospital.service');
 const Validation = require('../lib/validation');
 
 class UserController {
     userService = new UserService();
     reservationService = new ReservationService();
-    hospitalService = new HospitalService();
     validation = new Validation();
 
     // (admin) all 조회
     getUserInfo = async (req, res) => {
         try {
-            
             const UserInfo = await this.userService.findUsers();
             res.status(200).send(UserInfo);
         } catch (error) {
@@ -34,29 +31,9 @@ class UserController {
     // (admin) defalutDelete
     defalutDelete = async (req, res) => {
         const { userId } = req.params;
-        const getUserId = await this.userService.findUserId(userId);
-        console.log(getUserId);
-
-        const defalutRoleDelete = await this.userService.defalutRoleDelete(userId);
-        console.log(userId.role);
-        if (userId.role === 'partner') {
-            const hospitalDelete = await this.hospitalService.hospitalDelete(userId);
-            res.status(200).json(defalutRoleDelete, hospitalDelete);
-        }
-        res.status(200).json(defalutRoleDelete);
+        const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
+        return res.status(200).json(sequenceDelete);
     };
-
-    // partnerDelete = async (req, res) => {
-    //     try {
-    //         const { userId } = req.params;
-    //         const partnerDelete = await this.userService.partnerDelete(userId);
-    //         const hospitalDelete = await this.hospitalService.hospitalDelete(userId);
-
-    //         res.status(200).json(partnerDelete);
-    //     } catch (error) {
-    //         return res.status(error.status).json({ message: error.message });
-    //     }
-    // };
 
     //mypage
 
@@ -103,8 +80,8 @@ class UserController {
     };
 
     createReview = async (req, res, next) => {
-        try{
-        const reservationId = req.params;
+        try {
+            const reservationId = req.params;
 
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
             const { star, contents } = await this.validation.createReview.validateAsync(req.body);

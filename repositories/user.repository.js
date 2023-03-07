@@ -3,8 +3,10 @@ const { sequelize } = require('../models');
 const db = require('../models');
 
 class UserRepository {
-    constructor(UserModel) {
+    constructor(UserModel, HospitalModel, DoctorModel) {
         this.userModel = UserModel;
+        this.hospitalModel = HospitalModel;
+        this.doctorModel = DoctorModel;
     }
 
     findUserById = async (userId) => {
@@ -44,14 +46,19 @@ class UserRepository {
         return await this.userModel.findAll({});
     };
 
+    // 회원삭제
     userDeleteOne = async (userId) => {
         return await this.userModel.destroy({ where: { userId } });
     };
 
-    findUserId = async (userId) => {
-        const a = await this.userModel.findOne({ where: { userId } });
-        console.log(a);
-        return a;
+    // 의사삭제
+    doctorDeleteOne = async (doctorId) => {
+        return await this.doctorModel.destroy({ where: { doctorId } });
+    };
+
+    // 병원삭제
+    HospitalDeleteOne = async (userId) => {
+        return await this.hospitalModel.destroy({ where: { userId } });
     };
 
     // emailPasswordCheck = async (loginId) => {
