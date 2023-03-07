@@ -11,9 +11,9 @@ router.get('/admin', (req, res) => {
     res.render('admin.ejs');
 });
 
-router.get('/users/mypage/:userId', (req,res) =>{
-    res.render('mypage.ejs')
-})
+router.get('/users/mypage/:userId', (req, res) => {
+    res.render('mypage.ejs');
+});
 
 router.get('/map/hospitals', (req, res) => {
     res.render('map.ejs', { compnents: 'map' });

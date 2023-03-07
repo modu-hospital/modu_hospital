@@ -8,14 +8,14 @@ class UserRepository {
     }
 
     findUserById = async (userId) => {
-        const user = await db.User.findOne({
+        const user = await this.userModel.findOne({
             where: { userId: userId },
         });
         return user;
     };
 
     editUserProfile = async (userId, address, phone, name) => {
-        const editedProfile = await db.User.update(
+        const editedProfile = await this.userModel.update(
             {
                 address: address,
                 phone: phone,
@@ -60,11 +60,9 @@ class UserRepository {
         return userRoleUpdate;
     };
 
-    emailPasswordCheck = async (loginId)=> {
-        return await this.userModel.findAll({ where: {loginId}})
-    }
-
-    
+    emailPasswordCheck = async (loginId) => {
+        return await this.userModel.findAll({ where: { loginId } });
+    };
 }
 
 module.exports = UserRepository;
