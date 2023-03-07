@@ -56,7 +56,7 @@ class CategoryService {
         hospitals.map((department) => {
             for (let i = 0; i < department.categoriesMapping.length; i++) {
                 if (!department.categoriesMapping[i].doctors.hospitals) {
-                    return
+                    return;
                 }
 
                 // console.log(department.categoriesMapping[i].doctors.hospitals.hospitalImageFiles[0].url)
@@ -67,7 +67,11 @@ class CategoryService {
                         hospitalName: department.categoriesMapping[i].doctors.hospitals.name,
                         address: department.categoriesMapping[i].doctors.hospitals.address,
                         phone: department.categoriesMapping[i].doctors.hospitals.phone,
-                        hospitalImage: !department.categoriesMapping[i].doctors.hospitals.hospitalImageFiles[0] ?  "이미지 준비중" : department.categoriesMapping[i].doctors.hospitals.hospitalImageFiles[0].url
+                        hospitalImage: !department.categoriesMapping[i].doctors.hospitals
+                            .hospitalImageFiles[0]
+                            ? '이미지 준비중'
+                            : department.categoriesMapping[i].doctors.hospitals
+                                  .hospitalImageFiles[0].url,
                     };
                     arr.push(data);
                 }
