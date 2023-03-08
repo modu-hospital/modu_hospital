@@ -1,11 +1,11 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User } = require('../models');
+const { User, HospitalModel, DoctorModel } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class UserService {
-    userRepository = new UserRepository(User);
+    userRepository = new UserRepository(User, HospitalModel, DoctorModel);
     reservationRepository = new ReservationRepository();
 
     findAUserByUserId = async (userId) => {
@@ -55,7 +55,6 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
             return;
         }
@@ -124,10 +123,21 @@ class UserService {
         });
     };
 
-    roleUpdate = async (userId, role) => {
-        const roleUpdate = await this.userRepository.userRoleUpdate(userId, role);
+    userHospitalDoctorDelete = async (userId) => {
+        const getUserById = await this.userRepository.findUserById(userId);
+        if (getUserById.role === 'partner') {
+            const userDelete = await this.userRepository.userDeleteOne(userId);
+            const hospitalDelete = await this.userRepository.HospitalDeleteOne(userId);
+            const doctorDelete = await this.userRepository.doctorDeleteOne(userId);
 
-        return roleUpdate;
+            return {
+                userDelete: userDelete,
+                hospitalDelete: hospitalDelete,
+                doctorDelete: doctorDelete,
+            };
+        } else {
+            return await this.userRepository.userDeleteOne(userId);
+        }
     };
 }
 

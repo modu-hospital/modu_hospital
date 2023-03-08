@@ -4,8 +4,8 @@ body {
 }
 
 .container1 {
-    width: 100%;
-    margin: 0 auto;
+    width: 1700px;
+    margin: 0px 0px 0px -180px;
 }
 
 ul.tabs {

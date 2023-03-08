@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/', UserController.getUserInfo);
 
-router.get('/:role', UserController.getRoleUserInfo);
+router.get('/:role', UserController.getRoleUser);
 
-router.patch('/:userId', UserController.roleUpdate);
+router.delete('/:userId', UserController.defalutDelete);
 
 module.exports = router;
