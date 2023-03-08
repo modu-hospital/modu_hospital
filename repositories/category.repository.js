@@ -22,11 +22,17 @@ class CategoryRepository {
                 {
                     model: this.doctorCategoryMappingModel,
                     as: 'categoriesMapping',
+                    required: true,
                     include: [
                         {
                             model: this.doctorModel,
                             as: 'doctors',
+                            paranoid: false,
+                            required: false,
                             attributes: ['name'],
+                            where: {
+                                deletedAt: { [Op.lt]: 1 },
+                            },
                             include: [
                                 {
                                     model: this.hospitalModel,
@@ -37,13 +43,13 @@ class CategoryRepository {
                                         longitude: { [Op.between]: longitude },
                                         latitude: { [Op.between]: latitude },
                                     },
+                                    required: false,
                                     include: [
                                         {
                                             model: this.hospitalImageFileModel,
                                             as: 'hospitalImageFiles',
                                         },
                                     ],
-                                    required: false,
                                 },
                             ],
                         },
