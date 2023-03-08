@@ -14,7 +14,7 @@ class HospitalController {
         try {
             const { rightLongitude, rightLatitude, leftLongitude, leftLatitude } = req.body;
 
-            const hospitals = await this.hospitalService.findNearHospital(
+            const hospitals = await this.hospitalService.findNearHospitals(
                 rightLongitude,
                 rightLatitude,
                 leftLongitude,

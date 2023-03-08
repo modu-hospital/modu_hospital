@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon app",
-    "prettify": "prettier --write *.js **/*.js"
+    "prettify": "prettier --write *.js **/*.js",
+    "test:unit" : "jest __test__/unit --forceExit"
   },
   "repository": {
     "type": "git",

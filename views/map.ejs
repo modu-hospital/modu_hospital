@@ -161,14 +161,15 @@
         }
       })
 
+
+
       fetchData(map, geocoder)
 
 
-      //localhost:3000/api/categories/search
+      // localhost:3000/api/categories/search
       document.getElementById('departmentBtn').addEventListener('click', (event) => {
         event.preventDefault();
         const data = getData(map)
-
 
         const department = clickBtn()
         data.department = department
@@ -183,6 +184,142 @@
           .then((response) => response.json())
           .then((data) => {
             document.getElementById('list').innerHTML = ``
+            if (!data[0]) {
+              kakao.maps.event.addListener(map, 'zoom_changed', function () {
+
+                const data = getData(map)
+
+                fetch(`http://localhost:3000/api/categories/search`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    document.getElementById('list').innerHTML = ``
+                    for (let i = 0; i < data.length; i++) {
+                      const a =
+                        `
+                        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+                        <div class="info">
+                        <span style="position:static">${data[i].name}</span>
+                        <span style="position:static">${data[i].address}</span>
+                        <span style="position:static">${data[i].phone}</span>
+                        </div>
+                      `
+
+                      const li = document.createElement('li');
+                      li.innerHTML = a;
+                      document.getElementById('list').appendChild(li);
+                    }
+                  })
+
+                fetch(`http://localhost:3000/api/categories/search`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    const a = document.getElementById("listBtn")
+                    a.innerText = `근처 ${data.length}개의 병원`
+                    for (let i = 0; i < data.length; i++) {
+                      geocoder.addressSearch(
+                        data[i].address,
+                        function (result, status) {
+                          // 정상적으로 검색이 완료됐으면
+                          if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                            // 결과값으로 받은 위치를 마커로 표시합니다
+                            var marker = new kakao.maps.Marker({
+                              map: map,
+                              position: coords,
+                            });
+
+                            marker.id = data.hospitals[i].hospitalId
+                            // 마커에 클릭이벤트를 등록합니다
+                            markerClick(marker)
+                          }
+                        }
+                      );
+                    }
+                  })
+              })
+
+
+              kakao.maps.event.addListener(map, 'dragend', function () {
+
+                const data = getData(map)
+
+                fetch(`http://localhost:3000/api/categories/search`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    document.getElementById('list').innerHTML = ``
+                    for (let i = 0; i < data.length; i++) {
+                      const a =
+                        `
+                      <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+                <div class="info">
+              <span style="position:static">${data[i].name}</span>
+              <span style="position:static">${data[i].address}</span>
+              <span style="position:static">${data[i].phone}</span>
+              </div>
+              `
+
+                      const li = document.createElement('li');
+                      li.innerHTML = a;
+                      document.getElementById('list').appendChild(li);
+                    }
+                  })
+
+                fetch(`http://localhost:3000/api/categories/search`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    const a = document.getElementById("listBtn")
+                    a.innerText = `근처 ${data.length}개의 병원`
+                    for (let i = 0; i < data.length; i++) {
+                      geocoder.addressSearch(
+                        data[i].address,
+                        function (result, status) {
+                          // 정상적으로 검색이 완료됐으면
+                          if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                            // 결과값으로 받은 위치를 마커로 표시합니다
+                            var marker = new kakao.maps.Marker({
+                              map: map,
+                              position: coords,
+                            });
+
+                            marker.id = data[i].hospitalId
+                            // 마커에 클릭이벤트를 등록합니다
+                            markerClick(marker)
+                          }
+                        }
+                      );
+                    }
+                  })
+              })
+            } else {
+
+            }
             for (let i = 0; i < data.length; i++) {
               const a =
                 `
@@ -235,14 +372,14 @@
                 .then((response) => response.json())
                 .then((data) => {
                   document.getElementById('list').innerHTML = ``
-                  for (let i = 0; i < data.hospitals.length; i++) {
+                  for (let i = 0; i < data.length; i++) {
                     const a =
                       `
-        <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
 <div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
+<span style="position:static">${data[i].name}</span>
+<span style="position:static">${data[i].address}</span>
+<span style="position:static">${data[i].phone}</span>
 </div>
 `
 
@@ -261,10 +398,10 @@
                 .then((response) => response.json())
                 .then((data) => {
                   const a = document.getElementById("listBtn")
-                  a.innerText = `근처 ${data.hospitals.length}개의 병원`
-                  for (let i = 0; i < data.hospitals.length; i++) {
+                  a.innerText = `근처 ${data.length}개의 병원`
+                  for (let i = 0; i < data.length; i++) {
                     geocoder.addressSearch(
-                      data.hospitals[i].address,
+                      data[i].address,
                       function (result, status) {
                         // 정상적으로 검색이 완료됐으면
                         if (status === kakao.maps.services.Status.OK) {
@@ -276,7 +413,7 @@
                             position: coords,
                           });
 
-                          marker.id = data.hospitals[i].hospitalId
+                          marker.id = data[i].hospitalId
                           // 마커에 클릭이벤트를 등록합니다
                           markerClick(marker)
                         }
@@ -304,14 +441,14 @@
                 .then((response) => response.json())
                 .then((data) => {
                   document.getElementById('list').innerHTML = ``
-                  for (let i = 0; i < data.hospitals.length; i++) {
+                  for (let i = 0; i < data.length; i++) {
                     const a =
                       `
-        <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
 <div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
+<span style="position:static">${data[i].name}</span>
+<span style="position:static">${data[i].address}</span>
+<span style="position:static">${data[i].phone}</span>
 </div>
 `
 
@@ -331,10 +468,10 @@
                 .then((response) => response.json())
                 .then((data) => {
                   const a = document.getElementById("listBtn")
-                  a.innerText = `근처 ${data.hospitals.length}개의 병원`
-                  for (let i = 0; i < data.hospitals.length; i++) {
+                  a.innerText = `근처 ${data.length}개의 병원`
+                  for (let i = 0; i < data.length; i++) {
                     geocoder.addressSearch(
-                      data.hospitals[i].address,
+                      data[i].address,
                       function (result, status) {
                         // 정상적으로 검색이 완료됐으면
                         if (status === kakao.maps.services.Status.OK) {
@@ -346,7 +483,7 @@
                             position: coords,
                           });
 
-                          marker.id = data.hospitals[i].hospitalId
+                          marker.id = data[i].hospitalId
                           // 마커에 클릭이벤트를 등록합니다
                           markerClick(marker)
                         }
@@ -621,6 +758,7 @@
                     );
                   }
                 })
+
             })
           } else {
             for (let i = 0; i < data.hospitals.length; i++) {
@@ -707,6 +845,7 @@
                           );
                         }
                       })
+
                   });
 
                   kakao.maps.event.addListener(map, 'dragend', function () {
@@ -775,6 +914,7 @@
                           );
                         }
                       })
+
                   }
 
                   );
@@ -782,8 +922,6 @@
               );
             }
           }
-
-
         })
     }
 
