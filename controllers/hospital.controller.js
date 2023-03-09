@@ -275,7 +275,7 @@ class HospitalController {
     registerHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
-        const userId = 16;
+        const userId = 42;
         const { name, address, phone } = req.body;
         const { location, address_name } = req.hospitalLocation; // 중요 부분!
         const longitude = location.longitude;
@@ -299,6 +299,14 @@ class HospitalController {
                 .json({ success: error.success, message: error.message });
         }
     };
+
+    // 의사 정보 등록 
+    registerdoctor = async (req, res, next) => {
+        // const { currentUser } = res.locals;
+        // cosnt userId = currentUser.id;
+        const userId =42; 
+       
+    }
 }
 
 module.exports = HospitalController;

@@ -1,35 +1,3 @@
-const form = document.getElementById('hospitalForm');
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const address = document.getElementById('addressInput').value;
-    const phone = document.getElementById('phone').value;
-
-    const data = {
-        name,
-        address,
-        phone,
-    };
-
-    const response = await fetch('/api/hospitals/location', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-        const result = await response.json();
-        alert('병원 등록이 완료되었습니다');
-        window.location.href = 'http://localhost:3000/hospital';
-    } else {
-        console.error('HTTP error:', response.status);
-    }
-});
-
 // 모달창을 열기 위한 함수
 function openModal() {
     var modal = document.getElementById('modal');
@@ -196,10 +164,10 @@ function makeListJson(jsonStr) {
 
 /// @brief 주소검색창 - 주소지 삽입
 
-function inputTextAddress(zipcode, address) {
+function inputTextAddress(zipcode, roadaddress) {
     document.getElementById('zipCode').value = zipcode;
 
-    document.getElementById('address').value = address;
+    document.getElementById('roadaddress').value = roadaddress;
 }
 
 /// @brief 주소검색창 - 열기
@@ -348,4 +316,11 @@ function goPage(pageNum) {
     document.getElementById('currentPage').value = pageNum;
 
     getAddr();
+}
+
+function inputData() {
+    var text = document.getElementById('roadaddress').value;
+    document.getElementById('address').value = text;
+    var modal = document.getElementById('modal');
+    modal.style.display = 'none';
 }

@@ -250,6 +250,17 @@ class HospitalService {
             throw err;
         }
     };
+
+    registerdoctor = async (userId, hospitalId, name, image, contents) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospital = hospitaldata.hospitalId; 
+            const doctordata = this.hospitalRepository.registerdoctor( hospitalId, name, image, contents);
+            return doctordata; 
+        } catch (err) {
+            throw err; 
+        }
+    };
 }
 
 module.exports = HospitalService;
