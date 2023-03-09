@@ -223,12 +223,14 @@
 
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
       event.preventDefault()
+      globalMarker.map(marker => marker.setMap(null))
       kakao.maps.event.removeListener(map, 'dragend', cc)
       kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
     })
 
     document.getElementById('resetBtn').addEventListener('click', event => {
       event.preventDefault()
+      globalMarker.map(marker => marker.setMap(null))
       const department = document.getElementsByName('department')
       for (let i = 0; i < department.length; i++) {
         department[i].checked = false
@@ -332,6 +334,7 @@
 
   function fetchData(map, geocoder) {
     const data = getData(map)
+    globalMarker.map(marker => marker.setMap(null))
     fetch(`http://localhost:3000/api/hospitals/around`, {
       method: 'POST',
       headers: {
@@ -607,9 +610,11 @@
   }
 
   function de(map, geocoder) {
+    globalMarker.map(marker => marker.setMap(null))
 
     // localhost:3000/api/categories/search
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
+      globalMarker.map(marker => marker.setMap(null))
       const department = clickBtn()
       if (!department) {
         return
