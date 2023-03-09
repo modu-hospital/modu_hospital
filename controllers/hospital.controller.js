@@ -300,13 +300,12 @@ class HospitalController {
         }
     };
 
-    // 의사 정보 등록 
+    // 의사 정보 등록
     registerdoctor = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
-        const userId =42; 
-       
-    }
+        const userId = 42;
+    };
 }
 
 module.exports = HospitalController;
