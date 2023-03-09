@@ -5,7 +5,6 @@ class RefreshTokenService {
     refreshTokenRepository = new RefreshTokenRepository(Refreshtoken);
 
     createToken = async (userId, token) => {
-        
         // const user = await this.refreshTokenRepository.findUserId(userId);
         return await this.refreshTokenRepository.createRefreshToken(userId, token);
     };

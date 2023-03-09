@@ -22,7 +22,7 @@ class HospitalService {
         HospitalImageFile
     );
 
-    findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
+    findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const longitude = [];
             const latitude = [];
@@ -87,6 +87,8 @@ class HospitalService {
             if (!hospital) {
                 return {};
             }
+
+            // return hospital
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
@@ -231,6 +233,15 @@ class HospitalService {
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
             return waitingdata;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    findOneHospital = async (userId) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            return hospitaldata;
         } catch (err) {
             throw err;
         }

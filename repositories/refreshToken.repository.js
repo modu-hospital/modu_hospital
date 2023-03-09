@@ -1,6 +1,5 @@
 const { where, or, op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
-const db = require('../models');
 
 class RefreshTokenRepository {
     constructor(UserModel, RefreshTokenModel) {
@@ -9,7 +8,7 @@ class RefreshTokenRepository {
     }
 
     findUserId = async (userId) => {
-        return await this.userModel.findOne({ where: {userId} });
+        return await this.userModel.findOne({ where: { userId } });
     };
 
     createRefreshToken = async (userId, token) => {

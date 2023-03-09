@@ -1,0 +1,74 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title" id="name"></h5>
+        <p class="card-text">주소: <span id="address" class="editable-text" onclick="openModal()"></span></p>
+        <p class="card-text">전화번호: <span id="phone" class="editable-text"></span></p>
+        <p class="card-text">위도: <span id="latitude" class="editable-text"></span></p>
+        <p class="card-text">경도: <span id="longitude" class="editable-text"></span></p>
+        <p class="card-text">생성 날짜: <span id="createdAt"></span></p>
+        <p class="card-text">업데이트 날짜: <span id="updatedAt"></span></p>
+        <button class="btn btn-primary" onclick="updateHospital()">수정하기</button>
+    </div>
+</div>
+
+
+<!-- 모달 -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
+                <div style="height:5px;"></div>
+                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
+                <hr /><br />
+
+                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+
+                <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
+
+                <div id="wrap">
+                     <div id="closeBtn" onClick="addressWindowClose();">
+                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                </div>
+            <div>
+                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
+                    placeholder="도로명주소, 건물명 또는 지번 입력" />
+                <input type="button" onClick="getAddr();" value="주소검색" />
+            </div>
+
+            <div>
+                <div id="totoalOutcome">
+
+                    검색결과 : <span id="totalCnt">0</span>
+
+                </div>
+                <table id="list"></table>
+
+            </div>
+
+            <div id="pagingList" style='text-align:center;'></div>
+
+        </div>
+
+        <div style="height:5px;"></div>
+
+        <input type="text" id="address" value="" placeholder="도로명 주소, 지번 주소" readonly />
+
+        <div style="height:5px;"></div>
+
+        <input type="button" value="입력" onclick="inputData()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  
+
+</script>

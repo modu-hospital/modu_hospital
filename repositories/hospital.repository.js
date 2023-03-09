@@ -1,4 +1,4 @@
-const { where, Op } = require('sequelize');
+const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
 const formatterdDate = '%Y-%m-%d %H:%i'; // %Y-%m-%d %H:%i:%s => 원하는 날짜 형식 바꾸기
@@ -320,26 +320,7 @@ class HospitalRepository {
                     latitude: { [Op.between]: latitude },
                 },
                 attributes: ['hospitalId', 'name', 'address', 'phone'],
-                include: [
-                    { model: this.hospitalImageFileModel, as: 'hospitalImageFiles' },
-                    {
-                        model: this.doctorModel,
-                        as: 'doctors',
-                        attributes: ['name'],
-                        include: [
-                            {
-                                model: this.doctorCategoryMappingModel,
-                                as: 'doctorCategoryMappings',
-                                include: [
-                                    {
-                                        model: this.categoryModel,
-                                        as: 'categories',
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                ],
+                include: [{ model: this.hospitalImageFileModel, as: 'hospitalImageFiles' }],
             });
             return hospitals;
         } catch (err) {
@@ -356,6 +337,11 @@ class HospitalRepository {
                     {
                         model: this.doctorModel,
                         as: 'doctors',
+                        paranoid: false,
+                        required: false,
+                        where: {
+                            deletedAt: { [Op.lt]: 1 },
+                        },
                         attributes: ['name', 'image'],
                         include: [
                             {

@@ -4,21 +4,26 @@ class CategoryController {
     categoryService = new CategoryService();
 
     findHospitalsThatFitsDepartment = async (req, res, next) => {
-        const { rightLongitude, rightLatitude, leftLongitude, leftLatitude, department } = req.body;
+        try {
+            const { rightLongitude, rightLatitude, leftLongitude, leftLatitude, department } =
+                req.body;
 
-        if (!department) {
-            return;
+            if (!department) {
+                return;
+            }
+
+            const hospitals = await this.categoryService.findHospitalsThatFitsDepartment(
+                department,
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
+
+            res.json(hospitals);
+        } catch (err) {
+            next(err);
         }
-
-        const hospitals = await this.categoryService.findHospitalsThatFitsDepartment(
-            department,
-            rightLongitude,
-            rightLatitude,
-            leftLongitude,
-            leftLatitude
-        );
-
-        res.json(hospitals);
     };
 }
 

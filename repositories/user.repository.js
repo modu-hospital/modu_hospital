@@ -3,21 +3,22 @@ const { sequelize } = require('../models');
 const db = require('../models');
 
 class UserRepository {
-    constructor(UserModel, RefreshTokenModel) {
+    constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
         this.userModel = UserModel;
-        this.refreshTokenModel = RefreshTokenModel
-        
+        this.hospitalModel = HospitalModel;
+        this.doctorModel = DoctorModel;
+        this.refreshTokenModel = RefreshTokenModel;
     }
 
     findUserById = async (userId) => {
-        const user = await db.User.findOne({
+        const user = await this.userModel.findOne({
             where: { userId: userId },
         });
         return user;
     };
 
     editUserProfile = async (userId, address, phone, name) => {
-        const editedProfile = await db.User.update(
+        const editedProfile = await this.userModel.update(
             {
                 address: address,
                 phone: phone,
@@ -38,32 +39,35 @@ class UserRepository {
         return await this.userModel.findOne({ where: { loginId } });
     };
 
-    findUserRole = async () => {
+    findUserRole = async (role) => {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    // (관리자) all 유저 조회
-    findUsers = async () => {
-        const users = await this.userModel.findAll({});
-        return users;
+    findAllUser = async () => {
+        return await this.userModel.findAll({});
     };
 
-    // (관리자) role별 유저 조회
-    findRoleUsers = async (role) => {
-        const roleUsers = await this.userModel.findAll({ where: { role } });
-        return roleUsers;
+    // 회원삭제
+    userDeleteOne = async (userId) => {
+        return await this.userModel.destroy({ where: { userId } });
     };
 
+    // 의사삭제
+    doctorDeleteOne = async (doctorId) => {
+        return await this.doctorModel.destroy({ where: { doctorId } });
+    };
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
 
-    tokenSave = async(userId, token) => {
-        return await this.refreshTokenModel.create({userId, token})
-    }
+    tokenSave = async (userId, token) => {
+        return await this.refreshTokenModel.create({ userId, token });
+    };
 
-
-
+    // 병원삭제
+    HospitalDeleteOne = async (userId) => {
+        return await this.hospitalModel.destroy({ where: { userId } });
+    };
 }
 
 module.exports = UserRepository;

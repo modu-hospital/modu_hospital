@@ -7,7 +7,7 @@ class UserController {
     reservationService = new ReservationService();
     validation = new Validation();
 
-    // 서비스관리자의 회원 정보 조회
+    // (admin) all 조회
     getUserInfo = async (req, res) => {
         try {
             const UserInfo = await this.userService.findUsers();
@@ -17,14 +17,22 @@ class UserController {
         }
     };
 
-    getRoleUserInfo = async (req, res) => {
+    // (admin) role별 조회
+    getRoleUser = async (req, res) => {
         try {
             const { role } = req.params;
-            const roleUserInfo = await this.userService.findRoleUsers(role);
+            const roleUserInfo = await this.userService.findUserRole(role);
             res.status(200).send(roleUserInfo);
         } catch (error) {
             return res.status(error.status).json({ message: error.message });
         }
+    };
+
+    // (admin) defalutDelete
+    defalutDelete = async (req, res) => {
+        const { userId } = req.params;
+        const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
+        return res.status(200).json(sequenceDelete);
     };
 
     //mypage
@@ -32,9 +40,8 @@ class UserController {
     getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const userProfile = await this.userService.showUserProfile(userId.userId);
-
-            return res.status(200).json({ userProfile });
+            const userProfile = await this.userService.getUserProfile(userId.userId);
+            return res.status(200).json(userProfile);
         } catch (err) {
             next(err);
         }
@@ -43,7 +50,7 @@ class UserController {
     editUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
-            const { address, phone, name } = await this.validation.editProfile.validateAsync(
+            const { name, phone, address } = await this.validation.editProfile.validateAsync(
                 req.body
             );
             const editedProfile = await this.userService.editUserProfile(
@@ -53,6 +60,38 @@ class UserController {
                 name
             );
             return res.status(201).json(editedProfile);
+        } catch (err) {
+            next(err);
+        }
+    };
+    getApprovedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const approved = await this.userService.getApprovedReservation(userId, page);
+            return res.status(200).json(approved);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getWaitingReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const waiting = await this.userService.getWaitingReservation(userId, page);
+            return res.status(200).json(waiting);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getDoneOrReviewedReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const doneOrReviewed = await this.userService.getDoneOrReviewedReservation(
+                userId,
+                page
+            );
+            return res.status(200).json(doneOrReviewed);
         } catch (err) {
             next(err);
         }
@@ -73,7 +112,6 @@ class UserController {
 
     createReview = async (req, res, next) => {
         try {
-            console.log('asdfjwejfnjwe');
             const reservationId = req.params;
 
             // 추가예정 : token의 userId와 reservation의 userId가 같은지 확인
@@ -95,7 +133,12 @@ class UserController {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
-                name, loginId, password, phone, idNumber, role
+                name,
+                loginId,
+                password,
+                phone,
+                idNumber,
+                role
             );
             res.json(user);
         } catch (err) {
@@ -111,7 +154,12 @@ class UserController {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
-                name, loginId, password, phone, idNumber, role
+                name,
+                loginId,
+                password,
+                phone,
+                idNumber,
+                role
             );
             res.json(user);
         } catch (err) {
@@ -130,15 +178,14 @@ class UserController {
 
         res.cookie('accessToken', accessToken);
         // res.cookie('refreshToken', refreshToken);
-        
-        const userId = res.locals.user
-        const token = req.cookies.refreshToken
+
+        const userId = res.locals.user;
+        const token = req.cookies.refreshToken;
 
         // console.log("userId", userId)
         // console.log("token", token)
 
-
-        const saveToken = await this.userService.saveToken(userId, token)
+        const saveToken = await this.userService.saveToken(userId, token);
 
         res.json(saveToken);
     };

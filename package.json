@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon app",
-    "prettify": "prettier --write *.js **/*.js"
+    "prettify": "prettier --write *.js **/*.js",
+    "test:unit" : "jest __test__/unit --forceExit"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.1.2",
+    "request": "^2.88.2",
     "redis": "^4.6.5",
     "sequelize": "^6.29.0",
     "socket.io": "^4.6.1"
