@@ -34,4 +34,9 @@ router.get('/register', (req, res) => {
     res.render('index.ejs', { components: 'hospitalRegister' });
 });
 
+//병원정보 수정 페이지
+router.get('/edit', (req, res) => {
+    res.render('index.ejs', { components: 'hospitalEdit' });
+});
+
 module.exports = router;

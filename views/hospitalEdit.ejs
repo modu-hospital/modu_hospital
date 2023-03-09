@@ -1,18 +1,19 @@
-<div id="sform">
-    <form action="/hospital" id = "hospitalForm">
-        <h2>병원정보 등록</h2>
-        <label for="name">병원이름</label>
-        <input type="text" id="name" name="name" required>
-        <label for="address">주소</label>
-        <input type="text" id="addressInput" name="addressInput" required onclick="openModal()">
-        <label for="phone">전화번호</label>
-        <input type="text" id="phone" name="phone" required>
-        <button type="submit">등록하기</button>
-    </form>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title" id="name"></h5>
+        <p class="card-text">주소: <span id="address" class="editable-text" onclick="openModal()"></span></p>
+        <p class="card-text">전화번호: <span id="phone" class="editable-text"></span></p>
+        <p class="card-text">위도: <span id="latitude" class="editable-text"></span></p>
+        <p class="card-text">경도: <span id="longitude" class="editable-text"></span></p>
+        <p class="card-text">생성 날짜: <span id="createdAt"></span></p>
+        <p class="card-text">업데이트 날짜: <span id="updatedAt"></span></p>
+        <button class="btn btn-primary" onclick="updateHospital()">수정하기</button>
+    </div>
 </div>
 
-<!-- 모달창 -->
-<div id="modal" class="modal">
+
+<!-- 모달 -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -67,14 +68,7 @@
     </div>
 </div>
 
-
 <script>
-    
-function inputData() {
-    var text = document.getElementById('address').value;
-    document.getElementById('addressInput').value = text;
-    var modal = document.getElementById('modal');
-    modal.style.display = 'none';
-}
-</script>
+  
 
+</script>
