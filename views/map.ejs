@@ -614,7 +614,6 @@
 
     // localhost:3000/api/categories/search
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
-      globalMarker.map(marker => marker.setMap(null))
       const department = clickBtn()
       if (!department) {
         return
@@ -752,6 +751,7 @@
                         marker.id = data[i].hospitalId
                         // 마커에 클릭이벤트를 등록합니다
                         markerClick(marker)
+                        globalMarker.push(marker)
                       }
                     }
                   );
@@ -763,6 +763,7 @@
 
             kakao.maps.event.addListener(map, 'dragend', gg)
           } else {
+            globalMarker.map(marker => marker.setMap(null))
             for (let i = 0; i < data.length; i++) {
               const a =
                 `
