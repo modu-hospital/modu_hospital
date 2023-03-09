@@ -47,18 +47,6 @@
             <!-- Header -->
             <%- include('header.ejs') %>
 
-            <!-- Menu -->
-            <nav id="menu">
-                <h2>Menu</h2>
-                <ul>
-                    <li><a href="" onclick="location.href='/'">Home</a></li>
-                    <li><a href="generic.html">로그인</a></li>
-                    <li><a href="generic.html">회원가입</a></li>
-                    <li><a href="" onclick="location.href='/hospital'">원장님의 공간</a></li>
-                    <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-                </ul>
-            </nav>
-
             <!-- page -->
             <% if (components === "main") { %> <%- include('main.ejs') %> <% } %>
             <% if (components === "map") { %> <%- include('map.ejs') %> <% } %> 
@@ -76,10 +64,7 @@
         <script src="./js/breakpoints.min.js"></script>
         <script src="./js/util.js"></script>
         <script src="./js/main.js"></script>
-        <script src="./js/tabmenu.js"></script>
-        <script src="./js/reservationlist.js"></script>    
-        <script src="./js/hospital.js"></script>
-        <script src="./js/hospitalEdit.js"></script>
-        <script src="./js/hospitalRegister.js"></script>
+        <script src="./js/tabmenu.js"></script> 
+        <script src="./js/road.js"></script>
     </body>
 </html>
