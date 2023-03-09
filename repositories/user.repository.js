@@ -56,6 +56,7 @@ class UserRepository {
     doctorDeleteOne = async (doctorId) => {
         return await this.doctorModel.destroy({ where: { doctorId } });
     };
+
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };

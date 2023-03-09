@@ -170,24 +170,26 @@ class UserController {
         }
     };
 
-    login = async (req, res) => {
+    login = async (req, res, next) => {
         const { loginId, password } = req.body;
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const { accessToken, refreshToken } = await this.userService.login(loginId, password);
-
-        res.cookie('accessToken', accessToken);
-        // res.cookie('refreshToken', refreshToken);
+        // const { accessToken, refreshToken } = await this.userService.login(loginId, password);
+        const user = await this.userService.login(loginId, password);
 
         const userId = res.locals.user;
         const token = req.cookies.refreshToken;
 
-        // console.log("userId", userId)
+        console.log("유저컨트롤러")
+
+        console.log("userId", userId)
         // console.log("token", token)
 
         const saveToken = await this.userService.saveToken(userId, token);
 
-        res.json(saveToken);
+        res.json({user});
+
+        // next(err)
     };
 
     logout = async (req, res) => {

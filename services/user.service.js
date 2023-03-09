@@ -67,7 +67,9 @@ class UserService {
     };
 
     login = async (loginId, password) => {
-        const user = await this.userRepository.emailPasswordCheck(loginId, password);
+        const user = await this.userRepository.emailPasswordCheck(loginId);
+
+        console.log(user)
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
@@ -78,9 +80,14 @@ class UserService {
         const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
             expiresIn: '10s',
         });
-        // const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
+        const refreshToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '7d',
+        });
 
-        return { accessToken };
+        res.cookie("accessToken", accessToken)
+        res.cookie("refreshToken", refreshToken)
+
+        return { message:"로그인" };
     };
 
     findUsers = async () => {
