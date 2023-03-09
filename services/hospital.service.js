@@ -22,7 +22,7 @@ class HospitalService {
         HospitalImageFile
     );
 
-    findNearHospital = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
+    findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const longitude = [];
             const latitude = [];
@@ -65,12 +65,6 @@ class HospitalService {
 
             // return hospitals
             const infos = hospitals.map((hospital) => {
-                const doctors = hospital.doctors.map((doctor) => {
-                    const department = doctor.doctorCategoryMappings.map((category) => {
-                        return category.categories.department;
-                    });
-                    return { doctor: doctor.name, department: department.join(',') };
-                });
                 return {
                     hospitalId: hospital.hospitalId,
                     name: hospital.name,
@@ -93,6 +87,8 @@ class HospitalService {
             if (!hospital) {
                 return {};
             }
+
+            // return hospital
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
