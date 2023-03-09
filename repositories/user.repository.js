@@ -3,8 +3,10 @@ const { sequelize } = require('../models');
 const db = require('../models');
 
 class UserRepository {
-    constructor(UserModel) {
+    constructor(UserModel, RefreshTokenModel) {
         this.userModel = UserModel;
+        this.refreshTokenModel = RefreshTokenModel
+        
     }
 
     findUserById = async (userId) => {
@@ -55,6 +57,13 @@ class UserRepository {
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
+
+    tokenSave = async(userId, token) => {
+        return await this.refreshTokenModel.create({userId, token})
+    }
+
+
+
 }
 
 module.exports = UserRepository;

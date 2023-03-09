@@ -129,9 +129,18 @@ class UserController {
         const { accessToken, refreshToken } = await this.userService.login(loginId, password);
 
         res.cookie('accessToken', accessToken);
-        res.cookie('refreshToken', refreshToken);
+        // res.cookie('refreshToken', refreshToken);
+        
+        const userId = res.locals.user
+        const token = req.cookies.refreshToken
 
-        res.json({ accessToken, refreshToken });
+        // console.log("userId", userId)
+        // console.log("token", token)
+
+
+        const saveToken = await this.userService.saveToken(userId, token)
+
+        res.json(saveToken);
     };
 
     logout = async (req, res) => {

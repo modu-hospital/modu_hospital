@@ -1,12 +1,13 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User } = require('../models');
+const { User, RefreshToken } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class UserService {
-    userRepository = new UserRepository(User);
+    userRepository = new UserRepository(User, RefreshToken);
     reservationRepository = new ReservationRepository();
+    
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
@@ -87,11 +88,9 @@ class UserService {
         const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
             expiresIn: '10s',
         });
-        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
+        // const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
-        // tokenObject[refreshToken] = loginId
-
-        return { accessToken, refreshToken };
+        return { accessToken };
     };
 
     findUsers = async () => {
@@ -131,6 +130,11 @@ class UserService {
             };
         });
     };
+    
+    saveToken = async (userId, token) => {
+        await this.userRepository.tokenSave(userId, token)
+        return {message:"토큰이 저장되었습니다"}
+    }
 }
 
 module.exports = UserService;
