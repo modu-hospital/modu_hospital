@@ -4,8 +4,8 @@ body {
 }
 
 .container1 {
-    width: 1700px;
     margin: 0px 0px 0px -180px;
+    width: 1700px;
 }
 
 ul.tabs {
@@ -13,7 +13,7 @@ ul.tabs {
     padding: 0px;
     list-style: none;
 }
-ul.tabs li {
+ul.nav-tabs li {
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
     font-weight: bold;
     background: none;
@@ -47,10 +47,6 @@ ul.tabs li.current {
     font-weight: 900;
 }
 
-#select {
-    width: 200px;
-}
-
 #filter-content {
     width: 250px;
 }
@@ -62,13 +58,11 @@ ul.tabs li.current {
     margin: 0px 0px 20px 20px;
 }
 
-#btn_init {
-    font-size: 0.7em;
-    width: 120px;
-    height: 48px;
-    letter-spacing: 0.5px;
-    text-align: center;
-    padding: 0px 0px 0px 0px;
-    border-color: gainsboro;
-    border-radius: 7.5px;
+#css-pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.page-item {
+    margin: 30px 0px 0px 15px;
 }

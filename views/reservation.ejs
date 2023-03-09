@@ -1,0 +1,144 @@
+<!-- Main -->
+<div id="main">
+    <div class="inner">
+        <h1>진료예약</h1>
+
+        <!-- Form -->
+        <section>
+            <form method="post" action="#">
+                <div class="row gtr-uniform">
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-low" name="demo-priority" checked />
+                        <label for="demo-priority-low">초진</label>
+                    </div>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-normal" name="demo-priority" />
+                        <label for="demo-priority-normal">재진</label>
+                    </div>
+                    <div class="col-7">
+                        <select name="relationCategory" id="relationCategory">
+                            <option value="미선택">- 환자와의 관계 -</option>
+                            <option value="본인">본인</option>
+                            <option value="직계">직계</option>
+                            <option value="배우자 및 배우자의 직계">배우자 및 배우자의 직계</option>
+                            <option value="형제·자매">형제·자매</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="col-5" id="divSelfWrite">
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="patientName"
+                            id="patientName"
+                            value=""
+                            placeholder="환자이름"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="proxyName"
+                            id="proxyName"
+                            value=""
+                            disabled
+                            placeholder="대리신청인"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="idNumber"
+                            id="idNumber"
+                            value=""
+                            placeholder="환자의 주민등록번호( - 를 포함해주세요 )"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            value=""
+                            placeholder="연락처( - 를 포함해주세요 )"
+                        />
+                    </div>
+                    <div class="col-12 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="address"
+                            id="address"
+                            value=""
+                            placeholder="주소"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="date"
+                            id="date"
+                            value=""
+                            placeholder="예약날짜 찾기"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="time"
+                            id="time"
+                            value=""
+                            placeholder="예약시간 찾기"
+                        />
+                    </div>
+                    <div class="col-12">
+                        <textarea
+                            name="message"
+                            id="message"
+                            placeholder="간단한 증상을 적어주세요 ( ex. 두통, 기침, 숨막힘, 복통 등 )"
+                            rows="6"
+                        ></textarea>
+                    </div>
+                    <p><h2>개인정보는 어디다 쓸거냐면요~</h2>
+
+                        <span class="image left"><img src="images/pic14.jpg" alt="" /></span
+                        >Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis
+                        eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum.
+                        Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu
+                        faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget.
+                        tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis
+                        tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis
+                        in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
+                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt
+                        felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in
+                        faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
+                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus
+                        euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent.
+                    </p>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-high" name="demo-priority" />
+                        <label for="demo-priority-high">개인정보 동의</label>
+                    </div>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-high" name="demo-priority" />
+                        <label for="demo-priority-high">개인정보 미동의</label>
+                    </div>
+                    <div class="col-12">
+                        <ul class="actions">
+                            <li>
+                                <input type="submit" value="예약하기" class="primary" />
+                            </li>
+                            <li><input type="reset" value="다지우기" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

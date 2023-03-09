@@ -1,28 +1,66 @@
 // 전체회원목록 조회
-$.ajax({
-    type: 'GET',
-    url: `/api/admin`,
-    async: false,
-    success: function (response) {
-        for (let i = 0; i < response.length; i++) {
-            let { userId, loginId, name, phone, idNumber, address, createdAt, role } = response[i];
-            if (role !== 'waiting') {
-                let temp_html = `<tr id="userId${userId}">
-                                <th scope="row" class="list-MS">${userId}</th>
-                                <td class="list-name">${name}</td>
-                                <td class="list-name">${getGender(idNumber)}</td>
-                                <td class="list-MS">${loginId}</td>
-                                <td class="list-MS">${phone}</td>
-                                <td class="list-name">${editaddress(address)}</td>
-                                <td class="list-MS"">${editDate(createdAt)}</td>
-                                <td><a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
-                                        >회원삭제</a
-                                    >
-                                </td>
-                                </tr>`;
-                $('#allUserList').append(temp_html);
-            } else {
-                let temp_html = `<tr id="userId${userId}">
+$(document).ready(function () {
+    const urlSearch = new URLSearchParams(location.search);
+    const page = Number(urlSearch.get('page'));
+    const type = urlSearch.get('type');
+
+    if (type === 'customer') {
+        $('.active').removeClass('active');
+        $('#customerTab').addClass('active');
+    } else if (type === 'partner') {
+        $('.active').removeClass('active');
+        $('#partnerTab').addClass('active');
+    } else if (type === 'waiting') {
+        $('.active').removeClass('active');
+        $('#waitingTab').addClass('active');
+    } else {
+        $('.active').removeClass('active');
+        $('#allUserListTab').addClass('active');
+    }
+
+    $('#customerTab').click(function (role) {
+        if (document.querySelector('#customUserList td') === null) {
+            getCustomUserInfo(role);
+        } else {
+            return;
+        }
+    });
+
+    $('#partnerTab').click(function (role) {
+        if (document.querySelector('#partnerUserList td') === null) {
+            getPartnerUserInfo(role);
+        } else {
+            return;
+        }
+    });
+
+    $('#waitingTab').click(function (role) {
+        if (document.querySelector('#waitingUserList td') === null) {
+            getWaitingUserInfo(role);
+        } else {
+            return;
+        }
+    });
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/admin?page=${page || 1}&type=${type}`,
+        async: false,
+        success: function (response) {
+            const lastPage = response.lastPage;
+            const allUser = response.allUser;
+            for (let i = 1; i <= lastPage; i++) {
+                let temp_html = `<li class="page-item">
+                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
+                </li>`;
+                $('#Allpagination').append(temp_html);
+            }
+
+            for (let i = 0; i < allUser.rows.length; i++) {
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    allUser.rows[i];
+                if (role !== 'waiting') {
+                    let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
                                     <td class="list-name">${name}</td>
                                     <td class="list-name">${getGender(idNumber)}</td>
@@ -30,30 +68,61 @@ $.ajax({
                                     <td class="list-MS">${phone}</td>
                                     <td class="list-name">${editaddress(address)}</td>
                                     <td class="list-MS"">${editDate(createdAt)}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
-                                            >승인</a
-                                        >
-                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
-                                            >미승인</a
+                                    <td><a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
+                                            >회원삭제</a
                                         >
                                     </td>
-                                </tr>`;
-                $('#allUserList').append(temp_html);
+                                    </tr>`;
+                    $('#allUserList').append(temp_html);
+                } else {
+                    let temp_html = `<tr id="userId${userId}">
+                                        <th scope="row" class="list-MS">${userId}</th>
+                                        <td class="list-name">${name}</td>
+                                        <td class="list-name">${getGender(idNumber)}</td>
+                                        <td class="list-MS">${loginId}</td>
+                                        <td class="list-MS">${phone}</td>
+                                        <td class="list-name">${editaddress(address)}</td>
+                                        <td class="list-MS"">${editDate(createdAt)}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
+                                                >승인</a
+                                            >
+                                            <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
+                                                >미승인</a
+                                            >
+                                        </td>
+                                    </tr>`;
+                    $('#allUserList').append(temp_html);
+                }
             }
-        }
-    },
+        },
+    });
 });
 
 // 일반회원목록 조회
-function getCustomUserInfo() {
+
+$(document).ready(function getCustomUserInfo() {
+    const urlSearch = new URLSearchParams(location.search);
+    const page = Number(urlSearch.get('page'));
+    console.log(page);
+    const type = urlSearch.get('type');
+    console.log(type);
     $.ajax({
         type: 'GET',
-        url: `/api/admin/customer`,
+        url: `/api/admin/customer?page=${page || 1}&type=${type}`,
         async: false,
         success: function (response) {
-            for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+            const lastPage = response.lastPage;
+            const allUser = response.allUser;
+            for (let i = 1; i <= lastPage; i++) {
+                let temp_html = `<li class="page-item">
+                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
+                </li>`;
+                $('#paginationCustomer').append(temp_html);
+            }
+            for (let i = 0; i < allUser.rows.length; i++) {
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    allUser.rows[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -73,17 +142,30 @@ function getCustomUserInfo() {
             }
         },
     });
-}
+});
 
 // 파트너회원목록 조회
 function getPartnerUserInfo() {
+    const urlSearch = new URLSearchParams(location.search);
+    const page = Number(urlSearch.get('page'));
+    const type = urlSearch.get('type');
+
     $.ajax({
         type: 'GET',
-        url: `/api/admin/partner`,
+        url: `/api/admin/partner?page=${page || 1}&type=partner`,
         async: false,
         success: function (response) {
-            for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+            const lastPage = response.lastPage;
+            const allUser = response.allUser;
+            for (let i = 1; i <= lastPage; i++) {
+                let temp_html = `<li class="page-item">
+                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
+                </li>`;
+                $('#paginationPartner').append(temp_html);
+            }
+            for (let i = 0; i < allUser.rows.length; i++) {
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    allUser.rows[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -107,13 +189,26 @@ function getPartnerUserInfo() {
 
 // 승인대기회원목록 조회
 function getWaitingUserInfo() {
+    const urlSearch = new URLSearchParams(location.search);
+    const page = Number(urlSearch.get('page'));
+    const type = urlSearch.get('type');
+
     $.ajax({
         type: 'GET',
-        url: `/api/admin/waiting`,
+        url: `/api/admin/waiting?page=${page || 1}&type=waiting`,
         async: false,
         success: function (response) {
-            for (let i = 0; i < response.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt } = response[i];
+            const lastPage = response.lastPage;
+            const allUser = response.allUser;
+            for (let i = 1; i <= lastPage; i++) {
+                let temp_html = `<li class="page-item">
+                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
+                </li>`;
+                $('#paginationWaiting').append(temp_html);
+            }
+            for (let i = 0; i < allUser.rows.length; i++) {
+                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
+                    allUser.rows[i];
 
                 let temp_html = `<tr id="userId${userId}">
                                     <th scope="row" class="list-MS">${userId}</th>
@@ -147,7 +242,7 @@ function userDelete(userId) {
             url: `/api/admin/${userId}`,
             async: false,
             success: function (success) {
-                alert('삭제가 완료되었습니다.');
+                alert('정상적으로 삭제되었습니다.');
                 $(`#userId${userId}`).remove();
                 location.reload();
             },
@@ -167,7 +262,7 @@ function approveUpdate(userId) {
             async: false,
             data: { role: 'partner' },
             success: function (success) {
-                alert('파트너회원으로 승인하였습니다.');
+                alert('정상적으로 승인되었습니다.');
                 $(`#userId${userId}`).remove();
                 location.reload();
             },

@@ -24,10 +24,10 @@
         />
 
         <!-- css -->
-        <link rel="stylesheet" href="./css/hospitalRegister.css" />
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/tabmenu.css" />
-        <noscript> <link rel="stylesheet" href="./css/noscript.css" /> </noscript>
+        <link rel="stylesheet" href="/css/hospitalRegister.css" />
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/tabmenu.css" />
+        <noscript> <link rel="stylesheet" href="/css/noscript.css" /> </noscript>
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
@@ -49,24 +49,28 @@
             </nav>
 
             <!-- page -->
-            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %>
-            <% if (components === "map") { %> <%- include('map.ejs') %> <% } %> 
-            <% if (components === "hospital") { %> <%- include('hospital.ejs') %> <% } %>
-            <% if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% } %>
+            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %> <% if (components
+            === "map") { %> <%- include('map.ejs') %> <% } %> <% if (components === "hospital") { %>
+            <%- include('hospital.ejs') %> <% } %> <% if (components === "admin") { %> <%-
+            include('admin.ejs') %> <% } %> <% if (components === "hospitalRegister") { %> <%-
+            include('hospitalRegister.ejs') %> <% } %> <% if (components === "reservation") { %> <%-
+            include('reservation.ejs') %> <% } %>
 
             <!-- Footer -->
             <%- include('footer.ejs') %>
         </div>
 
         <!-- Scripts -->
-        <script src="./js/jquery.min.js"></script>
-        <script src="./js/browser.min.js"></script>
-        <script src="./js/breakpoints.min.js"></script>
-        <script src="./js/util.js"></script>
-        <script src="./js/main.js"></script>
-        <script src="./js/tabmenu.js"></script>
-        <script src="./js/reservationlist.js"></script>    
-        <script src="./js/hospital.js"></script>
-        <script src="./js/hospitalRegister.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/browser.min.js"></script>
+        <script src="/js/breakpoints.min.js"></script>
+        <script src="/js/util.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/tabmenu.js"></script>
+        <script src="/js/reservationlist.js"></script>
+        <script src="/js/hospital.js"></script>
+        <script src="/js/hospitalRegister.js"></script>
+        <script src="/js/admin.js"></script>
+        <script src="/js/reservation.js"></script>
     </body>
 </html>
