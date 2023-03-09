@@ -174,8 +174,6 @@
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
       event.preventDefault()
       kakao.maps.event.removeListener(map, 'dragend', cc)
-      kakao.maps.event.removeListener(map, 'dragend', bb)
-      kakao.maps.event.removeListener(map, 'zoom_changed', ae)
       kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
     })
 
@@ -185,8 +183,7 @@
       for (let i = 0; i < department.length; i++) {
         department[i].checked = false
       }
-      kakao.maps.event.removeListener(map, 'zoom_changed', dd)
-      kakao.maps.event.removeListener(map, 'dragend', ee)
+
       kakao.maps.event.removeListener(map, 'zoom_changed', ff)
       kakao.maps.event.removeListener(map, 'dragend', gg)
 
@@ -227,8 +224,6 @@
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
       event.preventDefault()
       kakao.maps.event.removeListener(map, 'dragend', cc)
-      kakao.maps.event.removeListener(map, 'dragend', bb)
-      kakao.maps.event.removeListener(map, 'zoom_changed', ae)
       kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
     })
 
@@ -238,8 +233,7 @@
       for (let i = 0; i < department.length; i++) {
         department[i].checked = false
       }
-      kakao.maps.event.removeListener(map, 'zoom_changed', dd)
-      kakao.maps.event.removeListener(map, 'dragend', ee)
+
       kakao.maps.event.removeListener(map, 'zoom_changed', ff)
       kakao.maps.event.removeListener(map, 'dragend', gg)
 
