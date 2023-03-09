@@ -1,276 +1,1030 @@
 <link rel="stylesheet" href="/css/map.css">
-
-<body onload="load()">
-  <input type="checkbox" name="departmentCheckbox" id="departmentCheckbox">
-  <label for="departmentCheckbox">
-    <span></span>
-    <span></span>
-    <span></span>
-  </label>
-  <div class="boxwrap">
-    <div id="departmentwrap">
-      <div class="division">
-        <div>
-          감염내과<input type="checkbox" name="department" value="감염내과" />
-        </div>
-        <div>
-          내분비내과<input type="checkbox" name="department" value="내분비내과" />
-        </div>
-        <div>
-          류마티스내과<input type="checkbox" name="department" value="내분비내과" />
-        </div>
-        <div>
-          순환기내과<input type="checkbox" name="department" value="순환기내과" />
-        </div>
-        <div>
-          신장내과<input type="checkbox" name="department" value="신장내과" />
-        </div>
-        <div>
-          알레르기내과<input type="checkbox" name="department" value="알레르기내과" />
-        </div>
-        <div>
-          혈액종양내과<input type="checkbox" name="department" value="혈액종양내과" />
-        </div>
-        <div>
-          호흡기내과<input type="checkbox" name="department" value="호흡기내과" />
-        </div>
+<input type="checkbox" name="departmentCheckbox" id="departmentCheckbox">
+<label for="departmentCheckbox">
+  <span></span>
+  <span></span>
+  <span></span>
+</label>
+<div class="boxwrap">
+  <div id="departmentwrap">
+    <div class="division">
+      <div>
+        감염내과<input type="checkbox" name="department" value="감염내과" />
       </div>
-      <div class="division">
-        <div>
-          대장항문<input type="checkbox" name="department" value="대장항문" />
-        </div>
-        <div>
-          성형외과<input type="checkbox" name="department" value="성형외과" />
-        </div>
-        <div>
-          신경외과<input type="checkbox" name="department" value="신경외과" />
-        </div>
-        <div>
-          외과<input type="checkbox" name="department" value="외과" />
-        </div>
-        <div>
-          정형외과<input type="checkbox" name="department" value="정형외과" />
-        </div>
-        <div>
-          흉부외과<input type="checkbox" name="department" value="흉부외과" />
-        </div>
+      <div>
+        내분비내과<input type="checkbox" name="department" value="내분비내과" />
       </div>
-      <div class="division">
-        <div>
-          산부인과<input type="checkbox" name="department" value="산부인과" />
-        </div>
-        <div>
-          피부과<input type="checkbox" name="department" value="피부과" />
-        </div>
-        <div>
-          비뇨기과<input type="checkbox" name="department" value="비뇨기과" />
-        </div>
-        <div>
-          안과<input type="checkbox" name="department" value="안과" />
-        </div>
-        <div>
-          이비인후과<input type="checkbox" name="department" value="이비인후과" />
-        </div>
-        <div>
-          정신과<input type="checkbox" name="department" value="정신과" />
-        </div>
-        <div>
-          마취통증의학과<input type="checkbox" name="department" value="마취통증의학과" />
-        </div>
-        <div>
-          가정의학과<input type="checkbox" name="department" value="가정의학과" />
-        </div>
-        <div>
-          응급의학과<input type="checkbox" name="department" value="응급의학과" />
-        </div>
-        <div>
-          재활의학과<input type="checkbox" name="department" value="재활의학과" />
-        </div>
-        <div>
-          영상의학과<input type="checkbox" name="department" value="영상의학과" />
-        </div>
-        <div>
-          방사선종양학과<input type="checkbox" name="department" value="방사선종양학과" />
-        </div>
-        <div>
-          핵의학과<input type="checkbox" name="department" value="핵의학과" />
-        </div>
-        <div>
-          진단검사의학과<input type="checkbox" name="department" value="진단검사의학과" />
-        </div>
-        <div>
-          병리과<input type="checkbox" name="department" value="병리과" />
-        </div>
-        <div>
-          의공학과<input type="checkbox" name="department" value="의공학과" />
-        </div>
-        <div>
-          한방과<input type="checkbox" name="department" value="한방과" />
-        </div>
+      <div>
+        류마티스내과<input type="checkbox" name="department" value="내분비내과" />
+      </div>
+      <div>
+        순환기내과<input type="checkbox" name="department" value="순환기내과" />
+      </div>
+      <div>
+        신장내과<input type="checkbox" name="department" value="신장내과" />
+      </div>
+      <div>
+        알레르기내과<input type="checkbox" name="department" value="알레르기내과" />
+      </div>
+      <div>
+        혈액종양내과<input type="checkbox" name="department" value="혈액종양내과" />
+      </div>
+      <div>
+        호흡기내과<input type="checkbox" name="department" value="호흡기내과" />
       </div>
     </div>
-    <button id="departmentBtn" style="display: block;">적용하기</button>
-    <button id="resetBtn" style="display: block;">초기화</button>
+    <div class="division">
+      <div>
+        대장항문<input type="checkbox" name="department" value="대장항문" />
+      </div>
+      <div>
+        성형외과<input type="checkbox" name="department" value="성형외과" />
+      </div>
+      <div>
+        신경외과<input type="checkbox" name="department" value="신경외과" />
+      </div>
+      <div>
+        외과<input type="checkbox" name="department" value="외과" />
+      </div>
+      <div>
+        정형외과<input type="checkbox" name="department" value="정형외과" />
+      </div>
+      <div>
+        흉부외과<input type="checkbox" name="department" value="흉부외과" />
+      </div>
+    </div>
+    <div class="division">
+      <div>
+        산부인과<input type="checkbox" name="department" value="산부인과" />
+      </div>
+      <div>
+        피부과<input type="checkbox" name="department" value="피부과" />
+      </div>
+      <div>
+        비뇨기과<input type="checkbox" name="department" value="비뇨기과" />
+      </div>
+      <div>
+        안과<input type="checkbox" name="department" value="안과" />
+      </div>
+      <div>
+        이비인후과<input type="checkbox" name="department" value="이비인후과" />
+      </div>
+      <div>
+        정신과<input type="checkbox" name="department" value="정신과" />
+      </div>
+      <div>
+        마취통증의학과<input type="checkbox" name="department" value="마취통증의학과" />
+      </div>
+      <div>
+        가정의학과<input type="checkbox" name="department" value="가정의학과" />
+      </div>
+      <div>
+        응급의학과<input type="checkbox" name="department" value="응급의학과" />
+      </div>
+      <div>
+        재활의학과<input type="checkbox" name="department" value="재활의학과" />
+      </div>
+      <div>
+        영상의학과<input type="checkbox" name="department" value="영상의학과" />
+      </div>
+      <div>
+        방사선종양학과<input type="checkbox" name="department" value="방사선종양학과" />
+      </div>
+      <div>
+        핵의학과<input type="checkbox" name="department" value="핵의학과" />
+      </div>
+      <div>
+        진단검사의학과<input type="checkbox" name="department" value="진단검사의학과" />
+      </div>
+      <div>
+        병리과<input type="checkbox" name="department" value="병리과" />
+      </div>
+      <div>
+        의공학과<input type="checkbox" name="department" value="의공학과" />
+      </div>
+      <div>
+        한방과<input type="checkbox" name="department" value="한방과" />
+      </div>
+    </div>
   </div>
-  <input type="checkbox" name="" id="menuIcon">
-  <label for="menuIcon">
-    <span></span>
-    <span></span>
-    <span></span>
-  </label>
-  <div class="sidebar">
-    <nav id="list">
-      <ul>
-      </ul>
-    </nav>
-  </div>
-  <div id="map" style="width: 100%; height: 100vh;"></div>
-  <div>
-    <button id="listBtn" type="menu"></button>
-  </div>
-  <script type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1&libraries=services"></script>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1"></script>
-  <script>
-    var globalMarker = []
-    let ae
-    let bb
-    let ae1
-    let cc
-    // 동의
-    function successCallback(position) {
-      // 현재 좌표 중심좌표
-      // position.coords.latitude,position.coords.longitude	 37.486868162882, 127.08303697984
-      var mapContainer = document.getElementById("map") // 지도를 표시할 div
+  <button id="departmentBtn" style="display: block;">적용하기</button>
+  <button id="resetBtn" style="display: block;">초기화</button>
+</div>
+<input type="checkbox" name="" id="menuIcon">
+<label for="menuIcon">
+  <span></span>
+  <span></span>
+  <span></span>
+</label>
+<div class="sidebar">
+  <nav id="list">
+    <ul>
+    </ul>
+  </nav>
+</div>
+<div id="map" style="width: 100%; height: 100vh;"></div>
+<div>
+  <button id="listBtn" type="menu"></button>
+</div>
+<script type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1"></script>
+<script type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49ae370ae9f520ffdbf60c3ca2e7b0c1&libraries=services,clusterer,drawing"></script>
+<script>
+  window.onload = function () {
+    load()
+  }
+  var globalMarker = []
+  let ae
+  let bb
+  let ae1
+  let cc
 
-      mapOption = {
-        center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude), // 지도의 중심좌표
-        level: 5, // 지도의 확대 레벨
-      };
+  let dd
+  let ee
+  let ff
+  let gg
 
-      var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+  let a
+  let listEvent
+  let def
+  // 동의
+  function successCallback(position) {
+    // 현재 좌표 중심좌표
+    // position.coords.latitude,position.coords.longitude	 37.486868162882, 127.08303697984
+    var mapContainer = document.getElementById("map") // 지도를 표시할 div
 
-      var geocoder = new kakao.maps.services.Geocoder();
+    mapOption = {
+      center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude), // 지도의 중심좌표
+      level: 5, // 지도의 확대 레벨
+    };
 
-      let data = getData(map)
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-      let listEvent = listBtnClickEvent(map)
+    map.setMaxLevel(10);
 
-      document.getElementById('resetBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        const department = document.getElementsByName("department");
-        for (let i = 0; i < department.length; i++) {
-          // 속성중에 체크 된 항목이 있을 경우
-          department[i].checked = false
-          window.location.reload()
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    let data = getData(map)
+
+    listEvent = listBtnClickEvent(map)
+
+    a = fetchData(map, geocoder)
+
+    document.getElementById('departmentBtn').addEventListener('click', (event) => {
+      event.preventDefault()
+      kakao.maps.event.removeListener(map, 'dragend', ae)
+      kakao.maps.event.removeListener(map, 'dragend', bb)
+      kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
+      kakao.maps.event.removeListener(map, 'zoom_changed', cc)
+    })
+
+    def = de(map, geocoder)
+
+    document.getElementById('resetBtn').addEventListener('click', event => {
+      event.preventDefault()
+
+      window.location.reload()
+
+      //   const department = document.getElementsByName("department");
+
+      // for (let i = 0; i < department.length; i++) {
+      //   department[i].checked = false
+      // }
+
+      // document.getElementById('resetBtn').removeEventListener('click', de(map, geocoder))
+
+      kakao.maps.event.removeListener(map, 'zoom_changed', dd)
+      kakao.maps.event.removeListener(map, 'dragend', ee)
+      kakao.maps.event.removeListener(map, 'zoom_changed', ff)
+      kakao.maps.event.removeListener(map, 'dragend', gg)
+
+      // fetchData(map,geocoder)
+
+      kakao.maps.event.addListener(map, 'dragend', ae)
+      kakao.maps.event.addListener(map, 'dragend', bb)
+      kakao.maps.event.addListener(map, 'zoom_changed', ae1)
+      kakao.maps.event.addListener(map, 'zoom_changed', cc)
+    })
+
+
+    // var clusterer = new kakao.maps.MarkerClusterer({
+    //     map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+    //     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+    //     minLevel: 10 // 클러스터 할 최소 지도 레벨 
+    // });
+
+    // // 데이터를 가져오기 위해 jQuery를 사용합니다
+    // // 데이터를 가져와 마커를 생성하고 클러스터러 객체에 넘겨줍니다
+    // $.get("localhost:3000/api/hospitals/locations", function(data) {
+    //     // 데이터에서 좌표 값을 가지고 마커를 표시합니다
+    //     // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
+    //     var markers = $(data.positions).map(function(i, position) {
+    //         return new kakao.maps.Marker({
+    //             position : new kakao.maps.LatLng(position.lat, position.lng)
+    //         });
+    //     });
+
+    //     // 클러스터러에 마커들을 추가합니다
+    //     clusterer.addMarkers(markers);
+    // });
+
+
+  }
+
+
+  // 동의 X
+  function errorCallback(error) {
+
+
+    // 현재 좌표 중심좌표
+    // position.coords.latitude,position.coords.longitude	 37.486868162882, 127.08303697984
+    var mapContainer = document.getElementById("map") // 지도를 표시할 div
+
+    mapOption = {
+      center: new kakao.maps.LatLng(37.486868162882, 127.08303697984), // 지도의 중심좌표
+      level: 5, // 지도의 확대 레벨
+    };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    map.setMaxLevel(10);
+
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 영역의 좌표를 얻어옵니다.
+    const data = getData(map)
+
+    listBtnClickEvent(map)
+
+    fetchData(map, geocoder)
+
+    listEvent = listBtnClickEvent(map)
+
+    a = fetchData(map, geocoder)
+
+    de(map, geocoder)
+
+    document.getElementById('departmentBtn').addEventListener('click', (event) => {
+      event.preventDefault()
+      kakao.maps.event.removeListener(map, 'dragend', ae)
+      kakao.maps.event.removeListener(map, 'dragend', bb)
+      kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
+      kakao.maps.event.removeListener(map, 'zoom_changed', cc)
+    })
+
+    document.getElementById('resetBtn').addEventListener('click', event => {
+      event.preventDefault()
+
+      // window.location.reload()
+      // 변수에 담아서 밸류가 있으면 작동이 안되게 ^^
+
+
+      kakao.maps.event.removeListener(map, 'zoom_changed', dd)
+      kakao.maps.event.removeListener(map, 'dragend', ee)
+      kakao.maps.event.removeListener(map, 'zoom_changed', ff)
+      kakao.maps.event.removeListener(map, 'dragend', gg)
+      kakao.maps.event.removeListener(map, 'dragend', ae)
+      kakao.maps.event.removeListener(map, 'dragend', bb)
+      kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
+      kakao.maps.event.removeListener(map, 'zoom_changed', cc)
+
+      fetchData(map, geocoder)
+
+    })
+  }
+
+
+  function load() {
+
+    if (navigator.geolocation) {
+
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+    } else {
+
+      alert("geolocation not supported");
+
+    }
+
+  }
+
+  function getData(map) {
+    var bounds = map.getBounds();
+
+    // 영역의 남서쪽 좌표를 얻어옵니다
+    var swLatLng = bounds.getSouthWest();
+
+    // 영역의 북동쪽 좌표를 얻어옵니다
+    var neLatLng = bounds.getNorthEast();
+
+    const data = {
+      rightLatitude: neLatLng.getLat(),
+      rightLongitude: neLatLng.getLng(),
+      leftLatitude: swLatLng.getLat(),
+      leftLongitude: swLatLng.getLng(),
+    };
+
+    return data
+  }
+
+  function clickBtn() {
+    // 체크한 데이터를 담을 배열 선언
+    const arr = [];
+    // Name이 Color인 속성 취득
+    const department = document.getElementsByName("department");
+    // 취득한 속성 만큼 루프
+    for (let i = 0; i < department.length; i++) {
+      // 속성중에 체크 된 항목이 있을 경우
+      if (department[i].checked == true) {
+        arr.push(department[i].value);
+      }
+    }
+    return arr.join(",")
+  }
+
+  function listBtnClickEvent(map) {
+    document.getElementById('listBtn').addEventListener('click', (event) => {
+      event.preventDefault();
+
+      document.getElementById("menuIcon").checked = true;
+
+      const data = getData(map)
+
+      fetch(`http://localhost:3000/api/hospitals/around/info`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('list').innerHTML = ``
+          for (let i = 0; i < data.hospitals.length; i++) {
+            const a =
+              `
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+                <span style="position:static">${data.hospitals[i].name}</span>
+                <span style="position:static">${data.hospitals[i].address}</span>
+                <span style="position:static">${data.hospitals[i].phone}</span>
+                </div>
+              `
+
+            const li = document.createElement('li');
+            li.innerHTML = a;
+            document.getElementById('list').appendChild(li);
+          }
+        })
+
+    })
+  }
+
+
+  function fetchData(map, geocoder) {
+    const data = getData(map)
+    fetch(`http://localhost:3000/api/hospitals/around`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const a = document.getElementById("listBtn")
+        a.innerText = `근처 ${data.hospitals.length}개의 병원`
+
+
+
+        if (!data.hospitals[0]) {
+
+
+          kakao.maps.event.addListener(map, 'zoom_changed', function () {
+
+            const data = getData(map)
+
+            fetch(`http://localhost:3000/api/hospitals/around/info`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.hospitals.length; i++) {
+                  const a =
+                    `
+<img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+<div class="info">
+<span style="position:static">${data.hospitals[i].name}</span>
+<span style="position:static">${data.hospitals[i].address}</span>
+<span style="position:static">${data.hospitals[i].phone}</span>
+</div>
+`
+
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
+              })
+
+            fetch(`http://localhost:3000/api/hospitals/around`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const a = document.getElementById("listBtn")
+                a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                for (let i = 0; i < data.hospitals.length; i++) {
+                  geocoder.addressSearch(
+                    data.hospitals[i].address,
+                    function (result, status) {
+                      // 정상적으로 검색이 완료됐으면
+                      if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 결과값으로 받은 위치를 마커로 표시합니다
+                        var marker = new kakao.maps.Marker({
+                          map: map,
+                          position: coords,
+                        });
+
+                        marker.id = data.hospitals[i].hospitalId
+                        // 마커에 클릭이벤트를 등록합니다
+                        markerClick(marker)
+                        globalMarker.push(marker)
+                      }
+                    }
+                  );
+                }
+              })
+          })
+
+          kakao.maps.event.addListener(map, 'dragend', function () {
+
+            const data = getData(map)
+
+            fetch(`http://localhost:3000/api/hospitals/around/info`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.hospitals.length; i++) {
+                  const a =
+                    `
+                      <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                      <div class="info">
+                        <span style="position:static">${data.hospitals[i].name}</span>
+                        <span style="position:static">${data.hospitals[i].address}</span>
+                        <span style="position:static">${data.hospitals[i].phone}</span>
+                      </div>
+                    `
+
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
+              })
+
+            fetch(`http://localhost:3000/api/hospitals/around`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const a = document.getElementById("listBtn")
+                a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                for (let i = 0; i < data.hospitals.length; i++) {
+                  geocoder.addressSearch(
+                    data.hospitals[i].address,
+                    function (result, status) {
+                      // 정상적으로 검색이 완료됐으면
+                      if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 결과값으로 받은 위치를 마커로 표시합니다
+                        var marker = new kakao.maps.Marker({
+                          map: map,
+                          position: coords,
+                        });
+
+                        marker.id = data.hospitals[i].hospitalId
+                        // 마커에 클릭이벤트를 등록합니다
+                        markerClick(marker)
+                        globalMarker.push(marker)
+                      }
+                    }
+                  );
+                }
+              })
+
+          })
+        } else {
+
+
+          for (let i = 0; i < data.hospitals.length; i++) {
+            geocoder.addressSearch(
+              data.hospitals[i].address,
+              function (result, status) {
+                // 정상적으로 검색이 완료됐으면
+                if (status === kakao.maps.services.Status.OK) {
+                  var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                  // 결과값으로 받은 위치를 마커로 표시합니다
+                  var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                  });
+
+                  marker.id = data.hospitals[i].hospitalId
+                  // 마커에 클릭이벤트를 등록합니다
+                  markerClick(marker)
+
+                  globalMarker.push(marker)
+                }
+
+
+                kakao.maps.event.addListener(map, "zoom_changed", function () {
+
+                  globalMarker.map(marker => marker.setMap(null))
+
+                  const data = getData(map)
+
+                  fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      document.getElementById('list').innerHTML = ``
+                      for (let i = 0; i < data.hospitals.length; i++) {
+                        const a =
+                          `
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+        <div class="info">
+        <span style="position:static">${data.hospitals[i].name}</span>
+        <span style="position:static">${data.hospitals[i].address}</span>
+        <span style="position:static">${data.hospitals[i].phone}</span>
+        </div>
+        `
+
+                        const li = document.createElement('li');
+                        li.innerHTML = a;
+                        document.getElementById('list').appendChild(li);
+                      }
+                    })
+                  fetch(`http://localhost:3000/api/hospitals/around`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      const a = document.getElementById("listBtn")
+                      a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                      for (let i = 0; i < data.hospitals.length; i++) {
+                        geocoder.addressSearch(
+                          data.hospitals[i].address,
+                          function (result, status) {
+                            // 정상적으로 검색이 완료됐으면
+                            if (status === kakao.maps.services.Status.OK) {
+                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                              // 결과값으로 받은 위치를 마커로 표시합니다
+                              var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: coords,
+                              });
+
+                              marker.id = data.hospitals[i].hospitalId
+                              // 마커에 클릭이벤트를 등록합니다
+                              markerClick(marker)
+                              globalMarker.push(marker)
+                            }
+                          }
+                        );
+                      }
+                    })
+
+                });
+
+                kakao.maps.event.addListener(map, 'dragend', function () {
+
+                  globalMarker.map(marker => marker.setMap(null))
+
+                  const data = getData(map)
+
+                  fetch(`http://localhost:3000/api/hospitals/around/info`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      document.getElementById('list').innerHTML = ``
+                      for (let i = 0; i < data.hospitals.length; i++) {
+                        const a =
+                          `
+<img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+<div class="info">
+<span style="position:static">${data.hospitals[i].name}</span>
+<span style="position:static">${data.hospitals[i].address}</span>
+<span style="position:static">${data.hospitals[i].phone}</span>
+</div>
+`
+
+                        const li = document.createElement('li');
+                        li.innerHTML = a;
+                        document.getElementById('list').appendChild(li);
+                      }
+                    })
+
+                  fetch(`http://localhost:3000/api/hospitals/around`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      const a = document.getElementById("listBtn")
+                      a.innerText = `근처 ${data.hospitals.length}개의 병원`
+                      for (let i = 0; i < data.hospitals.length; i++) {
+                        geocoder.addressSearch(
+                          data.hospitals[i].address,
+                          function (result, status) {
+                            // 정상적으로 검색이 완료됐으면
+                            if (status === kakao.maps.services.Status.OK) {
+                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                              // 결과값으로 받은 위치를 마커로 표시합니다
+                              var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: coords,
+                              });
+
+                              marker.id = data.hospitals[i].hospitalId
+                              // 마커에 클릭이벤트를 등록합니다
+                              markerClick(marker)
+                              globalMarker.push(marker)
+                            }
+                          }
+                        );
+                      }
+                    })
+
+                });
+              }
+            );
+          }
         }
       })
+  }
 
+  function markerClick(marker) {
+    kakao.maps.event.addListener(marker, 'click', function () {
+      // 마커 위에 인포윈도우를 표시합니다
+      const id = marker.id
+      document.getElementById("menuIcon").checked = true;
+      fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('list').innerHTML = ``
 
+          const image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
+          const imagewrap = document.createElement("div")
+          imagewrap.innerHTML = image
+          document.getElementById("list").appendChild(imagewrap)
+          const a =
+            `
+                                        
+                                  <div class="info">
+                                      <p>${data.hospitalName}</p>
+                                      <p>${data.hospitalphone}</p>
+                                      <p>${data.hospitalAddress}</p>
+                                      </div>
+                                        `
+          const li = document.createElement('li');
+          li.innerHTML = a;
+          document.getElementById('list').appendChild(li);
 
-      const a = fetchData(map, geocoder)
+          for (let i = 0; i < data.doctors.length; i++) {
+            const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
+                                  <div class="info">
+                                  <span>${data.doctors[i].doctor}</span>
+                                        <span>${data.doctors[i].department}</span>
+                                        </div>`
+            const doctorLi = document.createElement('li');
+            doctorLi.innerHTML = b;
+            document.getElementById('list').appendChild(doctorLi);
+          }
 
+        })
+    });
+  }
+
+  function listBtnClickEventDepartment(map) {
+    document.getElementById('listBtn').addEventListener('click', (event) => {
+      event.preventDefault();
+      document.getElementById("menuIcon").checked = true;
+
+      const data = getData(map)
+      const department = clickBtn()
+      data.department = department
+
+      fetch(`http://localhost:3000/api/categories/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('list').innerHTML = ``
+          for (let i = 0; i < data.length; i++) {
+            const a =
+              `
+                <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+                <div class="info">
+                <span style="position:static">${data[i].hospitalName}</span>
+                <span style="position:static">${data[i].address}</span>
+                <span style="position:static">${data[i].phone}</span>
+                </div>
+              `
+
+            const li = document.createElement('li');
+            li.innerHTML = a;
+            document.getElementById('list').appendChild(li);
+          }
+        })
+
+    })
+  }
+
+  function de(map, geocoder) {
+    // localhost:3000/api/categories/search
+    document.getElementById('departmentBtn').addEventListener('click', (event) => {
       document.getElementById('departmentBtn').removeEventListener('click', a);
       document.getElementById('departmentBtn').removeEventListener('click', listEvent);
-      // localhost:3000/api/categories/search
-      document.getElementById('departmentBtn').addEventListener('click', (event) => {
-        kakao.maps.event.removeListener(map, 'dragend', ae)
-        kakao.maps.event.removeListener(map, 'dragend', bb)
-        kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
-        kakao.maps.event.removeListener(map, 'zoom_changed', cc)
-        event.preventDefault();
-        const data = getData(map)
-        globalMarker.map(marker => marker.setMap(null))
+      event.preventDefault();
+      const data = getData(map)
+      globalMarker.map(marker => marker.setMap(null))
 
-        listBtnClickEventDepartment(map)
+      listBtnClickEventDepartment(map)
 
-        const department = clickBtn()
-        data.department = department
+      const department = clickBtn()
+      data.department = department
 
-        fetch(`http://localhost:3000/api/categories/search`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById('list').innerHTML = ``
-            const a = document.getElementById("listBtn")
-            a.innerText = `근처 ${data.length}개의 병원`
-            if (!data[0]) {
-              kakao.maps.event.addListener(map, 'zoom_changed', function () {
+      fetch(`http://localhost:3000/api/categories/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('list').innerHTML = ``
+          const a = document.getElementById("listBtn")
+          a.innerText = `근처 ${data.length}개의 병원`
 
-                const data = getData(map)
+          dd = function () {
 
-                globalMarker.map(marker => marker.setMap(null))
+            const data = getData(map)
 
-                fetch(`http://localhost:3000/api/categories/search`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(data),
-                })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    document.getElementById('list').innerHTML = ``
-                    for (let i = 0; i < data.length; i++) {
-                      const a =
-                        `
+            globalMarker.map(marker => marker.setMap(null))
+
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.length; i++) {
+                  const a =
+                    `
+<img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+<div class="info">
+<span style="position:static">${data[i].hospitalName}</span>
+<span style="position:static">${data[i].address}</span>
+<span style="position:static">${data[i].phone}</span>
+</div>
+`
+
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
+              })
+          }
+
+          ee = function () {
+
+            const data = getData(map)
+
+            globalMarker.map(marker => marker.setMap(null))
+
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.length; i++) {
+                  const a =
+                    `
+<img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+<div class="info">
+<span style="position:static">${data[i].hospitalName}</span>
+<span style="position:static">${data[i].address}</span>
+<span style="position:static">${data[i].phone}</span>
+</div>
+`
+
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
+              })
+          }
+
+          ff = function () {
+            globalMarker.map(marker => marker.setMap(null))
+
+            const data = getData(map)
+            const department = clickBtn()
+            data.department = department
+
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.length; i++) {
+                  const a =
+                    `
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                         <div class="info">
                         <span style="position:static">${data[i].hospitalName}</span>
                         <span style="position:static">${data[i].address}</span>
                         <span style="position:static">${data[i].phone}</span>
                         </div>
+                     `
+
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
+              })
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const a = document.getElementById("listBtn")
+                a.innerText = `근처 ${data.length}개의 병원`
+                for (let i = 0; i < data.length; i++) {
+                  geocoder.addressSearch(
+                    data[i].address,
+                    function (result, status) {
+                      // 정상적으로 검색이 완료됐으면
+                      if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 결과값으로 받은 위치를 마커로 표시합니다
+                        var marker = new kakao.maps.Marker({
+                          map: map,
+                          position: coords,
+                        });
+
+                        marker.id = data[i].hospitalId
+                        // 마커에 클릭이벤트를 등록합니다
+                        markerClick(marker)
+                        globalMarker.push(marker)
+                      }
+                    }
+                  );
+                }
+              })
+          }
+
+          gg = function () {
+            globalMarker.map(marker => marker.setMap(null))
+
+            const data = getData(map)
+            const department = clickBtn()
+            data.department = department
+
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                document.getElementById('list').innerHTML = ``
+                for (let i = 0; i < data.length; i++) {
+                  const a =
+                    `
+                        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
+                        <div class="info">
+                          <span style="position:static">${data[i].hospitalName}</span>
+                          <span style="position:static">${data[i].address}</span>
+                          <span style="position:static">${data[i].phone}</span>
+                        </div>
                       `
 
-                      const li = document.createElement('li');
-                      li.innerHTML = a;
-                      document.getElementById('list').appendChild(li);
-                    }
-                  })
+                  const li = document.createElement('li');
+                  li.innerHTML = a;
+                  document.getElementById('list').appendChild(li);
+                }
               })
 
+            fetch(`http://localhost:3000/api/categories/search`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const a = document.getElementById("listBtn")
+                a.innerText = `근처 ${data.length}개의 병원`
+                for (let i = 0; i < data.length; i++) {
+                  geocoder.addressSearch(
+                    data[i].address,
+                    function (result, status) {
+                      // 정상적으로 검색이 완료됐으면
+                      if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-              kakao.maps.event.addListener(map, 'dragend', function () {
+                        // 결과값으로 받은 위치를 마커로 표시합니다
+                        var marker = new kakao.maps.Marker({
+                          map: map,
+                          position: coords,
+                        });
 
-                const data = getData(map)
-
-                globalMarker.map(marker => marker.setMap(null))
-
-                fetch(`http://localhost:3000/api/categories/search`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(data),
-                })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    console.log(data)
-                    document.getElementById('list').innerHTML = ``
-                    for (let i = 0; i < data.length; i++) {
-                      const a =
-                        `
-                      <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                        <div class="info">
-                        <span style="position:static">${data[i].hospitalName}</span>
-                        <span style="position:static">${data[i].address}</span>
-                        <span style="position:static">${data[i].phone}</span>
-                        </div>
-              `
-
-                      const li = document.createElement('li');
-                      li.innerHTML = a;
-                      document.getElementById('list').appendChild(li);
+                        marker.id = data[i].hospitalId
+                        // 마커에 클릭이벤트를 등록합니다
+                        markerClick(marker)
+                      }
                     }
-                  })
+                  );
+                }
               })
-            } else {
-              for (let i = 0; i < data.length; i++) {
+          }
+          if (!data[0]) {
+            kakao.maps.event.addListener(map, 'zoom_changed', dd)
+
+            kakao.maps.event.addListener(map, 'dragend', ee)
+          } else {
+            for (let i = 0; i < data.length; i++) {
               const a =
                 `
                 <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
@@ -305,670 +1059,14 @@
                 }
               );
             }
-            kakao.maps.event.addListener(map, "zoom_changed", function () {
-              globalMarker.map(marker => marker.setMap(null))
+            kakao.maps.event.addListener(map, "zoom_changed", ff);
 
-              const data = getData(map)
-              const department = clickBtn()
-              data.department = department
-
-              fetch(`http://localhost:3000/api/categories/search`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  document.getElementById('list').innerHTML = ``
-                  for (let i = 0; i < data.length; i++) {
-                    const a =
-                      `
-                        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                        <div class="info">
-                        <span style="position:static">${data[i].hospitalName}</span>
-                        <span style="position:static">${data[i].address}</span>
-                        <span style="position:static">${data[i].phone}</span>
-                        </div>
-                     `   
-
-                    const li = document.createElement('li');
-                    li.innerHTML = a;
-                    document.getElementById('list').appendChild(li);
-                  }
-                })
-              fetch(`http://localhost:3000/api/categories/search`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  const a = document.getElementById("listBtn")
-                  a.innerText = `근처 ${data.length}개의 병원`
-                  for (let i = 0; i < data.length; i++) {
-                    geocoder.addressSearch(
-                      data[i].address,
-                      function (result, status) {
-                        // 정상적으로 검색이 완료됐으면
-                        if (status === kakao.maps.services.Status.OK) {
-                          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                          // 결과값으로 받은 위치를 마커로 표시합니다
-                          var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords,
-                          });
-
-                          marker.id = data[i].hospitalId
-                          // 마커에 클릭이벤트를 등록합니다
-                          markerClick(marker)
-                          globalMarker.push(marker)
-                        }
-                      }
-                    );
-                  }
-                })
-            });
-
-            kakao.maps.event.addListener(map, 'dragend', function () {
-              globalMarker.map(marker => marker.setMap(null))
-
-              const data = getData(map)
-              const department = clickBtn()
-              data.department = department
-
-              fetch(`http://localhost:3000/api/categories/search`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  document.getElementById('list').innerHTML = ``
-                  for (let i = 0; i < data.length; i++) {
-                    const a =
-                      `
-                        <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                        <div class="info">
-                          <span style="position:static">${data[i].hospitalName}</span>
-                          <span style="position:static">${data[i].address}</span>
-                          <span style="position:static">${data[i].phone}</span>
-                        </div>
-                      `
-
-                    const li = document.createElement('li');
-                    li.innerHTML = a;
-                    document.getElementById('list').appendChild(li);
-                  }
-                })
-
-              fetch(`http://localhost:3000/api/categories/search`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  const a = document.getElementById("listBtn")
-                  a.innerText = `근처 ${data.length}개의 병원`
-                  for (let i = 0; i < data.length; i++) {
-                    geocoder.addressSearch(
-                      data[i].address,
-                      function (result, status) {
-                        // 정상적으로 검색이 완료됐으면
-                        if (status === kakao.maps.services.Status.OK) {
-                          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                          // 결과값으로 받은 위치를 마커로 표시합니다
-                          var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords,
-                          });
-
-                          marker.id = data[i].hospitalId
-                          // 마커에 클릭이벤트를 등록합니다
-                          markerClick(marker)
-                        }
-                      }
-                    );
-                  }
-                })
-            })
-            }
-            
-
-          })
-
-      })
-    }
+            kakao.maps.event.addListener(map, 'dragend', gg)
+          }
 
 
-    // 동의 X
-    function errorCallback(error) {
-
-
-      // 현재 좌표 중심좌표
-      // position.coords.latitude,position.coords.longitude	 37.486868162882, 127.08303697984
-      var mapContainer = document.getElementById("map") // 지도를 표시할 div
-
-      mapOption = {
-        center: new kakao.maps.LatLng(37.486868162882, 127.08303697984), // 지도의 중심좌표
-        level: 5, // 지도의 확대 레벨
-      };
-
-      var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-      var geocoder = new kakao.maps.services.Geocoder();
-
-      // 영역의 좌표를 얻어옵니다.
-      const data = getData(map)
-
-      listBtnClickEvent(map)
-
-      fetchData(map, geocoder)
-
-      document.getElementById('departmentBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        const data = getData(map)
-        console.log(globalMarker)
-        globalMarker.map(marker => marker.setMap(null))
-      })
-
-    }
-
-
-    function load() {
-
-      if (navigator.geolocation) {
-
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-
-      } else {
-
-        alert("geolocation not supported");
-
-      }
-
-    }
-
-    function getData(map) {
-      var bounds = map.getBounds();
-
-      // 영역의 남서쪽 좌표를 얻어옵니다
-      var swLatLng = bounds.getSouthWest();
-
-      // 영역의 북동쪽 좌표를 얻어옵니다
-      var neLatLng = bounds.getNorthEast();
-
-      const data = {
-        rightLatitude: neLatLng.getLat(),
-        rightLongitude: neLatLng.getLng(),
-        leftLatitude: swLatLng.getLat(),
-        leftLongitude: swLatLng.getLng(),
-      };
-
-      return data
-    }
-
-    function clickBtn() {
-      // 체크한 데이터를 담을 배열 선언
-      const arr = [];
-      // Name이 Color인 속성 취득
-      const department = document.getElementsByName("department");
-      // 취득한 속성 만큼 루프
-      for (let i = 0; i < department.length; i++) {
-        // 속성중에 체크 된 항목이 있을 경우
-        if (department[i].checked == true) {
-          arr.push(department[i].value);
-        }
-      }
-      return arr.join(",")
-    }
-
-    function listBtnClickEvent(map) {
-      document.getElementById('listBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-
-        document.getElementById("menuIcon").checked = true;
-
-        const data = getData(map)
-
-        fetch(`http://localhost:3000/api/hospitals/around/info`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById('list').innerHTML = ``
-            for (let i = 0; i < data.hospitals.length; i++) {
-              const a =
-                `
-                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                <div class="info">
-                <span style="position:static">${data.hospitals[i].name}</span>
-                <span style="position:static">${data.hospitals[i].address}</span>
-                <span style="position:static">${data.hospitals[i].phone}</span>
-                </div>
-              `
 
-              const li = document.createElement('li');
-              li.innerHTML = a;
-              document.getElementById('list').appendChild(li);
-            }
-          })
-
-      })
-    }
-
-
-    function fetchData(map, geocoder) {
-      const data = getData(map)
-      fetch(`http://localhost:3000/api/hospitals/around`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const a = document.getElementById("listBtn")
-          a.innerText = `근처 ${data.hospitals.length}개의 병원`
-          if (!data.hospitals[0]) {
-            ae1 = function () {
-
-const data = getData(map)
-
-fetch(`http://localhost:3000/api/hospitals/around/info`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    document.getElementById('list').innerHTML = ``
-    for (let i = 0; i < data.hospitals.length; i++) {
-      const a =
-        `
-<img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-<div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
-</div>
-`
-
-      const li = document.createElement('li');
-      li.innerHTML = a;
-      document.getElementById('list').appendChild(li);
-    }
-  })
-
-fetch(`http://localhost:3000/api/hospitals/around`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    const a = document.getElementById("listBtn")
-    a.innerText = `근처 ${data.hospitals.length}개의 병원`
-    for (let i = 0; i < data.hospitals.length; i++) {
-      geocoder.addressSearch(
-        data.hospitals[i].address,
-        function (result, status) {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-              map: map,
-              position: coords,
-            });
-
-            marker.id = data.hospitals[i].hospitalId
-            // 마커에 클릭이벤트를 등록합니다
-            markerClick(marker)
-            globalMarker.push(marker)
-          }
-        }
-      );
-    }
-  })
-}
-            kakao.maps.event.addListener(map, 'zoom_changed', ae1)
-
-            ae = function () {
-
-const data = getData(map)
-
-fetch(`http://localhost:3000/api/hospitals/around/info`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    document.getElementById('list').innerHTML = ``
-    for (let i = 0; i < data.hospitals.length; i++) {
-      const a =
-        `
-        <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-  <div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
-</div>
-`
-
-      const li = document.createElement('li');
-      li.innerHTML = a;
-      document.getElementById('list').appendChild(li);
-    }
-  })
-
-fetch(`http://localhost:3000/api/hospitals/around`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    const a = document.getElementById("listBtn")
-    a.innerText = `근처 ${data.hospitals.length}개의 병원`
-    for (let i = 0; i < data.hospitals.length; i++) {
-      geocoder.addressSearch(
-        data.hospitals[i].address,
-        function (result, status) {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-              map: map,
-              position: coords,
-            });
-
-            marker.id = data.hospitals[i].hospitalId
-            // 마커에 클릭이벤트를 등록합니다
-            markerClick(marker)
-            globalMarker.push(marker)
-          }
-        }
-      );
-    }
-  })
-
-}
-            kakao.maps.event.addListener(map, 'dragend', ae)
-          } else {
-            for (let i = 0; i < data.hospitals.length; i++) {
-              geocoder.addressSearch(
-                data.hospitals[i].address,
-                function (result, status) {
-                  // 정상적으로 검색이 완료됐으면
-                  if (status === kakao.maps.services.Status.OK) {
-                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                    // 결과값으로 받은 위치를 마커로 표시합니다
-                    var marker = new kakao.maps.Marker({
-                      map: map,
-                      position: coords,
-                    });
-
-                    marker.id = data.hospitals[i].hospitalId
-                    // 마커에 클릭이벤트를 등록합니다
-                    markerClick(marker)
-                  }
-                  cc =  function () {
-
-marker.setMap(null);
-
-const data = getData(map)
-
-fetch(`http://localhost:3000/api/hospitals/around/info`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    document.getElementById('list').innerHTML = ``
-    for (let i = 0; i < data.hospitals.length; i++) {
-      const a =
-        `
-        <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-<div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
-</div>
-`
-
-      const li = document.createElement('li');
-      li.innerHTML = a;
-      document.getElementById('list').appendChild(li);
-    }
-  })
-fetch(`http://localhost:3000/api/hospitals/around`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    const a = document.getElementById("listBtn")
-    a.innerText = `근처 ${data.hospitals.length}개의 병원`
-    for (let i = 0; i < data.hospitals.length; i++) {
-      geocoder.addressSearch(
-        data.hospitals[i].address,
-        function (result, status) {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-              map: map,
-              position: coords,
-            });
-
-            marker.id = data.hospitals[i].hospitalId
-            // 마커에 클릭이벤트를 등록합니다
-            markerClick(marker)
-            globalMarker.push(marker)
-          }
-        }
-      );
-    }
-  })
-
-}
-                  kakao.maps.event.addListener(map, "zoom_changed", cc);
-                  bb = function () {
-
-marker.setMap(null);
-
-const data = getData(map)
-
-fetch(`http://localhost:3000/api/hospitals/around/info`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    document.getElementById('list').innerHTML = ``
-    for (let i = 0; i < data.hospitals.length; i++) {
-      const a =
-        `
-        <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-<div class="info">
-<span style="position:static">${data.hospitals[i].name}</span>
-<span style="position:static">${data.hospitals[i].address}</span>
-<span style="position:static">${data.hospitals[i].phone}</span>
-</div>
-`
-
-      const li = document.createElement('li');
-      li.innerHTML = a;
-      document.getElementById('list').appendChild(li);
-    }
-  })
-
-fetch(`http://localhost:3000/api/hospitals/around`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    const a = document.getElementById("listBtn")
-    a.innerText = `근처 ${data.hospitals.length}개의 병원`
-    for (let i = 0; i < data.hospitals.length; i++) {
-      geocoder.addressSearch(
-        data.hospitals[i].address,
-        function (result, status) {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-              map: map,
-              position: coords,
-            });
-
-            marker.id = data.hospitals[i].hospitalId
-            // 마커에 클릭이벤트를 등록합니다
-            markerClick(marker)
-            globalMarker.push(marker)
-          }
-        }
-      );
-    }
-  })
-
-}
-                  kakao.maps.event.addListener(map, 'dragend', bb);
-                }
-              );
-            }
-          }
-        })
-    }
-
-    function markerClick(marker) {
-      kakao.maps.event.addListener(marker, 'click', function () {
-        // 마커 위에 인포윈도우를 표시합니다
-        const id = marker.id
-        document.getElementById("menuIcon").checked = true;
-        fetch(`http://localhost:3000/api/hospitals/info/${id}`)
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById('list').innerHTML = ``
-
-            const image = `<img src="${data.hospitalImage}" alt="${data.hospitalImage}" class="hospitalImage">`
-            const imagewrap = document.createElement("div")
-            imagewrap.innerHTML = image
-            document.getElementById("list").appendChild(imagewrap)
-            const a =
-              `
-                                        
-                                  <div class="info">
-                                      <p>${data.hospitalName}</p>
-                                      <p>${data.hospitalphone}</p>
-                                      <p>${data.hospitalAddress}</p>
-                                      </div>
-                                        `
-            const li = document.createElement('li');
-            li.innerHTML = a;
-            document.getElementById('list').appendChild(li);
-
-            for (let i = 0; i < data.doctors.length; i++) {
-              const b = `                                  <img src="${data.doctors[i].doctorImage}" alt="${data.doctors[i].doctor}" class="doctorImg">
-                                  <div class="info">
-                                  <span>${data.doctors[i].doctor}</span>
-                                        <span>${data.doctors[i].department}</span>
-                                        </div>`
-              const doctorLi = document.createElement('li');
-              doctorLi.innerHTML = b;
-              document.getElementById('list').appendChild(doctorLi);
-            }
-
-          })
-      });
-    }
-
-    function listBtnClickEventDepartment(map) {
-      document.getElementById('listBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        document.getElementById("menuIcon").checked = true;
-
-        const data = getData(map)
-        const department = clickBtn()
-        data.department = department
-
-        fetch(`http://localhost:3000/api/categories/search`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-            document.getElementById('list').innerHTML = ``
-            for (let i = 0; i < data.length; i++) {
-              const a =
-                `
-                <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                <div class="info">
-                <span style="position:static">${data[i].hospitalName}</span>
-                <span style="position:static">${data[i].address}</span>
-                <span style="position:static">${data[i].phone}</span>
-                </div>
-              `
-
-              const li = document.createElement('li');
-              li.innerHTML = a;
-              document.getElementById('list').appendChild(li);
-            }
-          })
-
-      })
-    }
-  </script>
-</body>
-
-</html>
+    })
+  }
+</script>
