@@ -290,7 +290,7 @@
       kakao.maps.event.removeListener(map, 'zoom_changed', ae1)
       kakao.maps.event.removeListener(map, 'zoom_changed', cc)
 
-      fetchData(map, geocoder)
+      // fetchData(map, geocoder)
 
     })
   }
@@ -385,6 +385,7 @@
 
   function fetchData(map, geocoder) {
     const data = getData(map)
+    console.log("asd")
     fetch(`http://localhost:3000/api/hospitals/around`, {
       method: 'POST',
       headers: {
