@@ -21,17 +21,18 @@ class TokenController {
 
         // const user = await this.tokenService.findUserId(loginId)
 
-        const newAccessToken = jwt.sign({refreshToken}, process.env.JWT_SECRET_KEY)
+        // const newAccessToken = jwt.sign({refreshToken}, process.env.JWT_SECRET_KEY)
 
-        // jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, (err, decode) => {
-        //     if(err) {
-        //         res.send("로그인 다시 하세요")
-        //     } else {
-        //         const newAccessToken = jwt.sign({loginId: user.loginId}, process.env.JWT_SECRET_KEY)
-        //         //재발급할때 그냥 refreshToken으로 재발급하는지
-        //         res.send(newAccessToken)
-        //     }
-        // })
+//refreshToken이 아니라 현재 로그인이 된 id
+        const newAccessToken = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, (err, decode) => {
+            if(err) {
+                res.send("로그인 다시 하세요")
+            } else {
+                const newAccessToken = jwt.sign({loginId: user.loginId}, process.env.JWT_SECRET_KEY)
+                //재발급할때 그냥 refreshToken으로 재발급하는지
+                res.send(newAccessToken)
+            }
+        })
         res.status(200).json({"message":"newAccessToken 발급 성공", newAccessToken});
     };
 }

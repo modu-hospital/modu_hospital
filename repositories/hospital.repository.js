@@ -297,6 +297,27 @@ class HospitalRepository {
         }
     };
 
+    // 의사 등록하기
+    registerdoctor = async (hospitalId, name, image, contents) => {
+        try {
+            // 로그인 접속 -> user 정보를 가지고 있음
+            // userId -> 병원 table 을 찾기 -> hospitalId를 가지고 옴
+            // hospitalId, name, image, contents, 생성
+            await this.doctorModel.create({
+                hospitalId,
+                name,
+                image,
+                contents,
+            });
+            return { status: 200, success: true, message: '의사를 등록 완료되었습니다.' };
+        } catch (error) {
+            (error.name = 'DB 에러'),
+                (error.message = '해당 요청을 처리하지 못했습니다.'),
+                (error.status = 400);
+            throw error;
+        }
+    };
+
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {
         try {

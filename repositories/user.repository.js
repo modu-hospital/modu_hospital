@@ -1,6 +1,4 @@
-const { where, or, op, QueryTypes } = require('sequelize');
-const { sequelize } = require('../models');
-const db = require('../models');
+
 
 class UserRepository {
     constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
