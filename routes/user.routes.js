@@ -23,6 +23,6 @@ router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
 router.post('/login', auth, userController.login); //auth
 router.post('/logout', userController.logout);
-// router.get("/refreshtoken", userController.refreshToken) //refreshtoken저장 API
+
 
 module.exports = router;

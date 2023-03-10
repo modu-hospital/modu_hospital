@@ -1,6 +1,7 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
 const Validation = require('../lib/validation');
+const jwt = require('jsonwebtoken');
 
 class UserController {
     userService = new UserService();
@@ -173,23 +174,21 @@ class UserController {
     login = async (req, res, next) => {
         const { loginId, password } = req.body;
 
+        console.log("컨트롤러러")
+
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        // const { accessToken, refreshToken } = await this.userService.login(loginId, password);
-        const user = await this.userService.login(loginId, password);
+        const { user, accessToken, refreshToken } = await this.userService.login(loginId, password);
 
-        const userId = res.locals.user;
-        const token = req.cookies.refreshToken;
+        await this.userService.saveToken({userId: user.userId}, {token: refreshToken});
+       
 
-        console.log("유저컨트롤러")
-
-        console.log("userId", userId)
+        // console.log("userId", user.userId) //undefined
         // console.log("token", token)
 
-        const saveToken = await this.userService.saveToken(userId, token);
+        // await this.userService.saveToken({user: accessToken.userId}, refreshToken);
 
-        res.json({user});
-
-        // next(err)
+        res.status(200).json(accessToken, refreshToken);
+        
     };
 
     logout = async (req, res) => {

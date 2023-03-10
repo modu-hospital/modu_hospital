@@ -69,8 +69,6 @@ class UserService {
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
 
-        console.log(user)
-
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 
         if (!user || !isPasswordCorrect) {
@@ -87,7 +85,7 @@ class UserService {
         res.cookie("accessToken", accessToken)
         res.cookie("refreshToken", refreshToken)
 
-        return { message:"로그인" };
+        return {message: "로그인 성공"};
     };
 
     findUsers = async () => {
@@ -146,8 +144,8 @@ class UserService {
     };
 
     saveToken = async (userId, token) => {
-        await this.userRepository.tokenSave(userId, token);
-        return { message: '토큰이 저장되었습니다' };
+        
+        return await this.userRepository.tokenSave(userId, token);
     };
 }
 

@@ -299,6 +299,8 @@ class HospitalController {
                 .json({ success: error.success, message: error.message });
         }
     };
+
+    //병원 상세 조회
 }
 
 module.exports = HospitalController;
