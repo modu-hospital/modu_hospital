@@ -1,0 +1,152 @@
+/* #reservation_share {
+    margin: 50px;
+    width: 970px;
+    border-collapse: collapse;
+    color: #505050;
+    border: 1px solid #f0f0f0;
+}
+
+#reservation_share td.top {
+    padding-bottom: 10px;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+#reservation_share td.title {
+    padding-left: 15px;
+    width: 110px;
+    height: 90px;
+    font-weight: 700;
+    font-size: 20px;
+    border-bottom: 1px solid #dcdcdc;
+    background-color: #fbedaa;
+}
+
+#reservation_share td.content {
+    font-size: 19px;
+    width: 320px;
+    padding-left: 20px;
+    border-bottom: 1px solid #dcdcdc;
+} */
+
+#reservation_user {
+    margin: 50px;
+    width: 600px;
+    border-collapse: collapse;
+    color: #505050;
+    /* 		border: 1px solid #dcdcdc; */
+}
+#reservation_user td.top {
+    padding-bottom: 20px;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+#reservation_user td.title {
+    padding: 15px;
+    font-weight: 700;
+    font-size: 20px;
+}
+#reservation_user td.content {
+    font-size: 19px;
+    width: 450px;
+    padding-left: 20px;
+}
+
+#reservation_time {
+    margin: 50px;
+    width: 600px;
+    border-collapse: collapse;
+    color: #505050;
+    /* 		border: 1px solid #dcdcdc; */
+}
+#reservation_time td.top {
+    padding-bottom: 20px;
+    font-weight: 700;
+    font-size: 25px;
+}
+#reservation_time td.content {
+    padding-bottom: 50px;
+}
+
+#calendar {
+    margin-bottom: 50px;
+    padding: 10px;
+    width: 250px;
+    color: #505050;
+    border: 1px solid #dcdcdc;
+}
+#calendar td {
+    padding: 10px;
+}
+
+#timeTable {
+    margin-bottom: 50px;
+    padding: 5px;
+    width: 200px;
+    color: #505050;
+}
+#timeTable td {
+    padding: 8px;
+}
+
+#selectedDate {
+    width: 200px;
+    height: 25px;
+    padding: 10px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+#selectedTime {
+    width: 200px;
+    height: 25px;
+    padding: 10px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+#totalPrice {
+    width: 200px;
+    height: 25px;
+    padding: 10px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+
+#btn_submit {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    color: #fff;
+    background-color: #ace2f9;
+    font-weight: 700;
+
+    border: none;
+    /* 		border-radius: 10px; */
+
+    display: inline-block;
+    width: 300px;
+}
+#btn_submit:hover {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    color: #ace2f9;
+    background-color: #fff;
+    font-weight: 700;
+
+    border: 1px solid #ace2f9;
+    /* 		border-radius: 10px; */
+
+    display: inline-block;
+    width: 300px;
+}

@@ -104,9 +104,7 @@ $(document).ready(function () {
 $(document).ready(function getCustomUserInfo() {
     const urlSearch = new URLSearchParams(location.search);
     const page = Number(urlSearch.get('page'));
-    console.log(page);
     const type = urlSearch.get('type');
-    console.log(type);
     $.ajax({
         type: 'GET',
         url: `/api/admin/customer?page=${page || 1}&type=${type}`,
