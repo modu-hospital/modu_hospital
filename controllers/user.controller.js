@@ -1,6 +1,7 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
 const Validation = require('../lib/validation');
+const jwt = require('jsonwebtoken');
 
 class UserController {
     userService = new UserService();
@@ -151,14 +152,13 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
         try {
-            const { name, phone, loginId, password, confirm, idNumber } =
+            const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
                 name,
-                phone,
                 loginId,
                 password,
-                confirm,
+                phone,
                 idNumber,
                 role
             );
@@ -173,14 +173,13 @@ class UserController {
     customerSignup = async (req, res) => {
         const role = 'customer';
         try {
-            const { name, phone, loginId, password, confirm, idNumber } =
+            const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
                 name,
-                phone,
                 loginId,
                 password,
-                confirm,
+                phone,
                 idNumber,
                 role
             );
@@ -193,18 +192,24 @@ class UserController {
         }
     };
 
-    login = async (req, res) => {
+    login = async (req, res, next) => {
         const { loginId, password } = req.body;
 
+        console.log("컨트롤러러")
+
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const { accessToken, refreshToken } = await this.userService.login(loginId, password);
+        const { user, accessToken, refreshToken } = await this.userService.login(loginId, password);
 
-        // tokenObject[refreshToken] = loginId
+        await this.userService.saveToken({userId: user.userId}, {token: refreshToken});
+       
 
-        res.cookie('accessToken', accessToken);
-        res.cookie('refreshToken', refreshToken);
+        // console.log("userId", user.userId) //undefined
+        // console.log("token", token)
 
-        res.json({ accessToken, refreshToken });
+        // await this.userService.saveToken({user: accessToken.userId}, refreshToken);
+
+        res.status(200).json(accessToken, refreshToken);
+        
     };
 
     logout = async (req, res) => {

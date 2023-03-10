@@ -5,9 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
+    "test:watch":"jest --watch",
+    "test:cov":"jest --coverage",
     "start": "nodemon app",
     "prettify": "prettier --write *.js **/*.js",
-    "test:unit": "jest __test__/unit --forceExit"
+    "test:integration": "jest __test__/integration --forceExit"
   },
   "repository": {
     "type": "git",
