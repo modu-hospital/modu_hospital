@@ -8,7 +8,12 @@ router.get('/', (req, res) => {
 
 // 서비스관리자 페이지
 router.get('/admin', (req, res) => {
-    res.render('admin.ejs');
+    res.render('index.ejs', { components: 'admin' });
+});
+
+// 예약페이지
+router.get('/users/reservation', (req, res) => {
+    res.render('index.ejs', { components: 'reservation' });
 });
 
 router.get('/users/mypage/:userId', (req, res) => {

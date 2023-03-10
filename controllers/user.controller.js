@@ -8,32 +8,53 @@ class UserController {
     reservationService = new ReservationService();
     validation = new Validation();
 
-    // (admin) all 조회
-    getUserInfo = async (req, res) => {
+    // (admin) all role 조회 + pagination
+    getAllPagination = async (req, res, next) => {
         try {
-            const UserInfo = await this.userService.findUsers();
-            res.status(200).send(UserInfo);
-        } catch (error) {
-            return res.status(err.status).json({ message: error.message });
+            const pageNum = req.query.page || 1;
+            const type = req.query.type;
+            const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
+            return res.status(200).json(PaginationByRole);
+        } catch (err) {
+            next(err);
         }
     };
 
     // (admin) role별 조회
-    getRoleUser = async (req, res) => {
+    getRoleUser = async (req, res, next) => {
         try {
             const { role } = req.params;
-            const roleUserInfo = await this.userService.findUserRole(role);
-            res.status(200).send(roleUserInfo);
-        } catch (error) {
-            return res.status(error.status).json({ message: error.message });
+            const pageNum = req.query.page || 1;
+            const type = req.query.type;
+
+            const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
+            return res.status(200).send(roleUserInfo);
+        } catch (err) {
+            next(err);
         }
     };
 
     // (admin) defalutDelete
-    defalutDelete = async (req, res) => {
-        const { userId } = req.params;
-        const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
-        return res.status(200).json(sequenceDelete);
+    defalutDelete = async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
+            return res.status(200).json(sequenceDelete);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    // (admin) 파트너승인
+    roleUpdate = async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            const { role } = req.body;
+            const roleUpdate = await this.userService.roleUpdate(userId, role);
+            return res.status(200).json(roleUpdate);
+        } catch (err) {
+            next(err);
+        }
     };
 
     //mypage

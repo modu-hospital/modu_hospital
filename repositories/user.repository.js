@@ -1,5 +1,3 @@
-
-
 class UserRepository {
     constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
         this.userModel = UserModel;
@@ -66,6 +64,65 @@ class UserRepository {
     // 병원삭제
     HospitalDeleteOne = async (userId) => {
         return await this.hospitalModel.destroy({ where: { userId } });
+    };
+
+    userRoleUpdate = async (userId, role) => {
+        const userRoleUpdate = await this.userModel.update(
+            {
+                role: role,
+            },
+            {
+                where: { userId },
+            }
+        );
+        return userRoleUpdate;
+    };
+
+    PaginationByAll = async (limit, offset, type) => {
+        let users;
+        const tabType = { offset, limit };
+        if (type === 'customer') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    role: 'customer',
+                },
+            });
+        } else if (type === 'partner') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    role: 'partner',
+                },
+            });
+        } else if (type === 'waiting') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    role: 'waiting',
+                },
+            });
+        } else {
+            users = await this.userModel.findAndCountAll({
+                offset,
+                limit,
+            });
+        }
+        return users;
+    };
+
+    PaginationByRole = async (limit, offset, role, type) => {
+        let users;
+        const tabType = { offset, limit };
+        users = await this.userModel.findAndCountAll({
+            ...tabType,
+            where: { role },
+        });
+        return users;
+    };
+
+    emailPasswordCheck = async (loginId) => {
+        return await this.userModel.findAll({ where: { loginId } });
     };
 }
 
