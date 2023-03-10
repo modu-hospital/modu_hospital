@@ -306,6 +306,8 @@ class HospitalController {
         // cosnt userId = currentUser.id;
         const userId = 42;
     };
+
+    //병원 상세 조회
 }
 
 module.exports = HospitalController;

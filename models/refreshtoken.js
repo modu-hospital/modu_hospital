@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            tableName: 'refreshtokens',
+            tableName: 'refreshTokens',
             modelName: 'RefreshToken',
         }
     );

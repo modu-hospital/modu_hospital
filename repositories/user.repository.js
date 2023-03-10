@@ -1,10 +1,11 @@
 
 
 class UserRepository {
-    constructor(UserModel, HospitalModel, DoctorModel) {
+    constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
         this.userModel = UserModel;
         this.hospitalModel = HospitalModel;
         this.doctorModel = DoctorModel;
+        this.refreshTokenModel = RefreshTokenModel;
     }
 
     findUserById = async (userId) => {
@@ -28,12 +29,12 @@ class UserRepository {
         return editedProfile;
     };
 
-    signup = async (name, phone, loginId, password, idNumber, role) => {
-        return await this.userModel.create({ name, phone, loginId, password, idNumber, role });
+    signup = async (name, loginId, password, phone, idNumber, role) => {
+        return await this.userModel.create({ name, loginId, password, phone, idNumber, role });
     };
 
     findUser = async (loginId) => {
-        return await this.userModel.findOne({ loginId });
+        return await this.userModel.findOne({ where: { loginId } });
     };
 
     findUserRole = async (role) => {
@@ -54,13 +55,17 @@ class UserRepository {
         return await this.doctorModel.destroy({ where: { doctorId } });
     };
 
+    emailPasswordCheck = async (loginId) => {
+        return await this.userModel.findAll({ where: { loginId } });
+    };
+
+    tokenSave = async (userId, token) => {
+        return await this.refreshTokenModel.create({ userId, token });
+    };
+
     // 병원삭제
     HospitalDeleteOne = async (userId) => {
         return await this.hospitalModel.destroy({ where: { userId } });
-    };
-
-    emailPasswordCheck = async (loginId) => {
-        return await this.userModel.findAll({ where: { loginId } });
     };
 }
 
