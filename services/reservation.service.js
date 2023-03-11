@@ -1,15 +1,16 @@
 const ReservationRepository = require('../repositories/reservation.repository');
 const CreateError = require('../lib/errors');
-const { Reservation } = require('../models');
+const {sequelize} = require('../models')
+
 class ReservationService {
-    reservationRepository = new ReservationRepository(Reservation);
+    reservationRepository = new ReservationRepository(sequelize)
     createError = new CreateError();
 
     cancelReservation = async (id) => {
         const reservation = await this.reservationRepository.findReservationById(id);
         if (reservation.status == 'done' || reservation.status == 'reviewed') {
-            const err = await this.createError.reservationAlreadyDone();
-            throw err;
+            const err = await this.createError.reservationAlreadyDone(); 
+            throw err
         }
         if (reservation.status == 'canceled') {
             const err = await this.createError.reservationAlreadyCanceled();
@@ -25,7 +26,6 @@ class ReservationService {
 
     createReview = async (reservationId, star, contents) => {
         const reservation = await this.reservationRepository.findReservationById(reservationId);
-        console.log(reservation.status);
         if (reservation.status === 'reviewed') {
             const err = this.createError.reviewAlreadyCreated();
             throw err;

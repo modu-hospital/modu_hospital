@@ -13,6 +13,8 @@ router.get('/mypage/waiting', userController.getWaitingReservation);
 
 router.get('/mypage/doneorreviewed', userController.getDoneOrReviewedReservation);
 
+router.get('/mypage/canceled', userController.getCanceledReservation);
+
 router.patch('/mypage/editprofile/:userId', userController.editUserProfile);
 
 router.patch('/mypage/cancel/:id', userController.cancelReservation);
@@ -21,11 +23,8 @@ router.post('/mypage/review/:id', userController.createReview);
 
 router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
-router.post('/login', userController.login);
+router.post('/login', auth, userController.login); //auth
 router.post('/logout', userController.logout);
-// router.get("/refreshtoken", userController.refreshToken) //refreshtoken저장 API
 
-// router.get("/accesstoken", userController.accessToken)
-// router.get('/login/success', userController.loginSuccess)
 
 module.exports = router;

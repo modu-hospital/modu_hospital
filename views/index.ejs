@@ -11,7 +11,10 @@
 
         <!-- ajax -->
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        />
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -27,18 +30,18 @@
             integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
             crossorigin="anonymous"
         />
-        <link
-             rel="stylesheet"
-             href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjBh/nUcbJ5PFzn0UwGdKh"
-             crossorigin="anonymous"
-        />
+        <!-- <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjBh/nUcbJ5PFzn0UwGdKh"
+            crossorigin="anonymous"
+        /> -->
 
         <!-- css -->
-        <link rel="stylesheet" href="./css/hospitalRegister.css" />
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/tabmenu.css" />
-        <noscript> <link rel="stylesheet" href="./css/noscript.css" /> </noscript>
+        <link rel="stylesheet" href="/css/hospitalRegister.css" />
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/tabmenu.css" />
+        <noscript> <link rel="stylesheet" href="/css/noscript.css" /> </noscript>
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
@@ -54,18 +57,25 @@
             <% if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% } %>
             <% if (components === "hospitalEdit") { %> <%- include('hospitalEdit.ejs') %> <% } %>
             <% if (components === "doctorRegister") { %> <%- include('doctorRegister.ejs') %> <% } %>
+            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %> 
+            <% if (components === "map") { %> <%- include('map.ejs') %> <% } %>
+            <% if (components === "reservation") { %> <%- include('reservation.ejs') %> <% } %> 
+            <% if (components === "admin") { %> <%- include('admin.ejs') %> <% } %>
+
 
             <!-- Footer -->
             <%- include('footer.ejs') %>
         </div>
 
         <!-- Scripts -->
-        <script src="./js/jquery.min.js"></script>
-        <script src="./js/browser.min.js"></script>
-        <script src="./js/breakpoints.min.js"></script>
-        <script src="./js/util.js"></script>
-        <script src="./js/main.js"></script>
-        <script src="./js/tabmenu.js"></script> 
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/browser.min.js"></script>
+        <script src="/js/breakpoints.min.js"></script>
+        <script src="/js/util.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/tabmenu.js"></script>
+        <script src="/js/admin.js"></script>
+        <script src="/js/reservation.js"></script>
         <script src="./js/road.js"></script>
     </body>
 </html>

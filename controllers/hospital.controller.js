@@ -348,9 +348,6 @@ class HospitalController {
         }
     }
 
-    
-
-
 }
 
 module.exports = HospitalController;
