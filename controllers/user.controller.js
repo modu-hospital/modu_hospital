@@ -118,6 +118,18 @@ class UserController {
             next(err);
         }
     };
+    getCanceledReservation = async (req, res, next) => {
+        try {
+            const { userId, page } = req.query;
+            const canceled = await this.userService.getCanceledReservation(
+                userId,
+                page
+            );
+            return res.status(200).json(canceled);
+        } catch (err) {
+            next(err);
+        }
+    };
 
     cancelReservation = async (req, res, next) => {
         try {
