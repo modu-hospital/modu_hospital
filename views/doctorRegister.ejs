@@ -1,0 +1,55 @@
+<h1>의사 정보 등록</h1>
+<form id="form">
+    <div>
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name">
+    </div>
+    <div>
+        <label for="contents">내용:</label>
+        <textarea id="contents" name="contents"></textarea>
+    </div>
+    <div>
+        <label for="image">프로필 이미지:</label>
+        <input type="file" id="image" name="image">
+    </div>
+    <div>
+        <button type="submit">등록</button>
+    </div>
+</form>
+<script>
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const contents = document.getElementById('contents').value;
+        const imageInput = document.getElementById('image');
+        const imageFile = imageInput.files[0];
+
+        if (!imageFile) {
+            alert('파일을 선택해주세요.');
+            return;
+        }
+        
+        const formData = new FormData();
+              formData.append('name', name);
+              formData.append('contents', contents);
+              formData.append('image', imageFile);
+
+
+        try {
+            const response = await fetch('/api/hospitals/register/doctor', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                alert('의사 정보 등록 성공');
+                const data = await response.json();
+                console.log(data);
+            } else {
+                alert('의사 정보 등록 실패');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+</script>
