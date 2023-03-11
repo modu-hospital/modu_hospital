@@ -1,6 +1,6 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken } = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -49,6 +49,13 @@ class UserService {
             page
         );
         return doneOrReviewed;
+    };
+    getCanceledReservation = async (userId, page) => {
+        const canceled = await this.reservationRepository.getCanceledReservation(
+            userId,
+            page
+        );
+        return canceled;
     };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
