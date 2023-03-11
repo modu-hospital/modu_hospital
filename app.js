@@ -7,7 +7,6 @@ const path = require('path');
 const app = express();
 dotenv.config();
 
-
 const http = createServer(app);
 
 /* define router */

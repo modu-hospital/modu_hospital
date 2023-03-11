@@ -297,7 +297,7 @@ class HospitalRepository {
 
     // 의사 등록하기
     registerdoctor = async (hospitalId, name, image, contents) => {
-           return await this.doctorModel.create({ hospitalId, name, image, contents });
+        return await this.doctorModel.create({ hospitalId, name, image, contents });
     };
 
     // 화면 위치 기준 병원 찾기

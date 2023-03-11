@@ -3,8 +3,7 @@ const router = express.Router();
 
 // upload
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/'})
-
+const upload = multer({ dest: 'uploads/' });
 
 const HospitalController = require('../controllers/hospital.controller');
 const hospitalController = new HospitalController();
@@ -44,8 +43,8 @@ router.put(
 //우리 병원 정보 조회
 router.get('/information', hospitalController.findOneHospital);
 
-//우리 병원 의사 등록 
-router.post('/register/doctor', upload.single('image'),hospitalController.registerdoctor);
+//우리 병원 의사 등록
+router.post('/register/doctor', upload.single('image'), hospitalController.registerdoctor);
 
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
