@@ -65,18 +65,14 @@ const authMiddleware = async (req, res, next) => {
     // access 검증 후, expired 만료시
     // 만료가 되면 재발급
     if (!accessTokenValidate) { //accessToken만료시
-
-        //{where: {token: refreshToken}}
-
-        console.log("@@@@refreshToken", refreshToken)
+        // console.log("@@@@refreshToken", refreshToken)
 
         const token = await RefreshToken.findAll({where: {token: refreshToken}})
-
-        //발급된 refreshToken의 조건으로 token를 찾는건지 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거지
+        //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
         //console.log("#####token", token[0].token)
 
-        //refreshToken 유효 여부 검증 한후 
+        //refreshToken 유효 여부 검증 한 후 
         //payload가 잘 들어갔는지 확인하고 싶음 userId.loginId값 확인하고 싶음
         const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY)
 

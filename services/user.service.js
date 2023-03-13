@@ -82,7 +82,7 @@ class UserService {
         if (!user || !isPasswordCorrect) {
             return;
         }
-
+        
         return user[0];
     };
 

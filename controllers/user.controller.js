@@ -211,6 +211,8 @@ class UserController {
 
         const user = await this.userService.login(loginId, password);
         console.log("@@@user", user.userId) //왜 유저가 null로 찍히는지
+        //TypeError: Cannot read properties of undefined (reading 'userId')
+        //값이 없기 때문에 잘못된 계정으로 로그인 시도
 
         //토큰 생성 컨트롤러에서
         const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
@@ -231,8 +233,7 @@ class UserController {
     // refreshToken이 있다면 verify 시켜주고 verify한 refreshToken이 만료됬다면 //update로 새로 만들기??
     // refreshToken이 없다면 그냥 save
 
-    // const {id: userId} = res.locals
-    //로컬스가 안 찍힘
+    // res.locals
     //전에 어떤 식으로 활용했었는지 확인
 
         const refresh = await this.userService.findToken(user.userId)
@@ -243,9 +244,10 @@ class UserController {
                 const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
                 return reupdate
             }
+            res.json(verify)
         } else {
             const save = await this.userService.saveToken(user.userId, refreshToken);
-            return save
+            res.json(save) 
         }
 
         res.status(200).json({accessToken, refreshToken});
