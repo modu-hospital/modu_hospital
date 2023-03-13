@@ -22,7 +22,6 @@ class CategoryRepository {
                 {
                     model: this.doctorCategoryMappingModel,
                     as: 'categoriesMapping',
-                    required: true,
                     include: [
                         {
                             model: this.doctorModel,
