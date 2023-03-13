@@ -1,6 +1,6 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User,Hospital, Doctor, RefreshToken} = require('../models');
+const { User,Hospital, Doctor, RefreshToken, sequelize} = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -85,7 +85,7 @@ class UserService {
         res.cookie("accessToken", accessToken)
         res.cookie("refreshToken", refreshToken)
 
-        return {message: "로그인 성공"};
+        return {accessToken, refreshToken};
     };
 
     findUsers = async () => {

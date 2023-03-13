@@ -14,6 +14,8 @@ class TokenController {
 
         const refreshToken = req.cookies.refreshToken
         if(!refreshToken) {
+            res.clearCookie('accessToken')
+            res.clearCookie('refreshToken')
             res.send("로그인 다시 하세요")
         }
 

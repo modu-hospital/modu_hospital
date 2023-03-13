@@ -16,7 +16,7 @@ router.get('/users/mypage/:userId', (req, res) => {
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs', { compnents: 'map' });
+    res.render('map.ejs', { components: 'map' });
 });
 
 //원장님의 공간
@@ -33,5 +33,10 @@ router.get('/register', (req, res) => {
 router.get('/edit', (req, res) => {
     res.render('index.ejs', { components: 'hospitalEdit' });
 });
+
+//병원상세페이지
+router.get('/detail', (req, res) => {
+    res.render('hospitalDetail.ejs')
+})
 
 module.exports = router;
