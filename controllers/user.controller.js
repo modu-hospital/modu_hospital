@@ -79,7 +79,7 @@ class UserController {
                 userId.userId,
                 address,
                 phone,
-                name
+                name,
             );
             return res.status(201)
         } catch (err) {
@@ -228,6 +228,41 @@ class UserController {
         res.clearCookie(); //res.cookie('accessToken', '')
         return res.status(200).json({ message: '로그아웃 되었습니다.' });
     };
+
+    sendEmailForCertification = async (req,res,next) => {
+       try {
+        const email = req.body.email
+         const sendEmail = await this.userService.sendEmailForCertification(email)
+         return res.status(200).json({message:'인증번호가 발송되었습니다'})
+       } catch (err) {
+        next(err)
+       }
+    }
+
+    sendEmailForResetPassword = async (req,res,next) => {
+        try{
+            const email = req.body.email
+            const sendEmail = await this.userService.sendEmailForResetPassword(email)
+            return res.status(200).json({message:'이메일이 발송되었습니다.'})
+        }catch(err){
+            next(err)
+        }
+    }
+    resetPassword = async (req,res,next) => {
+        try{
+        const {email, password, confirm, params} = req.body
+        await this.userService.resetPassword(email,password,confirm,params)
+        return res.status(200).json({message : '비밀번호 재설정이 완료되었습니다.'})
+        }catch(err){
+            next(err)
+        }
+    }
+    editUserPassword = async (req,res,next) => {
+        try{
+        }catch(err){
+            next(err)
+        }
+    }
 }
 
 module.exports = UserController;

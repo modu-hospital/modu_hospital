@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/userData/:userId', userController.getUserProfile);
+router.get('/mypage/userdata/:userId', userController.getUserProfile);
 
 router.get('/mypage/approved', userController.getApprovedReservation);
 
@@ -25,6 +25,15 @@ router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
 router.post('/login', auth, userController.login); //auth
 router.post('/logout', userController.logout);
+
+router.get('/email/certification/send', userController.sendEmailForCertification)
+
+router.get('/email/resetpassword/send', userController.sendEmailForResetPassword)
+
+router.patch('/resetpassword', userController.resetPassword)
+
+router.patch('/mypage/editpassword', userController.editUserPassword)
+
 
 
 module.exports = router;

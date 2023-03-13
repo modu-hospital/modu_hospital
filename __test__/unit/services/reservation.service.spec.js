@@ -20,7 +20,7 @@ describe('Reservation Service Unit Test', () => {
         jest.resetAllMocks();
     });
 
-    describe('cancelReservation()', () => {
+    describe('cancelReservation', () => {
         it('should throw ReservationAlreadyDone error', () => {
             const statusDone = {
                 status : 'done'
@@ -50,7 +50,7 @@ describe('Reservation Service Unit Test', () => {
         //     expect(async () => {await reservationService.cancelReservation(1)}).toEqual(reservationService.reservationRepository.editReservationStatusById())
         // })
     })
-    describe('createReview()', () => {
+    describe('createReview', () => {
         it('should throw ReviewAlreadyCreated error', async () => {
             const statusReviewed = {
                 status:"reviewed"
