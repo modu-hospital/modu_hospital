@@ -53,10 +53,12 @@ class UserRepository {
         return await this.doctorModel.destroy({ where: { doctorId } });
     };
 
+    //계정검사
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
 
+    //토큰 저장
     tokenSave = async (userId, token) => {
         return await this.refreshTokenModel.create({ userId, token });
     };
@@ -124,6 +126,16 @@ class UserRepository {
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
+
+    //userId로 refreshtoken 찾기
+    findToken = async (userId) => {
+        return await this.refreshTokenModel.findAll({where: {userId}})
+    }
+
+    //token 수정
+    updateToken = async (userId, token) => {
+        return await this.refreshTokenModel.update({token}, {where: {userId}})
+    }
 }
 
 module.exports = UserRepository;

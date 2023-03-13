@@ -60,7 +60,6 @@ class UserService {
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
-        console.log(existUser)
 
         if (existUser) {
             return {message: "이미 있는 회원"}
@@ -75,14 +74,16 @@ class UserService {
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
+        console.log("user[0].password", user[0].password)
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+        console.log("isPasswordCorrect", isPasswordCorrect)
 
         if (!user || !isPasswordCorrect) {
             return;
         }
 
-        return user;
+        return user[0];
     };
 
     findUsers = async () => {
@@ -145,6 +146,14 @@ class UserService {
     saveToken = async (userId, token) => {
         return await this.userRepository.tokenSave(userId, token);
     };
+
+    findToken = async (userId) => {
+        return await this.userRepository.findToken(userId)
+    }
+
+    updateToken = async(userId, token) => {
+        return await this.userRepository.updateToken(userId, token)
+    }
 }
 
 module.exports = UserService;

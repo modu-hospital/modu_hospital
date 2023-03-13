@@ -23,16 +23,14 @@ const authMiddleware = async (req, res, next) => {
     // 요청을 처리하기전에 중간에 기능을 동작시켜주는 애
 
     //쿠키를 가져온다
-    const { accessToken, refreshToken } = req.cookies;
+    let { accessToken, refreshToken } = req.cookies;
 
-    console.log(accessToken, refreshToken)
     //토큰 존재 확인
-    if (!accessToken || !refreshToken) { //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
-        return next()//res.status(400).json({message:"토큰이 없음"})
+    //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
+    if (!accessToken || !refreshToken) { 
+        return next()
         // return {message:"로그인 다시 해주세요"}
     }
-
-    console.log("아무거나1111111")
 
     //accessToken 검증
     const accessTokenValidate = validateAccess(accessToken);
@@ -44,8 +42,6 @@ const authMiddleware = async (req, res, next) => {
             return false;
         }
     }
-
-    console.log("아무거나2222222")
 
     //refreshToken 검증
     const refreshTokenValidate = validateRefresh(refreshToken);
@@ -59,198 +55,45 @@ const authMiddleware = async (req, res, next) => {
         }
     }
 
-    console.log("아무거나33333333")
-
-        // refreshToken 만료시
+    // refreshToken 만료시
     if (!refreshTokenValidate) { 
         res.clearCookie('accessToken')
         res.clearCookie('refreshToken')
         return res.status(400).json({message:"refreshToken 만료"})
     }
 
-    console.log("아무거나33333333")
-
     // access 검증 후, expired 만료시
     // 만료가 되면 재발급
     if (!accessTokenValidate) { //accessToken만료시
-        
-        // refreshToken이 없으면 위에서 먼저 걸려줌
-        //accessToken과 refreshToken 모두 만료 상태? => 로그인 다시하기
-        if(!refreshTokenValidate) {
-            res.clearCookie('accessToken')
-            res.clearCookie('refreshToken')
-            return next()
-        }//이것도 위에서 걸러주는거 아닌가?
 
-        console.log("아무거나@@@")
-        return next()
-    } else {
+        //{where: {token: refreshToken}}
 
-        //현재로그인이 된 아이디 값과과 refreshToken에 들어있는 아이디 값은 refreshToken
-        const {userId} = jwt.verify(accessToken, JWT_SECRET_KEY)
+        console.log("@@@@refreshToken", refreshToken)
 
-        const user = await User.findByPk(userId) 
+        const token = await RefreshToken.findAll({where: {token: refreshToken}})
 
-        if(user) {
-            res.locals.user = user
-            next()
-        }else {
-            return res.status(400).json({message: "회원가입하세요"})                                                                               
+        //발급된 refreshToken의 조건으로 token를 찾는건지 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거지
+
+        //console.log("#####token", token[0].token)
+
+        //refreshToken 유효 여부 검증 한후 
+        //payload가 잘 들어갔는지 확인하고 싶음 userId.loginId값 확인하고 싶음
+        const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY)
+
+        if(refreshTokenV) {
+            accessToken = jwt.sign({}, process.env.JWT_SECRET_KEY)//accessToken 새로 만들기
+            //(저장된 refreshToken을 조회해서 유효성 검사 후 유효하다면 재발급)
         }
-        next()
+        //return next()
     }
 
+        //현재로그인이 된 아이디 값과과 refreshToken에 들어있는 아이디 값은 refreshToken
+    const {userId} = accessTokenValidate
 
-    // next() //accessToken이 살아있다면
+    const user = await User.findByPk(userId) 
 
+    res.locals.user = user
 
-
-
-
-
-    // if (!accessTokenValidate) { //accessToken만료시
-        
-    //     // refreshToken이 없으면 위에서 먼저 걸려줌
-    //     //accessToken과 refreshToken 모두 만료 상태? => 로그인 다시하기
-    //     if(!refreshTokenValidate) {
-    //         res.clearCookie('accessToken')
-    //         res.clearCookie('refreshToken')
-    //         return next()
-    //     }//이것도 위에서 걸러주는거 아닌가?
-        
-    //     // refreshToken payload loginId가져다가 없으면 쿠키 지우고 다시 로그인
-
-    //     //이 코드가 왜 필요한지
-    //     // //리프레시 토큰의 userId의 페이로드.loginId값
-    //     // const getrefreshToken = await RefreshToken.findOne({where: {refreshToken}})
-    //     // console.log("getrefreshToken", getrefreshToken)
-        
-    //     // //payload의loginId가 현재 로그인된 loginId
-
-    //     // // console.log("아무거나44444444")
-
-    //     // if(!getrefreshToken) {
-    //     //     res.clearCookie('accessToken')
-    //     //     res.clearCookie('refreshToken')
-    //     //     return res.status(400).json({message:"access가 만료된 상태에서 토큰값을 불러오지 못함"})
-    //     // }
-
-      
-    //     // if(getrefreshToken !== refreshToken) {
-    //     //     res.clearCookie('accessToken')
-    //     //     res.clearCookie('refreshToken')
-    //     //     return res.status(400).json({message:"db에서 가져온 refreshToken이랑 cookie에 저장된 refreshToken이랑 다름"})
-    //     // }
-
-    //     console.log("아무거나@@@")
-    //     //refreshToken이 있으면 accessTomen 재발급 api는 프론트에서 적용시켜준다
-
-
-    //     //여기서 바로 token api로 작동시킬 수 있는지 
-    //     //return ....token api 경로ㅊ
-    //     re
-    // } else {
-    
-    // try{
-    //     //쿠키를 가져온다
-    //     const { accessToken, refreshToken } = req.cookies;
-
-    //     console.log(accessToken, refreshToken)
-    //     //토큰 존재 확인
-    //     if (!accessToken || !refreshToken) { //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
-    //         return res.status(400)({message:"토큰이 없음"})
-    //         // return {message:"로그인 다시 해주세요"}
-    //     }
-
-    //     console.log("아무거나!!")
-
-    //     //accessToken 검증
-    //     const accessTokenValidate = validateAccess(accessToken);
-    //     function validateAccess(accessToken) {
-    //         try {
-    //             const vertify = jwt.verify(accessToken, JWT_SECRET_KEY);
-    //             return vertify;
-    //         } catch (err) {
-    //             return false;
-    //         }
-    //     }
-
-    //     //refreshToken 검증
-    //     const refreshTokenValidate = validateRefresh(refreshToken);
-
-    //     function validateRefresh(refreshToken) {
-    //         try {
-    //             const vertify = jwt.verify(refreshToken, JWT_SECRET_KEY);
-    //             return vertify;
-    //         } catch (err) {
-    //             return false;
-    //         }
-    //     }
-
-    //      // refreshToken 만료시
-    //     if (!refreshTokenValidate) { 
-    //         res.clearCookie('accessToken')
-    //         res.clearCookie('refreshToken')
-    //         return res.status(400)({message:"refreshToken 만료"})
-    //     }     
-
-    //     // access 검증 후, expired 만료시
-    //     // 만료가 되면 재발급
-    //     if (!accessTokenValidate) { //accessToken만료시
-            
-    //         // refreshToken이 없으면 //accessToken과 refreshToken 모두 만료 상태? 
-    //         // refreshToken payload loginId가져다가 없으면 쿠키 지우고 다시 로그인
-
-    //         //리프레시 토큰의 userId의 페이로드.loginId값
-    //         const getrefreshToken = await RefreshToken.findOne({where: {refreshToken}})
-    //         console.log("getrefreshToken", getrefreshToken)
-    //         //현재로그인이 된 아이디 값고 refreshToken에 들어있는 아이디 값은 refreshToken
-    //         //payload의loginId가 현재 로그인된 loginId
-
-    //         if(!getrefreshToken) {
-    //             res.clearCookie('accessToken')
-    //             res.clearCookie('refreshToken')
-    //             return res.status(400)({message:"access가 만료된 상태에서 토큰값을 불러오지 못함"})
-    //         }
-
-    //         if(getrefreshToken !== refreshToken) {
-    //             res.clearCookie('accessToken')
-    //             res.clearCookie('refreshToken')
-    //             return res.status(400)({message:"db에서 가져온 refreshToken이랑 cookie에 저장된 refreshToken이랑 다름"})
-    //         }
-
-    //         console.log("아무거나@@@")
-    //         //refreshToken이 있으면 accessTomen 재발급 api는 프론트에서 적용시켜준다
-    //     } else {
-    //         const {loginId} = jwt.verify(accessToken, JWT_SECRET_KEY)
-
-    //         const user = await User.findByPk(loginId)
-
-    //         if(user) {
-    //             res.locals.user = user
-    //             next()
-    //         }else {
-    //             return res.status(400)({message: "회원가입하세요"})
-    //         }
-    //     }
-    //     //있다면 payload를 출력해주는
-    //     // const payload = jwt.verify(accessToken, JWT_SECRET_KEY);//안 찍힘
-    //     // console.log('##############payload', payload);
-
-    //     // const user = await User.findOne({ where: loginId });
-    //     // console.log('유저유저유저유저user', user); //안 찍힘
-
-    //     // console.log("@@@@@@@@@user.userId", user.userId) 
-    //     // //안 찍힘
-
-    //     // res.locals.user = user.userId;
-    //     // console.log('res.locals.user', res.locals.user);
-
-    //     next() //accessToken이 살아있다면
-    // } catch(err) {
-    //     res.cookie('accessToken', '')
-    //     res.cookie('refreshToken', '')
-    //     next(err)
-    // }
+    next()                                           
 }
 module.exports = authMiddleware;

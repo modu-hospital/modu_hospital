@@ -164,7 +164,8 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
-        const { name, loginId, password, confirm, phone, idNumber } =
+        try {
+            const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
             const user = await this.userService.signup(
                 name,
@@ -175,25 +176,12 @@ class UserController {
                 role
             );
             res.json(user);
-
-        // try {
-        //     const { name, loginId, password, confirm, phone, idNumber } =
-        //         await this.validation.signupValidation.validateAsync(req.body);
-        //     const user = await this.userService.signup(
-        //         name,
-        //         loginId,
-        //         password,
-        //         phone,
-        //         idNumber,
-        //         role
-        //     );
-        //     res.json(user);
-        // } catch (err) {
-        //     if (err.isJoi) {
-        //         return res.status(422).json({ message: err.details[0].message });
-        //     }
-        //     res.status(500).json({ message: err.message });
-        // }
+        } catch (err) {
+            if (err.isJoi) {
+                return res.status(422).json({ message: err.details[0].message });
+            }
+            res.status(500).json({ message: err.message });
+        }
     };
     customerSignup = async (req, res) => {
         const role = 'customer';
@@ -218,29 +206,49 @@ class UserController {
     };
 
     login = async (req, res, next) => {
+        console.log("컨트롤러")
         const { loginId, password } = req.body;
 
-        console.log("컨트롤러러")
-
-        //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
         const user = await this.userService.login(loginId, password);
-        console.log("user", user) //왜 유저가 null로 찍히는지
+        console.log("@@@user", user.userId) //왜 유저가 null로 찍히는지
 
         //토큰 생성 컨트롤러에서
-        const accessToken = jwt.sign({ loginId: user}, process.env.JWT_SECRET_KEY, {
+        const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
             expiresIn: '10s',
         });
-        const refreshToken = jwt.sign({ loginId: user}, process.env.JWT_SECRET_KEY, {
+
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
             expiresIn: '7d',
         });
 
         res.cookie("accessToken", accessToken)
         res.cookie("refreshToken", refreshToken)
 
-        await this.userService.saveToken(user, refreshToken);
+    // userId조건으로 refreshToken 찾아와서(userId의 조건으로 refreshToken 찾기)
+    // const refresh = await RefreshToken.findAll({where: {userId}})
+    // console.log(refresh) 값의 형태 알기 ex)refresh[0].refreshToken
+    //if(refresh[0].refreshToken)
+    // refreshToken이 있다면 verify 시켜주고 verify한 refreshToken이 만료됬다면 //update로 새로 만들기??
+    // refreshToken이 없다면 그냥 save
+
+    // const {id: userId} = res.locals
+    //로컬스가 안 찍힘
+    //전에 어떤 식으로 활용했었는지 확인
+
+        const refresh = await this.userService.findToken(user.userId)
+        // console.log("###refresh", refresh) //빈배열
+        if(refresh[0]) {
+            const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY)
+            if(!verify){
+                const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
+                return reupdate
+            }
+        } else {
+            const save = await this.userService.saveToken(user.userId, refreshToken);
+            return save
+        }
 
         res.status(200).json({accessToken, refreshToken});
-        
     };
 
     logout = async (req, res) => {
