@@ -81,7 +81,7 @@ class UserController {
                 phone,
                 name
             );
-            return res.status(201).json(editedProfile);
+            return res.status(201)
         } catch (err) {
             next(err);
         }
@@ -138,7 +138,7 @@ class UserController {
             const canceledReservation = await this.reservationService.cancelReservation(
                 reservationId.id
             );
-            return res.status(201).json(canceledReservation);
+            return res.status(201)
         } catch (err) {
             next(err);
         }
