@@ -14,7 +14,7 @@ class UserService {
     };
 
     getUserProfile = async (userId) => {
-        const user = await this.findAUserByUserId(userId);
+        const user = await this.findAUserByUserId(userId); 
         const userData = {
             userId: user.userId,
             loginId: user.loginId,
@@ -22,6 +22,7 @@ class UserService {
             phone: user.phone,
             address: user.address,
         };
+        
 
         return userData;
     };

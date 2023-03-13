@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/userData/:userId', userController.getUserProfile);
+router.get('/mypage/userdata/:userId', userController.getUserProfile);
 
 router.get('/mypage/approved', userController.getApprovedReservation);
 
