@@ -21,7 +21,7 @@ router.get('/users/mypage/:userId', (req, res) => {
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs', { components: 'map' });
+    res.render('map.ejs');
 });
 
 //원장님의 공간
