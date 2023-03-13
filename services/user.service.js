@@ -3,10 +3,13 @@ const ReservationRepository = require('../repositories/reservation.repository');
 const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const transPort = require('../config/nodemailer');
+const CreateError = require('../lib/errors')
 
 class UserService {
     userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken);
     reservationRepository = new ReservationRepository(sequelize);
+    createError = new CreateError()
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
@@ -14,7 +17,7 @@ class UserService {
     };
 
     getUserProfile = async (userId) => {
-        const user = await this.findAUserByUserId(userId); 
+        const user = await this.findAUserByUserId(userId);
         const userData = {
             userId: user.userId,
             loginId: user.loginId,
@@ -22,7 +25,6 @@ class UserService {
             phone: user.phone,
             address: user.address,
         };
-        
 
         return userData;
     };
@@ -52,10 +54,7 @@ class UserService {
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
-        const canceled = await this.reservationRepository.getCanceledReservation(
-            userId,
-            page
-        );
+        const canceled = await this.reservationRepository.getCanceledReservation(userId, page);
         return canceled;
     };
 
@@ -156,6 +155,62 @@ class UserService {
     saveToken = async (userId, token) => {
         return await this.userRepository.tokenSave(userId, token);
     };
+    sendEmailForCertification = (email) => {
+        const generateRandom = function (min, max) {
+            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            return randomNumber;
+        };
+
+        const number = generateRandom(111111, 999999);
+
+        const mailOptions = {
+            from: 'spartamoduhospital@gmail.com',
+            to: email,
+            subject: '모두의 병원 이메일 인증코드',
+            text: '인증 코드입니다. ' + number,
+        };
+
+        transPort.sendMail(mailOptions, (err, info) => {
+            console.log(info.envelope);
+            console.log(info.messageId);
+        });
+    };
+    sendEmailForResetPassword = async (email) => {
+        const user = await this.userRepository.findUserByEmail(email);
+        if (!user) {
+            const err = await this.createError.wrongEmail()
+            throw err
+        }
+        const params = await bcrypt.hash(email, 12);
+
+        const mailOptions = {
+            from: 'spartamoduhospital@gmail.com',
+            to: email,
+            subject: '모두의 병원 비밀번호 재설정',
+            text: 'params ' + params,
+        };
+
+        transPort.sendMail(mailOptions, (err, info) => {
+            console.log(info.envelope);
+            console.log(info.messageId);
+        });
+    };
+    resetPassword = async (email, password, confirm, params) => {
+        const user = await this.userRepository.findUserByEmail(email)
+        const match = await bcrypt.compare(email,params)
+        if(!user || !match){
+            throw this.createError.noAuthOrWrongEmail()
+        }
+        const passwordUpdated = await this.editPassword(user.userId, password, confirm)
+    }
+    editPassword = async (userId,password,confirm) => {
+        if(password != confirm){
+            throw this.createError.passwordNotMatched()
+        }
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const updated = await this.userRepository.updatePassword(userId, hashedPassword)
+        return updated
+    }
 }
 
 module.exports = UserService;
