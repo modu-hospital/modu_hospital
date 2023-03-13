@@ -1,6 +1,6 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken, sequelize} = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -51,24 +51,28 @@ class UserService {
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
-        const canceled = await this.reservationRepository.getCanceledReservation(
-            userId,
-            page
-        );
+        const canceled = await this.reservationRepository.getCanceledReservation(userId, page);
         return canceled;
     };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
-        console.log(existUser)
+        console.log(existUser);
 
         if (existUser) {
-            return {message: "이미 있는 회원"}
+            return { message: '이미 있는 회원' };
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const sign = await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
+        const sign = await this.userRepository.signup(
+            name,
+            loginId,
+            hashedPassword,
+            phone,
+            idNumber,
+            role
+        );
 
         return sign;
     };
@@ -76,13 +80,19 @@ class UserService {
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
 
-        const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
-
-        if (!user || !isPasswordCorrect) {
-            return;
+        if (!user) {
+            throw new Error();
         }
 
-        return user;
+        const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+
+        console.log(isPasswordCorrect);
+
+        if (!isPasswordCorrect) {
+            throw new Error();
+        }
+
+        return user[0];
     };
 
     findUsers = async () => {

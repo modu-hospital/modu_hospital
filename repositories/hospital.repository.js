@@ -299,7 +299,7 @@ class HospitalRepository {
 
     // 의사 등록하기
     registerdoctor = async (hospitalId, name, image, contents) => {
-           return await this.doctorModel.create({ hospitalId, name, image, contents });
+        return await this.doctorModel.create({ hospitalId, name, image, contents });
     };
 
     // 화면 위치 기준 병원 찾기
@@ -371,16 +371,15 @@ class HospitalRepository {
         }
     };
 
-
     //map에서 병원을 클릭하면 나오는
     //hospitalId 값에 해당하는 병원 상세 정보
-    getHospitalInfo = async(id) => {
+    getHospitalInfo = async (id) => {
         try {
             return await this.hospitalModel.findByPk(id, {
                 include: [
                     {
                         model: this.hospitalImageFileModel,
-                        as: 'hospitalImageFiles'
+                        as: 'hospitalImageFiles',
                     },
                     // {
                     //     model: this.reviewsModel,
@@ -406,42 +405,40 @@ class HospitalRepository {
                             {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes',
-                                attributes: ['dayOfTheWeek', 'startTime', 'endTime']
+                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'],
                             },
                             {
                                 model: this.doctorCategoryMappingModel,
                                 as: 'doctorCategoryMappings',
                                 include: [
                                     {
-                                        model: this.categoryModel, 
-                                        as:'categories',
-                                        attributes: ['department']
-
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            })
-        }catch(err) {
-            throw(err)
+                                        model: this.categoryModel,
+                                        as: 'categories',
+                                        attributes: ['department'],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+        } catch (err) {
+            throw err;
         }
-    }
+    };
     // hospitalId로 해당 병원하나 찝어서 => userId, name , address, phone 가져오기 ㅇ
- 
+
     // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
-    
+
     // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
-    
+
     // hospitalId에 역인 doctor테이블에서(hospitalId)=> doctorId, name, image, contents 가져오기 o
     // doctorId로 역인 workingTime테이블 doctorId에서=> datOfTheWeek, startTime, endTime 가져오기 o
-    
-    // doctorId로 역인 mapping테이블 doctorId에서 
-    //=> categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
-    // categoryId로 i역인 category테이블 id에서 
-    //=> department 가져오기  #####다른 사람이 인크루드한거 참고하기
 
+    // doctorId로 역인 mapping테이블 doctorId에서
+    //=> categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
+    // categoryId로 i역인 category테이블 id에서
+    //=> department 가져오기  #####다른 사람이 인크루드한거 참고하기
 }
 
 module.exports = HospitalRepository;

@@ -81,7 +81,7 @@ class UserController {
                 phone,
                 name
             );
-            return res.status(201)
+            return res.status(201);
         } catch (err) {
             next(err);
         }
@@ -121,10 +121,7 @@ class UserController {
     getCanceledReservation = async (req, res, next) => {
         try {
             const { userId, page } = req.query;
-            const canceled = await this.userService.getCanceledReservation(
-                userId,
-                page
-            );
+            const canceled = await this.userService.getCanceledReservation(userId, page);
             return res.status(200).json(canceled);
         } catch (err) {
             next(err);
@@ -138,7 +135,7 @@ class UserController {
             const canceledReservation = await this.reservationService.cancelReservation(
                 reservationId.id
             );
-            return res.status(201)
+            return res.status(201);
         } catch (err) {
             next(err);
         }
@@ -165,16 +162,9 @@ class UserController {
         const role = 'waiting';
 
         const { name, loginId, password, confirm, phone, idNumber } =
-                await this.validation.signupValidation.validateAsync(req.body);
-            const user = await this.userService.signup(
-                name,
-                loginId,
-                password,
-                phone,
-                idNumber,
-                role
-            );
-            res.json(user);
+            await this.validation.signupValidation.validateAsync(req.body);
+        const user = await this.userService.signup(name, loginId, password, phone, idNumber, role);
+        res.json(user);
 
         // try {
         //     const { name, loginId, password, confirm, phone, idNumber } =
@@ -220,27 +210,27 @@ class UserController {
     login = async (req, res, next) => {
         const { loginId, password } = req.body;
 
-        console.log("컨트롤러러")
+        console.log('컨트롤러러');
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
         const user = await this.userService.login(loginId, password);
-        console.log("user", user) //왜 유저가 null로 찍히는지
+        console.log('user', user.userId); //왜 유저가 null로 찍히는지
 
         //토큰 생성 컨트롤러에서
-        const accessToken = jwt.sign({ loginId: user}, process.env.JWT_SECRET_KEY, {
+        const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
             expiresIn: '10s',
         });
-        const refreshToken = jwt.sign({ loginId: user}, process.env.JWT_SECRET_KEY, {
+
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
             expiresIn: '7d',
         });
 
-        res.cookie("accessToken", accessToken)
-        res.cookie("refreshToken", refreshToken)
+        res.cookie('accessToken', accessToken);
+        res.cookie('refreshToken', refreshToken);
 
-        await this.userService.saveToken(user, refreshToken);
+        await this.userService.saveToken(user.userId, refreshToken);
 
-        res.status(200).json({accessToken, refreshToken});
-        
+        res.status(200).json({ accessToken, refreshToken });
     };
 
     logout = async (req, res) => {

@@ -5,9 +5,8 @@ class TokenService {
     tokenRepository = new TokenRepository(Refreshtoken);
 
     findUserId = async (loginId) => {
-        return await this.tokenRepository.findUserId(loginId)
+        return await this.tokenRepository.findUserId(loginId);
     };
-
 }
 
 module.exports = TokenService;

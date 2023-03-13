@@ -7,20 +7,18 @@ const multer = require('multer');
 // 이미지 업로드를 위한 multer 설정
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/') // 업로드 폴더 설정
+        cb(null, 'uploads/'); // 업로드 폴더 설정
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname) // 파일 이름 설정
-    }
-  });
+        cb(null, file.originalname); // 파일 이름 설정
+    },
+});
 
-const upload = multer({ storage }); 
+const upload = multer({ storage });
 
 // const fs = require('fs');
 const axios = require('axios');
 const env = process.env;
-
-
 
 // const s3 = new AWS.S3({
 //     endpoint: endpoint,
@@ -328,39 +326,30 @@ class HospitalController {
 
     // 의사 정보 등록
     registerdoctor = async (req, res, next) => {
-        // userId = 3; 
+        // userId = 3;
         const userId = 3;
-        const { name, contents} = req.body; 
+        const { name, contents } = req.body;
         try {
-            const file =req.file; //업로드된 파일 정보
+            const file = req.file; //업로드된 파일 정보
             console.log(file);
             if (!file) {
                 return res.status(400).json({ message: 'Not Found file' });
             }
-            const doctor = await this.hospitalService.registerdoctor(
-                userId, name,  file, contents
-            
-                
-            );
+            const doctor = await this.hospitalService.registerdoctor(userId, name, file, contents);
             return res.status(201).json({ data: doctor });
-        } catch(error) {
-            console.error(error)
+        } catch (error) {
+            console.error(error);
         }
-    }
+    };
 
     //병원 상세 조회
     getOneHospital = async (req, res, next) => {
+        const { id } = req.params;
 
-        const {id} = req.params
+        const oneHospital = await this.hospitalService.getOneHospital(id);
 
-        const oneHospital = await this.hospitalService.getOneHospital(id)
-
-        res.json(oneHospital)
-
-    }
-
-
-    
+        res.json(oneHospital);
+    };
 }
 
 module.exports = HospitalController;

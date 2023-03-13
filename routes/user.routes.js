@@ -26,5 +26,4 @@ router.post('/signup/customer', userController.customerSignup);
 router.post('/login', auth, userController.login); //auth
 router.post('/logout', userController.logout);
 
-
 module.exports = router;

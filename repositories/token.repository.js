@@ -10,7 +10,6 @@ class TokenRepository {
     findUserId = async (loginId) => {
         return await this.userModel.findOne({ where: { loginId } });
     };
-
 }
 
 module.exports = TokenRepository;

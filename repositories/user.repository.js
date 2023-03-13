@@ -31,7 +31,7 @@ class UserRepository {
         return await this.userModel.create({ name, loginId, password, phone, idNumber, role });
     };
 
-    findUser = async (loginId) => { 
+    findUser = async (loginId) => {
         return await this.userModel.findOne({ where: { loginId } });
     };
 
@@ -39,7 +39,7 @@ class UserRepository {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    findAllUser = async () => { 
+    findAllUser = async () => {
         return await this.userModel.findAll({});
     };
 
