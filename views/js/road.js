@@ -1,7 +1,6 @@
 // 모달창을 열기 위한 함수
 function openModal() {
     var modal = document.getElementById('modal');
-    modal.style.display = 'block';
 }
 
 var modal = document.getElementById('modal');

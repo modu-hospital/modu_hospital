@@ -1,7 +1,33 @@
 const HospitalService = require('../services/hospital.service');
 
+const multer = require('multer');
+// const AWS = require('aws-sdk');
+// const endpoint = new AWS.Endpoint('https://s3.amazonaws.com');
+
+// 이미지 업로드를 위한 multer 설정
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/') // 업로드 폴더 설정
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname) // 파일 이름 설정
+    }
+  });
+
+const upload = multer({ storage }); 
+
+// const fs = require('fs');
 const axios = require('axios');
 const env = process.env;
+
+
+
+// const s3 = new AWS.S3({
+//     endpoint: endpoint,
+//     accessKeyId:'AKIA6O5UU7XJZTBY3HFE',
+//     secretAccessKey:'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'
+
+// });
 
 const Validation = require('../lib/validation');
 
@@ -302,10 +328,25 @@ class HospitalController {
 
     // 의사 정보 등록
     registerdoctor = async (req, res, next) => {
-        // const { currentUser } = res.locals;
-        // cosnt userId = currentUser.id;
-        const userId = 42;
-    };
+        // userId = 3; 
+        const userId = 3;
+        const { name, contents} = req.body; 
+        try {
+            const file =req.file; //업로드된 파일 정보
+            console.log(file);
+            if (!file) {
+                return res.status(400).json({ message: 'Not Found file' });
+            }
+            const doctor = await this.hospitalService.registerdoctor(
+                userId, name,  file, contents
+            
+                
+            );
+            return res.status(201).json({ data: doctor });
+        } catch(error) {
+            console.error(error)
+        }
+    }
 
     //병원 상세 조회
     getOneHospital = async (req, res, next) => {

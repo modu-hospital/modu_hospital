@@ -1,6 +1,6 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User,Hospital, Doctor, RefreshToken, sequelize} = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize} = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -50,20 +50,27 @@ class UserService {
         );
         return doneOrReviewed;
     };
+    getCanceledReservation = async (userId, page) => {
+        const canceled = await this.reservationRepository.getCanceledReservation(
+            userId,
+            page
+        );
+        return canceled;
+    };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
+        console.log(existUser)
 
-        if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
-            return;
+        if (existUser) {
+            return {message: "이미 있는 회원"}
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
+        const sign = await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
 
-        return { message: '회원가입이 완료되었습니다' };
+        return sign;
     };
 
     login = async (loginId, password) => {
@@ -75,14 +82,11 @@ class UserService {
             return;
         }
 
-        res.cookie("accessToken", accessToken)
-        res.cookie("refreshToken", refreshToken)
-
-        return {accessToken};
+        return user;
     };
 
     findUsers = async () => {
-        const allUser = await this.userRepository.findUsers();
+        const allUser = await this.userRepository.findAllUser();
 
         return allUser.map((users) => {
             return {
@@ -99,24 +103,21 @@ class UserService {
         });
     };
 
-    findUserRole = async (role) => {
-        const roleUsers = await this.userRepository.findUserRole(role);
+    // 회원 조회(pagenation)
+    PaginationByRole = async (pageNum, type) => {
+        const limit = 10;
+        const offset = (pageNum - 1) * limit;
+        const allUser = await this.userRepository.PaginationByAll(limit, offset, type);
+        const lastPage = Math.ceil(allUser.count / limit);
+        return { allUser: allUser, lastPage: lastPage };
+    };
 
-        //     const isPasswordCorrect = await bcrypt.compare(password, user[0].password)
-        // }
-        return roleUsers.map((users) => {
-            return {
-                userId: users.userId,
-                name: users.name,
-                loginId: users.loginId,
-                password: users.password,
-                phone: users.phone,
-                idNumber: users.idNumber,
-                address: users.address,
-                role: users.role,
-                createdAt: users.createdAt,
-            };
-        });
+    findUserRole = async (role, pageNum, type) => {
+        const limit = 10;
+        const offset = (pageNum - 1) * limit;
+        const allUser = await this.userRepository.PaginationByRole(limit, offset, role, type);
+        const lastPage = Math.ceil(allUser.count / limit);
+        return { allUser: allUser, lastPage: lastPage };
     };
 
     userHospitalDoctorDelete = async (userId) => {
@@ -136,8 +137,12 @@ class UserService {
         }
     };
 
+    roleUpdate = async (userId, role) => {
+        const roleUpdate = await this.userRepository.userRoleUpdate(userId, role);
+        return roleUpdate;
+    };
+
     saveToken = async (userId, token) => {
-        
         return await this.userRepository.tokenSave(userId, token);
     };
 }

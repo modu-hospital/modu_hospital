@@ -37,9 +37,21 @@ describe('Reservation Service Unit Test', () => {
 
             expect(async () => {await reservationService.cancelReservation();}).rejects.toThrow(createError.reservationAlreadyCanceled())
         })
+        // it('should return what reservationRepository.editReservationStatusById() returns', () => {
+
+        //     const statusWaiting = {
+        //         status : 'waiting'
+        //     }
+        //     mockReservationRepository.findReservationById.mockResolvedValue(statusWaiting)
+
+        //     const repositoryReturnValue = [1]
+        //     mockReservationRepository.editReservationStatusById(repositoryReturnValue)
+
+        //     expect(async () => {await reservationService.cancelReservation(1)}).toEqual(reservationService.reservationRepository.editReservationStatusById())
+        // })
     })
     describe('createReview()', () => {
-        it('should throw ReviewAlreadyCreated error', () => {
+        it('should throw ReviewAlreadyCreated error', async () => {
             const statusReviewed = {
                 status:"reviewed"
             }

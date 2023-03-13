@@ -1,4 +1,16 @@
+const AWS = require('aws-sdk'); 
+const fs = require('fs');
+
+const env = process.env;
+
+const s3 = new AWS.S3({
+    endpoint: env.AWS_END_POINT,
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+});
+
 const HospitalRepository = require('../repositories/hospital.repository');
+
 const {
     Reservation,
     Hospital,
@@ -249,21 +261,56 @@ class HospitalService {
         }
     };
 
-    registerdoctor = async (userId, hospitalId, name, image, contents) => {
+    registerdoctor = async ( userId, name, file, contents) => {
         try {
-            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            let hospital = hospitaldata.hospitalId;
-            const doctordata = this.hospitalRepository.registerdoctor(
-                hospitalId,
-                name,
-                image,
-                contents
-            );
-            return doctordata;
+        const hospitaldata = await this.findOneHospital(userId);
+        if (!hospitaldata) {
+            const error = new Error('해당 병원이 존재하지 않습니다.');
+            error.name = 'Hospital Not found';
+            error.status = 400;
+            throw error;
+        }
+        let hospitalId = hospitaldata.hospitalId;
+        const image = await this.uploadToS3(file);
+        console.log(image)
+        const doctordata = await this.hospitalRepository.registerdoctor(
+            hospitalId,
+            name, 
+            image,
+            contents
+            
+        );
+        return doctordata; 
+
         } catch (err) {
-            throw err;
+            console.error(err) // 에러 로그 확인 
+          throw err;
         }
     };
+
+    // 이미지 업로드 함수 
+    uploadToS3 = async (file) => {
+        const fileContent = fs.readFileSync(file.path)
+        const filename = `${Date.now()}_${file.originalname}`;
+        const params = {
+            Bucket: env.AWS_BUCKET_NAME,
+            // endpoint:'moduhospital.s3.ap-northeast-2.amazonaws.com',
+            Key: `doctors/${filename}`,
+            Body: fileContent,
+            ContentType: file.mimetype,
+        };
+        
+        try {
+            const data = await s3.upload(params).promise();
+            console.log(data);
+            fs.unlinkSync(file.path);
+            return data.Location;
+        } catch (err) {
+            console.error(err);
+            throw new Error('Failed to upload image to S3');
+        }
+    }; 
+  
 
     getOneHospital = async (id) => {
         try {

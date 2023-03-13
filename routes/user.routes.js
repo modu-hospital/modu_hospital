@@ -13,6 +13,8 @@ router.get('/mypage/waiting', userController.getWaitingReservation);
 
 router.get('/mypage/doneorreviewed', userController.getDoneOrReviewedReservation);
 
+router.get('/mypage/canceled', userController.getCanceledReservation);
+
 router.patch('/mypage/editprofile/:userId', userController.editUserProfile);
 
 router.patch('/mypage/cancel/:id', userController.cancelReservation);
