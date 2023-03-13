@@ -177,7 +177,16 @@ class UserController {
         console.log("컨트롤러러")
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
-        const { user, accessToken, refreshToken } = await this.userService.login(loginId, password);
+        const { user } = await this.userService.login(loginId, password);
+
+
+        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '10s',
+        });
+        const refreshToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '7d',
+        });
+
 
         await this.userService.saveToken({userId: user.userId}, {token: refreshToken});
        

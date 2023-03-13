@@ -75,17 +75,10 @@ class UserService {
             return;
         }
 
-        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
-            expiresIn: '10s',
-        });
-        const refreshToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
-            expiresIn: '7d',
-        });
-
         res.cookie("accessToken", accessToken)
         res.cookie("refreshToken", refreshToken)
 
-        return {accessToken, refreshToken};
+        return {accessToken};
     };
 
     findUsers = async () => {

@@ -35,8 +35,13 @@ router.get('/edit', (req, res) => {
 });
 
 //병원상세페이지
-router.get('/detail', (req, res) => {
-    res.render('hospitalDetail.ejs')
+router.get('/hospital/:hospitalId', (req, res) => {
+    res.render('index.ejs', { components: 'hospitaldetail' })
+})
+
+//로그인
+router.get('/login', (req, res) => {
+    res.render('index.ejs', { components: 'login' })
 })
 
 module.exports = router;
