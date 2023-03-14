@@ -7,7 +7,6 @@ const path = require('path');
 const app = express();
 dotenv.config();
 
-
 const http = createServer(app);
 
 /* define router */
@@ -30,7 +29,8 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname + '/views')));
 
-const server = http.listen(process.env.PORT, () => console.log(`${process.env.PORT}번 포트가 열렸습니다.`));
+const server = http.listen(process.env.PORT, () =>
+    console.log(`${process.env.PORT}번 포트가 열렸습니다.`)
+);
 
-
-module.exports = server
+module.exports = server;

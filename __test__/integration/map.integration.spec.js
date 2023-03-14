@@ -1,13 +1,11 @@
 const supertest = require('supertest');
 const app = require('../../app.js');
 
-
 describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
-
     let agent;
     beforeAll((done) => {
         agent = supertest.agent(app);
-        done()
+        done();
     });
 
     afterAll((done) => {
@@ -15,7 +13,7 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
     });
 
     test('GET /api/hospitals/info API (searchHospitalInfo) Integration Test Success Case, Not Found Hospital Info Data', async () => {
-        const response = await supertest(app).get(`/api/hospitals/info/3`)
+        const response = await supertest(app).get(`/api/hospitals/info/3`);
 
         expect(response.status).toEqual(200);
 

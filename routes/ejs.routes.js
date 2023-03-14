@@ -17,11 +17,11 @@ router.get('/users/reservation', (req, res) => {
 });
 
 router.get('/users/mypage/:userId', (req, res) => {
-    res.render('mypage.ejs');
+    res.render('index.ejs', { components: 'mypage' });
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs');
+    res.render('map.ejs', { components: 'map' });
 });
 
 //원장님의 공간
@@ -47,6 +47,21 @@ router.get('/doctorRegister', (req, res) => {
 //의사정보 수정 페이지
 router.get('/doctorEdit', (req, res) => {
     res.render('index.ejs', { components: 'doctorEdit' });
+});
+
+//병원상세페이지
+router.get('/hospital/:hospitalId', (req, res) => {
+    res.render('index.ejs', { components: 'hospitaldetail' });
+});
+
+//로그인
+router.get('/login', (req, res) => {
+    res.render('index.ejs', { components: 'login' });
+});
+
+//회원가입
+router.get('/signup', (req, res) => {
+    res.render('index.ejs', { components: 'signup' });
 });
 
 module.exports = router;
