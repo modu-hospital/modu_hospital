@@ -3,7 +3,6 @@ const { JWT_SECRET_KEY } = process.env;
 const { User, RefreshToken } = require('../models');
 
 const authMiddleware = async (req, res, next) => {
-
     //문제가 뭐였냐면 로그인이 안된 유저들이 로그인이 된걸로 적용되었음
     //auth의 역할: 로그인 검증이랑 user확인(현재 로그인이 되어 있는 유저 확인 가능하게끔)
     //유저가 존재하는지, 발행한 토큰이맞는지, 유효한지 확인
@@ -27,8 +26,8 @@ const authMiddleware = async (req, res, next) => {
 
     //토큰 존재 확인
     //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
-    if (!accessToken || !refreshToken) { 
-        return next()
+    if (!accessToken || !refreshToken) {
+        return next();
         // return {message:"로그인 다시 해주세요"}
     }
 
@@ -56,40 +55,41 @@ const authMiddleware = async (req, res, next) => {
     }
 
     // refreshToken 만료시
-    if (!refreshTokenValidate) { 
-        res.clearCookie('accessToken')
-        res.clearCookie('refreshToken')
-        return res.status(400).json({message:"refreshToken 만료"})
+    if (!refreshTokenValidate) {
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+        return res.status(400).json({ message: 'refreshToken 만료' });
     }
 
     // access 검증 후, expired 만료시
     // 만료가 되면 재발급
-    if (!accessTokenValidate) { //accessToken만료시
+    if (!accessTokenValidate) {
+        //accessToken만료시
         // console.log("@@@@refreshToken", refreshToken)
 
-        const token = await RefreshToken.findAll({where: {token: refreshToken}})
+        const token = await RefreshToken.findAll({ where: { token: refreshToken } });
         //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
         //console.log("#####token", token[0].token)
 
-        //refreshToken 유효 여부 검증 한 후 
+        //refreshToken 유효 여부 검증 한 후
         //payload가 잘 들어갔는지 확인하고 싶음 userId.loginId값 확인하고 싶음
-        const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY)
+        const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY);
 
-        if(refreshTokenV) {
-            accessToken = jwt.sign({}, process.env.JWT_SECRET_KEY)//accessToken 새로 만들기
+        if (refreshTokenV) {
+            accessToken = jwt.sign({}, process.env.JWT_SECRET_KEY); //accessToken 새로 만들기
             //(저장된 refreshToken을 조회해서 유효성 검사 후 유효하다면 재발급)
         }
         //return next()
     }
 
-        //현재로그인이 된 아이디 값과과 refreshToken에 들어있는 아이디 값은 refreshToken
-    const {userId} = accessTokenValidate
+    //현재로그인이 된 아이디 값과과 refreshToken에 들어있는 아이디 값은 refreshToken
+    const { userId } = accessTokenValidate;
 
-    const user = await User.findByPk(userId) 
+    const user = await User.findByPk(userId);
 
-    res.locals.user = user
+    res.locals.user = user;
 
-    next()                                           
-}
+    next();
+};
 module.exports = authMiddleware;
