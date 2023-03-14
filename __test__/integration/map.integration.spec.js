@@ -5,25 +5,24 @@ const app = require('../../app.js');
 describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
 
     let agent;
-    beforeEach((done) => {
-        agent = supertest(app);
+    beforeAll((done) => {
+        agent = supertest.agent(app);
         done()
     });
 
-    afterEach((done) => {
+    afterAll((done) => {
         return app && app.close(done);
     });
 
-    // test('GET /api/hospitals/info API (searchHospitalInfo) Integration Test Success Case, Not Found Hospital Info Data', async () => {
-    //     const response = await supertest(app).get(`/api/hospitals/info/`).query({id:3}).send({ id: 3 });
+    test('GET /api/hospitals/info API (searchHospitalInfo) Integration Test Success Case, Not Found Hospital Info Data', async () => {
+        const response = await supertest(app).get(`/api/hospitals/info/3`)
 
-    //     // expect(response.status).toEqual(200);
+        expect(response.status).toEqual(200);
 
-    //     expect(response.body).toEqual({});
-    // });
+        expect(response.body).toEqual({});
+    });
 
-    test('POST /api/hospitals/around API (findNearHospital) Integration Test Success Case', async () => {
-        // { rightLongitude, rightLatitude, leftLongitude, leftLatitude }
+    test('POST /api/hospitals/around API (findNearHospital) Integration Test', async () => {
         const requestBodyParams = {
             rightLongitude: 127.13245302025508,
             rightLatitude: 37.52700879612589,
@@ -35,11 +34,9 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         expect(response.status).toEqual(200);
 
         expect(response.body).toEqual({ hospitals: [] });
-        // expect(response.body).toMatchObject([])
     });
 
-    test('POST /api/hospitals/around/info API (findNearHospitalsInfo)', async () => {
-        // TODO: 여기에 코드를 작성해야합니다.
+    test('POST /api/hospitals/around/info API (findNearHospitalsInfo), Integration Test', async () => {
         const requestBodyParams = {
             rightLongitude: 127.13245302025508,
             rightLatitude: 37.52700879612589,
@@ -53,8 +50,7 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         expect(response.body).toEqual({ hospitals: [] });
     });
 
-    test('POST /api/categories/search API (findHospitalsThatFitsDepartment)', async () => {
-        // { rightLongitude, rightLatitude, leftLongitude, leftLatitude }
+    test('POST /api/categories/search API (findHospitalsThatFitsDepartment), Integration Test', async () => {
         const requestBodyParams = {
             rightLongitude: 127.13245302025508,
             rightLatitude: 37.52700879612589,
@@ -67,12 +63,5 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         expect(response.status).toEqual(200);
 
         expect(response.body).toEqual({ hospitals: [] });
-        // expect(response.body).toMatchObject([])
     });
 });
-
-// afterAll(async () => {
-//   // 통합 테스트가 완료되었을 경우 sequelize의 연결된 테이블들의 정보를 초기화합니다.
-//   if (process.env.NODE_ENV === 'test') await sequelize.sync({ force: true });
-//   else throw new Error('NODE_ENV가 test 환경으로 설정되어 있지 않습니다.');
-// });

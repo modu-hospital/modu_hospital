@@ -74,6 +74,8 @@ class HospitalController {
         try {
             const { id } = req.params;
 
+            console.log(id)
+
             const info = await this.hospitalService.searchHospitalInfo(id);
 
             res.json(info);
