@@ -29,48 +29,49 @@ class HospitalRepository {
     //병원페이지 예약 승인대기 목록 불러오기
     getWaitedReservation = async (hospitalId) => {
         try {
-            const reservationwaitdata = await this.hospitalModel.findAll({
+            const reservationdata = await this.hospitalModel.findAll({
                 where: {
                     hospitalId,
                 },
+                paranoid: false,
                 attributes: ['hospitalId', 'name'],
                 include: [
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        attributes: ['name', 'doctorId'],
+                        attributes: ['doctorId', 'name'],
+                        paranoid: false,
                         include: [
                             {
                                 model: this.reservationModel,
                                 as: 'reservations',
+                                order: [['date', 'DESC']],
                                 where: {
                                     status: 'waiting',
                                 },
-                                order: [['date', 'DESC']],
-                                attributes: {
-                                    include: [
-                                        'id',
-                                        'name',
-                                        'phone',
-                                        'contents',
-                                        'idNumber',
-                                        'status',
-                                        [
-                                            sequelize.fn(
-                                                'DATE_FORMAT',
-                                                sequelize.col('date'),
-                                                '%Y-%m-%d %H:%i'
-                                            ),
-                                            'date',
-                                        ],
+                                attributes: [
+                                    'id',
+                                    'name',
+                                    'idNumber',
+                                    'phone',
+                                    'contents',
+                                    'status',
+                                    [
+                                        sequelize.fn(
+                                            'DATE_FORMAT',
+                                            sequelize.col('date'),
+                                            '%Y-%m-%d %H:%i'
+                                        ),
+                                        'date',
                                     ],
-                                },
+                                ],
+                                paranoid: false,
                             },
                         ],
                     },
                 ],
             });
-            return reservationwaitdata;
+            return reservationdata;
         } catch (error) {
             throw new Error(error);
         }
@@ -83,37 +84,39 @@ class HospitalRepository {
                 where: {
                     hospitalId,
                 },
+                paranoid: false,
                 attributes: ['hospitalId', 'name'],
                 include: [
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        attributes: ['name', 'doctorId'],
+                        attributes: ['doctorId', 'name'],
+                        paranoid: false,
                         include: [
                             {
                                 model: this.reservationModel,
                                 as: 'reservations',
+                                order: [['date', 'DESC']],
                                 where: {
                                     status: 'approved',
                                 },
-                                attributes: {
-                                    include: [
-                                        'id',
-                                        'name',
-                                        'phone',
-                                        'contents',
-                                        'idNumber',
-                                        'status',
-                                        [
-                                            sequelize.fn(
-                                                'DATE_FORMAT',
-                                                sequelize.col('date'),
-                                                '%Y-%m-%d %H:%i'
-                                            ),
-                                            'date',
-                                        ],
+                                attributes: [
+                                    'id',
+                                    'name',
+                                    'idNumber',
+                                    'phone',
+                                    'contents',
+                                    'status',
+                                    [
+                                        sequelize.fn(
+                                            'DATE_FORMAT',
+                                            sequelize.col('date'),
+                                            '%Y-%m-%d %H:%i'
+                                        ),
+                                        'date',
                                     ],
-                                },
+                                ],
+                                paranoid: false,
                             },
                         ],
                     },
@@ -132,35 +135,36 @@ class HospitalRepository {
                 where: {
                     hospitalId,
                 },
+                paranoid: false,
                 attributes: ['hospitalId', 'name'],
                 include: [
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        attributes: ['name', 'doctorId'],
+                        attributes: ['doctorId', 'name'],
+                        paranoid: false,
                         include: [
                             {
                                 model: this.reservationModel,
                                 as: 'reservations',
                                 order: [['date', 'DESC']],
-                                attributes: {
-                                    include: [
-                                        'id',
-                                        'name',
-                                        'phone',
-                                        'contents',
-                                        'idNumber',
-                                        'status',
-                                        [
-                                            sequelize.fn(
-                                                'DATE_FORMAT',
-                                                sequelize.col('date'),
-                                                '%Y-%m-%d %H:%i'
-                                            ),
-                                            'date',
-                                        ],
+                                attributes: [
+                                    'id',
+                                    'name',
+                                    'idNumber',
+                                    'phone',
+                                    'contents',
+                                    'status',
+                                    [
+                                        sequelize.fn(
+                                            'DATE_FORMAT',
+                                            sequelize.col('date'),
+                                            '%Y-%m-%d %H:%i'
+                                        ),
+                                        'date',
                                     ],
-                                },
+                                ],
+                                paranoid: false,
                             },
                         ],
                     },
@@ -176,17 +180,16 @@ class HospitalRepository {
     editReservation = async (id, date) => {
         try {
             const updated = await this.reservationModel.update({ date }, { where: { id } });
-            return { status: 200, success: true, message: '예약이 변경되었습니다.' };
+            return updated;
         } catch (error) {
-            throw new Error(error.message);
+            throw new Error(error);
         }
     };
 
     // 병원페이지 승인하기
     approvedReservation = async (id, status) => {
         try {
-            await this.reservationModel.update({ status }, { where: { id } });
-            return { status: 200, success: true, message: '승인이 변경되었습니다.' };
+            return await this.reservationModel.update({ status }, { where: { id } });
         } catch (error) {
             throw new Error(error.message);
         }
@@ -198,10 +201,7 @@ class HospitalRepository {
             const finddata = await this.reservationModel.findByPk(id);
             return finddata;
         } catch (error) {
-            (error.name = 'DB 에러'),
-                (error.message = '해당 요청을 처리하지 못했습니다.'),
-                (error.status = 400);
-            throw error;
+            throw new Error(error);
         }
     };
 
@@ -239,7 +239,7 @@ class HospitalRepository {
     //병원 정보 등록
     registerHospital = async (userId, name, address, phone, longitude, latitude) => {
         try {
-            await this.hospitalModel.create({
+            return await this.hospitalModel.create({
                 userId,
                 name,
                 address,
@@ -247,23 +247,15 @@ class HospitalRepository {
                 longitude,
                 latitude,
             });
-            return {
-                status: 200,
-                success: true,
-                message: '병원 등록을 하였습니다.',
-            };
         } catch (error) {
-            (error.name = 'DB 에러'),
-                (error.message = '해당 요청을 처리하지 못했습니다.'),
-                (error.status = 400);
-            throw error;
+            throw new Error(error);
         }
     };
 
     //병원 정보 수정
     registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
         try {
-            await this.hospitalModel.update(
+            return await this.hospitalModel.update(
                 {
                     name,
                     address,
@@ -273,12 +265,8 @@ class HospitalRepository {
                 },
                 { where: { userId } }
             );
-            return { status: 200, success: true, message: '병원 정보를 수정했습니다.' };
         } catch (error) {
-            (error.name = 'DB 에러'),
-                (error.message = '해당 요청을 처리하지 못했습니다.'),
-                (error.status = 400);
-            throw error;
+            throw new Error(error);
         }
     };
 
@@ -290,17 +278,73 @@ class HospitalRepository {
             });
             return findData;
         } catch (error) {
-            (error.name = 'DB 에러'),
-                (error.message = '해당 요청을 처리하지 못했습니다.'),
-                (error.status = 400);
-            throw error;
+            throw new Error(error);
+        }
+    };
+
+    // 의사 정보 불러오기
+    findAllDoctor = async (hospitalId) => {
+        try {
+            const findData = await this.doctorModel.findAll({
+                where: { hospitalId },
+            });
+            return findData;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    // 의사 한명 정보 불러오기
+    findOneDoctor = async (doctorId) => {
+        try {
+            const findData = await this.doctorModel.findOne({
+                where: { doctorId: doctorId },
+            });
+            return findData;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
     // 의사 등록하기
     registerdoctor = async (hospitalId, name, image, contents) => {
-        return await this.doctorModel.create({ hospitalId, name, image, contents });
+        try {
+            return await this.doctorModel.create({ hospitalId, name, image, contents });
+        } catch (error) {
+            throw new Error(error);
+        }
     };
+
+    // 의사 수정하기
+    editdoctor = async (doctorId, name, image, contents) => {
+        try {
+            return await this.doctorModel.update(
+                { name, image, contents },
+                { where: { doctorId } }
+            );
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    // category 찾고 없으면 생성
+    findOrCreate = async (department) => {
+        try {
+            const [categories, created] = await this.categoryModel.findOrCreate({
+                where: { department },
+            });
+            return categories;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    // doctor_categories_mappings => doctorId, categoryId 넣기
+    categoriesInstance = async (mappings) => {
+        await this.doctorCategoryMappingModel.bulkCreate(mappings);
+    };
+
+    // 의사일하는시간 넣기
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {
@@ -371,9 +415,8 @@ class HospitalRepository {
         }
     };
 
-
     //hospitalId 값에 해당하는 병원 상세 정보 (미완 하다 토큰하러)
-    getHospitalInfo = async(hospitalId) => {
+    getHospitalInfo = async (hospitalId) => {
         try {
             return await this.hospitalModel.findByPk(hospitalId, {
                 attributes: ['userId', 'name', 'address', 'phone'], //userId가 필요하나?
@@ -381,56 +424,50 @@ class HospitalRepository {
                     {
                         model: this.hospitalImageFileModel,
                         as: 'hospitalImageFiles',
-                        where: {hospitalId},
-                        attributes: ['url']
+                        where: { hospitalId },
+                        attributes: ['url'],
                     },
                     {
                         model: this.reviewsModel,
-                        as:'reviews',
-                        where: {hospitalId},
-                        attributes:['star', 'contents'],
+                        as: 'reviews',
+                        where: { hospitalId },
+                        attributes: ['star', 'contents'],
                         include: [
                             {
                                 model: this.userModel,
                                 as: 'users',
-                                attributes:['loginId']
-                            }
-                        ]
+                                attributes: ['loginId'],
+                            },
+                        ],
                     },
                     {
                         model: this.doctorModel,
-                        as:'doctors',
-                        where: {hospitalId},
+                        as: 'doctors',
+                        where: { hospitalId },
                         attributes: ['name', 'image', 'contents'],
                         include: [
                             {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes', //where: {doctorId }추가 해야되는지
-                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'] //doctorId안 해줘도 되는지 where
-                            }
-                        ]
-                    }
-                ]
-            })
-            
-        }catch(err) {
-
-        }
-    }
+                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'], //doctorId안 해줘도 되는지 where
+                            },
+                        ],
+                    },
+                ],
+            });
+        } catch (err) {}
+    };
     // hospitalId로 해당 병원하나 찝어서 => userId, name , address, phone 가져오기 ㅇ
- 
+
     // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
-    
+
     // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
-    
+
     // hospitalId에 역인 doctor테이블에서(hospitalId)=> doctorId, name, image, contents 가져오기
     // doctorId로 역인 workingTime테이블 doctorId에서=> datOfTheWeek, startTime, endTime 가져오기
-    
+
     // doctorId로 역인 mapping테이블 doctorId에서 => categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
     // categoryId로 i역인 category테이블 id에서 => department 가져오기  #####다른 사람이 인크루드한거 참고하기
-
-
-
 }
 
 module.exports = HospitalRepository;

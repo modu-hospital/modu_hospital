@@ -46,11 +46,20 @@ router.get('/information', hospitalController.findOneHospital);
 //우리 병원 의사 등록
 router.post('/register/doctor', upload.single('image'), hospitalController.registerdoctor);
 
+//우리 병원 의사 수정
+router.put('/edit/doctor/:doctorId', upload.single('image'), hospitalController.editdoctor);
+
+//우리 병원 의사 정보 불러오기
+router.get('/information/doctor', hospitalController.findAllDoctor);
+
+//의사 한명 정보 불러오기
+router.get('/information/doctor/:doctorId', hospitalController.findOneDoctor);
+
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
 router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 //병원 상세 조회
-router.get('/detail/:id')
+router.get('/detail/:id');
 
 module.exports = router;

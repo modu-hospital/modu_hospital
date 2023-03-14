@@ -121,10 +121,7 @@ class UserController {
     getCanceledReservation = async (req, res, next) => {
         try {
             const { userId, page } = req.query;
-            const canceled = await this.userService.getCanceledReservation(
-                userId,
-                page
-            );
+            const canceled = await this.userService.getCanceledReservation(userId, page);
             return res.status(200).json(canceled);
         } catch (err) {
             next(err);
@@ -207,13 +204,12 @@ class UserController {
     login = async (req, res, next) => {
         const { loginId, password } = req.body;
 
-        console.log("컨트롤러러")
+        console.log('컨트롤러러');
 
         //service에서 쓰여진 accessToken, refreshToken를 가져오기 위해 객체분해할당
         const { user, accessToken, refreshToken } = await this.userService.login(loginId, password);
 
-        await this.userService.saveToken({userId: user.userId}, {token: refreshToken});
-       
+        await this.userService.saveToken({ userId: user.userId }, { token: refreshToken });
 
         // console.log("userId", user.userId) //undefined
         // console.log("token", token)
@@ -221,7 +217,6 @@ class UserController {
         // await this.userService.saveToken({user: accessToken.userId}, refreshToken);
 
         res.status(200).json(accessToken, refreshToken);
-        
     };
 
     logout = async (req, res) => {

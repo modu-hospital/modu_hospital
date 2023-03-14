@@ -131,9 +131,7 @@ class HospitalService {
     findAllReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            console.log(hospitaldata);
             let hospitalId = hospitaldata.hospitalId;
-            console.log(hospitalId);
             const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
@@ -259,9 +257,29 @@ class HospitalService {
         }
     };
 
-    registerdoctor = async (userId, name, file, contents) => {
+    findAllDoctor = async (userId) => {
         try {
-            const hospitaldata = await this.findOneHospital(userId);
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const doctorAlldata = await this.hospitalRepository.findAllDoctor(hospitalId);
+            return doctorAlldata;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    findOneDoctor = async (doctorId) => {
+        try {
+            const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);
+            return doctordata;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    registerdoctor = async (userId, name, file, contents, categories) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const error = new Error('해당 병원이 존재하지 않습니다.');
                 error.name = 'Hospital Not found';
@@ -270,9 +288,44 @@ class HospitalService {
             }
             let hospitalId = hospitaldata.hospitalId;
             const image = await this.uploadToS3(file);
-            console.log(image);
             const doctordata = await this.hospitalRepository.registerdoctor(
                 hospitalId,
+                name,
+                image,
+                contents
+            );
+
+            // map 함수를 사용해서 categories 배열을 순회하면서 findOrcreate을 호출함.
+            // 그래서 이것을 category 배열에 저장하는 코드
+            const department = await Promise.all(
+                categories.map(async (department) => {
+                    const categorydata = await this.hospitalRepository.findOrCreate(department);
+
+                    return categorydata.id;
+                })
+            );
+
+            const mappings = await Promise.all(
+                department.map(async (department) => ({
+                    categoryId: department,
+                    doctorId: doctordata.doctorId,
+                }))
+            );
+
+            await this.hospitalRepository.categoriesInstance(mappings);
+
+            return doctordata;
+        } catch (err) {
+            console.error(err); // 에러 로그 확인
+            throw err;
+        }
+    };
+
+    editdoctor = async (doctorId, name, file, contents) => {
+        try {
+            const image = await this.uploadToS3(file);
+            const doctordata = await this.hospitalRepository.editdoctor(
+                doctorId,
                 name,
                 image,
                 contents
@@ -298,7 +351,6 @@ class HospitalService {
 
         try {
             const data = await s3.upload(params).promise();
-            console.log(data);
             fs.unlinkSync(file.path);
             return data.Location;
         } catch (err) {

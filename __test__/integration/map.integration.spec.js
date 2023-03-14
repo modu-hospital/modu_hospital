@@ -28,43 +28,45 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         };
         const response = await supertest(app).post(`/api/hospitals/around`).send(requestBodyParams);
 
-        expect(response.status).toEqual(200)
+        expect(response.status).toEqual(200);
 
-        expect(response.body).toEqual({hospitals: []});
+        expect(response.body).toEqual({ hospitals: [] });
         // expect(response.body).toMatchObject([])
     });
 
     test('POST /api/hospitals/around/info API (findNearHospitalsInfo) Integration Test Error Case, Invalid Params Error', async () => {
         // TODO: 여기에 코드를 작성해야합니다.
         const requestBodyParams = {
-          rightLongitude: 127.13245302025508,
-          rightLatitude: 37.52700879612589,
-          leftLongitude: 126.99344298385097,
-          leftLatitude: 37.47504078291968,
-      };
-      const response = await supertest(app).post(`/api/hospitals/around/info`).send(requestBodyParams);
+            rightLongitude: 127.13245302025508,
+            rightLatitude: 37.52700879612589,
+            leftLongitude: 126.99344298385097,
+            leftLatitude: 37.47504078291968,
+        };
+        const response = await supertest(app)
+            .post(`/api/hospitals/around/info`)
+            .send(requestBodyParams);
 
-      expect(response.status).toEqual(200)
+        expect(response.status).toEqual(200);
 
-      expect(response.body).toEqual({hospitals: []});
+        expect(response.body).toEqual({ hospitals: [] });
     });
 
     test('POST /api/categories/search API (findHospitalsThatFitsDepartment) Integration Test Success Case', async () => {
-      // { rightLongitude, rightLatitude, leftLongitude, leftLatitude }
-      const requestBodyParams = {
-          rightLongitude: 127.13245302025508,
-          rightLatitude: 37.52700879612589,
-          leftLongitude: 126.99344298385097,
-          leftLatitude: 37.47504078291968,
-          department : "치과"
-      };
-      const response = await supertest(app).post(`/api/hospitals/around`).send(requestBodyParams);
+        // { rightLongitude, rightLatitude, leftLongitude, leftLatitude }
+        const requestBodyParams = {
+            rightLongitude: 127.13245302025508,
+            rightLatitude: 37.52700879612589,
+            leftLongitude: 126.99344298385097,
+            leftLatitude: 37.47504078291968,
+            department: '치과',
+        };
+        const response = await supertest(app).post(`/api/hospitals/around`).send(requestBodyParams);
 
-      expect(response.status).toEqual(200)
+        expect(response.status).toEqual(200);
 
-      expect(response.body).toEqual({hospitals: []});
-      // expect(response.body).toMatchObject([])
-  });
+        expect(response.body).toEqual({ hospitals: [] });
+        // expect(response.body).toMatchObject([])
+    });
 });
 
 // afterAll(async () => {

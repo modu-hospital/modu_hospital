@@ -31,5 +31,4 @@ app.use(express.static(path.join(__dirname + '/views')));
 
 http.listen(process.env.PORT, () => console.log(`${process.env.PORT}번 포트가 열렸습니다.`));
 
-
-module.exports = app
+module.exports = app;

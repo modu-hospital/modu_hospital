@@ -1,7 +1,7 @@
-const { describe } = require('node:test')
-const ReservationService = require('../../../services/reservation.service')
-const CreateError = require('../../../lib/errors')
-const createError = new CreateError()
+const { describe } = require('node:test');
+const ReservationService = require('../../../services/reservation.service');
+const CreateError = require('../../../lib/errors');
+const createError = new CreateError();
 
 const mockReservationRepository = {
     findReservationById: jest.fn(),
@@ -10,10 +10,10 @@ const mockReservationRepository = {
     getDoneOrReviewedReservation: jest.fn(),
     findHospitalByReservationId: jest.fn(),
     editReservationStatusById: jest.fn(),
-    createReview: jest.fn()
-}
-const reservationService = new ReservationService()
-reservationService.reservationRepository = mockReservationRepository
+    createReview: jest.fn(),
+};
+const reservationService = new ReservationService();
+reservationService.reservationRepository = mockReservationRepository;
 
 describe('Reservation Service Unit Test', () => {
     beforeEach(() => {
@@ -23,20 +23,24 @@ describe('Reservation Service Unit Test', () => {
     describe('cancelReservation()', () => {
         it('should throw ReservationAlreadyDone error', () => {
             const statusDone = {
-                status : 'done'
-            }
-            mockReservationRepository.findReservationById.mockResolvedValue(statusDone)
+                status: 'done',
+            };
+            mockReservationRepository.findReservationById.mockResolvedValue(statusDone);
 
-            expect(async () => {await reservationService.cancelReservation();}).rejects.toThrow(createError.reservationAlreadyDone());
-        })
+            expect(async () => {
+                await reservationService.cancelReservation();
+            }).rejects.toThrow(createError.reservationAlreadyDone());
+        });
         it('should throw ReservationAlreadyCanceled error', () => {
             const statusCanceled = {
-                status : 'canceled'
-            }
-            mockReservationRepository.findReservationById.mockResolvedValue(statusCanceled)
+                status: 'canceled',
+            };
+            mockReservationRepository.findReservationById.mockResolvedValue(statusCanceled);
 
-            expect(async () => {await reservationService.cancelReservation();}).rejects.toThrow(createError.reservationAlreadyCanceled())
-        })
+            expect(async () => {
+                await reservationService.cancelReservation();
+            }).rejects.toThrow(createError.reservationAlreadyCanceled());
+        });
         // it('should return what reservationRepository.editReservationStatusById() returns', () => {
 
         //     const statusWaiting = {
@@ -49,24 +53,27 @@ describe('Reservation Service Unit Test', () => {
 
         //     expect(async () => {await reservationService.cancelReservation(1)}).toEqual(reservationService.reservationRepository.editReservationStatusById())
         // })
-    })
+    });
     describe('createReview()', () => {
         it('should throw ReviewAlreadyCreated error', async () => {
             const statusReviewed = {
-                status:"reviewed"
-            }
-            mockReservationRepository.findReservationById.mockResolvedValue(statusReviewed)
+                status: 'reviewed',
+            };
+            mockReservationRepository.findReservationById.mockResolvedValue(statusReviewed);
 
-            expect(async() => {await reservationService.createReview();}).rejects.toThrow(createError.reviewAlreadyCreated())
-        })
+            expect(async () => {
+                await reservationService.createReview();
+            }).rejects.toThrow(createError.reviewAlreadyCreated());
+        });
         it('should throw ReviewAlreadyCreated error', () => {
             const statusWaiting = {
-                status:"waiting"
-            }
-            mockReservationRepository.findReservationById.mockResolvedValue(statusWaiting)
+                status: 'waiting',
+            };
+            mockReservationRepository.findReservationById.mockResolvedValue(statusWaiting);
 
-            expect(async() => {await reservationService.createReview();}).rejects.toThrow(createError.reservationStatusIsNotDone())
-        })
-    })
-
-})
+            expect(async () => {
+                await reservationService.createReview();
+            }).rejects.toThrow(createError.reservationStatusIsNotDone());
+        });
+    });
+});

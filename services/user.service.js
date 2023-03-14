@@ -51,10 +51,7 @@ class UserService {
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
-        const canceled = await this.reservationRepository.getCanceledReservation(
-            userId,
-            page
-        );
+        const canceled = await this.reservationRepository.getCanceledReservation(userId, page);
         return canceled;
     };
 

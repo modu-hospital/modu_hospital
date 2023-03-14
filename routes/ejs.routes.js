@@ -44,9 +44,16 @@ router.get('/doctorRegister', (req, res) => {
     res.render('index.ejs', { components: 'doctorRegister' });
 });
 
-//의사정보 수정 페이지
+//의사한명 페이지
 router.get('/doctorEdit', (req, res) => {
+    const doctorId = req.query.doctorId;
     res.render('index.ejs', { components: 'doctorEdit' });
+});
+
+//의사한명 페이지
+router.get('/detail', (req, res) => {
+    const doctorId = req.query.doctorId;
+    res.render('index.ejs', { components: 'detail' });
 });
 
 module.exports = router;
