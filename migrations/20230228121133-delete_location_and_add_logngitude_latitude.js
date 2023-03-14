@@ -14,4 +14,14 @@ module.exports = {
             }),
         ]);
     },
+    async down(queryInterface, Sequelize) {
+        /**
+         * Add reverting commands here.
+         *
+         * Example:
+         * await queryInterface.dropTable('users');
+         */
+        // Promise.all([queryInterface.removeColumn('hospitals', 'longitude')]);
+        // return Promise.all([queryInterface.removeColumn('hospitals', 'latitude')]);
+    },
 };
