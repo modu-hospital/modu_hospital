@@ -13,6 +13,13 @@ class UserRepository {
         return user;
     };
 
+    findUserByEmail = async (email) => {
+        const user = await this.userModel.findOne({
+            where: {loginId:email}
+        })
+        return user
+    }
+
     editUserProfile = async (userId, address, phone, name) => {
         const editedProfile = await this.userModel.update(
             {
@@ -126,6 +133,17 @@ class UserRepository {
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
+    updatePassword = async (userId, password) => {
+        const updated = await this.userModel.update(
+            {
+                password:password
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+        return updated
+    }
 
     //userId로 refreshtoken 찾기
     findToken = async (userId) => {

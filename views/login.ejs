@@ -22,34 +22,34 @@
     </table>
 </form>
 <script>
-    // const form = document.querySelector("form")
+    const form = document.querySelector("form")
 
-    // form.addEventListener("submit", async(a) => {
-    //     try{
-    //         a.preventDefault()
-    //         const Id = document.getElementById("Id").value
-    //         const password = document.getElementById("password").value
-    //         const formData = new FormData()
+    form.addEventListener("submit", async(a) => {
+        try{
+            a.preventDefault()
+            const Id = document.getElementById("Id").value
+            const password = document.getElementById("password").value
+            const formData = new FormData()
 
-    //         formData.append("id", Id)
-    //         formData.append("password", password)
+            formData.append("id", Id)
+            formData.append("password", password)
 
-    //         const res = await axios.post('http://localhost:3000/api/users/login', formData,{
-    //             headers: {
-    //                 "Content-Type":"application/json",
-    //             }
-    //         })
-    //         .then(function(response) {
-    //             if(response?.status === 200){
-    //                 opener.location.href = "/main"
-    //                 window.close()
-    //             }
-    //         })
-    //     } catch(error) {
-    //         alert("다시 로그인해주세요")
-    //         location.reload()
-    //     }
-    // })
+            const res = await axios.post('http://localhost:3000/api/users/login', formData,{
+                headers: {
+                    "Content-Type":"application/json",
+                }
+            })
+            .then(function(response) {
+                if(response?.status === 200){
+                    opener.location.href = "/main"
+                    window.close()
+                }
+            })
+        } catch(error) {
+            alert("다시 로그인해주세요")
+            location.reload()
+        }
+    })
 </script>
 
 </body>

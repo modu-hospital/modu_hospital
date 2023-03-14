@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/userData/:userId', userController.getUserProfile);
+router.get('/mypage/userdata/:userId', userController.getUserProfile);
 
 router.get('/mypage/approved', userController.getApprovedReservation);
 
@@ -27,6 +27,15 @@ router.post('/login', userController.login);
 router.post('/logout', userController.logout)
 
 //auth는 로그인 한 이후 이용 가능한 서비스에 추가하기
+
+router.get('/email/certification/send', userController.sendEmailForCertification)
+
+router.get('/email/resetpassword/send', userController.sendEmailForResetPassword)
+
+router.patch('/resetpassword', userController.resetPassword)
+
+router.patch('/mypage/editpassword', userController.editUserPassword)
+
 
 
 module.exports = router;
