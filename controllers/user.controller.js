@@ -206,51 +206,77 @@ class UserController {
     };
 
     login = async (req, res, next) => {
-        console.log("컨트롤러")
-        const { loginId, password } = req.body;
+        try{
+            const { loginId, password } = req.body;
+            const user = await this.userService.login(loginId, password);
+            if( user === 0 ){
+                res.status(400).send({message: "아이디 비밀번호를 확인해주세요"})
+            } else {
 
-        const user = await this.userService.login(loginId, password);
-        console.log("@@@user", user.userId) //왜 유저가 null로 찍히는지
-        //TypeError: Cannot read properties of undefined (reading 'userId')
-        //값이 없기 때문에 잘못된 계정으로 로그인 시도
+                const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
+                    expiresIn: '10s',
+                });
 
-        //토큰 생성 컨트롤러에서
-        const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
-            expiresIn: '10s',
-        });
+                const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+                    expiresIn: '7d',
+                });
 
-        const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
-            expiresIn: '7d',
-        });
+                res.cookie("accessToken", accessToken)
+                res.cookie("refreshToken", refreshToken)
 
-        res.cookie("accessToken", accessToken)
-        res.cookie("refreshToken", refreshToken)
-
-    // userId조건으로 refreshToken 찾아와서(userId의 조건으로 refreshToken 찾기)
-    // const refresh = await RefreshToken.findAll({where: {userId}})
-    // console.log(refresh) 값의 형태 알기 ex)refresh[0].refreshToken
-    //if(refresh[0].refreshToken)
-    // refreshToken이 있다면 verify 시켜주고 verify한 refreshToken이 만료됬다면 //update로 새로 만들기??
-    // refreshToken이 없다면 그냥 save
-
-    // res.locals
-    //전에 어떤 식으로 활용했었는지 확인
-
-        const refresh = await this.userService.findToken(user.userId)
-        // console.log("###refresh", refresh) //빈배열
-        if(refresh[0]) {
-            const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY)
-            if(!verify){
-                const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
-                return reupdate
+                const refresh = await this.userService.findToken(user.userId)
+                // console.log("###refresh", refresh) //빈배열
+                if(refresh[0]) {
+                    const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY)
+                    if(!verify){
+                        const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
+                        return reupdate
+                    }
+                    res.json(verify)
+                } else {
+                    const save = await this.userService.saveToken(user.userId, refreshToken);
+                    return save 
+                }
+                res.status(200).json({accessToken, refreshToken})
             }
-            res.json(verify)
-        } else {
-            const save = await this.userService.saveToken(user.userId, refreshToken);
-            res.json(save) 
+        } catch (err){
+            next(err)
         }
 
-        res.status(200).json({accessToken, refreshToken});
+    //     //토큰 생성 컨트롤러에서
+    //     const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
+    //         expiresIn: '10s',
+    //     });
+
+    //     const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+    //         expiresIn: '7d',
+    //     });
+
+    //     res.cookie("accessToken", accessToken)
+    //     res.cookie("refreshToken", refreshToken)
+
+    // // userId조건으로 refreshToken 찾아와서(userId의 조건으로 refreshToken 찾기)
+    // // const refresh = await RefreshToken.findAll({where: {userId}})
+    // // console.log(refresh) 값의 형태 알기 ex)refresh[0].refreshToken
+    // //if(refresh[0].refreshToken)
+    // // refreshToken이 있다면 verify 시켜주고 verify한 refreshToken이 만료됬다면 //update로 새로 만들기??
+    // // refreshToken이 없다면 그냥 save
+
+    //     const refresh = await this.userService.findToken(user.userId)
+    //     // console.log("###refresh", refresh) //빈배열
+    //     if(refresh[0]) {
+    //         const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY)
+    //         if(!verify){
+    //             const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
+    //             return reupdate
+    //         }
+    //         res.json(verify)
+    //     } else {
+    //         const save = await this.userService.saveToken(user.userId, refreshToken);
+    //         return save 
+    //     }
+
+    //     res.status(200).json({accessToken, refreshToken});
     };
 
     logout = async (req, res) => {
