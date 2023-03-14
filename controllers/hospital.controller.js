@@ -4,6 +4,7 @@ const axios = require('axios');
 
 const env = process.env;
 
+
 const Validation = require('../lib/validation');
 
 class HospitalController {
@@ -48,6 +49,8 @@ class HospitalController {
     searchHospitalInfo = async (req, res, next) => {
         try {
             const { id } = req.params;
+
+            console.log(id);
 
             const info = await this.hospitalService.searchHospitalInfo(id);
 

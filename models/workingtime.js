@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate({ Doctor }) {
-            this.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctors' });
-        }
+            this.hasMany(Doctor, { foreignKey: 'doctorId', as: 'doctors' });
+        } //hasMany로 바꿔봄
     }
     WorkingTime.init(
         {

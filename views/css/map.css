@@ -3,13 +3,38 @@ body {
   list-style: none;
 }
 
+button {
+  background-color: #8ab3ff;
+  color: #ffffff;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  height: 5vh;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+#homeIcon {
+  color: #b9deff;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
 #listBtn {
   position: absolute;
   bottom: 10vh;
   right: 50%;
   width: 300px;
   height: 50px;
-  border: 3px solid #73AD21;
+  border: 3px solid #216cad;
+  background-color: #fff;
+  color: #222;
   z-index: 1;
   margin-right: -150px;
 }
@@ -19,52 +44,36 @@ input[id="menuIcon"] {
 }
 
 input[id="menuIcon"]+label {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   width: 30px;
   height: 20px;
-  position: fixed;
-  right: 15px;
-  top: 10px;
   transition: all 0.35s;
   cursor: pointer;
   z-index: 3;
+  margin-right: 10px;
 }
 
 input[id="menuIcon"]+label span {
   display: block;
-  position: absolute;
   width: 100%;
   height: 5px;
   border-radius: 30px;
-  background: #222;
+  background: #8ab3ff;
   transition: all .35s;
 }
 
-input[id="menuIcon"]+label span:nth-child(1) {
-  top: 0;
-}
-
-input[id="menuIcon"]+label span:nth-child(2) {
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-input[id="menuIcon"]+label span:nth-child(3) {
-  bottom: 0;
-}
-
 input[id="menuIcon"]:checked+label span:nth-child(1) {
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-}
-
-input[id="menuIcon"]:checked+label span:nth-child(2) {
   opacity: 0;
 }
 
+input[id="menuIcon"]:checked+label span:nth-child(2) {
+  transform: scale(1.5, 3);
+}
+
 input[id="menuIcon"]:checked+label span:nth-child(3) {
-  bottom: 50%;
-  transform: translateY(50%) rotate(-45deg);
+  opacity: 0;
 }
 
 div[class="sidebar"] {
@@ -104,52 +113,36 @@ input[id="departmentCheckbox"] {
 }
 
 input[id="departmentCheckbox"]+label {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   width: 30px;
   height: 20px;
-  position: fixed;
-  left: 15px;
-  top: 10px;
   transition: all 0.35s;
   cursor: pointer;
   z-index: 3;
+  margin-left: 10px;
 }
 
 input[id="departmentCheckbox"]+label span {
   display: block;
-  position: absolute;
   width: 100%;
   height: 5px;
   border-radius: 30px;
-  background: #222;
+  background: #8ab3ff;
   transition: all .35s;
 }
 
-input[id="departmentCheckbox"]+label span:nth-child(1) {
-  top: 0;
-}
-
-input[id="departmentCheckbox"]+label span:nth-child(2) {
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-input[id="departmentCheckbox"]+label span:nth-child(3) {
-  bottom: 0;
-}
-
 input[id="departmentCheckbox"]:checked+label span:nth-child(1) {
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-}
-
-input[id="departmentCheckbox"]:checked+label span:nth-child(2) {
   opacity: 0;
 }
 
+input[id="departmentCheckbox"]:checked+label span:nth-child(2) {
+  transform: scale(1.5, 3);
+}
+
 input[id="departmentCheckbox"]:checked+label span:nth-child(3) {
-  bottom: 50%;
-  transform: translateY(50%) rotate(-45deg);
+  opacity: 0;
 }
 
 div[class="boxwrap"] {
@@ -184,7 +177,15 @@ img {
   /* 파이어폭스 */
 }
 
-li {
+#pageMoveButton {
+  width: 380px;
+  height: 50px;
+  margin-left: 10px;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+.listBox {
   display: flex;
   justify-content: center;
   margin-top: 20px;

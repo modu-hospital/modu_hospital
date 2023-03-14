@@ -17,11 +17,11 @@ router.get('/users/reservation', (req, res) => {
 });
 
 router.get('/users/mypage/:userId', (req, res) => {
-    res.render('mypage.ejs');
+    res.render('index.ejs', { components: 'mypage' });
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs', { compnents: 'map' });
+    res.render('map.ejs', { components: 'map' });
 });
 
 //원장님의 공간
@@ -48,12 +48,6 @@ router.get('/doctorRegister', (req, res) => {
 router.get('/doctorEdit', (req, res) => {
     const doctorId = req.query.doctorId;
     res.render('index.ejs', { components: 'doctorEdit' });
-});
-
-//의사한명 페이지
-router.get('/detail', (req, res) => {
-    const doctorId = req.query.doctorId;
-    res.render('index.ejs', { components: 'detail' });
 });
 
 module.exports = router;
