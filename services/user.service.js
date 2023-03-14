@@ -1,6 +1,6 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize} = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
@@ -61,38 +61,29 @@ class UserService {
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
 
-        if (existUser[0]) {
-            res.status(400).json({ message: '이미 존재하는 아이디 입니다' });
-            return;
+        if (existUser) {
+            return existUser
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
+        const sign = await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
 
-        return { message: '회원가입이 완료되었습니다' };
+        return sign;
     };
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
+        console.log("user[0].password", user[0].password)
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+        console.log("isPasswordCorrect", isPasswordCorrect)
 
         if (!user || !isPasswordCorrect) {
             return;
         }
-
-        const accessToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
-            expiresIn: '10s',
-        });
-        const refreshToken = jwt.sign({ loginId: user[0].loginId }, process.env.JWT_SECRET_KEY, {
-            expiresIn: '7d',
-        });
-
-        res.cookie('accessToken', accessToken);
-        res.cookie('refreshToken', refreshToken);
-
-        return { message: '로그인 성공' };
+        
+        return user[0];
     };
 
     findUsers = async () => {
@@ -211,6 +202,13 @@ class UserService {
         const updated = await this.userRepository.updatePassword(userId, hashedPassword)
         return updated
     }
-}
 
+    findToken = async (userId) => {
+        return await this.userRepository.findToken(userId)
+    }
+
+    updateToken = async(userId, token) => {
+        return await this.userRepository.updateToken(userId, token)
+    }
+}
 module.exports = UserService;

@@ -23,8 +23,10 @@ router.post('/mypage/review/:id', userController.createReview);
 
 router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
-router.post('/login', auth, userController.login); //auth
-router.post('/logout', userController.logout);
+router.post('/login', userController.login); 
+router.post('/logout', userController.logout)
+
+//auth는 로그인 한 이후 이용 가능한 서비스에 추가하기
 
 router.get('/email/certification/send', userController.sendEmailForCertification)
 

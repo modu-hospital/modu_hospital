@@ -14,6 +14,8 @@ class TokenController {
 
         const refreshToken = req.cookies.refreshToken
         if(!refreshToken) {
+            res.clearCookie('accessToken')
+            res.clearCookie('refreshToken')
             res.send("로그인 다시 하세요")
         }
 
@@ -40,8 +42,3 @@ class TokenController {
 module.exports = TokenController;
 
 //auth에서 토큰 존재 유무, 검증, 재발급,
-
-// access token과 refresh token의 존재 유무를 체크합니다.
-// access token 검증 -> expired여야 함.
-// access token 디코딩하여 user의 정보를 가져옵니다.
-// 디코딩 결과가 없으면 권한이 없음을 응답.

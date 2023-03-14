@@ -20,6 +20,7 @@ const {
     DoctorCategoryMapping,
     User,
     HospitalImageFile,
+    WorkingTime
 } = require('../models/index.js');
 
 class HospitalService {
@@ -31,7 +32,8 @@ class HospitalService {
         Category,
         DoctorCategoryMapping,
         User,
-        HospitalImageFile
+        HospitalImageFile,
+        WorkingTime
     );
 
     findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -309,6 +311,54 @@ class HospitalService {
         }
     }; 
   
+
+    getOneHospital = async (id) => {
+        try {
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id)
+            if (!oneHospital) {
+                return {};
+            }
+
+            //리뷰는 따로 가져와서 프론트에, workingTime
+            //workingTime은 따로 가져와야되는지
+            const doctors = oneHospital.doctors.map((doctor) => {
+                const department = doctor.doctorCategoryMappings.map((category) => {
+                    return category.categories.department
+                })
+                
+                //workingTime은 함수가 아니라서?..
+                //categories는..
+                const workTime = doctor.workingTimes.map((work) => {
+                    return {
+                        day: work.dayOfTheWeek,
+                        start: work.startTime,
+                        end: work.endTime
+                    }
+                })
+               
+                return {
+                    doctors: doctor.name,
+                    doctorImage: doctor.image,
+                    doctorContent: doctor.contents,
+                    department: department.join(','),
+                    workTime: workTime
+                }
+
+            })
+            return {
+                hospitalId: oneHospital.hospitalId,
+                hospitalName: oneHospital.name,
+                hospitalAddress: oneHospital.address,
+                hospitalphone: oneHospital.phone,
+                hospitalImage: !oneHospital.hospitalImageFiles[0]
+                    ? '이미지 준비중'
+                    : oneHospital.hospitalImageFiles[0].url,
+                doctors,
+            }
+        } catch (err) {
+            throw err
+        }
+    }
 }
 
 module.exports = HospitalService;

@@ -348,6 +348,19 @@ class HospitalController {
         }
     }
 
+    //병원 상세 조회
+    getOneHospital = async (req, res, next) => {
+
+        const {id} = req.params
+
+        const oneHospital = await this.hospitalService.getOneHospital(id)
+
+        res.json(oneHospital)
+
+    }
+
+
+    
 }
 
 module.exports = HospitalController;
