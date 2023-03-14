@@ -44,24 +44,10 @@ router.get('/doctorRegister', (req, res) => {
     res.render('index.ejs', { components: 'doctorRegister' });
 });
 
-//의사정보 수정 페이지
+//의사한명 페이지
 router.get('/doctorEdit', (req, res) => {
+    const doctorId = req.query.doctorId;
     res.render('index.ejs', { components: 'doctorEdit' });
-});
-
-//병원상세페이지
-router.get('/hospital/:hospitalId', (req, res) => {
-    res.render('index.ejs', { components: 'hospitaldetail' });
-});
-
-//로그인
-router.get('/login', (req, res) => {
-    res.render('index.ejs', { components: 'login' });
-});
-
-//회원가입
-router.get('/signup', (req, res) => {
-    res.render('index.ejs', { components: 'signup' });
 });
 
 module.exports = router;

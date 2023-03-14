@@ -275,6 +275,7 @@ class UserController {
         //     }
 
         //     res.status(200).json({accessToken, refreshToken});
+        
     };
 
     logout = async (req, res) => {
