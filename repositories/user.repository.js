@@ -1,9 +1,11 @@
 class UserRepository {
-    constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
+    constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel, PasswordResetCaseModel, sequelize) {
         this.userModel = UserModel;
         this.hospitalModel = HospitalModel;
         this.doctorModel = DoctorModel;
         this.refreshTokenModel = RefreshTokenModel;
+        this.passwordResetCaseModel = PasswordResetCaseModel
+        this.sequelize = sequelize
     }
 
     findUserById = async (userId) => {
@@ -141,6 +143,25 @@ class UserRepository {
             }
         );
         return updated
+    }
+    
+    findResetCaseByUserId = async (userId) => {
+        return await this.passwordResetCaseModel.findOne({ where: { userId } })
+    }
+    findResetCaseByToken = async (token) => {
+        return await this.passwordResetCaseModel.findOne({where:{token}})
+    }
+    createPasswordResetCase = async (userId,token) => {
+        return await this.passwordResetCaseModel.create({userId,token})
+    }
+    updatePasswordResetCase = async (userId,token) => {
+        return await this.passwordResetCaseModel.update(
+            {
+                token:token,
+            },
+            {
+                where: { userId:userId }
+            })
     }
 }
 

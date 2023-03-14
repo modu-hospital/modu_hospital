@@ -26,11 +26,13 @@ router.post('/signup/customer', userController.customerSignup);
 router.post('/login', auth, userController.login); //auth
 router.post('/logout', userController.logout);
 
-router.get('/email/certification/send', userController.sendEmailForCertification)
+// router.get('/email/certification/send', userController.sendEmailForCertification)
 
 router.get('/email/resetpassword/send', userController.sendEmailForResetPassword)
 
 router.patch('/resetpassword', userController.resetPassword)
+
+router.get('/resetpassword/:token', userController.findResetCase)
 
 router.patch('/mypage/editpassword', userController.editUserPassword)
 
