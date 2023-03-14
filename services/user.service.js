@@ -3,7 +3,7 @@ const ReservationRepository = require('../repositories/reservation.repository');
 const { User, Hospital, Doctor, RefreshToken, sequelize} = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const transPort = require('../config/nodemailer');
+const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors')
 
 class UserService {
