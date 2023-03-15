@@ -4,7 +4,6 @@ const axios = require('axios');
 
 const env = process.env;
 
-
 const Validation = require('../lib/validation');
 
 class HospitalController {
