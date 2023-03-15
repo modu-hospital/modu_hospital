@@ -32,9 +32,7 @@
             <td>주민등록번호 : </td>
             <td><input type="password" id="idNumber" name="idNumber"></td>
         </tr>
-        <tr>
-            <td><input type="submit" value="회원가입"></td>
-        </tr>
+        <button class="button signup__submit" id="signup">회원가입</button>
     </table>
 </form>
 <script>
@@ -69,34 +67,39 @@ function check_pw(){
      }
  }
 }
-    // const form = document.querySelector("form")
 
-    // form.addEventListener("submit", async(a) => {
-    //     try{
-    //         a.preventDefault()
-    //         const Id = document.getElementById("Id").value
-    //         const password = document.getElementById("password").value
-    //         const formData = new FormData()
+document.getElementById('signup')
+fetch('localhost:3000/api/users/signup/customer', {
+        method : "POST",
+        body : JSON.stringify({
+            name : name,
+            loginId : email,
+            password : password,
+            confirm : confirm,
+            phone : phone,
+            idNumber : idNumber
 
-    //         formData.append("id", Id)
-    //         formData.append("password", password)
+        }),
+        headers : {
+            'Content-Type' : 'application/json',
+            'Accept' : 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(res => {
+        console.log(res)
+    })
 
-    //         const res = await axios.post('http://localhost:3000/api/users/login', formData,{
-    //             headers: {
-    //                 "Content-Type":"application/json",
-    //             }
-    //         })
-    //         .then(function(response) {
-    //             if(response?.status === 200){
-    //                 opener.location.href = "/main"
-    //                 window.close()
-    //             }
-    //         })
-    //     } catch(error) {
-    //         alert("다시 로그인해주세요")
-    //         location.reload()
-    //     }
-    // })
+//         fetch('API 주소 넣어주기',{
+// 	headers : {
+//     	//헤더에 들어갈 것들
+//     }
+// }).then(response => response.json())
+//   .then(response => {
+//   	//fetch 이후 작동할 코드들이 들어간다.
+//   })
+
+        //파트너 맺기? 누르면 partner로 api 연결
 </script>
 
 </body>

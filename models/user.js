@@ -1,6 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const refreshtoken = require('./refreshtoken');
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         /**

@@ -208,6 +208,7 @@ class UserService {
     }
 
     updateToken = async(userId, token) => {
+        console.log("token#########", token)
         return await this.userRepository.updateToken(userId, token)
     }
 }
