@@ -196,7 +196,7 @@ class UserService {
             subject: '모두의 병원 비밀번호 재설정',
             text: 'token ' + token,
         };
-
+        //메일 전송
         // transPort.sendMail(mailOptions, (err, info) => {
         //     console.log(info.envelope);
         //     console.log(info.messageId);
@@ -218,6 +218,7 @@ class UserService {
         const elapsed = ((now - resetCase.updatedAt) / 60000)
         //만료된 요청
         if(elapsed > validTime){
+            await this.userRepository.updatePasswordResetCase(user.userId, null)
             throw this.createError.requestExpired()
         }
 
