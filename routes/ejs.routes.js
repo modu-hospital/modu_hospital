@@ -50,4 +50,10 @@ router.get('/doctorEdit', (req, res) => {
     res.render('index.ejs', { components: 'doctorEdit' });
 });
 
+//의사한명 페이지
+router.get('/doctorTime', (req, res) => {
+    const doctorId = req.query.doctorId;
+    res.render('index.ejs', { components: 'doctorTime' });
+});
+
 module.exports = router;

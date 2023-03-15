@@ -301,10 +301,25 @@ class HospitalController {
         }
     };
 
+    // 병원 이미지 등록
+    registerImagehospital = async(req, res, next) => {
+        // const { currentUser } = res.locals;
+        // cosnt userId = currentUser.id;
+        const userId = 91;
+        try {
+            const files = req.files;
+            console.log(files);
+            const hospital = await this.hospitalService.registerImagehospital(userId, files);
+            return res.json({data: hospital});
+        } catch (error){
+            next(error);
+        }
+    }
+
     // 의사 정보 등록
     registerdoctor = async (req, res, next) => {
         // userId = 3;
-        console.log(req);
+        console.log(req.body);
         const userId = 91;
         const { name, contents, categories } = req.body;
 
@@ -369,6 +384,18 @@ class HospitalController {
             next(error);
         }
     };
+    
+    // 의사 workigtime 넣기 
+    createWorkingTime = async (req, res, next) => {
+        try {
+            const workigTimeData = req.body; 
+            const workingTime = await this.hospitalService.createWorkingTime(workigTimeData);
+            return res.json(workingTime);
+        } catch (error) {
+            next(error); 
+        }
+    };
+
 }
 
 module.exports = HospitalController;

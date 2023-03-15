@@ -345,7 +345,6 @@ class HospitalService {
         const filename = `${Date.now()}_${file.originalname}`;
         const params = {
             Bucket: env.AWS_BUCKET_NAME,
-            // endpoint:'moduhospital.s3.ap-northeast-2.amazonaws.com',
             Key: `doctors/${filename}`,
             Body: fileContent,
             ContentType: file.mimetype,
@@ -360,6 +359,88 @@ class HospitalService {
             throw new Error('Failed to upload image to S3');
         }
     };
+
+    // 의사 workingtime 넣기
+    createWorkingTime = async (workigTimeData) => {
+        const workigtime = [];
+        for (let i = 0; i < workigTimeData.workingTimes.length; i++){
+            const data = {
+                doctorId: parseInt(workigTimeData.doctorId), // 문자열을 정수형으로 변환
+                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek), // 문자열을 정수형으로 변환
+                startTime: workigTimeData.workingTimes[i].startTime,
+                endTime: workigTimeData.workingTimes[i].endTime,
+                startDate: workigTimeData.workingTimes[i].startDate,
+                endDate: workigTimeData.workingTimes[i].endDate
+            };
+            workigtime.push(data);
+        }
+        console.log(workigtime)
+
+        try {
+            const doctorWorkingTimeData = await this.hospitalRepository.createWorkingTime(workigtime);
+            return doctorWorkingTimeData;
+        } catch (error){
+            throw error;
+        }
+    };
+
+    
+    registerImagehospital = async(userId, files) => {
+        const promises = files.map((file, index) => {
+            const fileContent = fs.readFileSync(file.path); 
+            const filename = `${Date.now()}_${file.originalname}`;
+            const params = {
+                Bucket: env.AWS_BUCKET_NAME,
+                Key: `doctors/${filename}`,
+                Body: fileContent,
+                ContentType: file.mimetype,
+              };
+              return new Promise((resolve, reject) => {
+                s3.upload(params, (err, data) => {
+                    if (err) {
+                        console.error(err);
+                        reject(new Error(`Failed to upload image ${index + 1} to S3`));
+                    } else {
+                        console.log(`File ${index + 1} uploaded successfully. ${data.Location}`);
+                        fs.unlinkSync(file.path);
+                        resolve(data.Location);
+                    }
+                })
+              })
+        });
+
+        const imageurls = await Promise.all(promises);
+        console.log(imageurls)
+
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const error = new Error('해당 병원이 존재하지 않습니다.');
+                error.name = 'Hospital Not found';
+                error.status = 400;
+                throw error;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+            console.log(hospitalId);
+            // 이미지 여러개 업로드 하기 
+
+            const url = [];
+            for (let i = 0; i < imageurls.length; i++) {
+                const data = {
+                    hospitalId: hospitalId,
+                    url: imageurls[i]
+                };
+                url.push(data);
+            }
+            const ImageFile = await this.hospitalRepository.registerImagehospital(url);
+
+            return ImageFile; 
+        } catch (error) {
+            throw err;
+        }
+    
+
+    }
 
     getOneHospital = async (id) => {
         try {

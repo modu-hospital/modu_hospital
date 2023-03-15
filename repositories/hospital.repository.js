@@ -13,7 +13,7 @@ class HospitalRepository {
         DoctorCategoryMappingModel,
         UserModel,
         HospitalImageFileModel,
-        WorkingTimeModel
+        WorkingTimeModel,
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -282,6 +282,16 @@ class HospitalRepository {
         }
     };
 
+    // 해당 병원 이미지 넣기 
+    registerImagehospital = async (url) => {
+        try {
+            const ImageFile = await this.hospitalImageFileModel.bulkCreate(url);
+            return ImageFile;
+        } catch (error){
+            throw new Error(error);
+        }
+    }
+
     // 의사 정보 불러오기
     findAllDoctor = async (hospitalId) => {
         try {
@@ -345,6 +355,10 @@ class HospitalRepository {
     };
 
     // 의사일하는시간 넣기
+    createWorkingTime = async (workigtime) => {
+       const data = await this.workingTimeModel.bulkCreate(workigtime); 
+        return data ;
+    };
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {

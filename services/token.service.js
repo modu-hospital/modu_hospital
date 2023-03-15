@@ -1,5 +1,5 @@
 const TokenRepository = require('../repositories/token.repository');
-const { Refreshtoken } = require('../models/refreshtoken');
+const { Refreshtoken } = require('../models/index.js');
 
 class TokenService {
     tokenRepository = new TokenRepository(Refreshtoken);
