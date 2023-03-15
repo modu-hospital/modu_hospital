@@ -269,7 +269,7 @@ class HospitalService {
             throw err;
         }
     };
-    
+
     findOneDoctor = async (doctorId) => {
         try {
             const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);

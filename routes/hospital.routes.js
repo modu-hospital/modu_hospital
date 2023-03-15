@@ -66,6 +66,6 @@ router.post('/around/info', hospitalController.findNearHospitalsInfo);
 router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 //병원 상세 조회
-router.get('/detail/:id')
+router.get('/detail/:id');
 
 module.exports = router;

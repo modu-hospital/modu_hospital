@@ -1,13 +1,22 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize, PasswordResetCase } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
+require('dotenv').config();
+const env = process.env;
 
 class UserService {
-    userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken);
+    userRepository = new UserRepository(
+        User,
+        Hospital,
+        Doctor,
+        RefreshToken,
+        PasswordResetCase,
+        sequelize
+    );
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
 
@@ -153,53 +162,88 @@ class UserService {
     saveToken = async (userId, token) => {
         return await this.userRepository.tokenSave(userId, token);
     };
-    sendEmailForCertification = (email) => {
-        const generateRandom = function (min, max) {
-            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-            return randomNumber;
-        };
+    // sendEmailForCertification = (email) => {
+    //     const generateRandom = function (min, max) {
+    //         const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    //         return randomNumber;
+    //     };
 
-        const number = generateRandom(111111, 999999);
+    //     const number = generateRandom(111111, 999999);
 
-        const mailOptions = {
-            from: 'spartamoduhospital@gmail.com',
-            to: email,
-            subject: '모두의 병원 이메일 인증코드',
-            text: '인증 코드입니다. ' + number,
-        };
+    //     const mailOptions = {
+    //         from: 'spartamoduhospital@gmail.com',
+    //         to: email,
+    //         subject: '모두의 병원 이메일 인증코드',
+    //         text: '인증 코드입니다. ' + number,
+    //     };
 
-        transPort.sendMail(mailOptions, (err, info) => {
-            console.log(info.envelope);
-            console.log(info.messageId);
-        });
-    };
+    //     transPort.sendMail(mailOptions, (err, info) => {
+    //         console.log(info.envelope);
+    //         console.log(info.messageId);
+    //     });
+    // };
     sendEmailForResetPassword = async (email) => {
         const user = await this.userRepository.findUserByEmail(email);
         if (!user) {
             const err = await this.createError.wrongEmail();
             throw err;
         }
-        const params = await bcrypt.hash(email, 12);
 
+        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
+        const token = await bcrypt.hash(Math.random().toString(36).slice(2), 12);
+        if (!isCaseExist) {
+            await this.userRepository.createPasswordResetCase(user.userId, token);
+        } else {
+            await this.userRepository.updatePasswordResetCase(user.userId, token);
+        }
         const mailOptions = {
             from: 'spartamoduhospital@gmail.com',
             to: email,
             subject: '모두의 병원 비밀번호 재설정',
-            text: 'params ' + params,
+            text: 'token ' + token,
         };
 
-        transPort.sendMail(mailOptions, (err, info) => {
-            console.log(info.envelope);
-            console.log(info.messageId);
-        });
+        // transPort.sendMail(mailOptions, (err, info) => {
+        //     console.log(info.envelope);
+        //     console.log(info.messageId);
+        // });
     };
-    resetPassword = async (email, password, confirm, params) => {
+
+    resetPassword = async (email, password, confirm, token) => {
+        // 이메일 발송 후 유효시간 설정(분)
+        const validTime = 15;
+
         const user = await this.userRepository.findUserByEmail(email);
-        const match = await bcrypt.compare(email, params);
-        if (!user || !match) {
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
+
+        //email로 찾은 user가 없거나 /email을 발송한 적이 없거나 / token과email이 일치하지 않을 때
+        if (!user || !resetCase.token || !(user.userId == resetCase.userId)) {
             throw this.createError.noAuthOrWrongEmail();
         }
-        const passwordUpdated = await this.editPassword(user.userId, password, confirm);
+        const now = new Date();
+        //이메일 발신 후 경과시간 (분)
+        const elapsed = (now - resetCase.updatedAt) / 60000;
+        //만료된 요청
+        if (elapsed > validTime) {
+            throw this.createError.requestExpired();
+        }
+
+        //비밀번호 update
+        if (password != confirm) {
+            throw this.createError.passwordNotMatched();
+        }
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const updated = await this.userRepository.updatePassword(user.userId, hashedPassword);
+
+        await this.userRepository.updatePasswordResetCase(user.userId, null);
+        return updated;
+    };
+    findResetCase = async (token) => {
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
+        if (!resetCase) {
+            return false;
+        }
+        return true;
     };
     editPassword = async (userId, password, confirm) => {
         if (password != confirm) {
