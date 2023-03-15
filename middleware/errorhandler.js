@@ -82,7 +82,8 @@ const errorHandler = (err, req, res, next) => {
 
     for (let i = 0; i < Object.keys(errorList).length; i++) {
         if (req.path.substr(0, Object.keys(errorList)[i].length) === Object.keys(errorList)[i]) {
-            return res.status(500).json({ message: Object.values(errorList)[i] });
+            console.log(err)
+                return res.status(500).json({ message: Object.values(errorList)[i] });   
         }
     }
 
