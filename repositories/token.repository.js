@@ -5,9 +5,8 @@ class TokenRepository {
     }
 
     findUserId = async (userId) => {
-        return await this.userModel.findOne({where: {userId}});
+        return await this.userModel.findOne({ where: { userId } });
     };
-
 }
 
 module.exports = TokenRepository;

@@ -10,7 +10,7 @@ let mockUserService = {
     getCanceledReservation: jest.fn(),
 };
 let mockReservationService = {
-    cancelReservation: jest.fn()
+    cancelReservation: jest.fn(),
 };
 
 let mockRequest = {

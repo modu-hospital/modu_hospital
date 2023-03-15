@@ -15,10 +15,10 @@ class UserRepository {
 
     findUserByEmail = async (email) => {
         const user = await this.userModel.findOne({
-            where: {loginId:email}
-        })
-        return user
-    }
+            where: { loginId: email },
+        });
+        return user;
+    };
 
     editUserProfile = async (userId, address, phone, name) => {
         const editedProfile = await this.userModel.update(
@@ -38,7 +38,7 @@ class UserRepository {
         return await this.userModel.create({ name, loginId, password, phone, idNumber, role });
     };
 
-    findUser = async (loginId) => { 
+    findUser = async (loginId) => {
         return await this.userModel.findOne({ where: { loginId } });
     };
 
@@ -46,7 +46,7 @@ class UserRepository {
         return await this.userModel.findAll({ where: { role } });
     };
 
-    findAllUser = async () => { 
+    findAllUser = async () => {
         return await this.userModel.findAll({});
     };
 
@@ -131,14 +131,14 @@ class UserRepository {
     updatePassword = async (userId, password) => {
         const updated = await this.userModel.update(
             {
-                password:password
+                password: password,
             },
             {
                 where: { userId: userId },
             }
         );
-        return updated
-    }
+        return updated;
+    };
     //토큰 저장
     tokenSave = async (userId, token) => {
         return await this.refreshTokenModel.create({ userId, token });
@@ -146,13 +146,13 @@ class UserRepository {
 
     //userId로 refreshtoken 찾기
     findToken = async (userId) => {
-        return await this.refreshTokenModel.findAll({where: {userId}})
-    }
+        return await this.refreshTokenModel.findAll({ where: { userId } });
+    };
 
     //token 수정
     updateToken = async (userId, token) => {
-        return await this.refreshTokenModel.update({token}, {where: {userId}})
-    }
+        return await this.refreshTokenModel.update({ token }, { where: { userId } });
+    };
 }
 
 module.exports = UserRepository;

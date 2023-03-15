@@ -13,11 +13,11 @@ const mockReservationRepository = {
     getApprovedReservation: jest.fn(),
     getWaitingReservation: jest.fn(),
     getDoneOrReviewedReservation: jest.fn(),
-    getCanceledReservation: jest.fn()
-}
+    getCanceledReservation: jest.fn(),
+};
 const userService = new UserService();
 userService.userRepository = mockUserRepository;
-userService.reservationRepository = mockReservationRepository
+userService.reservationRepository = mockReservationRepository;
 
 describe('User Service Unit Test', () => {
     beforeEach(() => {
@@ -53,9 +53,9 @@ describe('User Service Unit Test', () => {
                     status: 'approved',
                 },
             ];
-            mockReservationRepository.getApprovedReservation.mockResolvedValue(reservationData)
-            const returnValue = await userService.getApprovedReservation()
-            expect(returnValue).toMatchObject(reservationData)
+            mockReservationRepository.getApprovedReservation.mockResolvedValue(reservationData);
+            const returnValue = await userService.getApprovedReservation();
+            expect(returnValue).toMatchObject(reservationData);
         });
     });
     describe('getWaitingReservation', () => {
@@ -70,9 +70,9 @@ describe('User Service Unit Test', () => {
                     status: 'waiting',
                 },
             ];
-            mockReservationRepository.getWaitingReservation.mockResolvedValue(reservationData)
-            const returnValue = await userService.getWaitingReservation()
-            expect(returnValue).toMatchObject(reservationData)
+            mockReservationRepository.getWaitingReservation.mockResolvedValue(reservationData);
+            const returnValue = await userService.getWaitingReservation();
+            expect(returnValue).toMatchObject(reservationData);
         });
     });
     describe('getApprovedReservation', () => {
@@ -87,9 +87,9 @@ describe('User Service Unit Test', () => {
                     status: 'approved',
                 },
             ];
-            mockReservationRepository.getApprovedReservation.mockResolvedValue(reservationData)
-            const returnValue = await userService.getApprovedReservation()
-            expect(returnValue).toMatchObject(reservationData)
+            mockReservationRepository.getApprovedReservation.mockResolvedValue(reservationData);
+            const returnValue = await userService.getApprovedReservation();
+            expect(returnValue).toMatchObject(reservationData);
         });
     });
     describe('getDoneOrReviewedReservation', () => {
@@ -104,9 +104,11 @@ describe('User Service Unit Test', () => {
                     status: 'doneOrReviewed',
                 },
             ];
-            mockReservationRepository.getDoneOrReviewedReservation.mockResolvedValue(reservationData)
-            const returnValue = await userService.getDoneOrReviewedReservation()
-            expect(returnValue).toMatchObject(reservationData)
+            mockReservationRepository.getDoneOrReviewedReservation.mockResolvedValue(
+                reservationData
+            );
+            const returnValue = await userService.getDoneOrReviewedReservation();
+            expect(returnValue).toMatchObject(reservationData);
         });
     });
     describe('getCanceledReservation', () => {
@@ -121,11 +123,9 @@ describe('User Service Unit Test', () => {
                     status: 'canceled',
                 },
             ];
-            mockReservationRepository.getCanceledReservation.mockResolvedValue(reservationData)
-            const returnValue = await userService.getCanceledReservation()
-            expect(returnValue).toMatchObject(reservationData)
+            mockReservationRepository.getCanceledReservation.mockResolvedValue(reservationData);
+            const returnValue = await userService.getCanceledReservation();
+            expect(returnValue).toMatchObject(reservationData);
         });
     });
-
-    
 });

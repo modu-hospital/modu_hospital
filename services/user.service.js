@@ -1,15 +1,15 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken, sequelize} = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
-const CreateError = require('../lib/errors')
+const CreateError = require('../lib/errors');
 
 class UserService {
     userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken);
     reservationRepository = new ReservationRepository(sequelize);
-    createError = new CreateError()
+    createError = new CreateError();
 
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
@@ -62,27 +62,34 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {
-            return existUser
+            return existUser;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const sign = await this.userRepository.signup(name, loginId, hashedPassword, phone, idNumber, role);
+        const sign = await this.userRepository.signup(
+            name,
+            loginId,
+            hashedPassword,
+            phone,
+            idNumber,
+            role
+        );
 
         return sign;
     };
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
-        console.log("user[0].password", user[0].password)
+        console.log('user[0].password', user[0].password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
-        console.log("isPasswordCorrect", isPasswordCorrect)
+        console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
             return;
         }
-        
+
         return user[0];
     };
 
@@ -169,8 +176,8 @@ class UserService {
     sendEmailForResetPassword = async (email) => {
         const user = await this.userRepository.findUserByEmail(email);
         if (!user) {
-            const err = await this.createError.wrongEmail()
-            throw err
+            const err = await this.createError.wrongEmail();
+            throw err;
         }
         const params = await bcrypt.hash(email, 12);
 
@@ -187,29 +194,29 @@ class UserService {
         });
     };
     resetPassword = async (email, password, confirm, params) => {
-        const user = await this.userRepository.findUserByEmail(email)
-        const match = await bcrypt.compare(email,params)
-        if(!user || !match){
-            throw this.createError.noAuthOrWrongEmail()
+        const user = await this.userRepository.findUserByEmail(email);
+        const match = await bcrypt.compare(email, params);
+        if (!user || !match) {
+            throw this.createError.noAuthOrWrongEmail();
         }
-        const passwordUpdated = await this.editPassword(user.userId, password, confirm)
-    }
-    editPassword = async (userId,password,confirm) => {
-        if(password != confirm){
-            throw this.createError.passwordNotMatched()
+        const passwordUpdated = await this.editPassword(user.userId, password, confirm);
+    };
+    editPassword = async (userId, password, confirm) => {
+        if (password != confirm) {
+            throw this.createError.passwordNotMatched();
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const updated = await this.userRepository.updatePassword(userId, hashedPassword)
-        return updated
-    }
+        const updated = await this.userRepository.updatePassword(userId, hashedPassword);
+        return updated;
+    };
 
     findToken = async (userId) => {
-        return await this.userRepository.findToken(userId)
-    }
+        return await this.userRepository.findToken(userId);
+    };
 
-    updateToken = async(userId, token) => {
-        console.log("token#########", token)
-        return await this.userRepository.updateToken(userId, token)
-    }
+    updateToken = async (userId, token) => {
+        console.log('token#########', token);
+        return await this.userRepository.updateToken(userId, token);
+    };
 }
 module.exports = UserService;
