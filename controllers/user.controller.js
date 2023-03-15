@@ -275,7 +275,6 @@ class UserController {
         //     }
 
         //     res.status(200).json({accessToken, refreshToken});
-        
     };
 
     logout = async (req, res) => {
@@ -293,41 +292,44 @@ class UserController {
     //    }
     // }
 
-    sendEmailForResetPassword = async (req,res,next) => {
-        try{
-            console.log(new Date())
-            const {email,token} = req.body
-            const sendEmail = await this.userService.sendEmailForResetPassword(email,token)
-            return res.status(200).json({message:'이메일이 발송되었습니다.'})
-        }catch(err){
-            next(err)
+    sendEmailForResetPassword = async (req, res, next) => {
+        try {
+            console.log(new Date());
+            const { email, token } = req.body;
+            const sendEmail = await this.userService.sendEmailForResetPassword(email, token);
+            return res.status(200).json({ message: '이메일이 발송되었습니다.' });
+        } catch (err) {
+            next(err);
         }
-    }
-    resetPassword = async (req,res,next) => {
-        try{
-        const {email, password, confirm, token} = await this.validation.resetUserPassword.validateAsync(req.body)
-        const passwordReset = await this.userService.resetPassword(email,password,confirm,token)
-        return res.status(200).json({message : '비밀번호 재설정이 완료되었습니다.'})
-        }catch(err){
-            next(err)
-        }
-    }
-    findResetCase = async (req,res,next) => {
-        try{
-            const {token} = req.params
-            const isCaseExist = await this.userService.findResetCase(token)
-            return res.status(200).json({isCaseExist})
-
-        }catch(err){
-            next(err)
-        }
-    }
-    editUserPassword = async (req,res,next) => {
-        try{
-            const {userId, password, confirm} = await this.validation.editUserPassword.validateAsync(
-                req.body
-
+    };
+    resetPassword = async (req, res, next) => {
+        try {
+            const { email, password, confirm, token } =
+                await this.validation.resetUserPassword.validateAsync(req.body);
+            const passwordReset = await this.userService.resetPassword(
+                email,
+                password,
+                confirm,
+                token
             );
+            return res.status(200).json({ message: '비밀번호 재설정이 완료되었습니다.' });
+        } catch (err) {
+            next(err);
+        }
+    };
+    findResetCase = async (req, res, next) => {
+        try {
+            const { token } = req.params;
+            const isCaseExist = await this.userService.findResetCase(token);
+            return res.status(200).json({ isCaseExist });
+        } catch (err) {
+            next(err);
+        }
+    };
+    editUserPassword = async (req, res, next) => {
+        try {
+            const { userId, password, confirm } =
+                await this.validation.editUserPassword.validateAsync(req.body);
             return res.status(200).json({ message: '비밀번호 재설정이 완료되었습니다.' });
         } catch (err) {
             next(err);

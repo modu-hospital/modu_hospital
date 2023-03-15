@@ -4,12 +4,19 @@ const { User, Hospital, Doctor, RefreshToken, sequelize, PasswordResetCase } = r
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
-const CreateError = require('../lib/errors')
+const CreateError = require('../lib/errors');
 require('dotenv').config();
 const env = process.env;
 
 class UserService {
-    userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken,PasswordResetCase, sequelize);
+    userRepository = new UserRepository(
+        User,
+        Hospital,
+        Doctor,
+        RefreshToken,
+        PasswordResetCase,
+        sequelize
+    );
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
 
@@ -182,12 +189,12 @@ class UserService {
             throw err;
         }
 
-        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId)
-        const token = await bcrypt.hash(Math.random().toString(36).slice(2),12)
-        if(!isCaseExist){
-        await this.userRepository.createPasswordResetCase(user.userId, token)
-        }else{
-        await this.userRepository.updatePasswordResetCase(user.userId, token)
+        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
+        const token = await bcrypt.hash(Math.random().toString(36).slice(2), 12);
+        if (!isCaseExist) {
+            await this.userRepository.createPasswordResetCase(user.userId, token);
+        } else {
+            await this.userRepository.updatePasswordResetCase(user.userId, token);
         }
         const mailOptions = {
             from: 'spartamoduhospital@gmail.com',
@@ -204,44 +211,43 @@ class UserService {
 
     resetPassword = async (email, password, confirm, token) => {
         // 이메일 발송 후 유효시간 설정(분)
-        const validTime = 15
+        const validTime = 15;
 
-        const user = await this.userRepository.findUserByEmail(email)
-        const resetCase = await this.userRepository.findResetCaseByToken(token)
+        const user = await this.userRepository.findUserByEmail(email);
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
 
-        //email로 찾은 user가 없거나 /email을 발송한 적이 없거나 / token과email이 일치하지 않을 때 
-        if(!user || !resetCase.token || !(user.userId == resetCase.userId) ){
-            throw this.createError.noAuthOrWrongEmail()
+        //email로 찾은 user가 없거나 /email을 발송한 적이 없거나 / token과email이 일치하지 않을 때
+        if (!user || !resetCase.token || !(user.userId == resetCase.userId)) {
+            throw this.createError.noAuthOrWrongEmail();
         }
-        const now = new Date()
+        const now = new Date();
         //이메일 발신 후 경과시간 (분)
-        const elapsed = ((now - resetCase.updatedAt) / 60000)
+        const elapsed = (now - resetCase.updatedAt) / 60000;
         //만료된 요청
-        if(elapsed > validTime){
-            throw this.createError.requestExpired()
+        if (elapsed > validTime) {
+            throw this.createError.requestExpired();
         }
 
         //비밀번호 update
-        if(password != confirm){
-            throw this.createError.passwordNotMatched()
+        if (password != confirm) {
+            throw this.createError.passwordNotMatched();
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const updated = await this.userRepository.updatePassword(user.userId, hashedPassword)
+        const updated = await this.userRepository.updatePassword(user.userId, hashedPassword);
 
-        await this.userRepository.updatePasswordResetCase(user.userId, null)
-        return updated
-    }
+        await this.userRepository.updatePasswordResetCase(user.userId, null);
+        return updated;
+    };
     findResetCase = async (token) => {
-        const resetCase = await this.userRepository.findResetCaseByToken(token)
-        if(!resetCase){
-            return false
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
+        if (!resetCase) {
+            return false;
         }
-        return true
-    }
-    editPassword = async (userId,password,confirm) => {
-        if(password != confirm){
-            throw this.createError.passwordNotMatched()
-
+        return true;
+    };
+    editPassword = async (userId, password, confirm) => {
+        if (password != confirm) {
+            throw this.createError.passwordNotMatched();
         }
         const hashedPassword = await bcrypt.hash(password, 12);
         const updated = await this.userRepository.updatePassword(userId, hashedPassword);

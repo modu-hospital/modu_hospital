@@ -20,9 +20,9 @@ router.get('/users/mypage/:userId', (req, res) => {
     res.render('index.ejs', { components: 'mypage' });
 });
 
-router.get('/users/resetpassword/:params', (req,res) =>{
-    res.render('index.ejs',  { components: 'resetpassword' })
-})
+router.get('/users/resetpassword/:params', (req, res) => {
+    res.render('index.ejs', { components: 'resetpassword' });
+});
 
 router.get('/map/hospitals', (req, res) => {
     res.render('map.ejs', { components: 'map' });
@@ -55,8 +55,8 @@ router.get('/doctorEdit', (req, res) => {
 });
 
 //page expired
-router.get('/errors/expired', (req,res) => {
-    res.status(403).render('expired')
-})
+router.get('/errors/expired', (req, res) => {
+    res.status(403).render('expired');
+});
 
 module.exports = router;
