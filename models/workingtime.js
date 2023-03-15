@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             dayOfTheWeek: DataTypes.INTEGER,
             startTime: DataTypes.TIME,
             endTime: DataTypes.TIME,
+            startDate: DataTypes.DATE,
+            endDate: DataTypes.DATE,
         },
         {
             sequelize,

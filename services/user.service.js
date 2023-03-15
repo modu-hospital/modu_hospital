@@ -1,11 +1,11 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken } = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize, WorkingTime } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class UserService {
-    userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken);
+    userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken, WorkingTime);
     reservationRepository = new ReservationRepository(sequelize);
 
     findAUserByUserId = async (userId) => {

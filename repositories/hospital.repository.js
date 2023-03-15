@@ -387,9 +387,8 @@ class HospitalRepository {
         }
     };
 
-
     //hospitalId 값에 해당하는 병원 상세 정보 (미완 하다 토큰하러)
-    getHospitalInfo = async(hospitalId) => {
+    getHospitalInfo = async (hospitalId) => {
         try {
             return await this.hospitalModel.findByPk(hospitalId, {
                 attributes: ['userId', 'name', 'address', 'phone'], //userId가 필요하나?
@@ -397,56 +396,50 @@ class HospitalRepository {
                     {
                         model: this.hospitalImageFileModel,
                         as: 'hospitalImageFiles',
-                        where: {hospitalId},
-                        attributes: ['url']
+                        where: { hospitalId },
+                        attributes: ['url'],
                     },
                     {
                         model: this.reviewsModel,
-                        as:'reviews',
-                        where: {hospitalId},
-                        attributes:['star', 'contents'],
+                        as: 'reviews',
+                        where: { hospitalId },
+                        attributes: ['star', 'contents'],
                         include: [
                             {
                                 model: this.userModel,
                                 as: 'users',
-                                attributes:['loginId']
-                            }
-                        ]
+                                attributes: ['loginId'],
+                            },
+                        ],
                     },
                     {
                         model: this.doctorModel,
-                        as:'doctors',
-                        where: {hospitalId},
+                        as: 'doctors',
+                        where: { hospitalId },
                         attributes: ['name', 'image', 'contents'],
                         include: [
                             {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes', //where: {doctorId }추가 해야되는지
-                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'] //doctorId안 해줘도 되는지 where
-                            }
-                        ]
-                    }
-                ]
-            })
-            
-        }catch(err) {
-
-        }
-    }
+                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'], //doctorId안 해줘도 되는지 where
+                            },
+                        ],
+                    },
+                ],
+            });
+        } catch (err) {}
+    };
     // hospitalId로 해당 병원하나 찝어서 => userId, name , address, phone 가져오기 ㅇ
- 
+
     // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
-    
+
     // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
-    
+
     // hospitalId에 역인 doctor테이블에서(hospitalId)=> doctorId, name, image, contents 가져오기
     // doctorId로 역인 workingTime테이블 doctorId에서=> datOfTheWeek, startTime, endTime 가져오기
-    
+
     // doctorId로 역인 mapping테이블 doctorId에서 => categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
     // categoryId로 i역인 category테이블 id에서 => department 가져오기  #####다른 사람이 인크루드한거 참고하기
-
-
-
 }
 
 module.exports = HospitalRepository;
