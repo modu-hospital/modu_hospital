@@ -101,12 +101,6 @@ describe('Layered Architecture Pattern Category Service Unit Test', () => {
 
         mockCategoryRepository.findHospitalsThatFitsDepartment.mockResolvedValue(returnValue);
 
-        //   "leftLatitude": 35.47504078291968,
-        // "leftLongitude":125.99344298385097,
-        // "rightLatitude": 39.52700879612589,
-        // "rightLongitude":129.13245302025508,
-        // "department" : "비뇨기과"
-
         const hospitals = await categoryService.findHospitalsThatFitsDepartment(
             '비뇨기과',
             129.13245302025508,

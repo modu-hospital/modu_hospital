@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk'); 
+const AWS = require('aws-sdk');
 const fs = require('fs');
 
 const env = process.env;
@@ -20,6 +20,7 @@ const {
     DoctorCategoryMapping,
     User,
     HospitalImageFile,
+    WorkingTime,
 } = require('../models/index.js');
 
 class HospitalService {
@@ -31,7 +32,8 @@ class HospitalService {
         Category,
         DoctorCategoryMapping,
         User,
-        HospitalImageFile
+        HospitalImageFile,
+        WorkingTime
     );
 
     findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
@@ -131,9 +133,7 @@ class HospitalService {
     findAllReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            console.log(hospitaldata);
             let hospitalId = hospitaldata.hospitalId;
-            console.log(hospitalId);
             const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
@@ -259,36 +259,89 @@ class HospitalService {
         }
     };
 
-    registerdoctor = async ( userId, name, file, contents) => {
+    findAllDoctor = async (userId) => {
         try {
-        const hospitaldata = await this.findOneHospital(userId);
-        if (!hospitaldata) {
-            const error = new Error('해당 병원이 존재하지 않습니다.');
-            error.name = 'Hospital Not found';
-            error.status = 400;
-            throw error;
-        }
-        let hospitalId = hospitaldata.hospitalId;
-        const image = await this.uploadToS3(file);
-        console.log(image)
-        const doctordata = await this.hospitalRepository.registerdoctor(
-            hospitalId,
-            name, 
-            image,
-            contents
-            
-        );
-        return doctordata; 
-
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            let hospitalId = hospitaldata.hospitalId;
+            const doctorAlldata = await this.hospitalRepository.findAllDoctor(hospitalId);
+            return doctorAlldata;
         } catch (err) {
-            console.error(err) // 에러 로그 확인 
-          throw err;
+            throw err;
+        }
+    };
+    
+    findOneDoctor = async (doctorId) => {
+        try {
+            const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);
+            return doctordata;
+        } catch (err) {
+            throw err;
         }
     };
 
-    // 이미지 업로드 함수 
+    registerdoctor = async (userId, name, file, contents, categories) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const error = new Error('해당 병원이 존재하지 않습니다.');
+                error.name = 'Hospital Not found';
+                error.status = 400;
+                throw error;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+            const image = await this.uploadToS3(file);
+            const doctordata = await this.hospitalRepository.registerdoctor(
+                hospitalId,
+                name,
+                image,
+                contents
+            );
+
+            // map 함수를 사용해서 categories 배열을 순회하면서 findOrcreate을 호출함.
+            // 그래서 이것을 category 배열에 저장하는 코드
+            const department = await Promise.all(
+                categories.map(async (department) => {
+                    const categorydata = await this.hospitalRepository.findOrCreate(department);
+
+                    return categorydata.id;
+                })
+            );
+
+            const mappings = await Promise.all(
+                department.map(async (department) => ({
+                    categoryId: department,
+                    doctorId: doctordata.doctorId,
+                }))
+            );
+
+            await this.hospitalRepository.categoriesInstance(mappings);
+
+            return doctordata;
+        } catch (err) {
+            console.error(err); // 에러 로그 확인
+            throw err;
+        }
+    };
+
+    editdoctor = async (doctorId, name, file, contents) => {
+        try {
+            const image = await this.uploadToS3(file);
+            const doctordata = await this.hospitalRepository.editdoctor(
+                doctorId,
+                name,
+                image,
+                contents
+            );
+            return doctordata;
+        } catch (err) {
+            console.error(err); // 에러 로그 확인
+            throw err;
+        }
+    };
+
+    // 이미지 업로드 함수
     uploadToS3 = async (file) => {
-        const fileContent = fs.readFileSync(file.path)
+        const fileContent = fs.readFileSync(file.path);
         const filename = `${Date.now()}_${file.originalname}`;
         const params = {
             Bucket: env.AWS_BUCKET_NAME,
@@ -297,18 +350,63 @@ class HospitalService {
             Body: fileContent,
             ContentType: file.mimetype,
         };
-        
+
         try {
             const data = await s3.upload(params).promise();
-            console.log(data);
             fs.unlinkSync(file.path);
             return data.Location;
         } catch (err) {
             console.error(err);
             throw new Error('Failed to upload image to S3');
         }
-    }; 
-  
+    };
+
+    getOneHospital = async (id) => {
+        try {
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            if (!oneHospital) {
+                return {};
+            }
+
+            //리뷰는 따로 가져와서 프론트에, workingTime
+            //workingTime은 따로 가져와야되는지
+            const doctors = oneHospital.doctors.map((doctor) => {
+                const department = doctor.doctorCategoryMappings.map((category) => {
+                    return category.categories.department;
+                });
+
+                //workingTime은 함수가 아니라서?..
+                //categories는..
+                const workTime = doctor.workingTimes.map((work) => {
+                    return {
+                        day: work.dayOfTheWeek,
+                        start: work.startTime,
+                        end: work.endTime,
+                    };
+                });
+
+                return {
+                    doctors: doctor.name,
+                    doctorImage: doctor.image,
+                    doctorContent: doctor.contents,
+                    department: department.join(','),
+                    workTime: workTime,
+                };
+            });
+            return {
+                hospitalId: oneHospital.hospitalId,
+                hospitalName: oneHospital.name,
+                hospitalAddress: oneHospital.address,
+                hospitalphone: oneHospital.phone,
+                hospitalImage: !oneHospital.hospitalImageFiles[0]
+                    ? '이미지 준비중'
+                    : oneHospital.hospitalImageFiles[0].url,
+                doctors,
+            };
+        } catch (err) {
+            throw err;
+        }
+    };
 }
 
 module.exports = HospitalService;

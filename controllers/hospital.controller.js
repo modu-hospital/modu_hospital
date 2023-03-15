@@ -1,33 +1,9 @@
 const HospitalService = require('../services/hospital.service');
 
-const multer = require('multer');
-// const AWS = require('aws-sdk');
-// const endpoint = new AWS.Endpoint('https://s3.amazonaws.com');
-
-// 이미지 업로드를 위한 multer 설정
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/') // 업로드 폴더 설정
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname) // 파일 이름 설정
-    }
-  });
-
-const upload = multer({ storage }); 
-
-// const fs = require('fs');
 const axios = require('axios');
+
 const env = process.env;
 
-
-
-// const s3 = new AWS.S3({
-//     endpoint: endpoint,
-//     accessKeyId:'AKIA6O5UU7XJZTBY3HFE',
-//     secretAccessKey:'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'
-
-// });
 
 const Validation = require('../lib/validation');
 
@@ -74,6 +50,8 @@ class HospitalController {
         try {
             const { id } = req.params;
 
+            console.log(id);
+
             const info = await this.hospitalService.searchHospitalInfo(id);
 
             res.json(info);
@@ -91,7 +69,7 @@ class HospitalController {
             // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
             // const { currentUser } = res.locals;
             // const userId = currentUser.id;
-            const userId = 2; // 현재 임시로 들어간 값
+            const userId = 91; // 현재 임시로 들어간 값
             const reservationdata = await this.hospitalService.findAllReservation(userId);
             res.status(200).json({
                 reservationdata: reservationdata,
@@ -157,7 +135,7 @@ class HospitalController {
             // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
             // const { currentUser } = res.locals;
             // const userId = currentUser.id;
-            const userId = 2;
+            const userId = 91;
             const waitingdata = await this.hospitalService.getWaitedReservation(userId);
             res.status(200);
             if (waitingdata.length === 0) {
@@ -179,7 +157,7 @@ class HospitalController {
             // 추가로 생각해볼 에러처리 => role = "파트너"가 아니면 "파트너만 사용가능합니다" 메시지 출력하기
             // const { currentUser } = res.locals;
             // const userId = currentUser.id;
-            const userId = 2;
+            const userId = 91;
             const approveddata = await this.hospitalService.getapprovedReservation(userId);
             res.status(200).json({ success: true, approveddata: approveddata });
         } catch (error) {
@@ -191,7 +169,7 @@ class HospitalController {
     registerEditHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
-        const userId = 2;
+        const userId = 91;
         const { name, address, phone } = req.body;
         // 주소 값이 없는 경우에 대한 예외 처리
         if (!req.hospitalLocation) {
@@ -206,7 +184,6 @@ class HospitalController {
                     data: registerEditdata,
                 });
             } catch (error) {
-                console.log(error);
                 return res.status(error.status).json({
                     success: error.success,
                     message: error.message,
@@ -232,7 +209,6 @@ class HospitalController {
                 data: registerEditdata,
             });
         } catch (error) {
-            console.log(error);
             return res.status(error.status).json({
                 success: error.success,
                 message: error.message,
@@ -245,7 +221,7 @@ class HospitalController {
         try {
             // const { currentUser } = res.locals;
             // const userId = currentUser.id;
-            const userId = 2;
+            const userId = 91;
             const data = await this.hospitalService.getAllreviews(userId);
             res.status(200).json({ data: data });
         } catch (error) {
@@ -258,7 +234,7 @@ class HospitalController {
         try {
             // const { currentUser } = res.locals;
             // const userId = currentUser.id;
-            const userId = 2;
+            const userId = 91;
             const data = await this.hospitalService.findOneHospital(userId);
             res.status(200).json({ data: data });
         } catch (error) {
@@ -301,7 +277,7 @@ class HospitalController {
     registerHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
         // cosnt userId = currentUser.id;
-        const userId = 42;
+        const userId = 91;
         const { name, address, phone } = req.body;
         const { location, address_name } = req.hospitalLocation; // 중요 부분!
         const longitude = location.longitude;
@@ -319,7 +295,6 @@ class HospitalController {
 
             return res.status(201).json({ data: registerdata });
         } catch (error) {
-            console.log(error);
             return res
                 .status(error.status)
                 .json({ success: error.success, message: error.message });
@@ -328,26 +303,72 @@ class HospitalController {
 
     // 의사 정보 등록
     registerdoctor = async (req, res, next) => {
-        // userId = 3; 
-        const userId = 3;
-        const { name, contents} = req.body; 
+        // userId = 3;
+        console.log(req);
+        const userId = 91;
+        const { name, contents, categories } = req.body;
+
+        const unique = Array.from(new Set(categories)); // 배열에서 중복된 값 제거
+        const replaceCategories = await Promise.all(
+            unique.map((categories) => categories.replace(/\s/g, ''))
+        );
+        // map() 함수를 이용해서 unuque 배열의 공백 제거, replace() 함수 이용해서 새로운 문자열 만들기 => /\s/g, "" 문자열 내 모든 공백 찾기위한 패턴
+        // replaceCategories
+        // console.log('#####replaceCategories',replaceCategories);
         try {
-            const file =req.file; //업로드된 파일 정보
-            console.log(file);
-            if (!file) {
-                return res.status(400).json({ message: 'Not Found file' });
-            }
-            const doctor = await this.hospitalService.registerdoctor(
-                userId, name,  file, contents
-            
-                
+            const file = req.file; //업로드된 파일 정보
+            const { doctor } = await this.hospitalService.registerdoctor(
+                userId,
+                name,
+                file,
+                contents,
+                replaceCategories
             );
             return res.status(201).json({ data: doctor });
-        } catch(error) {
-            console.error(error)
+        } catch (error) {
+            console.error(error);
         }
-    }
+    };
 
+    // 소속 병원 의사 정보 수정하기
+    editdoctor = async (req, res, next) => {
+        // const doctorId = 22;
+        // const name = "주호민";
+        // const contents = "안녕하세요 주펄입니다.";
+        let doctorId = parseInt(req.params.doctorId);
+        const { name, contents } = req.body;
+        try {
+            const file = req.file; //업로드된 파일 정보
+            const doctor = await this.hospitalService.editdoctor(doctorId, name, file, contents);
+            return res.json({ data: doctor });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // 소속 병원 의사들 정보 불러오기
+    findAllDoctor = async (req, res, next) => {
+        // const { currentUser } = res.locals;
+        // cosnt userId = currentUser.id;
+        const userId = 91;
+        try {
+            const doctorAlldata = await this.hospitalService.findAllDoctor(userId);
+            return res.json(doctorAlldata);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    // 의사 한명 정보 불러오기 => 의사 상세페이지 => 수정하려고 만듦
+    findOneDoctor = async (req, res, next) => {
+        let doctorId = parseInt(req.params.doctorId);
+        try {
+            const doctordata = await this.hospitalService.findOneDoctor(doctorId);
+            return res.json(doctordata);
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = HospitalController;
