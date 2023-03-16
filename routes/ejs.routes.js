@@ -15,11 +15,11 @@ router.get('/admin', (req, res) => {
 router.get('/users/reservation', (req, res) => {
     res.render('index.ejs', { components: 'reservation' });
 });
-
+// 마이페이지
 router.get('/users/mypage/:userId', (req, res) => {
     res.render('index.ejs', { components: 'mypage' });
 });
-
+// 비밀번호 재설정 페이지
 router.get('/users/resetpassword/:params', (req, res) => {
     res.render('index.ejs', { components: 'resetpassword' });
 });

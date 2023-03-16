@@ -45,6 +45,8 @@
     }
 </style>
 
+
+
 <section class="profile" style="background-color: #f4f5f7">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
@@ -633,6 +635,7 @@
         });
     }
     function showInput() {
+        $('#editButton').attr('onclick', 'hideInput()')
         $('#user-data').attr('class', 'row pt-1 d-none');
         $('#input-user-data').attr('class', 'row pt-1');
         $('#edit-buttons').attr('class', 'row pt-1');
@@ -643,6 +646,7 @@
         return false;
     }
     function hideInput() {
+        $('#editButton').attr('onclick', 'showInput()')
         $('#user-data').attr('class', 'row pt-1');
         $('#input-user-data').attr('class', 'row pt-1 d-none');
         $('#edit-buttons').attr('class', 'row pt-1 d-none');
