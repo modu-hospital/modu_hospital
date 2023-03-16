@@ -25,7 +25,7 @@ router.get('/users/resetpassword/:params', (req, res) => {
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs', { components: 'map' }); 
+    res.render('map.ejs', { components: 'map' });
 });
 
 //원장님의 공간
