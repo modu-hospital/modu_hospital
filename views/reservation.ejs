@@ -3,7 +3,7 @@
 #my_modal {
     display: none;
     height: 800px;
-    padding: 20px 60px;
+    padding: 20px 200px;
     background-color: #fefefe;
     border: 2px solid #888;
     border-radius: 5px;
@@ -68,8 +68,8 @@ color: #505050;
 
 #reservation_time td.top {
     padding-bottom: 20px;
-    font-weight: 700;
-    font-size: 25px;
+    font-weight: 500;
+    font-size: 15px;
 }
 #reservation_time td.content {
     padding-bottom: 50px;
@@ -89,7 +89,7 @@ color: #505050;
 #timeTable {
     margin-bottom: 50px;
     padding: 5px;
-    width: 200px;
+    width: 100%;
     color: #505050;
 }
 #timeTable td {
@@ -328,11 +328,15 @@ color: #505050;
                         </table>
                     </td>
                     <td>
-                        <!-- <table id="timeTable"></table> -->
+                        
                     </td>
                 </tr>
                 <tr> 
-                    <td class="top" align="left" colspan="2"><table id="timeTable"></table></td>
+                    <!-- <td class="top"</td> -->
+                    <td class="top" align="left" colspan="2">
+                        <table id="doctorTable"></table>
+                        <table class="timetable" id="timeTable"></table>
+                    </td>
                 </tr>
                 <tr> 
                     <td class="top" align="left" colspan="2">예약일시</td>

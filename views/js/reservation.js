@@ -117,51 +117,6 @@ function reservationTime() {
     viewModal('my_modal');
 }
 
-// <%
-// 	if ((Integer)request.getAttribute("error") == 1){
-// 		out.println("<script>alert('오류발생1!!');history.back();</script>");
-// 	}
-
-// 	//유저정보 획득
-// 	String userName = LoginedUserInfo.name;
-// 	String userPhone = LoginedUserInfo.phone;
-// 	String userEmail = LoginedUserInfo.email;
-
-// 	//share detail data
-// 	Dto_Share share = (Dto_Share)request.getAttribute("DETAIL");
-// 	//JSON 형식으로 달의 날자별 예약현황을 전송받음
-// 	JSONArray thisMonthResData = (JSONArray)request.getAttribute("thisMonthResData");
-// 	JSONArray nextMonthResData = (JSONArray)request.getAttribute("nextMonthResData");
-
-// 	//예약가능 요일 (일~월, 가능0 불가능1)
-// 	char[] possibleDay = (share.getDayLimit()).toCharArray();
-// 	//예약가능 시간 (start time~end time) end - start = 이용가능시
-// 	int startTime = share.getStartTime();
-// 	int endTime = share.getEndTime();
-// 	//총 이용 가능 시간
-// 	int totalUsingTime = endTime - startTime;
-
-// 	//예약이 가득찬 날들의 배열
-// const thisMonthFullDateList = new Array();
-// thisMonthFullDateList.forEach((date) => {
-//     thisMonthFullDateList.push(date);
-// });
-// const nextMonthFullDateList = new Array();
-// nextMonthFullDateList.forEach((date) => {
-//     nextMonthFullDateList.push(date);
-// });
-
-// console.log(thisMonthFullDateList);
-
-// 	var thisMonthFullDateList = new Array();
-// 	<c:forEach items="${thisMonthFullDateList}" var = "date">
-// 		thisMonthFullDateList.push(${date});
-// 	</c:forEach>
-// 	var nextMonthFullDateList = new Array();
-// 	<c:forEach items="${nextMonthFullDateList}" var = "date">
-// 		nextMonthFullDateList.push(${date});
-// 	</c:forEach>
-
 //---------------- calendar --------------------------
 //date객체 획득. 가변
 let today = new Date();
@@ -265,8 +220,6 @@ function buildCalendar() {
         etp = exchangeToPosibleDay(cnt) * 1;
 
         // 예약불가 일자 분류(1/2) - 요일생성 안
-        // 예약이 가득찬 날을 배열로 보유하고 있어 날마다 탐색하는 것은 비효율적
-        // for문 종료 후 예약이 가득찬 날의 배열을 순차탐색해서 해당 일자의 id를 가진 cell을 핸들링 하는 것이 효율적
         if (nowMonth === realMonth && i <= realToDay) {
             // 이번달이고 오늘을 포함한 지난달
             noCount += 1;
@@ -436,10 +389,10 @@ function thisMonth(todayMonth, dateMonth) {
 
 //---------------- time table --------------------------
 //선택된 시간중 가장 빠른/늦은 시간;
-let startTime;
-let startTimeHalf;
-let endTime;
-let endTimeHalf;
+let startHour;
+let startMinute;
+let endHour;
+let endMinute;
 // 선택된 시간중 가장 빠른/늦은 시간;
 let selectedFirstTime = 24 * 1;
 let selectedFinalTime = 0 * 1;
@@ -461,143 +414,206 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
         url: `/api/workingtime/reservationdate?year=${selectedYear}&month=${selectedMonth}&date=${selectedDate}&week=${dayWeek}`,
         async: false,
         success: function (response) {
-            console.log('GET success 후 받아진 response: ', response);
-
             // 고려해야 할 점
             // 1. 의사가 2명 이상일 경우
             // 2. 퐁당퐁당 예약가능할 경우
             // 3. 예약이 하나도 없을 경우
-
-            console.log(Object.values(response));
+            console.log('GET success 후 받아진 response: ', response);
 
             row = null;
             month = selectedMonth; // 달력에서 선택한 셀의 달
             date = selectedDate; // 일자를 받아오고
+            console.log('내가 클릭한 month: ', month, '내가 클릭한 date: ', date);
             let timeTable = document.getElementById('timeTable'); // 시간표를 출력할 테이블을 가져옴
-
+            let doctorTable = document.getElementById('doctorTable'); // 시간표를 출력할 테이블을 가져옴
             // 테이블 초기화
             while (timeTable.rows.length > 0) {
                 timeTable.deleteRow(timeTable.rows.length - 1);
+                doctorTable.deleteRow(doctorTable.rows.length - 1);
             }
 
-            // 시간표 테이블 생성
-            for (i = 0; i < endTime - startTime; i++) {
-                function onTime(i) {
-                    console.log('onTime: ', i);
-                    //곱해서 숫자타입으로 변환
-                    cellTime = startTime * 1 + i;
-
-                    // 시작시간부터 30분씩 순차적으로 셀 생성
-                    cellStartTimeText = cellTime + ':00';
-                    cellEndTimeText = cellTime + ':30';
-                    inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-
-                    //셀 입력을 위해 테이블 개행
-                    row = timeTable.insertRow();
-                    //해당 row의 셀 생성
+            for (let i = 0; i < response.length; i++) {
+                // 객체의 길이만큼 반복
+                let hospitalName = response[i].hospitalName;
+                let doctorName = response[i].doctorName;
+                let time = response[i].times;
+                console.log(`첫번째 for문 ${i}번째의 ${hospitalName}`);
+                if (i < 1) {
+                    row = doctorTable.insertRow();
                     cell = row.insertCell();
-                    //cell에 id 부여
-                    cell.setAttribute('id', cellTime); // id는 행의 시작시간
-                    cell.setAttribute('class', 'timetable');
-                    //셀에 입력
-                    cell.innerHTML = inputCellText;
-                    console.log(
-                        'onTime(i): ',
-                        inputCellText,
-                        'onTime(id): ',
-                        cell.getAttribute('id')
-                    );
-                }
+                    cell.setAttribute('id', doctorName);
+                    cell.innerHTML = '담당의사 : ' + doctorName;
+                    for (let j = 0; j < Object.keys(time).length; j++) {
+                        if (Object.values(time)[j].length === 0) {
+                            // times의 value가 "" 이면 startTime 지정 / 이름이면 미지정
 
-                function halfAnTime(i) {
-                    console.log('halfAnTime: ', i);
-                    // 시간 출력
-                    cellTime = startTime * 1 + i;
-                    for (let j = 30; j >= 0; j -= 30) {
-                        // 30분 간격으로 분 출력
-                        if (j === 0) {
-                            cellTime = cellTime + 1;
-                            cellEndTimeText = cellTime + ':00';
+                            if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
+                                // 30분단위 출력
+
+                                startHour = Object.keys(time)[j].split(':')[0] * 1;
+                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                                endHour = Object.keys(time)[j].split(':')[0] * 1;
+                                endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
+
+                                // 시간표테이블 생성
+
+                                cellTime = startHour;
+                                // 시작시간부터 30분씩 순차적으로 셀 생성
+                                cellStartTimeText = cellTime + ':00';
+                                cellEndTimeText = cellTime + ':30';
+                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+
+                                // 셀 입력을 위해 테이블 개행
+                                row = timeTable.insertRow();
+                                //해당 row의 셀 생성
+                                cell = row.insertCell();
+                                // cell에 id 부여
+                                cell.setAttribute('id', cellTime); // id는 행의 시작시간
+                                // 셀에 입력
+                                cell.innerHTML = inputCellText;
+                            } else {
+                                startHour = Object.keys(time)[j].split(':')[0] * 1;
+                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                                endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
+                                endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
+
+                                // 시간표테이블 생성
+
+                                cellTime = startHour;
+                                // 시작시간부터 30분씩 순차적으로 셀 생성
+                                cellStartTimeText = cellTime + ':30';
+                                cellEndTimeText = cellTime + 1 + ':00';
+                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                                // 셀 입력을 위해 테이블 개행
+                                row = timeTable.insertRow();
+                                //해당 row의 셀 생성
+                                cell = row.insertCell();
+                                // cell에 id 부여
+                                cell.setAttribute('id', cellTime + 0.5); // id는 행의 시작시간
+                                // 셀에 입력
+                                cell.innerHTML = inputCellText;
+                            }
                         } else {
-                            cellStartTimeText = cellTime + ':30';
+                            console.log(
+                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문의 ${
+                                    Object.values(time)[j].length === 0
+                                }방에 ${j}번째 startTime 미지정방에 진입했다.`
+                            );
+
+                            console.log(
+                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문 ${j}번째 두번째 if문 ${j}번째의 조건이 ${
+                                    Object.values(time)[j].length === 0
+                                }이기 때문에 ${Object.keys(time)[j]}은 예약이 불가능한 시간대이다.`
+                            );
                         }
                     }
-                    inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                } else {
+                    // 닥터ID에 따른 닥터의 name도 제일 위에다가 붙여야함
+                    // i 가 1씩 증가할때마다 테이블이 옆으로 붙어야함
+                    row = doctorTable.insertRow();
+                    cell = doctorTable.rows[0].insertCell(-1);
+                    cell.setAttribute('id', doctorName);
+                    cell.innerHTML = '담당의사 : ' + doctorName;
+                    // 열 추가 되는 부분
+                    for (let j = 0; j < Object.keys(time).length; j++) {
+                        if (Object.values(time)[j].length === 0) {
+                            // times의 value가 "" 이면 startTime 지정 / 이름이면 미지정
 
-                    //셀 입력을 위해 테이블 개행
-                    row = timeTable.insertRow();
-                    //해당 row의 셀 생성
-                    cell = row.insertCell();
-                    //cell에 id 부여
-                    cell.setAttribute('id', cellTime - 0.5); // id는 행의 시작시간
-                    cell.setAttribute('class', 'timetable');
-                    //셀에 입력
-                    cell.innerHTML = inputCellText;
-                    console.log(
-                        'halfAnTime(i): ',
-                        inputCellText,
-                        'halfAnTime(id): ',
-                        cell.getAttribute('id')
-                    );
+                            if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
+                                // 30분단위 출력
+
+                                startHour = Object.keys(time)[j].split(':')[0] * 1;
+                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                                endHour = Object.keys(time)[j].split(':')[0] * 1;
+                                endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
+
+                                // 시간표테이블 생성
+
+                                cellTime = startHour;
+                                // 시작시간부터 30분씩 순차적으로 셀 생성
+                                cellStartTimeText = cellTime + ':00';
+                                cellEndTimeText = cellTime + ':30';
+                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                                // 셀 입력을 위해 테이블 개행
+                                row = timeTable.insertRow();
+                                console.log('row: ', row);
+                                //해당 row의 셀 생성
+                                // cell = row.insertCell();
+                                cell = timeTable.rows[j].insertCell(-1);
+                                console.log('cell: ', cell);
+                                // cell에 id 부여
+                                cell.setAttribute('id', cellTime); // id는 행의 시작시간
+                                // 셀에 입력
+                                cell.innerHTML = inputCellText;
+                            } else {
+                                startHour = Object.keys(time)[j].split(':')[0] * 1;
+                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                                endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
+                                endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
+                                // 시간표테이블 생성
+                                cellTime = startHour;
+                                // 시작시간부터 30분씩 순차적으로 셀 생성
+                                cellStartTimeText = cellTime + ':30';
+                                cellEndTimeText = cellTime + 1 + ':00';
+                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                                // 셀 입력을 위해 테이블 개행
+                                row = timeTable.insertRow();
+                                console.log('row: ', row);
+                                //해당 row의 셀 생성
+                                // cell = row.insertCell();
+                                cell = timeTable.rows[j].insertCell(-1);
+                                // console.log('cell: ', cell);
+                                // cell에 id 부여
+                                cell.setAttribute('id', cellTime + 0.5); // id는 행의 시작시간
+                                // 셀에 입력
+                                cell.innerHTML = inputCellText;
+                            }
+                        } else {
+                            console.log(
+                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문의 ${
+                                    Object.values(time)[j].length === 0
+                                }방에 ${j}번째 startTime 미지정방에 진입했다.`
+                            );
+
+                            console.log(
+                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문 ${j}번째 두번째 if문 ${j}번째의 조건이 ${
+                                    Object.values(time)[j].length === 0
+                                }이기 때문에 ${Object.keys(time)[j]}은 예약이 불가능한 시간대이다.`
+                            );
+                        }
+                    }
                 }
-
-                // 시간표 테이블 생성
-                console.log('시간표 테이블 생성');
-                if (startTimeHalf === 0 && endTimeHalf === 0) {
-                    console.log('0 0 이다');
-                    for (i = 0; i < endTime - startTime; i++) {
-                        onTime(i);
-                        halfAnTime(i);
-                    }
-                } else if (startTimeHalf !== 0 && endTimeHalf === 0) {
-                    console.log('30 0 이다');
-                    for (i = 0; i < endTime - startTime; i++) {
-                        halfAnTime(i);
-                        onTime(i + 1);
-                    }
-                } else if (startTimeHalf === 0 && endTimeHalf !== 0) {
-                    console.log('0 30 이다');
-                    for (i = 0; i < endTime - startTime; i++) {
-                        onTime(i);
-                        halfAnTime(i);
-                    }
-                    onTime(endTime - startTime);
-                } else if (startTimeHalf !== 0 && endTimeHalf !== 0) {
-                    console.log('30 30 이다');
-                    for (i = 0; i < endTime - startTime; i++) {
-                        halfAnTime(i);
-                        onTime(i + 1);
-                    }
-                }
-
-                // 시간표 테이블의 클릭이벤트
-                $('.timetable').on('click', function () {
-                    cellTime = this.getAttribute('id');
-                    cellTime = cellTime * 1;
-                    console.log('selected : ' + cellTime);
-
-                    // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
-                    if (selectedCellTime != null) {
-                        selectedCellTime.bgColor = '#FFFFFF';
-                    }
-                    selectedCellTime = this;
-                    this.bgColor = '#fbedaa';
-
-                    //하단의 예약일시에 시간 표시
-                    if (cellTime % 1 === 0) {
-                        resTime = cellTime + ':00 ~ ' + cellTime + ':30';
-
-                        resTimeForm = document.getElementById('selectedTime');
-                        resTimeForm.value = resTime;
-                    } else {
-                        resTime =
-                            Math.floor(cellTime) + ':30 ~ ' + Math.floor(cellTime + 1) + ':00';
-
-                        resTimeForm = document.getElementById('selectedTime');
-                        resTimeForm.value = resTime;
-                    }
-                });
             }
+            // 시간표 테이블의 클릭이벤트
+            cell.onclick = function () {
+                cellTime = this.getAttribute('id');
+                console.log(cellTime);
+                cellTime = cellTime * 1;
+                console.log('selected : ' + cellTime);
+
+                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
+                if (selectedCellTime != null) {
+                    selectedCellTime.bgColor = '#FFFFFF';
+                }
+                selectedCellTime = this;
+                this.bgColor = '#fbedaa';
+
+                //하단의 예약일시에 시간 표시
+                if (getOnlyDecimal(cellTime, 1) === 0) {
+                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+
+                    resTimeForm = document.getElementById('selectedTime');
+                    resTimeForm.value = resTime;
+                } else {
+                    resTime = Math.floor(cellTime) + ':30 ~ ' + Math.floor(cellTime + 1) + ':00';
+
+                    resTimeForm = document.getElementById('selectedTime');
+                    resTimeForm.value = resTime;
+                }
+            };
         },
     });
 }
@@ -605,6 +621,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 //시간표 초기화
 function tableinit() {
     $('#timeTable').empty();
+    $('#doctorTable').empty();
     selectedTimeInit();
     buildCalendar();
 }
@@ -618,6 +635,13 @@ function selectedTimeInit() {
 
     selectedFirstTime = 24 * 1;
     selectedFinalTime = 0 * 1;
+}
+
+//소수점만 출력
+function getOnlyDecimal(number, length) {
+    let result = number % 1;
+    result = Number(result.toFixed(length));
+    return result;
 }
 
 // function submitRes() {
@@ -646,19 +670,6 @@ function selectedTimeInit() {
 //             return false;
 //         }
 //     }
-
-// if ( ${DETAIL.capacity} < capacityForm.value){
-//     alert("인원수가 초과되었습니다.");
-//     capacityForm.focus();
-//     return false;
-// }
-
-// popUp = window.open("payment", "payment");
-// form = document.paymentForm
-// form.action = "payment";
-// form.target = "payment";
-// form.submit();
-// }
 
 buildCalendar();
 

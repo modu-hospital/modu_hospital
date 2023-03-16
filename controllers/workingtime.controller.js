@@ -15,13 +15,6 @@ class WorkingtimeController {
             week
         );
         return res.status(200).json(findWorkingDate);
-        // hospitalName: findWorkingDate[0].HospitalName,
-        // doctorName: findWorkingDate[0].doctorName,
-        // startTime: findWorkingDate[0].startTime,
-        // endTime: findWorkingDate[0].endTime,
-        // startDate: findWorkingDate[0].startDate,
-        // endDate: findWorkingDate[0].endDate,
-        // times: findWorkingDate.slice(1),
     };
 }
 
