@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/userdata/:userId', userController.getUserProfile);
+router.get('/mypage/userdata', userController.getUserProfile);
 
 router.get('/mypage/approved', userController.getApprovedReservation);
 
@@ -15,7 +15,7 @@ router.get('/mypage/doneorreviewed', userController.getDoneOrReviewedReservation
 
 router.get('/mypage/canceled', userController.getCanceledReservation);
 
-router.patch('/mypage/editprofile/:userId', userController.editUserProfile);
+router.patch('/mypage/editprofile', userController.editUserProfile);
 
 router.patch('/mypage/cancel/:id', userController.cancelReservation);
 
