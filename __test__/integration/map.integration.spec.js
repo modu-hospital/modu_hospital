@@ -9,7 +9,7 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
     });
 
     afterAll((done) => {
-        return app && app.close(done);
+        app && app.close(done);
     });
 
     test('GET /api/hospitals/info API (searchHospitalInfo) Integration Test Success Case, Not Found Hospital Info Data', async () => {
@@ -32,7 +32,6 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         expect(response.status).toEqual(200);
 
         expect(response.body).toEqual({ hospitals: [] });
-        // expect(response.body).toMatchObject([])
     });
 
     test('POST /api/hospitals/around/info API (findNearHospitalsInfo), Integration Test', async () => {
@@ -52,7 +51,6 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
     });
 
     test('POST /api/categories/search API (findHospitalsThatFitsDepartment) Integration Test Success Case', async () => {
-        // { rightLongitude, rightLatitude, leftLongitude, leftLatitude }
         const requestBodyParams = {
             rightLongitude: 127.13245302025508,
             rightLatitude: 37.52700879612589,
@@ -65,6 +63,5 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
         expect(response.status).toEqual(200);
 
         expect(response.body).toEqual({ hospitals: [] });
-        // expect(response.body).toMatchObject([])
     });
 });
