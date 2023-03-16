@@ -1,13 +1,22 @@
 const UserRepository = require('../repositories/user.repository.js');
 const ReservationRepository = require('../repositories/reservation.repository');
-const { User, Hospital, Doctor, RefreshToken, sequelize } = require('../models');
+const { User, Hospital, Doctor, RefreshToken, sequelize, PasswordResetCase } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
+require('dotenv').config();
+const env = process.env;
 
 class UserService {
-    userRepository = new UserRepository(User, Hospital, Doctor, RefreshToken);
+    userRepository = new UserRepository(
+        User,
+        Hospital,
+        Doctor,
+        RefreshToken,
+        PasswordResetCase,
+        sequelize
+    );
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
 
@@ -62,8 +71,8 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {
-            const err = await this.createError.UserAlreadyExist()
-            throw err
+            const err = await this.createError.UserAlreadyExist();
+            throw err;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -90,24 +99,14 @@ class UserService {
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
         console.log('user[0].password', user[0].password);
-        console.log("user", user[0].loginId)
-        //바디값에 loginId 잘못 찍어도 콘솔에 user값 잘 나와야되는거 아닌가
-        //console 안 찍힘
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
         console.log('isPasswordCorrect', isPasswordCorrect);
 
-        //아이디를 없는 아이디로 바디값에 넣었을 때때
-        //썬클에서 에러를 찍을 때 에러를 지정해줬는데 알 수 없는 오류가 발생했습니다 뜸
-        //TypeError: Cannot read properties of undefined (reading 'password')
-
         if (!user || !isPasswordCorrect) {
-            const err = await this.createError.wrongEmailOrPassword()
-            throw err
+            const err = await this.createError.wrongEmailOrPassword();
+            throw err;
         }
-        //비번을 틀렸을 땐 에러 잘 찍힘
-
-
 
         return user[0];
     };
@@ -172,53 +171,89 @@ class UserService {
     saveToken = async (userId, token) => {
         return await this.userRepository.tokenSave(userId, token);
     };
-    sendEmailForCertification = (email) => {
-        const generateRandom = function (min, max) {
-            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-            return randomNumber;
-        };
+    // sendEmailForCertification = (email) => {
+    //     const generateRandom = function (min, max) {
+    //         const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    //         return randomNumber;
+    //     };
 
-        const number = generateRandom(111111, 999999);
+    //     const number = generateRandom(111111, 999999);
 
-        const mailOptions = {
-            from: 'spartamoduhospital@gmail.com',
-            to: email,
-            subject: '모두의 병원 이메일 인증코드',
-            text: '인증 코드입니다. ' + number,
-        };
+    //     const mailOptions = {
+    //         from: 'spartamoduhospital@gmail.com',
+    //         to: email,
+    //         subject: '모두의 병원 이메일 인증코드',
+    //         text: '인증 코드입니다. ' + number,
+    //     };
 
-        transPort.sendMail(mailOptions, (err, info) => {
-            console.log(info.envelope);
-            console.log(info.messageId);
-        });
-    };
+    //     transPort.sendMail(mailOptions, (err, info) => {
+    //         console.log(info.envelope);
+    //         console.log(info.messageId);
+    //     });
+    // };
     sendEmailForResetPassword = async (email) => {
         const user = await this.userRepository.findUserByEmail(email);
         if (!user) {
             const err = await this.createError.wrongEmail();
             throw err;
         }
-        const params = await bcrypt.hash(email, 12);
 
+        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
+        const token = Math.random().toString(36).slice(2) + new Date().getTime().toString(36);
+        if (!isCaseExist) {
+            await this.userRepository.createPasswordResetCase(user.userId, token);
+        } else {
+            await this.userRepository.updatePasswordResetCase(user.userId, token);
+        }
         const mailOptions = {
             from: 'spartamoduhospital@gmail.com',
             to: email,
             subject: '모두의 병원 비밀번호 재설정',
-            text: 'params ' + params,
+            text: 'token ' + token,
         };
-
+        //메일 전송
         transPort.sendMail(mailOptions, (err, info) => {
             console.log(info.envelope);
             console.log(info.messageId);
         });
     };
-    resetPassword = async (email, password, confirm, params) => {
+
+    resetPassword = async (email, password, confirm, token) => {
+        // 이메일 발송 후 유효시간 설정(분)
+        const validTime = 15;
+
         const user = await this.userRepository.findUserByEmail(email);
-        const match = await bcrypt.compare(email, params);
-        if (!user || !match) {
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
+
+        //email로 찾은 user가 없거나 /email을 발송한 적이 없거나 / token과email이 일치하지 않을 때
+        if (!user || !resetCase.token || !(user.userId == resetCase.userId)) {
             throw this.createError.noAuthOrWrongEmail();
         }
-        const passwordUpdated = await this.editPassword(user.userId, password, confirm);
+        const now = new Date();
+        //이메일 발신 후 경과시간 (분)
+        const elapsed = (now - resetCase.updatedAt) / 60000;
+        //만료된 요청
+        if (elapsed > validTime) {
+            await this.userRepository.updatePasswordResetCase(user.userId, null);
+            throw this.createError.requestExpired();
+        }
+
+        //비밀번호 update
+        if (password != confirm) {
+            throw this.createError.passwordNotMatched();
+        }
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const updated = await this.userRepository.updatePassword(user.userId, hashedPassword);
+
+        await this.userRepository.updatePasswordResetCase(user.userId, null);
+        return updated;
+    };
+    findResetCase = async (token) => {
+        const resetCase = await this.userRepository.findResetCaseByToken(token);
+        if (!resetCase) {
+            return false;
+        }
+        return true;
     };
     editPassword = async (userId, password, confirm) => {
         if (password != confirm) {

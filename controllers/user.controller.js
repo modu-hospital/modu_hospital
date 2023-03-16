@@ -225,25 +225,6 @@ class UserController {
 
                 res.status(200).json({ accessToken, refreshToken, save });
             }
-
-            // if (user) {
-            //     const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
-            //         expiresIn: '10s',
-            //     });
-
-            //     const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
-            //         expiresIn: '7d',
-            //     });
-
-            //     res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
-            //     res.cookie('refreshToken', refreshToken);
-
-            //     const save = await this.userService.saveToken(user.userId, refreshToken);
-
-            //     res.status(200).json({ accessToken, refreshToken, save });
-            // } else {
-            //     return {}
-            // }
         } catch (err) {
             next(err);
         }
@@ -254,20 +235,21 @@ class UserController {
         return res.status(200).json({ message: '로그아웃 되었습니다.' });
     };
 
-    sendEmailForCertification = async (req, res, next) => {
-        try {
-            const email = req.body.email;
-            const sendEmail = await this.userService.sendEmailForCertification(email);
-            return res.status(200).json({ message: '인증번호가 발송되었습니다' });
-        } catch (err) {
-            next(err);
-        }
-    };
+    // sendEmailForCertification = async (req,res,next) => {
+    //    try {
+    //     const email = req.body.email
+    //      const sendEmail = await this.userService.sendEmailForCertification(email)
+    //      return res.status(200).json({message:'인증번호가 발송되었습니다'})
+    //    } catch (err) {
+    //     next(err)
+    //    }
+    // }
 
     sendEmailForResetPassword = async (req, res, next) => {
         try {
-            const email = req.body.email;
-            const sendEmail = await this.userService.sendEmailForResetPassword(email);
+            console.log(new Date());
+            const { email, token } = req.body;
+            const sendEmail = await this.userService.sendEmailForResetPassword(email, token);
             return res.status(200).json({ message: '이메일이 발송되었습니다.' });
         } catch (err) {
             next(err);
@@ -275,14 +257,32 @@ class UserController {
     };
     resetPassword = async (req, res, next) => {
         try {
-            const { email, password, confirm, params } =
+            const { email, password, confirm, token } =
                 await this.validation.resetUserPassword.validateAsync(req.body);
             const passwordReset = await this.userService.resetPassword(
                 email,
                 password,
                 confirm,
-                params
+                token
             );
+            return res.status(200).json({ message: '비밀번호 재설정이 완료되었습니다.' });
+        } catch (err) {
+            next(err);
+        }
+    };
+    findResetCase = async (req, res, next) => {
+        try {
+            const { token } = req.params;
+            const isCaseExist = await this.userService.findResetCase(token);
+            return res.status(200).json({ isCaseExist });
+        } catch (err) {
+            next(err);
+        }
+    };
+    editUserPassword = async (req, res, next) => {
+        try {
+            const { userId, password, confirm } =
+                await this.validation.editUserPassword.validateAsync(req.body);
             return res.status(200).json({ message: '비밀번호 재설정이 완료되었습니다.' });
         } catch (err) {
             next(err);

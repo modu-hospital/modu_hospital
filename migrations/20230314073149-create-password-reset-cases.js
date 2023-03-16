@@ -2,40 +2,24 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('reservations', {
+        await queryInterface.createTable('passwordResetCases', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-
-            hospitalId: {
-                type: Sequelize.INTEGER,
-            },
             userId: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BIGINT,
             },
-            relationship: {
+            token: {
                 type: Sequelize.STRING,
             },
-            name: {
-                type: Sequelize.STRING,
-            },
-            phone: {
-                type: Sequelize.STRING,
-            },
-            date: {
+            createdAt: {
                 type: Sequelize.DATE,
             },
-            contents: {
-                type: Sequelize.STRING,
-            },
-            idNumber: {
-                type: Sequelize.STRING,
-            },
-            status: {
-                type: Sequelize.INTEGER,
+            updatedAt: {
+                type: Sequelize.DATE,
             },
             createdAt: {
                 allowNull: false,
@@ -48,6 +32,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('reservations');
+        await queryInterface.dropTable('passwordResetCases');
     },
 };

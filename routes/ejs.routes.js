@@ -20,6 +20,10 @@ router.get('/users/mypage/:userId', (req, res) => {
     res.render('index.ejs', { components: 'mypage' });
 });
 
+router.get('/users/resetpassword/:params', (req, res) => {
+    res.render('index.ejs', { components: 'resetpassword' });
+});
+
 router.get('/map/hospitals', (req, res) => {
     res.render('map.ejs', { components: 'map' });
 });
@@ -44,14 +48,20 @@ router.get('/doctorRegister', (req, res) => {
     res.render('index.ejs', { components: 'doctorRegister' });
 });
 
-//의사정보 수정 페이지
+//의사한명 페이지
 router.get('/doctorEdit', (req, res) => {
+    const doctorId = req.query.doctorId;
     res.render('index.ejs', { components: 'doctorEdit' });
 });
 
 //병원상세페이지
 router.get('/hospital/:hospitalId', (req, res) => {
     res.render('index.ejs', { components: 'hospitaldetail' });
+});
+
+//page expired
+router.get('/errors/expired', (req, res) => {
+    res.status(403).render('expired');
 });
 
 //로그인
