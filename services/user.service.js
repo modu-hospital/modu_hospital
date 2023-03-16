@@ -212,7 +212,7 @@ class UserService {
             text: 'token ' + token,
         };
         //메일 전송
-        transPort.sendMail(mailOptions, (err, info) => {
+        await transPort.sendMail(mailOptions, (err, info) => {
             console.log(info.envelope);
             console.log(info.messageId);
         });
