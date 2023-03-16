@@ -58,7 +58,6 @@ class UserController {
     };
 
     //mypage
-
     getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
@@ -206,8 +205,9 @@ class UserController {
         try {
             const { loginId, password } = req.body;
             const user = await this.userService.login(loginId, password);
-            if (user === 0) {
-                res.status(400).send({ message: '아이디 비밀번호를 확인해주세요' });
+
+            if (!user) {
+                res.status(412).json({ message: err.message });
             } else {
                 const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
                     expiresIn: '10s',
@@ -217,64 +217,16 @@ class UserController {
                     expiresIn: '7d',
                 });
 
-                res.cookie('accessToken', accessToken);
+                res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
                 res.cookie('refreshToken', refreshToken);
 
-                const refresh = await this.userService.findToken(user.userId);
-                // console.log("###refresh", refresh) //빈배열
-                if (refresh[0]) {
-                    const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY);
-                    if (!verify) {
-                        const reupdate = await this.userService.updateToken(user.userId, {
-                            token: refreshToken,
-                        });
-                        return reupdate;
-                    }
-                    res.json(verify);
-                } else {
-                    const save = await this.userService.saveToken(user.userId, refreshToken);
-                    return save;
-                }
-                res.status(200).json({ accessToken, refreshToken });
+                const save = await this.userService.saveToken(user.userId, refreshToken);
+
+                res.status(200).json({ accessToken, refreshToken, save });
             }
         } catch (err) {
             next(err);
         }
-
-        //     //토큰 생성 컨트롤러에서
-        //     const accessToken = jwt.sign({ loginId: user.userId} , process.env.JWT_SECRET_KEY, {
-        //         expiresIn: '10s',
-        //     });
-
-        //     const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
-        //         expiresIn: '7d',
-        //     });
-
-        //     res.cookie("accessToken", accessToken)
-        //     res.cookie("refreshToken", refreshToken)
-
-        // // userId조건으로 refreshToken 찾아와서(userId의 조건으로 refreshToken 찾기)
-        // // const refresh = await RefreshToken.findAll({where: {userId}})
-        // // console.log(refresh) 값의 형태 알기 ex)refresh[0].refreshToken
-        // //if(refresh[0].refreshToken)
-        // // refreshToken이 있다면 verify 시켜주고 verify한 refreshToken이 만료됬다면 //update로 새로 만들기??
-        // // refreshToken이 없다면 그냥 save
-
-        //     const refresh = await this.userService.findToken(user.userId)
-        //     // console.log("###refresh", refresh) //빈배열
-        //     if(refresh[0]) {
-        //         const verify = jwt.verify(refresh[0].token, process.env.JWT_SECRET_KEY)
-        //         if(!verify){
-        //             const reupdate =  await this.userService.updateToken(user.userId, {token: refreshToken})
-        //             return reupdate
-        //         }
-        //         res.json(verify)
-        //     } else {
-        //         const save = await this.userService.saveToken(user.userId, refreshToken);
-        //         return save
-        //     }
-
-        //     res.status(200).json({accessToken, refreshToken});
     };
 
     logout = async (req, res) => {

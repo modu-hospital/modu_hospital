@@ -74,11 +74,6 @@ class UserRepository {
         return await this.userModel.findAll({ where: { loginId } });
     };
 
-    //토큰 저장
-    tokenSave = async (userId, token) => {
-        return await this.refreshTokenModel.create({ userId, token });
-    };
-
     // 병원삭제
     HospitalDeleteOne = async (userId) => {
         return await this.hospitalModel.destroy({ where: { userId } });
@@ -172,6 +167,11 @@ class UserRepository {
                 where: { userId: userId },
             }
         );
+    };
+
+    //토큰 저장
+    tokenSave = async (userId, token) => {
+        return await this.refreshTokenModel.create({ userId, token });
     };
 
     //userId로 refreshtoken 찾기

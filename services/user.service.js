@@ -71,10 +71,14 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {
-            return existUser;
+            const err = await this.createError.UserAlreadyExist();
+            throw err;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+
+        // 추가 고민
+        // const hashedIdNumber = await bcrypt.hash(password, 12);
 
         const sign = await this.userRepository.signup(
             name,
@@ -88,6 +92,10 @@ class UserService {
         return sign;
     };
 
+    //@@@@@@@@@@@@@@문제
+    //비밀번호가 틀리면 비밀번호 바꾸라고??하는건지
+    // 비밀번호 업데이트 하라고?? 뜸,,, 이게 뭔지
+
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
         console.log('user[0].password', user[0].password);
@@ -96,7 +104,8 @@ class UserService {
         console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
-            return;
+            const err = await this.createError.wrongEmailOrPassword();
+            throw err;
         }
 
         return user[0];

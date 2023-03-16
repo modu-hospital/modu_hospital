@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth.middleware');
 
 // upload
 const multer = require('multer');
@@ -63,6 +64,6 @@ router.post('/around/info', hospitalController.findNearHospitalsInfo);
 router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 //병원 상세 조회
-router.get('/detail/:id');
+router.get('/detail/:id', auth, hospitalController.getOneHospital);
 
 module.exports = router;
