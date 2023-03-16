@@ -62,10 +62,14 @@ class UserService {
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {
-            return existUser;
+            const err = await this.createError.UserAlreadyExist()
+            throw err
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+
+        // 추가 고민
+        // const hashedIdNumber = await bcrypt.hash(password, 12);
 
         const sign = await this.userRepository.signup(
             name,
@@ -79,16 +83,31 @@ class UserService {
         return sign;
     };
 
+    //@@@@@@@@@@@@@@문제
+    //비밀번호가 틀리면 비밀번호 바꾸라고??하는건지
+    // 비밀번호 업데이트 하라고?? 뜸,,, 이게 뭔지
+
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
         console.log('user[0].password', user[0].password);
+        console.log("user", user[0].loginId)
+        //바디값에 loginId 잘못 찍어도 콘솔에 user값 잘 나와야되는거 아닌가
+        //console 안 찍힘
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
         console.log('isPasswordCorrect', isPasswordCorrect);
 
+        //아이디를 없는 아이디로 바디값에 넣었을 때때
+        //썬클에서 에러를 찍을 때 에러를 지정해줬는데 알 수 없는 오류가 발생했습니다 뜸
+        //TypeError: Cannot read properties of undefined (reading 'password')
+
         if (!user || !isPasswordCorrect) {
-            return;
+            const err = await this.createError.wrongEmailOrPassword()
+            throw err
         }
+        //비번을 틀렸을 땐 에러 잘 찍힘
+
+
 
         return user[0];
     };
@@ -215,7 +234,6 @@ class UserService {
     };
 
     updateToken = async (userId, token) => {
-        console.log('token#########', token);
         return await this.userRepository.updateToken(userId, token);
     };
 }

@@ -39,7 +39,6 @@ class TokenController {
 
         console.log('컨트롤러', refreshToken);
         const user = await this.tokenService.findUserId(userId);
-        //loginId를 가져오고 싶은데 어떻게
 
         console.log(user.loginId);
 

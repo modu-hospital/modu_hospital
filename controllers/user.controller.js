@@ -208,7 +208,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             if (!user) {
-                res.status(400).json({ message: err.message });
+                res.status(412).json({ message: err.message });
             } else {
                 const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
                     expiresIn: '10s',
@@ -225,6 +225,25 @@ class UserController {
 
                 res.status(200).json({ accessToken, refreshToken, save });
             }
+
+            // if (user) {
+            //     const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
+            //         expiresIn: '10s',
+            //     });
+
+            //     const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+            //         expiresIn: '7d',
+            //     });
+
+            //     res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
+            //     res.cookie('refreshToken', refreshToken);
+
+            //     const save = await this.userService.saveToken(user.userId, refreshToken);
+
+            //     res.status(200).json({ accessToken, refreshToken, save });
+            // } else {
+            //     return {}
+            // }
         } catch (err) {
             next(err);
         }

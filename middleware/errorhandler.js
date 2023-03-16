@@ -6,6 +6,7 @@ const errorHandler = (err, req, res, next) => {
         result = str[0].toLowerCase() + str.slice(1, str.length);
         return result;
     };
+    
     // /* token expired */
     // if (err.name === 'TokenExpiredError') {
     //     return res.render('index.ejs', { components: 'main', user: null });
@@ -44,7 +45,7 @@ const errorHandler = (err, req, res, next) => {
             name: '이름',
             phone: '전화번호',
             loginId: '아이디',
-            email: '이메일',
+            email:'이메일',
             address: '주소',
             password: '비민번호',
             confirm: '비밀번호 확인',
@@ -64,7 +65,7 @@ const errorHandler = (err, req, res, next) => {
                     .json({ message: `${Object.values(keys)[i]}의 형식이 적절하지 않습니다.` });
             }
         }
-        return res.status(412).json({ message: '입력값의 형식이 적절하지 않습니다.' });
+        return res.status(412).json({message: '입력값의 형식이 적절하지 않습니다.'})
     }
     // key = 에러처리할 url, value = 알 수 없는 에러 시 반환할 메세지
     // 파라미터는 제거 후 입력 ex):userId
@@ -73,20 +74,21 @@ const errorHandler = (err, req, res, next) => {
         '/api/users/mypage/editprofile/': '프로필 수정이 실패했습니다.',
         '/api/users/mypage/review/': '리뷰 작성이 실패했습니다.',
         '/api/users/mypage/': '마이페이지 불러오기에 실패했습니다.',
-        '/api/users/email': '이메일 발송에 실패하였습니다.',
+        '/api/users/email':'이메일 발송에 실패하였습니다.'
+
     };
     // lib/errors.js 에서 작성된 에러 먼저 출력, 그 후 errorList의 value 출력
     if (makeFirstLetterLowerCase(err.name) in createError) {
         return res.status(err.status).json({ message: err.message });
     }
-
+    
     for (let i = 0; i < Object.keys(errorList).length; i++) {
         if (req.path.substr(0, Object.keys(errorList)[i].length) === Object.keys(errorList)[i]) {
-            return res.status(500).json({ message: Object.values(errorList)[i] });
+                return res.status(500).json({ message: Object.values(errorList)[i] });   
         }
     }
 
-    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' }), console.log(err);
+    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' }), console.log(err)
 };
 
 module.exports = errorHandler;
