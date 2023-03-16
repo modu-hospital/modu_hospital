@@ -45,6 +45,8 @@
     }
 </style>
 
+
+
 <section class="profile" style="background-color: #f4f5f7">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
@@ -469,18 +471,17 @@
 
 <script>
     $(document).ready(function () {
-        getUserData(location.href.split('/')[5]);
-        getApproved(location.href.split('/')[5], 1);
-        getWaiting(location.href.split('/')[5], 1);
-        getDoneOrReviewed(location.href.split('/')[5], 1);
-        getCanceled(location.href.split('/')[5], 1);
+        getUserData();
+        getApproved(1);
+        getWaiting(1);
+        getDoneOrReviewed(1);
+        getCanceled(1);
     });
 
-    function getUserData(userId) {
-        console.log(userId);
+    function getUserData() {
         $.ajax({
             type: 'GET',
-            url: `/api/users/mypage/userdata/${userId}`,
+            url: `/api/users/mypage/userdata`,
             success: function (response) {
                 const userData = response;
 
@@ -505,12 +506,18 @@
             `;
                 $('#user-data').append(temp_html);
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#alertModal').modal('show');
+            }
         });
     }
-    function getApproved(userId, page) {
+    function getApproved(page) {
         $.ajax({
             type: 'GET',
-            url: `/api/users/mypage/approved?userId=${userId}&page=${page}`,
+            url: `/api/users/mypage/approved?&page=${page}`,
             success: function (response) {
                 const approved = response;
 
@@ -533,13 +540,19 @@
                     }
                 }
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#alertModal').modal('show');
+            }
         });
     }
 
-    function getWaiting(userId, page) {
+    function getWaiting(page) {
         $.ajax({
             type: 'GET',
-            url: `/api/users/mypage/waiting?userId=${userId}&page=${page}`,
+            url: `/api/users/mypage/waiting?&page=${page}`,
             success: function (response) {
                 const waiting = response;
                 if (page == 1 && !response.length) {
@@ -560,13 +573,19 @@
                     }
                 }
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#alertModal').modal('show');
+            }
         });
     }
 
-    function getDoneOrReviewed(userId, page) {
+    function getDoneOrReviewed( page) {
         $.ajax({
             type: 'GET',
-            url: `/api/users/mypage/doneorreviewed?userId=${userId}&page=${page}`,
+            url: `/api/users/mypage/doneorreviewed?&page=${page}`,
             success: function (response) {
                 const doneOrReviewed = response;
                 if (page == 1 && !response.length) {
@@ -605,12 +624,18 @@
                     }
                 }
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#alertModal').modal('show');
+            }
         });
     }
-    function getCanceled(userId, page) {
+    function getCanceled( page) {
         $.ajax({
             type: 'GET',
-            url: `/api/users/mypage/canceled?userId=${userId}&page=${page}`,
+            url: `/api/users/mypage/canceled?&page=${page}`,
             success: function (response) {
                 const canceled = response;
                 if (page == 1 && !response.length) {
@@ -630,9 +655,16 @@
                     }
                 }
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#alertModal').modal('show');
+            }
         });
     }
     function showInput() {
+        $('#editButton').attr('onclick', 'hideInput()')
         $('#user-data').attr('class', 'row pt-1 d-none');
         $('#input-user-data').attr('class', 'row pt-1');
         $('#edit-buttons').attr('class', 'row pt-1');
@@ -643,6 +675,7 @@
         return false;
     }
     function hideInput() {
+        $('#editButton').attr('onclick', 'showInput()')
         $('#user-data').attr('class', 'row pt-1');
         $('#input-user-data').attr('class', 'row pt-1 d-none');
         $('#edit-buttons').attr('class', 'row pt-1 d-none');
@@ -654,22 +687,31 @@
         return false;
     }
     function editProfile() {
-        const userId = location.href.split('/')[5];
         const name = $('#input-user-name').val();
         const phone = $('#input-user-phone').val();
         const address = $('#input-user-address').val();
         $.ajax({
             type: 'PATCH',
-            url: `/api/users/mypage/editprofile/${userId}`,
+            url: `/api/users/mypage/editprofile`,
             data: {
                 name: name,
                 phone: phone,
                 address: address,
             },
             success: function (response) {
-                alert(response['message']);
-                window.location.reload();
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#alertModal').modal('show');
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#alertModal').modal('show');
+            }
         });
     }
     function showAddressModal() {
@@ -738,6 +780,7 @@
         $('#modal-confirm').html('확인');
         $('#alertModal').modal('show');
     }
+    
 
     function showCancelModal() {
         const reservationId = event.target.dataset.reservationid;
@@ -757,8 +800,19 @@
             url: `/api/users/mypage/cancel/${reservationId}`,
             data: {},
             success: function (response) {
-                window.location.reload();
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#alertModal').modal('show');
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#alertModal').modal('show');
+            }
         });
     }
 
@@ -798,9 +852,19 @@
                 contents: contents,
             },
             success: function (response) {
-                alert('리뷰 작성 완료');
-                window.location.reload();
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#alertModal').modal('show');
             },
+            error: function (response){
+                $('#alertModalLabel').html('알림');
+                $('#alertText').html(response.responseJSON.message);
+                $('#modal-confirm').html('확인');
+                $('#modal-confirm').attr('onclick',`$('#alertModal').modal('show');`)
+                $('#alertModal').modal('show');
+            }
         });
     }
     function nextPage(status) {
@@ -824,7 +888,7 @@
         const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
         $(`#${status}`).empty();
 
-        window[`get${upperCase}`](location.href.split('/')[5], page);
+        window[`get${upperCase}`](page);
     }
     function inputAddress() {
         const text = $('#roadaddress').val();

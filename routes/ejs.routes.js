@@ -15,11 +15,16 @@ router.get('/admin', (req, res) => {
 router.get('/users/reservation', (req, res) => {
     res.render('index.ejs', { components: 'reservation' });
 });
-
-router.get('/users/mypage/:userId', (req, res) => {
+// 마이페이지
+router.get('/users/mypage', (req, res) => {
     res.render('index.ejs', { components: 'mypage' });
 });
+//비밀번호 찾기 (이메일 발송) 페이지
+router.get('/findmypassword', (req, res) => {
+    res.render('index.ejs', { components: 'findmypassword' })
+})
 
+// 비밀번호 재설정 페이지
 router.get('/users/resetpassword/:params', (req, res) => {
     res.render('index.ejs', { components: 'resetpassword' });
 });
