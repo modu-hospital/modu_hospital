@@ -44,5 +44,4 @@ jobs:
         cache: 'npm'
     - run: npm cache clean --force 
     - run: npm install --cache
-    - run: npm install
     - run: npm test
