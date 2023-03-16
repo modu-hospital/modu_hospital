@@ -53,7 +53,7 @@ describe('Reservation Service Unit Test', () => {
 
         //     expect(async () => {await reservationService.cancelReservation(1)}).toEqual(reservationService.reservationRepository.editReservationStatusById())
         // })
-    })
+    });
     describe('createReview()', () => {
         it('should throw ReviewAlreadyCreated error', async () => {
             const statusReviewed = {

@@ -11,9 +11,6 @@ const hospitalController = new HospitalController();
 //예약관리 조회
 router.get('/reservation', hospitalController.findAllReservation);
 
-//예약관리 예약날짜 수정
-router.patch('/reservation/date/:id', hospitalController.editReservation);
-
 //예약관리 승인하기 수정
 router.patch('/reservation/status/:id', hospitalController.approvedReservation);
 
@@ -40,6 +37,9 @@ router.put(
     hospitalController.registerEditHospital
 );
 
+//병원 이미지 업로드
+router.post('/register/image', upload.array('images',5),hospitalController.registerImagehospital);
+
 //우리 병원 정보 조회
 router.get('/information', hospitalController.findOneHospital);
 
@@ -55,11 +55,14 @@ router.get('/information/doctor', hospitalController.findAllDoctor);
 //의사 한명 정보 불러오기
 router.get('/information/doctor/:doctorId', hospitalController.findOneDoctor);
 
+//의사 일하는 시간 넣기
+router.post('/register/doctor/workingtime', hospitalController.createWorkingTime);
+
 router.post('/around', hospitalController.findNearHospital);
 router.post('/around/info', hospitalController.findNearHospitalsInfo);
 router.get('/info/:id', hospitalController.searchHospitalInfo);
 
 //병원 상세 조회
-router.get('/detail/:id')
+router.get('/detail/:id');
 
 module.exports = router;

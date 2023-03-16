@@ -217,6 +217,10 @@
                           <button onclick="location.href='/register'">우리 병원 등록하기</button>
                           <button onclick="location.href='/edit'">우리 병원 수정하기</button>
                         </div>
+                        <form action="/api/hospitals/register/image" method="POST" enctype="multipart/form-data">
+                          <input type="file" name="images" multiple>
+                          <input type="submit" value="Upload">
+                        </form>
                     </div>
                 </div>
                 <div id="tab-6" class="tab-content">
@@ -662,16 +666,20 @@ function informationHospital() {
 				var contents = document.createElement("p");
 				contents.textContent = data[i].contents;
 				var editButton = document.createElement("button");
-				editButton.textContent = "의사 수정하기";
+				editButton.textContent = "수정 하기";
 				editButton.onclick = function() {                   
                     location.href = `/doctorEdit/?doctorId=${data[i].doctorId}`
-                   // location.replace(`/doctorEdit/${data[i].doctorId}`);
-					// location.href = "/doctorEdit/" + data[i].doctorId;
 				};
+        var createButton = document.createElement("button");
+        createButton.textContent = "시간 등록";
+        createButton.onclick = function(){
+          location.href = `/doctorTime/?doctorId=${data[i].doctorId}`
+        }
 				card.appendChild(image);
 				card.appendChild(name);
 				card.appendChild(contents);
 				card.appendChild(editButton);
+        card.appendChild(createButton);
 				container.appendChild(card);
 			}
 		}
