@@ -64,6 +64,12 @@ router.get('/hospital/:hospitalId', (req, res) => {
     res.render('index.ejs', { components: 'hospitaldetail' });
 });
 
+//의사 시간 추가
+router.get('/doctorTime', (req, res) => {
+    const doctorId = req.query.doctorId;
+    res.render('index.ejs', { components: 'doctorTime' });
+});
+
 //page expired
 router.get('/errors/expired', (req, res) => {
     res.status(403).render('expired');
