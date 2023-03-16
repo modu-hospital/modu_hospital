@@ -70,8 +70,8 @@ class HospitalController {
                 reservationdata: reservationdata,
             });
         } catch (error) {
-                next(error);
-            }
+            next(error);
+        }
     };
 
     approvedReservation = async (req, res, next) => {
@@ -121,7 +121,6 @@ class HospitalController {
             next(error);
         }
     };
-
 
     registerEditHospital = async (req, res, next) => {
         // const { currentUser } = res.locals;
@@ -211,9 +210,9 @@ class HospitalController {
             };
             const address_name = address_info.address_name;
 
-            req.hospitalLocation = { location, address_name }; 
+            req.hospitalLocation = { location, address_name };
 
-            return next(); 
+            return next();
         } catch (error) {
             next(error);
         }
@@ -224,7 +223,7 @@ class HospitalController {
         // cosnt userId = currentUser.id;
         const userId = 91;
         const { name, address, phone } = req.body;
-        const { location, address_name } = req.hospitalLocation; 
+        const { location, address_name } = req.hospitalLocation;
         const longitude = location.longitude;
         const latitude = location.latitude;
 
@@ -240,33 +239,33 @@ class HospitalController {
 
             return res.json({ data: registerdata });
         } catch (error) {
-            throw error
+            throw error;
         }
     };
 
-    registerImagehospital = async(req, res, next) => {
+    registerImagehospital = async (req, res, next) => {
         const userId = 91;
         try {
             const files = req.files;
             console.log(files);
             const hospital = await this.hospitalService.registerImagehospital(userId, files);
-            return res.json({data: hospital});
-        } catch (error){
+            return res.json({ data: hospital });
+        } catch (error) {
             next(error);
         }
-    }
+    };
 
     registerdoctor = async (req, res, next) => {
         // userId = 3;
         const userId = 91;
         const { name, contents, categories } = req.body;
 
-        const unique = Array.from(new Set(categories)); 
+        const unique = Array.from(new Set(categories));
         const replaceCategories = await Promise.all(
             unique.map((categories) => categories.replace(/\s/g, ''))
         );
         try {
-            const file = req.file; 
+            const file = req.file;
             const { doctor } = await this.hospitalService.registerdoctor(
                 userId,
                 name,
@@ -276,7 +275,7 @@ class HospitalController {
             );
             return res.status(201).json({ data: doctor });
         } catch (error) {
-             next(error);
+            next(error);
         }
     };
 
@@ -284,14 +283,13 @@ class HospitalController {
         let doctorId = parseInt(req.params.doctorId);
         const { name, contents } = req.body;
         try {
-            const file = req.file; 
+            const file = req.file;
             const doctor = await this.hospitalService.editdoctor(doctorId, name, file, contents);
             return res.json({ data: doctor });
         } catch (error) {
             next(error);
         }
     };
-
 
     findAllDoctor = async (req, res, next) => {
         const userId = 91;
@@ -312,17 +310,25 @@ class HospitalController {
             next(error);
         }
     };
-    
+
     createWorkingTime = async (req, res, next) => {
         try {
-            const workigTimeData = req.body; 
+            const workigTimeData = req.body;
             const workingTime = await this.hospitalService.createWorkingTime(workigTimeData);
             return res.json(workingTime);
         } catch (error) {
-            next(error); 
+            next(error);
         }
     };
 
+    //병원 상세 조회
+    getOneHospital = async (req, res, next) => {
+        const { id } = req.params;
+
+        const oneHospital = await this.hospitalService.getOneHospital(id);
+
+        res.json(oneHospital);
+    };
 }
 
 module.exports = HospitalController;
