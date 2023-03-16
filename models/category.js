@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate({ DoctorCategoryMapping }) {
             // define association here
-            this.hasMany(DoctorCategoryMapping, { foreignKey: 'categoryId', as: 'doctorCategoryMappings'});
+            this.hasMany(DoctorCategoryMapping, {
+                foreignKey: 'categoryId',
+                as: 'categoriesMapping',
+            });
         }
     }
     Category.init(

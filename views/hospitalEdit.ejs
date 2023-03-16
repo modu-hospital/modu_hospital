@@ -1,0 +1,119 @@
+<div id="sform">
+    <form action="/hospital" id="hospitalForm">
+        <h2>병원정보 수정</h2>
+        <label for="name">병원이름</label>
+        <input type="text" id="name" name="name" required>
+        <label for="address">주소</label>
+        <input type="text" id="address" name="address" required onclick="openModal()">
+        <label for="phone">전화번호</label>
+        <input type="text" id="phone" name="phone" required>
+        <button type="submit">수정하기</button>
+    </form>
+</div>
+
+<!-- 모달창 -->
+<div id="modal" class="modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
+                <div style="height:5px;"></div>
+                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
+                <hr /><br />
+
+                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+
+                <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
+
+                <div id="wrap">
+                     <div id="closeBtn" onClick="addressWindowClose();">
+                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                </div>
+            <div>
+                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
+                    placeholder="도로명주소, 건물명 또는 지번 입력" />
+                <input type="button" onClick="getAddr();" value="주소검색" />
+            </div>
+
+            <div>
+                <div id="totoalOutcome">
+
+                    검색결과 : <span id="totalCnt">0</span>
+
+                </div>
+                <table id="list"></table>
+
+            </div>
+
+            <div id="pagingList" style='text-align:center;'></div>
+
+        </div>
+
+        <div style="height:5px;"></div>
+
+        <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
+
+        <div style="height:5px;"></div>
+
+        <input type="button" value="입력" onclick="inputData()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+        $(document).ready(function () {
+    informationHospital();
+});
+   function informationHospital() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/hospitals/information',
+        dataType: 'json',
+        success: function (response) {
+            const hospital = response.data;
+
+            // 병원 정보를 form에 삽입
+            $('#name').val(hospital.name);
+            $('#address').val(hospital.address);
+            $('#phone').val(hospital.phone);
+        },
+    });
+}
+
+$('#hospitalForm').submit(function (e) {
+    e.preventDefault(); // 기본 이벤트 막기
+
+    const formData = $(this).serialize(); // form 데이터 가져오기
+
+
+    $.ajax({
+        type: 'PUT', // 수정 요청
+        url: '/api/hospitals/register/edit',
+        data: formData, // form 데이터 전송
+        success: function (response) {
+            alert('병원 정보가 수정되었습니다.');
+            // 성공적으로 수정된 경우 처리할 내용을 작성
+
+            window.location.href = 'http://localhost:3000/hospital';
+            // alert 이후 병원 관리페이지로 이동 
+        },
+        error: function (xhr) {
+            alert('병원 정보 수정에 실패했습니다.');
+            // 수정에 실패한 경우 처리할 내용을 작성
+        },
+    });
+});
+
+
+</script>

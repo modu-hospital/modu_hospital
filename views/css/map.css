@@ -1,0 +1,236 @@
+body {
+  margin: 0;
+  list-style: none;
+}
+
+button {
+  background-color: #8ab3ff;
+  color: #ffffff;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  height: 5vh;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+#homeIcon {
+  color: #b9deff;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+#listBtn {
+  position: absolute;
+  bottom: 10vh;
+  right: 50%;
+  width: 300px;
+  height: 50px;
+  border: 3px solid #216cad;
+  background-color: #fff;
+  color: #222;
+  z-index: 1;
+  margin-right: -150px;
+}
+
+input[id="menuIcon"] {
+  display: none;
+}
+
+input[id="menuIcon"]+label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 20px;
+  transition: all 0.35s;
+  cursor: pointer;
+  z-index: 3;
+  margin-right: 10px;
+}
+
+input[id="menuIcon"]+label span {
+  display: block;
+  width: 100%;
+  height: 5px;
+  border-radius: 30px;
+  background: #8ab3ff;
+  transition: all .35s;
+}
+
+input[id="menuIcon"]:checked+label span:nth-child(1) {
+  opacity: 0;
+}
+
+input[id="menuIcon"]:checked+label span:nth-child(2) {
+  transform: scale(1.5, 3);
+}
+
+input[id="menuIcon"]:checked+label span:nth-child(3) {
+  opacity: 0;
+}
+
+div[class="sidebar"] {
+  width: 400px;
+  height: 100%;
+  background: #ffffff;
+  position: fixed;
+  top: 0;
+  right: -400px;
+  z-index: 2;
+  transition: all .35s;
+  overflow: scroll;
+}
+
+input[id="menuIcon"]:checked+label+div {
+  right: 0;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  -ms-overflow-style: none;
+  /* 인터넷 익스플로러 */
+  scrollbar-width: none;
+  /* 파이어폭스 */
+}
+
+input[id="departmentCheckbox"] {
+  display: none;
+}
+
+input[id="departmentCheckbox"]+label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 20px;
+  transition: all 0.35s;
+  cursor: pointer;
+  z-index: 3;
+  margin-left: 10px;
+}
+
+input[id="departmentCheckbox"]+label span {
+  display: block;
+  width: 100%;
+  height: 5px;
+  border-radius: 30px;
+  background: #8ab3ff;
+  transition: all .35s;
+}
+
+input[id="departmentCheckbox"]:checked+label span:nth-child(1) {
+  opacity: 0;
+}
+
+input[id="departmentCheckbox"]:checked+label span:nth-child(2) {
+  transform: scale(1.5, 3);
+}
+
+input[id="departmentCheckbox"]:checked+label span:nth-child(3) {
+  opacity: 0;
+}
+
+div[class="boxwrap"] {
+  width: 400px;
+  height: 100%;
+  background: #ffffff;
+  position: fixed;
+  top: 0;
+  left: -400px;
+  z-index: 2;
+  transition: all .35s;
+  overflow: scroll;
+}
+
+input[id="departmentCheckbox"]:checked+label+div {
+  left: 0;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+}
+
+.boxwrap::-webkit-scrollbar {
+  display: none;
+}
+
+.boxwrap {
+  -ms-overflow-style: none;
+  /* 인터넷 익스플로러 */
+  scrollbar-width: none;
+  /* 파이어폭스 */
+}
+
+#pageMoveButton {
+  width: 380px;
+  height: 50px;
+  margin-left: 10px;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+.listBox {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+li:last-child {
+  margin-bottom: 20px;
+}
+
+.info {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hospitalImage {
+  width: 380px;
+  height: 200px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#departmentwrap {
+  display: flex;
+  justify-content: space-between
+}
+
+.division {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+}
+
+#departmentBtn {
+  width: 380px;
+  height: 50px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+#resetBtn {
+  width: 380px;
+  height: 50px;
+  margin-top: 20px;
+  margin-left: 10px;
+}

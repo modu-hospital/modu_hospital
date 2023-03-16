@@ -1,0 +1,358 @@
+<style>
+/* body 스타일 */
+#my_modal {
+    display: none;
+    height: 800px;
+    padding: 20px 200px;
+    background-color: #fefefe;
+    border: 2px solid #888;
+    border-radius: 5px;
+    overflow: hidden auto;
+
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 18px;
+}
+
+#my_modal .modal_close_btn {
+    position:absolute;
+    display:inline-block;
+    *display:inline;
+    width:50px;
+    height:50px;
+    text-align:center;
+    margin-right:20px;
+    top: 30px;
+    right: 10px;
+}
+
+#my_modal .modal_close_btn:after {content: "\00d7"; font-size:50pt;line-height:35px;}
+
+#popup_open_btn {
+    box-shadow: none;
+    background-color: #585858;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 0;
+    box-shadow: inset 0 0 0 2px #585858;
+    color: #585858;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 900;
+    height: 3.5em;
+    letter-spacing: 0.35em;
+    line-height: 3.45em;
+    overflow: hidden;
+    padding: 0 1.25em 0 1.6em;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+#popup_open_btn:hover {
+    box-shadow: inset 0 0 0 2px darksalmon;
+    color: darksalmon;
+}
+
+#reservation_time {
+margin: 50px;
+width: 600px;
+border-collapse: collapse;
+color: #505050;
+/* 		border: 1px solid #dcdcdc; */
+}
+
+#reservation_time td.top {
+    padding-bottom: 20px;
+    font-weight: 500;
+    font-size: 15px;
+}
+#reservation_time td.content {
+    padding-bottom: 50px;
+}
+
+#calendar {
+    margin-bottom: 50px;
+    padding: 10px;
+    width: 250px;
+    color: #505050;
+    border: 1px solid #dcdcdc;
+}
+#calendar td {
+    padding: 10px;
+}
+
+#timeTable {
+    margin-bottom: 50px;
+    padding: 5px;
+    width: 100%;
+    color: #505050;
+}
+#timeTable td {
+    padding: 8px;
+}
+
+#selectedDate {
+    width: 200px;
+    height: 25px;
+    padding: 10px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+#selectedTime {
+    width: 200px;
+    height: 25px;
+    padding: 10px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+
+#btn_submit {
+    box-shadow: none;
+    background-color: #585858;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 0;
+    box-shadow: inset 0 0 0 2px #585858;
+    color: #585858;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 900;
+    height: 3.5em;
+    letter-spacing: 0.35em;
+    line-height: 3.45em;
+    overflow: hidden;
+    padding: 0 1.25em 0 1.6em;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#btn_submit:hover {
+    box-shadow: inset 0 0 0 2px darksalmon;
+    color: darksalmon;
+}
+
+    
+</style>
+
+<!-- Main -->
+<div id="main">
+    <div class="inner">
+        <h1>진료예약</h1>
+        <!-- Form -->
+        <section>
+            <form action="#">
+                <div class="row gtr-uniform">
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-first" name="demo-priority" checked />
+                        <label for="demo-priority-first">초진</label>
+                    </div>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-normal" name="demo-priority" />
+                        <label for="demo-priority-normal">재진</label>
+                    </div>
+                    <div class="col-7">
+                        <select name="relationCategory" id="relationCategory">
+                            <option value="미선택">- 환자와의 관계 -</option>
+                            <option value="본인">본인</option>
+                            <option value="직계">직계</option>
+                            <option value="배우자 및 배우자의 직계">배우자 및 배우자의 직계</option>
+                            <option value="형제·자매">형제·자매</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="col-5" id="divSelfWrite">
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="patientName"
+                            id="patientName"
+                            value=""
+                            placeholder="환자이름"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="proxyName"
+                            id="proxyName"
+                            value=""
+                            disabled
+                            placeholder="대리신청인"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="idNumber"
+                            id="idNumber"
+                            value=""
+                            placeholder="환자의 주민등록번호( - 를 포함해주세요 )"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            value=""
+                            placeholder="연락처( - 를 포함해주세요 )"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="address"
+                            id="address"
+                            value=""
+                            placeholder="주소"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <a id="popup_open_btn" onclick="reservationTime()">예약시간찾기</a>
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="reservationSelectedDate"
+                            id="reservationSelectedDate"
+                            value=""
+                            disabled
+                            placeholder="예약날짜"
+                        />
+                    </div>
+                    <div class="col-6 col-12-xsmall">
+                        <input
+                            type="text"
+                            name="reservationSelectedTime"
+                            id="reservationSelectedTime"
+                            value=""
+                            disabled
+                            placeholder="예약시간"
+                        />
+                    </div>
+                    <div class="col-12">
+                        <textarea
+                            name="message"
+                            id="message"
+                            placeholder="간단한 증상을 적어주세요 ( ex. 두통, 기침, 숨막힘, 복통 등 )"
+                            rows="6"
+                        ></textarea>
+                    </div>
+                    <p><h2>개인정보는 어디다 쓸거냐면요~</h2>
+
+                        <span class="image left"><img src="images/pic14.jpg" alt="" /></span
+                        >Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis
+                        eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum.
+                        Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu
+                        faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget.
+                        tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis
+                        tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis
+                        in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
+                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt
+                        felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in
+                        faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
+                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus
+                        euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
+                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
+                        Integer ac pellentesque praesent.
+                    </p>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-high" name="demo-priority" />
+                        <label for="demo-priority-high">개인정보 동의</label>
+                    </div>
+                    <div class="col-4 col-12-small">
+                        <input type="radio" id="demo-priority-low" name="demo-priority" />
+                        <label for="demo-priority-low">개인정보 미동의</label>
+                    </div>
+                    <div class="col-12">
+                        <ul class="actions">
+                            <li>
+                                <input type="submit" value="예약하기" class="primary" />
+                            </li>
+                            <li><input type="reset" value="다지우기" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+<div id="my_modal">
+    <div class="mainBox">
+        <div class="contentBox">
+            <div class="textLeft"><span style="color: #505050; font-size:40px; font-weight:700">예약하기</span>
+            <div class="underline"></div>
+        </div>
+            <table id="reservation_time">
+                <tr>
+                    <td class="top" align="left">시간선택</td>
+                    <td class="top" align="right"><button class="btnTime" type="button" onclick="tableinit()">초기화</button></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="calendar">
+                            <tr>
+                                <td align="center"><label onclick="prevCalendar()"> ◀ </label></td>
+                                <td colspan="5" align="center" id="calendarTitle">yyyy년 m월</td>
+                                <td align="center"><label onclick="nextCalendar()"> ▶ </label></td>
+                            </tr>
+                            <tr>
+                                <td align="center"><font color ="#F79DC2">일</td>
+                                <td align="center">월</td>
+                                <td align="center">화</td>
+                                <td align="center">수</td>
+                                <td align="center">목</td>
+                                <td align="center">금</td>
+                                <td align="center"><font color ="skyblue">토</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr> 
+                    <!-- <td class="top"</td> -->
+                    <td class="top" align="left" colspan="2">
+                        <table id="doctorTable"></table>
+                        <table class="timetable" id="timeTable"></table>
+                    </td>
+                </tr>
+                <tr> 
+                    <td class="top" align="left" colspan="2">예약일시</td>
+                </tr>
+                <tr>
+                    <td class="content" colspan="2" align="left">
+                        <input id="selectedDate" style="border:none; width:100px"  name="selectedDate" value="" readonly="readonly" ></input>
+                        <input id="selectedTime" style="border:none"  name="selectedTime" value="" readonly="readonly"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content" align="left" colspan="2">
+                    <input id="btn_submit" type="button" value="예약하기" onclick="submitRes()"></td>
+                <tr>
+            </table>
+        </div>
+    </div>
+    <a class="modal_close_btn"></a>
+</div>

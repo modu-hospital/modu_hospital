@@ -1,0 +1,80 @@
+table {
+    width: 100%;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #444444;
+}
+
+tr>td:first-child {
+    text-align: center;
+}
+
+div#wrap {
+    display: none;
+    border: 1px solid #DDDDDD;
+    width: 500px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+div#wrap>div {
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+
+div#wrap a:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+
+div#wrap a:hover {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+div#totoalOutcome {
+    display: none;
+}
+
+#closeBtn {
+    float: right;
+    cursor: pointer;
+  }
+  
+  #closeBtn:hover {
+    opacity: 0.5;
+  }
+  
+  #pagingList {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  #list {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #list td {
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #list th {
+    padding: 5px;
+    text-align: center;
+    background-color: #f5f5f5;
+  }
+  
+  .modal-dialog {
+    max-width: 800px;
+  }
