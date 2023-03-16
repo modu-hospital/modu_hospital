@@ -25,7 +25,7 @@ router.get('/users/resetpassword/:params', (req, res) => {
 });
 
 router.get('/map/hospitals', (req, res) => {
-    res.render('map.ejs', { components: 'map' });
+    res.render('map.ejs', { components: 'map' }); 
 });
 
 //원장님의 공간
@@ -52,6 +52,12 @@ router.get('/doctorRegister', (req, res) => {
 router.get('/doctorEdit', (req, res) => {
     const doctorId = req.query.doctorId;
     res.render('index.ejs', { components: 'doctorEdit' });
+});
+
+//의사 시간 추가
+router.get('/doctorTime', (req, res) => {
+    const doctorId = req.query.doctorId;
+    res.render('index.ejs', { components: 'doctorTime' });
 });
 
 //page expired
