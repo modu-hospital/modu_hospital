@@ -1,7 +1,7 @@
 const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
-const formatterdDate = '%Y-%m-%d %H:%i'; // %Y-%m-%d %H:%i:%s => 원하는 날짜 형식 바꾸기
+const formatterdDate = '%Y-%m-%d %H:%i'; 
 
 class HospitalRepository {
     constructor(
@@ -13,7 +13,7 @@ class HospitalRepository {
         DoctorCategoryMappingModel,
         UserModel,
         HospitalImageFileModel,
-        WorkingTimeModel
+        WorkingTimeModel,
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -26,7 +26,6 @@ class HospitalRepository {
         this.workingTimeModel = WorkingTimeModel;
     }
 
-    //병원페이지 예약 승인대기 목록 불러오기
     getWaitedReservation = async (hospitalId) => {
         try {
             const reservationdata = await this.hospitalModel.findAll({
@@ -77,7 +76,6 @@ class HospitalRepository {
         }
     };
 
-    //병원페이지 승인 확정 목록
     getapprovedReservation = async (hospitalId) => {
         try {
             const reservationdata = await this.hospitalModel.findAll({
@@ -128,7 +126,6 @@ class HospitalRepository {
         }
     };
 
-    //병원페이지 전체 예약관리 조회
     findAllReservation = async (hospitalId) => {
         try {
             const reservationdata = await this.hospitalModel.findAll({
@@ -176,7 +173,6 @@ class HospitalRepository {
         }
     };
 
-    //병원페이지 예약관리 날짜 수정
     editReservation = async (id, date) => {
         try {
             const updated = await this.reservationModel.update({ date }, { where: { id } });
@@ -186,7 +182,6 @@ class HospitalRepository {
         }
     };
 
-    // 병원페이지 승인하기
     approvedReservation = async (id, status) => {
         try {
             return await this.reservationModel.update({ status }, { where: { id } });
@@ -195,7 +190,6 @@ class HospitalRepository {
         }
     };
 
-    //해당 예약이 존재하는지 찾기
     findOneReservation = async (id) => {
         try {
             const finddata = await this.reservationModel.findByPk(id);
@@ -205,7 +199,6 @@ class HospitalRepository {
         }
     };
 
-    //리뷰 조회
     getAllreviews = async (hospitalId) => {
         try {
             const data = await this.userModel.findAll({
@@ -236,7 +229,6 @@ class HospitalRepository {
         }
     };
 
-    //병원 정보 등록
     registerHospital = async (userId, name, address, phone, longitude, latitude) => {
         try {
             return await this.hospitalModel.create({
@@ -252,7 +244,6 @@ class HospitalRepository {
         }
     };
 
-    //병원 정보 수정
     registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
         try {
             return await this.hospitalModel.update(
@@ -270,7 +261,6 @@ class HospitalRepository {
         }
     };
 
-    // 해당 병원 찾기
     findOneHospital = async (userId) => {
         try {
             const findData = await this.hospitalModel.findOne({
@@ -282,7 +272,15 @@ class HospitalRepository {
         }
     };
 
-    // 의사 정보 불러오기
+    registerImagehospital = async (url) => {
+        try {
+            const ImageFile = await this.hospitalImageFileModel.bulkCreate(url);
+            return ImageFile;
+        } catch (error){
+            throw new Error(error);
+        }
+    }
+
     findAllDoctor = async (hospitalId) => {
         try {
             const findData = await this.doctorModel.findAll({
@@ -294,7 +292,6 @@ class HospitalRepository {
         }
     };
 
-    // 의사 한명 정보 불러오기
     findOneDoctor = async (doctorId) => {
         try {
             const findData = await this.doctorModel.findOne({
@@ -306,7 +303,6 @@ class HospitalRepository {
         }
     };
 
-    // 의사 등록하기
     registerdoctor = async (hospitalId, name, image, contents) => {
         try {
             return await this.doctorModel.create({ hospitalId, name, image, contents });
@@ -315,7 +311,6 @@ class HospitalRepository {
         }
     };
 
-    // 의사 수정하기
     editdoctor = async (doctorId, name, image, contents) => {
         try {
             return await this.doctorModel.update(
@@ -327,7 +322,6 @@ class HospitalRepository {
         }
     };
 
-    // category 찾고 없으면 생성
     findOrCreate = async (department) => {
         try {
             const [categories, created] = await this.categoryModel.findOrCreate({
@@ -339,12 +333,14 @@ class HospitalRepository {
         }
     };
 
-    // doctor_categories_mappings => doctorId, categoryId 넣기
     categoriesInstance = async (mappings) => {
         await this.doctorCategoryMappingModel.bulkCreate(mappings);
     };
 
-    // 의사일하는시간 넣기
+    createWorkingTime = async (workigtime) => {
+       const data = await this.workingTimeModel.bulkCreate(workigtime); 
+        return data ;
+    };
 
     // 화면 위치 기준 병원 찾기
     findNearHospitals = async (longitude, latitude) => {
