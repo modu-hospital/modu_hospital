@@ -38,7 +38,7 @@ router.put(
 );
 
 //병원 이미지 업로드
-router.post('/register/image', upload.array('images',5),hospitalController.registerImagehospital);
+router.post('/register/image', upload.array('images', 5), hospitalController.registerImagehospital);
 
 //우리 병원 정보 조회
 router.get('/information', hospitalController.findOneHospital);

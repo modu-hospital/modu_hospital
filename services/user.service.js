@@ -189,13 +189,12 @@ class UserService {
             throw err;
         }
 
-
-        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId)
+        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
         const token = Math.random().toString(36).slice(2) + new Date().getTime().toString(36);
-        if(!isCaseExist){
-        await this.userRepository.createPasswordResetCase(user.userId, token)
-        }else{
-        await this.userRepository.updatePasswordResetCase(user.userId, token)
+        if (!isCaseExist) {
+            await this.userRepository.createPasswordResetCase(user.userId, token);
+        } else {
+            await this.userRepository.updatePasswordResetCase(user.userId, token);
         }
         const mailOptions = {
             from: 'spartamoduhospital@gmail.com',
@@ -204,7 +203,7 @@ class UserService {
             text: 'token ' + token,
         };
         //메일 전송
-        transPort.sendMail(mailOptions, (err, info) => {
+        await transPort.sendMail(mailOptions, (err, info) => {
             console.log(info.envelope);
             console.log(info.messageId);
         });
@@ -225,9 +224,9 @@ class UserService {
         //이메일 발신 후 경과시간 (분)
         const elapsed = (now - resetCase.updatedAt) / 60000;
         //만료된 요청
-        if(elapsed > validTime){
-            await this.userRepository.updatePasswordResetCase(user.userId, null)
-            throw this.createError.requestExpired()
+        if (elapsed > validTime) {
+            await this.userRepository.updatePasswordResetCase(user.userId, null);
+            throw this.createError.requestExpired();
         }
 
         //비밀번호 update

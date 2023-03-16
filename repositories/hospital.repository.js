@@ -1,7 +1,7 @@
 const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
-const formatterdDate = '%Y-%m-%d %H:%i'; 
+const formatterdDate = '%Y-%m-%d %H:%i';
 
 class HospitalRepository {
     constructor(
@@ -13,7 +13,7 @@ class HospitalRepository {
         DoctorCategoryMappingModel,
         UserModel,
         HospitalImageFileModel,
-        WorkingTimeModel,
+        WorkingTimeModel
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -276,10 +276,10 @@ class HospitalRepository {
         try {
             const ImageFile = await this.hospitalImageFileModel.bulkCreate(url);
             return ImageFile;
-        } catch (error){
+        } catch (error) {
             throw new Error(error);
         }
-    }
+    };
 
     findAllDoctor = async (hospitalId) => {
         try {
@@ -338,8 +338,8 @@ class HospitalRepository {
     };
 
     createWorkingTime = async (workigtime) => {
-       const data = await this.workingTimeModel.bulkCreate(workigtime); 
-        return data ;
+        const data = await this.workingTimeModel.bulkCreate(workigtime);
+        return data;
     };
 
     // 화면 위치 기준 병원 찾기
