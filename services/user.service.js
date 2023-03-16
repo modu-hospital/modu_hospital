@@ -189,12 +189,13 @@ class UserService {
             throw err;
         }
 
-        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
-        const token = await bcrypt.hash(Math.random().toString(36).slice(2), 12);
-        if (!isCaseExist) {
-            await this.userRepository.createPasswordResetCase(user.userId, token);
-        } else {
-            await this.userRepository.updatePasswordResetCase(user.userId, token);
+
+        const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId)
+        const token = Math.random().toString(36).slice(2) + new Date().getTime().toString(36);
+        if(!isCaseExist){
+        await this.userRepository.createPasswordResetCase(user.userId, token)
+        }else{
+        await this.userRepository.updatePasswordResetCase(user.userId, token)
         }
         const mailOptions = {
             from: 'spartamoduhospital@gmail.com',
@@ -202,11 +203,11 @@ class UserService {
             subject: '모두의 병원 비밀번호 재설정',
             text: 'token ' + token,
         };
-
-        // transPort.sendMail(mailOptions, (err, info) => {
-        //     console.log(info.envelope);
-        //     console.log(info.messageId);
-        // });
+        //메일 전송
+        transPort.sendMail(mailOptions, (err, info) => {
+            console.log(info.envelope);
+            console.log(info.messageId);
+        });
     };
 
     resetPassword = async (email, password, confirm, token) => {
@@ -224,8 +225,9 @@ class UserService {
         //이메일 발신 후 경과시간 (분)
         const elapsed = (now - resetCase.updatedAt) / 60000;
         //만료된 요청
-        if (elapsed > validTime) {
-            throw this.createError.requestExpired();
+        if(elapsed > validTime){
+            await this.userRepository.updatePasswordResetCase(user.userId, null)
+            throw this.createError.requestExpired()
         }
 
         //비밀번호 update
