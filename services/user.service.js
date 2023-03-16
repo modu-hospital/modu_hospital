@@ -183,7 +183,7 @@ class UserService {
         }
 
         const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId)
-        const token = await bcrypt.hash(Math.random().toString(36).slice(2),12)
+        const token = Math.random().toString(36).slice(2) + new Date().getTime().toString(36);
         if(!isCaseExist){
         await this.userRepository.createPasswordResetCase(user.userId, token)
         }else{
@@ -196,10 +196,10 @@ class UserService {
             text: 'token ' + token,
         };
         //메일 전송
-        // transPort.sendMail(mailOptions, (err, info) => {
-        //     console.log(info.envelope);
-        //     console.log(info.messageId);
-        // });
+        transPort.sendMail(mailOptions, (err, info) => {
+            console.log(info.envelope);
+            console.log(info.messageId);
+        });
     };
 
     resetPassword = async (email, password, confirm, token) => {
