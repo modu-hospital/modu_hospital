@@ -11,9 +11,6 @@ const hospitalController = new HospitalController();
 //예약관리 조회
 router.get('/reservation', hospitalController.findAllReservation);
 
-//예약관리 예약날짜 수정
-router.patch('/reservation/date/:id', hospitalController.editReservation);
-
 //예약관리 승인하기 수정
 router.patch('/reservation/status/:id', hospitalController.approvedReservation);
 

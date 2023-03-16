@@ -1,3 +1,4 @@
+const CreateError = require('../lib/errors');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
@@ -35,6 +36,7 @@ class HospitalService {
         HospitalImageFile,
         WorkingTime
     );
+    createError = new CreateError();
 
     findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
@@ -133,6 +135,11 @@ class HospitalService {
     findAllReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
+
             let hospitalId = hospitaldata.hospitalId;
             const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
@@ -145,14 +152,12 @@ class HospitalService {
         try {
             const findOneReservation = await this.hospitalRepository.findOneReservation(id);
             if (!findOneReservation) {
-                const error = new Error('해당 예약이 존재하지 않습니다.');
-                error.name = 'Reservation Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.reservationNotFound();
+                throw err;
             }
             return await this.hospitalRepository.editReservation(id, date);
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -160,25 +165,27 @@ class HospitalService {
         try {
             const findOneReservation = await this.hospitalRepository.findOneReservation(id);
             if (!findOneReservation) {
-                const error = new Error('해당 예약이 존재하지 않습니다.');
-                error.name = 'Reservation Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.reservationNotFound();
+                throw err;
             }
             return await this.hospitalRepository.approvedReservation(id, status);
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
     getWaitedReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if(!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
-            throw err;
+            throw new Error(error);
         }
     };
 
@@ -202,7 +209,7 @@ class HospitalService {
                 latitude: registalHospitalData.latitude,
             };
         } catch (error) {
-            throw error;
+            new Error(error);
         }
     };
 
@@ -210,10 +217,8 @@ class HospitalService {
         try {
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
             if (!findOneHospital) {
-                const error = new Error('해당 병원이 존재하지 않습니다.');
-                error.name = 'Hospital Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.hospitalNotFound();
+                throw err; 
             }
             return await this.hospitalRepository.registerEditHospital(
                 userId,
@@ -224,13 +229,17 @@ class HospitalService {
                 latitude
             );
         } catch (error) {
-            throw error;
+            new Error(error);
         }
     };
 
     getAllreviews = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if(!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err; 
+            }
             let hospitalId = hospitaldata.hospitalId;
             const data = await this.hospitalRepository.getAllreviews(hospitalId);
             return data;
@@ -242,11 +251,15 @@ class HospitalService {
     getapprovedReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if(!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
             return waitingdata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -254,19 +267,23 @@ class HospitalService {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             return hospitaldata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
     findAllDoctor = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if(!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const doctorAlldata = await this.hospitalRepository.findAllDoctor(hospitalId);
             return doctorAlldata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -274,8 +291,8 @@ class HospitalService {
         try {
             const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);
             return doctordata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -283,10 +300,8 @@ class HospitalService {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
-                const error = new Error('해당 병원이 존재하지 않습니다.');
-                error.name = 'Hospital Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError();
+                throw err;
             }
             let hospitalId = hospitaldata.hospitalId;
             const image = await this.uploadToS3(file);
@@ -297,12 +312,9 @@ class HospitalService {
                 contents
             );
 
-            // map 함수를 사용해서 categories 배열을 순회하면서 findOrcreate을 호출함.
-            // 그래서 이것을 category 배열에 저장하는 코드
             const department = await Promise.all(
                 categories.map(async (department) => {
                     const categorydata = await this.hospitalRepository.findOrCreate(department);
-
                     return categorydata.id;
                 })
             );
@@ -317,9 +329,8 @@ class HospitalService {
             await this.hospitalRepository.categoriesInstance(mappings);
 
             return doctordata;
-        } catch (err) {
-            console.error(err); // 에러 로그 확인
-            throw err;
+        } catch (error) {
+            throw new Error(error)
         }
     };
 
@@ -333,13 +344,12 @@ class HospitalService {
                 contents
             );
             return doctordata;
-        } catch (err) {
-            console.error(err); // 에러 로그 확인
-            throw err;
+        } catch (error) {
+            throw new Error(error)
         }
     };
 
-    // 이미지 업로드 함수
+    
     uploadToS3 = async (file) => {
         const fileContent = fs.readFileSync(file.path);
         const filename = `${Date.now()}_${file.originalname}`;
@@ -354,19 +364,17 @@ class HospitalService {
             const data = await s3.upload(params).promise();
             fs.unlinkSync(file.path);
             return data.Location;
-        } catch (err) {
-            console.error(err);
-            throw new Error('Failed to upload image to S3');
+        } catch (error) {
+            throw new Error('Failed to upload image to S3', error);
         }
     };
 
-    // 의사 workingtime 넣기
     createWorkingTime = async (workigTimeData) => {
         const workigtime = [];
         for (let i = 0; i < workigTimeData.workingTimes.length; i++){
             const data = {
-                doctorId: parseInt(workigTimeData.doctorId), // 문자열을 정수형으로 변환
-                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek), // 문자열을 정수형으로 변환
+                doctorId: parseInt(workigTimeData.doctorId), 
+                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek), 
                 startTime: workigTimeData.workingTimes[i].startTime,
                 endTime: workigTimeData.workingTimes[i].endTime,
                 startDate: workigTimeData.workingTimes[i].startDate,
@@ -374,17 +382,14 @@ class HospitalService {
             };
             workigtime.push(data);
         }
-        console.log(workigtime)
-
         try {
             const doctorWorkingTimeData = await this.hospitalRepository.createWorkingTime(workigtime);
             return doctorWorkingTimeData;
         } catch (error){
-            throw error;
+            throw new Error(error);
         }
     };
 
-    
     registerImagehospital = async(userId, files) => {
         const promises = files.map((file, index) => {
             const fileContent = fs.readFileSync(file.path); 
@@ -415,14 +420,10 @@ class HospitalService {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
-                const error = new Error('해당 병원이 존재하지 않습니다.');
-                error.name = 'Hospital Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.hospitalNotFound();
+                throw err;
             }
             let hospitalId = hospitaldata.hospitalId;
-            console.log(hospitalId);
-            // 이미지 여러개 업로드 하기 
 
             const url = [];
             for (let i = 0; i < imageurls.length; i++) {
@@ -436,10 +437,8 @@ class HospitalService {
 
             return ImageFile; 
         } catch (error) {
-            throw err;
+            throw new Error(error);
         }
-    
-
     }
 
     getOneHospital = async (id) => {
