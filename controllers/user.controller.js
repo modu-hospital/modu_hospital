@@ -58,7 +58,6 @@ class UserController {
     };
 
     //mypage
-
     getUserProfile = async (req, res, next) => {
         try {
             const userId = req.params;
