@@ -134,6 +134,10 @@ class HospitalService {
 
     findAllReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
@@ -176,6 +180,10 @@ class HospitalService {
 
     getWaitedReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
@@ -235,6 +243,10 @@ class HospitalService {
 
     getAllreviews = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
@@ -250,6 +262,10 @@ class HospitalService {
 
     getapprovedReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
@@ -265,6 +281,10 @@ class HospitalService {
 
     findOneHospital = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             return hospitaldata;
         } catch (error) {
@@ -273,6 +293,10 @@ class HospitalService {
     };
 
     findAllDoctor = async (userId) => {
+        if (!userId) {
+            const err = this.createError.requestExpired();
+            throw err;
+        }
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
