@@ -178,7 +178,7 @@
 
 
     de(map, geocoder)
-    
+
     document.getElementById('departmentBtn').addEventListener('click', (event) => {
       event.preventDefault()
       let arr = []
@@ -217,6 +217,8 @@
       })
         .then((response) => response.json())
         .then((data) => {
+          const a = document.getElementById("listBtn")
+          a.innerText = `근처 ${data.hospitals.length}개의 병원`
           for (let i = 0; i < data.hospitals.length; i++) {
             geocoder.addressSearch(
               data.hospitals[i].address,
@@ -245,6 +247,7 @@
       kakao.maps.event.addListener(map, "zoom_changed", ae1);
 
       kakao.maps.event.addListener(map, 'dragend', cc);
+      listBtnClickEvent(map)
     })
   }
 
@@ -315,6 +318,8 @@
       })
         .then((response) => response.json())
         .then((data) => {
+          const a = document.getElementById("listBtn")
+          a.innerText = `근처 ${data.hospitals.length}개의 병원`
           for (let i = 0; i < data.hospitals.length; i++) {
             geocoder.addressSearch(
               data.hospitals[i].address,
@@ -339,6 +344,36 @@
             );
           }
         })
+
+      fetch(`http://localhost:3000/api/hospitals/around/info`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('list').innerHTML = ``
+          for (let i = 0; i < data.hospitals.length; i++) {
+            const a =
+              `
+              <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="info">
+                <span style="position:static">${data.hospitals[i].name}</span>
+                <span style="position:static">${data.hospitals[i].address}</span>
+                <span style="position:static">${data.hospitals[i].phone}</span>
+                </div>
+                <div>
+              `
+
+            const li = document.createElement('li');
+            li.innerHTML = a;
+            document.getElementById('list').appendChild(li);
+          }
+        })
+
 
       kakao.maps.event.addListener(map, "zoom_changed", ae1);
 

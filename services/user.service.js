@@ -68,13 +68,18 @@ class UserService {
     };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
+        
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {
-            return existUser;
+            const err = await this.createError.UserAlreadyExist();
+            throw err;
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+
+        // 추가 고민
+        // const hashedIdNumber = await bcrypt.hash(password, 12);
 
         const sign = await this.userRepository.signup(
             name,
@@ -88,6 +93,10 @@ class UserService {
         return sign;
     };
 
+    //@@@@@@@@@@@@@@문제
+    //비밀번호가 틀리면 비밀번호 바꾸라고??하는건지
+    // 비밀번호 업데이트 하라고?? 뜸,,, 이게 뭔지
+
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
         console.log('user[0].password', user[0].password);
@@ -96,7 +105,8 @@ class UserService {
         console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
-            return;
+            const err = await this.createError.wrongEmailOrPassword();
+            throw err;
         }
 
         return user[0];
@@ -190,7 +200,7 @@ class UserService {
         }
 
         const isCaseExist = await this.userRepository.findResetCaseByUserId(user.userId);
-        const token = await bcrypt.hash(Math.random().toString(36).slice(2), 12);
+        const token = Math.random().toString(36).slice(2) + new Date().getTime().toString(36);
         if (!isCaseExist) {
             await this.userRepository.createPasswordResetCase(user.userId, token);
         } else {
@@ -202,11 +212,11 @@ class UserService {
             subject: '모두의 병원 비밀번호 재설정',
             text: 'token ' + token,
         };
-
-        // transPort.sendMail(mailOptions, (err, info) => {
-        //     console.log(info.envelope);
-        //     console.log(info.messageId);
-        // });
+        //메일 전송
+        await transPort.sendMail(mailOptions, (err, info) => {
+            console.log(info.envelope);
+            console.log(info.messageId);
+        });
     };
 
     resetPassword = async (email, password, confirm, token) => {
@@ -225,6 +235,7 @@ class UserService {
         const elapsed = (now - resetCase.updatedAt) / 60000;
         //만료된 요청
         if (elapsed > validTime) {
+            await this.userRepository.updatePasswordResetCase(user.userId, null);
             throw this.createError.requestExpired();
         }
 
