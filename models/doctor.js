@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             doctorId: {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
+                autoIncrement: true,
             },
             hospitalId: DataTypes.INTEGER,
             name: DataTypes.STRING,

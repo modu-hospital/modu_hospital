@@ -1,8 +1,7 @@
-
 class ReservationRepository {
     constructor(sequelize) {
-        this.models = sequelize.models
-        this.sequelize = sequelize
+        this.models = sequelize.models;
+        this.sequelize = sequelize;
     }
     findReservationById = async (id) => {
         const reservation = await this.models.Reservation.findOne({ where: { id } });
@@ -10,39 +9,63 @@ class ReservationRepository {
     };
 
     getApprovedReservation = async (userId, page) => {
+        const reservationsPerPage = 3;
         const query = `
         SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId
         inner join hospitals as h on d.hospitalId = h.hospitalId
         WHERE r.userId = ${userId} and r.status = "approved"
         ORDER BY r.date DESC
-        LIMIT ${3 * (page - 1)}, ${page * 3};
+        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
         `;
-        const approved = await this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        const approved = await this.sequelize.query(query, {
+            type: this.sequelize.QueryTypes.SELECT,
+        });
         return approved;
     };
     getWaitingReservation = async (userId, page) => {
+        const reservationsPerPage = 3;
         const query = `
         SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId
         inner join hospitals as h on d.hospitalId = h.hospitalId
         WHERE r.userId = ${userId} and r.status = 'waiting'
         ORDER BY r.date DESC
-        LIMIT ${3 * (page - 1)}, ${page * 3};
+        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
         `;
-        const waiting = await this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        const waiting = await this.sequelize.query(query, {
+            type: this.sequelize.QueryTypes.SELECT,
+        });
         return waiting;
     };
     getDoneOrReviewedReservation = async (userId, page) => {
+        const reservationsPerPage = 3;
         const query = `
         SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId
         inner join hospitals as h on d.hospitalId = h.hospitalId
         WHERE r.userId = ${userId} and r.status = "done" or r.status = 'reviewed'
         ORDER BY r.date DESC
-        LIMIT ${3 * (page - 1)}, ${page * 3};
+        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
         `;
-        const doneOrReviewed = await this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        const doneOrReviewed = await this.sequelize.query(query, {
+            type: this.sequelize.QueryTypes.SELECT,
+        });
+        return doneOrReviewed;
+    };
+    getCanceledReservation = async (userId, page) => {
+        const reservationsPerPage = 3;
+        const query = `
+        SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
+        inner join doctors as d on r.doctorId = d.doctorId
+        inner join hospitals as h on d.hospitalId = h.hospitalId
+        WHERE r.userId = ${userId} and r.status = 'canceled'
+        ORDER BY r.date DESC
+        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
+        `;
+        const doneOrReviewed = await this.sequelize.query(query, {
+            type: this.sequelize.QueryTypes.SELECT,
+        });
         return doneOrReviewed;
     };
 
@@ -51,7 +74,9 @@ class ReservationRepository {
         inner join doctors as d on r.doctorId = d.doctorId 
         inner join hospitals as h on d.hospitalId  = h.hospitalId 
         WHERE r.id = ${reservationId}`;
-        const hospitalIdAndUserId = await this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        const hospitalIdAndUserId = await this.sequelize.query(query, {
+            type: this.sequelize.QueryTypes.SELECT,
+        });
 
         return hospitalIdAndUserId[0];
     };

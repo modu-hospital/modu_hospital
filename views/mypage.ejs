@@ -1,350 +1,373 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+    .vh-100 profile {
+        font: optional;
+    }
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>관리 페이지</title>
+    .hover-effect:hover {
+        opacity: 0.5;
+    }
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <style>
-        .hover-effect:hover {
-            opacity: 0.5;
-        }
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+    }
 
-        .rating {
-            display: inline-flex;
-            margin-top: -10px;
-            flex-direction: row-reverse;
-        }
+    .rating > input {
+        display: none;
+    }
 
-        .rating>input {
-            display: none;
-        }
+    .rating > label {
+        position: relative;
+        width: 1em;
+        font-size: 6vw;
+        color: #ffd600;
+        cursor: pointer;
+    }
 
-        .rating>label {
-            position: relative;
-            width: 28px;
-            font-size: 35px;
-            color: #fff200;
-            cursor: pointer;
-        }
+    .rating > label::before {
+        content: '\2605';
+        position: absolute;
+        opacity: 0;
+    }
 
-        .rating>label::before {
-            content: '\2605';
-            position: absolute;
-            opacity: 0;
-        }
+    .rating > label:hover:before,
+    .rating > label:hover ~ label:before {
+        opacity: 1 !important;
+    }
 
-        .rating>label:hover:before,
-        .rating>label:hover~label:before {
-            opacity: 1 !important;
-        }
+    .rating > input:checked ~ label:before {
+        opacity: 1;
+    }
 
-        .rating>input:checked~label:before {
-            opacity: 1;
-        }
+    .rating:hover > input:checked ~ label:before {
+        opacity: 0.4;
+    }
+</style>
 
-        .rating:hover>input:checked~label:before {
-            opacity: 0.4;
-        }
-    </style>
-
-    <script>
-        $(document).ready(function () {
-            getUserData(location.href.split('/')[5]);
-            getApproved(location.href.split('/')[5], 1);
-            getWaiting(location.href.split('/')[5], 1);
-            getDoneOrReviewed(location.href.split('/')[5], 1);
-        });
-
-        function getUserData(userId) {
-            $.ajax({
-                type: 'GET',
-                url: `/api/users/mypage/userdata/${userId}`,
-                success: function (response) {
-                    const userData = response;
-
-                    let temp_html = `
-                        <div class="col-6 mb-3">
-                            <h6>ID</h6>
-                            <p id="user-loginId" class="text-muted">${userData.loginId}</p>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <h6>이름</h6>
-                            <p id="user-name" class="text-muted">${userData.name}</p>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <h6>연락처</h6>
-                            <p id="user-phone" class="text-muted">${userData.phone}</p>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <h6>주소</h6>
-                            <p id="user-address" class="text-muted">${userData.address}</p>
-                        </div>
-
-                        `;
-                    $('#user-data').append(temp_html);
-                },
-            });
-        }
-        function getApproved(userId, page) {
-            $.ajax({
-                type: 'GET',
-                url: `/api/users/mypage/approved?userId=${userId}&page=${page}`,
-                success: function (response) {
-                    const approved = response;
-
-                    for (let i = 0; i < approved.length; i++) {
-                        let temp_html = ` 
-                        <div class="col-2 mb-3" float="'left" width="60px">
-                        <img width="60px" src='${approved[i].doctorImage}'>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
-                        <p class="text-muted">${approved[i].date}</p>
-                    </div>
-                    <div>
-                    <button data-reservationId="${approved[i].id}" onclick="cancelReservation()" type="button" class="btn btn-info">취소하기</button>
-                    </div>`;
-                        $('#approved').append(temp_html);
-                        
-                    }
-                },
-            });
-        }
-        function getWaiting(userId, page) {
-            $.ajax({
-                type: 'GET',
-                url: `/api/users/mypage/waiting?userId=${userId}&page=${page}`,
-                success: function (response) {
-                    const waiting = response;
-
-                    for (let i = 0; i < waiting.length; i++) {
-                        let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-                        <img width="60px" src='${waiting[i].doctorImage}'>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h6>${waiting[i].hospitalName} ${waiting[i].doctorName}</h6>
-                        <p class="text-muted">${waiting[i].date}</p>
-                    </div>
-                    <div>
-                    <button data-reservationId="${waiting[i].id}" onclick="cancelReservation()" type="button" class="btn btn-info">취소하기</button>
-                    </div>`;
-                        $('#waiting').append(temp_html);
-                    }
-                },
-            });
-        }
-
-        function getDoneOrReviewed(userId, page) {
-            $.ajax({
-                type: 'GET',
-                url: `/api/users/mypage/doneorreviewed?userId=${userId}&page=${page}`,
-                success: function (response) {
-                    const doneOrReviewed = response;
-
-                    for (let i = 0; i < doneOrReviewed.length; i++) {
-                        if (doneOrReviewed[i].status == 'done') {
-                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-                        <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-                        <p class="text-muted">${doneOrReviewed[i].date}</p>
-                    </div>
-                    <div>
-                    <button data-reservationId="${doneOrReviewed[i].id}" onclick="showReviewModal()" type="button" class="btn btn-info">리뷰 남기기</button>
-                    </div>`;
-
-                            $('#doneOrReviewed').append(temp_html);
-                        } else {
-                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-                            <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-                            <p class="text-muted">${doneOrReviewed[i].date}</p>
-                        </div>
-                        <div>
-                        <button data-reservationId="${doneOrReviewed[i].id}" type="button" class="btn btn-dark" disabled>리뷰 작성됨</button>
-                        </div>`;
-
-                            $('#doneOrReviewed').append(temp_html);
-                        }
-                    }
-                },
-            });
-        }
-        function getCanceled () {
-            $.ajax({
-                type: 'GET',
-                url: `/api/users/mypage/canceled?userId=${userId}&page=${page}`,
-                success: function (response) {
-                    const canceled = response;
-
-                    for (let i = 0; i < canceled.length; i++) {
-                        let temp_html = ` 
-                        <div class="col-2 mb-3" float="'left" width="60px">
-                        <img width="60px" src='${canceled[i].doctorImage}'>
-                        </div>
-                        <div class="col-10 mb-3">
-                        <h6>${canceled[i].hospitalName} ${canceled[i].doctorName}</h6>
-                        <p class="text-muted">${canceled[i].date}</p>
-                        </div>
-                    `;
-                        $('#canceled').append(temp_html);
-                    }
-                },
-            });
-
-        }
-        function showInput() {
-            $('#user-data').attr('class', 'row pt-1 d-none');
-            $('#input-user-data').attr('class', 'row pt-1');
-            $('#edit-buttons').attr('class', 'row pt-1');
-            $('#input-user-loginId').attr('value', $('#user-loginId').html());
-            $('#input-user-name').attr('value', $('#user-name').html());
-            $('#input-user-phone').attr('value', $('#user-phone').html());
-            $('#input-user-address').attr('value', $('#user-address').html());
-            return false;
-        }
-        function hideInput() {
-            $('#user-data').attr('class', 'row pt-1');
-            $('#input-user-data').attr('class', 'row pt-1 d-none');
-            $('#edit-buttons').attr('class', 'row pt-1 d-none');
-            $('#input-user-loginId').attr('value', '');
-            $('#input-user-name').attr('value', '');
-            $('#input-user-phone').attr('value', '');
-            $('#input-user-address').attr('value', '');
-
-            return false;
-        }
-        function editProfile() {
-            const userId = location.href.split('/')[5];
-            const name = $('#input-user-name').val();
-            const phone = $('#input-user-phone').val();
-            const address = $('#input-user-address').val();
-            $.ajax({
-                type: 'PATCH',
-                url: `/api/users/mypage/editprofile/${userId}`,
-                data: {
-                    name: name,
-                    phone: phone,
-                    address: address,
-                },
-                success: function (response) {
-                    alert(response['message']);
-                    window.location.reload();
-                },
-            });
-        }
-        function cancelReservation() {
-            const reservationId = event.target.dataset.reservationid;
-            $.ajax({
-                type: 'PATCH',
-                url: `/api/users/mypage/cancel/${reservationId}`,
-                data: {},
-                success: function (response) {
-                    alert(response['message']);
-                    window.location.reload();
-                },
-            });
-        }
-        // Rating Initialization
-        function showReviewModal() {
-            $('#rateMe2').mdbRate();
-
-            const reservationId = event.target.dataset.reservationid;
-            $('#modal-confirm').attr('data-modal', reservationId);
-            $('#alertModalLabel').html('리뷰 작성');
-            const modalText = `
-                <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label> </div>
-               
-                  `;
-            $('#alertText').html(modalText);
-            $('#modal-confirm').html('리뷰 남기기');
-            $('#alertModal').modal('show');
-        }
-        function reviewReservation() {
-            return console.log(event.target.dataset);
-        }
-        function showAddressModal() {
-            $('#alertModalLabel').html('주소 입력');
-            const modalText = ``;
-            $('#alertText').html(modalText);
-            $('#alertModal').modal('show');
-        }
-    </script>
-</head>
-
-<body>
-    <section class="vh-100" style="background-color: #f4f5f7">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-lg-6 mb-4 mb-lg-0">
-                    <div class="card mb-3" style="border-radius: 0.5rem">
-                        <div class="row g-0">
-                            <div class="col-md-12">
-                                <div class="card-body p-4">
-                                    <h6 style="float: left; margin-right: 6px">내 정보</h6>
-                                    <a onclick="showInput()" id="editButton" class="table-link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-pencil hover-effect" viewBox="0 0 16 16">
-                                            <path
-                                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
-                                        </svg>
-                                    </a>
-                                    <hr class="mt-0 mb-4" />
-                                    <div id="user-data" class="row pt-1"></div>
-                                    <div id="input-user-data" class="row pt-1 d-none">
-                                        <div class="col-6 mb-3">
-                                            <h6>ID</h6>
-                                            <input id="input-user-loginId" class="text-muted" disabled />
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <h6>이름</h6>
-                                            <input id="input-user-name" value="" class="text-muted" />
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <h6>연락처</h6>
-                                            <input id="input-user-phone" class="text-muted" />
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <h6>주소</h6>
-                                            <input id="input-user-address" class="text-muted mb-1" disabled />
-                                            <button id="edit-address-modal" onclick="showAddressModal()"
-                                                class="btn btn-info">
-                                                주소입력
-                                            </button>
-                                        </div>
+<section class="profile" style="background-color: #f4f5f7">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col col-lg-6 mb-4 mb-lg-0">
+                <div class="card mb-3" style="border-radius: 0.5rem">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <div class="card-body p-4">
+                                <h6 style="float: left; margin-right: 6px">내 정보</h6>
+                                <a onclick="showInput()" id="editButton" class="table-link">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-pencil hover-effect"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
+                                        />
+                                    </svg>
+                                </a>
+                                <hr class="mt-0 mb-4" />
+                                <div id="user-data" class="row pt-1"></div>
+                                <div id="input-user-data" class="row pt-1 d-none">
+                                    <div class="col-6 mb-3">
+                                        <h6>ID</h6>
+                                        <input
+                                            id="input-user-loginId"
+                                            class="text-muted"
+                                            disabled
+                                        />
                                     </div>
-                                    <div id="edit-buttons" class="row pt-1 d-none"
-                                        style="text-align: left; margin: auto auto 20px auto">
-                                        <button id="edit-button" onclick="editProfile()" type="button"
-                                            style="margin-right: 5px" class="btn btn-info">
-                                            수정
-                                        </button>
-                                        <button id="edit-cancel-button" onclick="hideInput()" type="button"
-                                            class="btn btn-secondary">
-                                            취소
+                                    <div class="col-6 mb-3">
+                                        <h6>이름</h6>
+                                        <input id="input-user-name" value="" class="text-muted" />
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>연락처</h6>
+                                        <input id="input-user-phone" class="text-muted" />
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>주소</h6>
+                                        <input
+                                            id="input-user-address"
+                                            class="text-muted mb-1"
+                                            disabled
+                                        />
+                                        <button
+                                            id="edit-address-modal"
+                                            onclick="openModal()"
+                                            class="btn btn-info"
+                                        >
+                                            주소입력
                                         </button>
                                     </div>
+                                </div>
+                                <div
+                                    id="edit-buttons"
+                                    class="row pt-1 d-none"
+                                    style="text-align: left; margin: auto auto 20px auto"
+                                >
+                                    <button
+                                        id="edit-button"
+                                        onclick="editProfile()"
+                                        type="button"
+                                        style="margin-right: 5px"
+                                        class="btn btn-info text-center col-2"
+                                    >
+                                        수정
+                                    </button>
+                                    <button
+                                        id="edit-cancel-button"
+                                        onclick="hideInput()"
+                                        type="button"
+                                        class="btn btn-secondary text-center col-2"
+                                    >
+                                        취소
+                                    </button>
+                                </div>
+                                <div id="approved-list" class="">
                                     <h6>현재 예약된 진료</h6>
                                     <hr class="mt-0 mb-4" />
                                     <div id="approved" class="row pt-1"></div>
+
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination" id="pages-approved">
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="approved"
+                                                    onclick="previousPage('approved')"
+                                                    aria-label="Previous"
+                                                >
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <div id="pages">
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('approved')"
+                                                        class="page-link"
+                                                        id="approved-page1"
+                                                        data-page="1"
+                                                        >1</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('approved')"
+                                                        class="page-link"
+                                                        id="approved-page2"
+                                                        data-page="2"
+                                                        >2</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('approved')"
+                                                        class="page-link"
+                                                        id="approved-page3"
+                                                        data-page="3"
+                                                        >3</a
+                                                    >
+                                                </li>
+                                            </div>
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="approved"
+                                                    onclick="nextPage('approved')"
+                                                    aria-label="Next"
+                                                >
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div id="waiting-list" class="">
                                     <h6>예약 확정 대기중</h6>
                                     <hr class="mt-0 mb-4" />
                                     <div id="waiting" class="row pt-1"></div>
+
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination" id="pages-waiting">
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="waiting"
+                                                    onclick="previousPage('waiting')"
+                                                    aria-label="Previous"
+                                                >
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <div id="pages">
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('waiting')"
+                                                        class="page-link"
+                                                        id="waiting-page1"
+                                                        data-page="1"
+                                                        >1</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('waiting')"
+                                                        class="page-link"
+                                                        id="waiting-page2"
+                                                        data-page="2"
+                                                        >2</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('waiting')"
+                                                        class="page-link"
+                                                        id="waiting-page3"
+                                                        data-page="3"
+                                                        >3</a
+                                                    >
+                                                </li>
+                                            </div>
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="waiting"
+                                                    onclick="nextPage('waiting')"
+                                                    aria-label="Next"
+                                                >
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div id="doneOrReviewed-list" class="">
                                     <h6>진료 내역</h6>
                                     <hr class="mt-0 mb-4" />
                                     <div id="doneOrReviewed" class="row pt-1"></div>
+
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination" id="pages-doneOrReviewed">
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="doneOrReviewed"
+                                                    onclick="previousPage('doneOrReviewed')"
+                                                    aria-label="Previous"
+                                                >
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <div id="pages">
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('doneOrReviewed')"
+                                                        class="page-link"
+                                                        id="doneOrReviewed-page1"
+                                                        data-page="1"
+                                                        >1</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('doneOrReviewed')"
+                                                        class="page-link"
+                                                        id="doneOrReviewed-page2"
+                                                        data-page="2"
+                                                        >2</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('doneOrReviewed')"
+                                                        class="page-link"
+                                                        id="doneOrReviewed-page3"
+                                                        data-page="3"
+                                                        >3</a
+                                                    >
+                                                </li>
+                                            </div>
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="doneOrReviewed"
+                                                    onclick="nextPage('doneOrReviewed')"
+                                                    aria-label="Next"
+                                                >
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div id="canceled-list" class="">
                                     <h6>취소된 예약</h6>
                                     <hr class="mt-0 mb-4" />
                                     <div id="canceled" class="row pt-1"></div>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination" id="pages-canceled">
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="canceled"
+                                                    onclick="previousPage('canceled')"
+                                                    aria-label="Previous"
+                                                >
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <div id="pages">
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('canceled')"
+                                                        class="page-link"
+                                                        id="canceled-page1"
+                                                        data-page="1"
+                                                        >1</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('canceled')"
+                                                        class="page-link"
+                                                        id="canceled-page2"
+                                                        data-page="2"
+                                                        >2</a
+                                                    >
+                                                </li>
+                                                <li class="page-item float-left">
+                                                    <a
+                                                        onclick="showPage('canceled')"
+                                                        class="page-link"
+                                                        id="canceled-page3"
+                                                        data-page="3"
+                                                        >3</a
+                                                    >
+                                                </li>
+                                            </div>
+                                            <li class="page-item">
+                                                <a
+                                                    class="page-link"
+                                                    data-status="canceled"
+                                                    onclick="nextPage('canceled')"
+                                                    aria-label="Next"
+                                                >
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -352,49 +375,462 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <div class="modal text-left" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="alertModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="alertText">
-                    <input type="hidden" id="modal-hidden-input" value="" />
-                </div>
-                <div class="modal-footer">
-                    <button onclick="" data-id="" id="modal-confirm" type="button"
-                        class="btn btn-outline-sparta btn-confirm" data-dismiss="modal"></button>
-                </div>
+<div
+    class="modal text-left"
+    id="alertModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="alertModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="alertText">
+                <input type="hidden" id="modal-hidden-input" value="" />
+            </div>
+            <div class="modal-footer">
+                <button
+                    onclick=""
+                    data-id=""
+                    id="modal-confirm"
+                    type="button"
+                    class="btn btn-outline-sparta btn-confirm"
+                    data-dismiss="modal"
+                ></button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal text-left" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="alertModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<!-- 모달창 -->
+<div id="modal" class="modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
+                <div style="height:5px;"></div>
+                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
+                <hr /><br />
+
+                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+
+                <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
+
+                <div id="wrap">
+                     <div id="closeBtn" onClick="addressWindowClose();">
+                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
                 </div>
-                <div class="modal-body" id="alertText">
-                    <input type="hidden" id="modal-hidden-input" value="" />
+            <div>
+                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
+                    placeholder="도로명주소, 건물명 또는 지번 입력" />
+                <input type="button" onClick="getAddr();" value="주소검색" />
+            </div>
+
+            <div>
+                <div id="totoalOutcome">
+
+                    검색결과 : <span id="totalCnt">0</span>
+
                 </div>
-                <div class="modal-footer">
-                    <button onclick="" data-id="" id="modal-confirm" type="button"
-                        class="btn btn-outline-sparta btn-confirm" data-dismiss="modal"></button>
-                </div>
+                <table id="list"></table>
+
+            </div>
+
+            <div id="pagingList" style='text-align:center;'></div>
+
+        </div>
+
+        <div style="height:5px;"></div>
+
+        <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
+
+        <div style="height:5px;"></div>
+
+        <input type="button" value="입력" onclick="inputAddress()" />
             </div>
         </div>
     </div>
-</body>
+</div>
 
-</html>
+<script>
+    $(document).ready(function () {
+        getUserData(location.href.split('/')[5]);
+        getApproved(location.href.split('/')[5], 1);
+        getWaiting(location.href.split('/')[5], 1);
+        getDoneOrReviewed(location.href.split('/')[5], 1);
+        getCanceled(location.href.split('/')[5], 1);
+    });
+
+    function getUserData(userId) {
+        console.log(userId);
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/userdata/${userId}`,
+            success: function (response) {
+                const userData = response;
+
+                let temp_html = `
+            <div class="col-6 mb-3">
+                <h6>ID</h6>
+                <p id="user-loginId" class="text-muted">${userData.loginId}</p>
+            </div>
+            <div class="col-6 mb-3">
+                <h6>이름</h6>
+                <p id="user-name" class="text-muted">${userData.name}</p>
+            </div>
+            <div class="col-6 mb-3">
+                <h6>연락처</h6>
+                <p id="user-phone" class="text-muted">${userData.phone}</p>
+            </div>
+            <div class="col-6 mb-3">
+                <h6>주소</h6>
+                <p id="user-address" class="text-muted">${userData.address}</p>
+            </div>
+
+            `;
+                $('#user-data').append(temp_html);
+            },
+        });
+    }
+    function getApproved(userId, page) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/approved?userId=${userId}&page=${page}`,
+            success: function (response) {
+                const approved = response;
+
+                if (page == 1 && !response.length) {
+                    $('#pages-approved').attr('class', 'pagination d-none');
+                } else {
+                    for (let i = 0; i < approved.length; i++) {
+                        let temp_html = ` 
+                <div class="col-2 mb-3" float="left" width="60px">
+                <img width="60px" src='${approved[i].doctorImage}'>
+            </div>
+            <div class="col-7 float="left" mb-3">
+                <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
+                <p class="text-muted">${approved[i].date}</p>
+            </div>
+            <div class="col-2">
+            <button data-reservationId="${approved[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
+            </div>`;
+                        $('#approved').append(temp_html);
+                    }
+                }
+            },
+        });
+    }
+
+    function getWaiting(userId, page) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/waiting?userId=${userId}&page=${page}`,
+            success: function (response) {
+                const waiting = response;
+                if (page == 1 && !response.length) {
+                    $('#pages-waiting').attr('class', 'pagination d-none');
+                } else {
+                    for (let i = 0; i < waiting.length; i++) {
+                        let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
+            <img width="60px" src='${waiting[i].doctorImage}'>
+        </div>
+        <div class="col-7 mb-3">
+            <h6>${waiting[i].hospitalName} ${waiting[i].doctorName}</h6>
+            <p class="text-muted">${waiting[i].date}</p>
+        </div>
+        <div class="col-2">
+        <button data-reservationId="${waiting[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
+        </div>`;
+                        $('#waiting').append(temp_html);
+                    }
+                }
+            },
+        });
+    }
+
+    function getDoneOrReviewed(userId, page) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/doneorreviewed?userId=${userId}&page=${page}`,
+            success: function (response) {
+                const doneOrReviewed = response;
+                if (page == 1 && !response.length) {
+                    $('#pages-doneOrReviewed').attr('class', 'd-none');
+                } else {
+                    for (let i = 0; i < doneOrReviewed.length; i++) {
+                        if (doneOrReviewed[i].status == 'done') {
+                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
+            <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
+        </div>
+        <div class="col-6 mb-3">
+            <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
+            <p class="text-muted">${doneOrReviewed[i].date}</p>
+        </div>
+        <div class="col-2">
+
+        <button data-reservationId="${doneOrReviewed[i].id}" onclick="showReviewModal()" type="button" class="btn btn-info">리뷰 남기기</button>
+        </div>`;
+
+                            $('#doneOrReviewed').append(temp_html);
+                        } else {
+                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
+                <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
+            </div>
+            <div class="col-6 mb-3">
+                <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
+                <p class="text-muted">${doneOrReviewed[i].date}</p>
+            </div>
+            <div class="col-2">
+
+            <button data-reservationId="${doneOrReviewed[i].id}" type="button" class="btn btn-dark" disabled>리뷰 작성됨</button>
+            </div>`;
+
+                            $('#doneOrReviewed').append(temp_html);
+                        }
+                    }
+                }
+            },
+        });
+    }
+    function getCanceled(userId, page) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/canceled?userId=${userId}&page=${page}`,
+            success: function (response) {
+                const canceled = response;
+                if (page == 1 && !response.length) {
+                    $('#pages-canceled').attr('class', 'd-none');
+                } else {
+                    for (let i = 0; i < canceled.length; i++) {
+                        let temp_html = ` 
+            <div class="col-2 mb-3" float="'left" width="60px">
+            <img width="60px" src='${canceled[i].doctorImage}'>
+            </div>
+            <div class="col-10 mb-3">
+            <h6>${canceled[i].hospitalName} ${canceled[i].doctorName}</h6>
+            <p class="text-muted">${canceled[i].date}</p>
+            </div>
+        `;
+                        $('#canceled').append(temp_html);
+                    }
+                }
+            },
+        });
+    }
+    function showInput() {
+        $('#user-data').attr('class', 'row pt-1 d-none');
+        $('#input-user-data').attr('class', 'row pt-1');
+        $('#edit-buttons').attr('class', 'row pt-1');
+        $('#input-user-loginId').attr('value', $('#user-loginId').html());
+        $('#input-user-name').attr('value', $('#user-name').html());
+        $('#input-user-phone').attr('value', $('#user-phone').html());
+        $('#input-user-address').attr('value', $('#user-address').html());
+        return false;
+    }
+    function hideInput() {
+        $('#user-data').attr('class', 'row pt-1');
+        $('#input-user-data').attr('class', 'row pt-1 d-none');
+        $('#edit-buttons').attr('class', 'row pt-1 d-none');
+        $('#input-user-loginId').attr('value', '');
+        $('#input-user-name').attr('value', '');
+        $('#input-user-phone').attr('value', '');
+        $('#input-user-address').attr('value', '');
+
+        return false;
+    }
+    function editProfile() {
+        const userId = location.href.split('/')[5];
+        const name = $('#input-user-name').val();
+        const phone = $('#input-user-phone').val();
+        const address = $('#input-user-address').val();
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/users/mypage/editprofile/${userId}`,
+            data: {
+                name: name,
+                phone: phone,
+                address: address,
+            },
+            success: function (response) {
+                alert(response['message']);
+                window.location.reload();
+            },
+        });
+    }
+    function showAddressModal() {
+        $('#alertModalLabel').html('주소검색');
+        const modalText = `
+        <div class="modal-body">
+            현재 페이지 :
+            <input type="number" id="currentPage" value="1" style="text-align: center" />
+            <div style="height: 5px"></div>
+            페이지당 출력 개수 :
+            <input type="number" id="countPerPage" value="5" style="text-align: center" />
+            <hr />
+            <br />
+
+            <input
+                type="text"
+                id="zipCode"
+                value=""
+                onClick="addressWindowOpen();"
+                placeholder="00000"
+                readonly
+            />
+
+            <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
+
+            <div id="wrap">
+                <div id="closeBtn" onClick="addressWindowClose();">
+                    <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        id="searchAddr"
+                        value=""
+                        onkeydown="enterSearch();"
+                        placeholder="도로명주소, 건물명 또는 지번 입력"
+                    />
+                    <input type="button" onClick="getAddr();" value="주소검색" />
+                </div>
+
+                <div>
+                    <div id="totoalOutcome">검색결과 : <span id="totalCnt">0</span></div>
+                    <table id="list"></table>
+                </div>
+
+                <div id="pagingList" style="text-align: center"></div>
+            </div>
+
+            <div style="height: 5px"></div>
+
+            <input
+                type="text"
+                id="roadaddress"
+                value=""
+                placeholder="도로명 주소, 지번 주소"
+                readonly
+            />
+
+            <div style="height: 5px"></div>
+
+            <input type="button" value="입력" onclick="inputData()" />
+        </div>
+        
+      `
+        $('#alertText').html(modalText);
+        $('#modal-confirm').html('확인');
+        $('#alertModal').modal('show');
+    }
+
+    function showCancelModal() {
+        const reservationId = event.target.dataset.reservationid;
+        $('#alertModalLabel').html('알림');
+        const modalText = `
+        정말 예약을 취소하시겠습니까?
+      `;
+        $('#alertText').html(modalText);
+        $('#modal-confirm').html('확인');
+        $('#modal-confirm').attr('onclick', `cancelReservation(${reservationId})`);
+        $('#alertModal').modal('show');
+    }
+
+    function cancelReservation(reservationId) {
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/users/mypage/cancel/${reservationId}`,
+            data: {},
+            success: function (response) {
+                window.location.reload();
+            },
+        });
+    }
+
+    function showReviewModal() {
+        const reservationId = event.target.dataset.reservationid;
+        $('#alertModalLabel').html('리뷰 작성');
+        const modalText = `
+
+<div class="rating">
+
+<input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+<input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+<input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+<input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+<input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+</div>
+
+<div class="form-outline">
+<textarea class="form-control" id="reviewContents" rows="4"></textarea>
+</div>
+
+`;
+        $('#alertText').html(modalText);
+        $('#modal-confirm').attr('onclick', `reviewReservation(${reservationId})`);
+        $('#modal-confirm').html('리뷰 남기기');
+        $('#alertModal').modal('show');
+    }
+    function reviewReservation(reservationId) {
+        const star = $('input[name=rating]:checked').val();
+        const contents = $('#reviewContents').val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/api/users/mypage/review/${reservationId}`,
+            data: {
+                star: star,
+                contents: contents,
+            },
+            success: function (response) {
+                alert('리뷰 작성 완료');
+                window.location.reload();
+            },
+        });
+    }
+    function nextPage(status) {
+        const pages = 3;
+        for (let i = 0; i < pages; i++) {
+            $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) + 3);
+        }
+    }
+    function previousPage(status) {
+        const pages = 3;
+        for (let i = 0; i < pages; i++) {
+            if ($(`#${status}-page${i + 1}`).html() < 3) {
+                return;
+            } else {
+                $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) - 3);
+            }
+        }
+    }
+    function showPage(status) {
+        const page = $(`#${status}-page${event.target.dataset.page}`).html();
+        const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
+        $(`#${status}`).empty();
+
+        window[`get${upperCase}`](location.href.split('/')[5], page);
+    }
+    function inputAddress() {
+        const text = $('#roadaddress').val();
+        console.log(text)
+        $('#input-user-address').attr('value', text);
+        const modal = document.getElementById('modal');
+        modal.style.display = 'none';
+    }
+</script>

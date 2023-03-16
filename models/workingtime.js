@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate({ Doctor }) {
-            this.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctors' });
-        }
+            this.hasMany(Doctor, { foreignKey: 'doctorId', as: 'doctors' });
+        } //hasMany로 바꿔봄
     }
     WorkingTime.init(
         {
@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             dayOfTheWeek: DataTypes.INTEGER,
             startTime: DataTypes.TIME,
             endTime: DataTypes.TIME,
-            startDate: DataTypes.DATE,
-            endDate: DataTypes.DATE,
+            startDate: DataTypes.DATEONLY,
+            endDate: DataTypes.DATEONLY,
         },
         {
             sequelize,

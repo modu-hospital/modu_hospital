@@ -1,4 +1,17 @@
+const CreateError = require('../lib/errors');
+const AWS = require('aws-sdk');
+const fs = require('fs');
+
+const env = process.env;
+
+const s3 = new AWS.S3({
+    endpoint: env.AWS_END_POINT,
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+});
+
 const HospitalRepository = require('../repositories/hospital.repository');
+
 const {
     Reservation,
     Hospital,
@@ -8,6 +21,7 @@ const {
     DoctorCategoryMapping,
     User,
     HospitalImageFile,
+    WorkingTime,
 } = require('../models/index.js');
 
 class HospitalService {
@@ -19,8 +33,10 @@ class HospitalService {
         Category,
         DoctorCategoryMapping,
         User,
-        HospitalImageFile
+        HospitalImageFile,
+        WorkingTime
     );
+    createError = new CreateError();
 
     findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
@@ -119,9 +135,12 @@ class HospitalService {
     findAllReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            console.log(hospitaldata);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
+
             let hospitalId = hospitaldata.hospitalId;
-            console.log(hospitalId);
             const data = await this.hospitalRepository.findAllReservation(hospitalId);
             return data;
         } catch (error) {
@@ -133,14 +152,12 @@ class HospitalService {
         try {
             const findOneReservation = await this.hospitalRepository.findOneReservation(id);
             if (!findOneReservation) {
-                const error = new Error('해당 예약이 존재하지 않습니다.');
-                error.name = 'Reservation Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.reservationNotFound();
+                throw err;
             }
             return await this.hospitalRepository.editReservation(id, date);
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -148,25 +165,27 @@ class HospitalService {
         try {
             const findOneReservation = await this.hospitalRepository.findOneReservation(id);
             if (!findOneReservation) {
-                const error = new Error('해당 예약이 존재하지 않습니다.');
-                error.name = 'Reservation Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.reservationNotFound();
+                throw err;
             }
             return await this.hospitalRepository.approvedReservation(id, status);
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
     getWaitedReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
-            throw err;
+            throw new Error(error);
         }
     };
 
@@ -190,7 +209,7 @@ class HospitalService {
                 latitude: registalHospitalData.latitude,
             };
         } catch (error) {
-            throw error;
+            new Error(error);
         }
     };
 
@@ -198,10 +217,8 @@ class HospitalService {
         try {
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
             if (!findOneHospital) {
-                const error = new Error('해당 병원이 존재하지 않습니다.');
-                error.name = 'Hospital Not found';
-                error.status = 400;
-                throw error;
+                const err = this.createError.hospitalNotFound();
+                throw err;
             }
             return await this.hospitalRepository.registerEditHospital(
                 userId,
@@ -212,13 +229,17 @@ class HospitalService {
                 latitude
             );
         } catch (error) {
-            throw error;
+            new Error(error);
         }
     };
 
     getAllreviews = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const data = await this.hospitalRepository.getAllreviews(hospitalId);
             return data;
@@ -230,11 +251,15 @@ class HospitalService {
     getapprovedReservation = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             let hospitalId = hospitaldata.hospitalId;
             const waitingdata = this.hospitalRepository.getapprovedReservation(hospitalId);
             return waitingdata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
@@ -242,22 +267,223 @@ class HospitalService {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             return hospitaldata;
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error);
         }
     };
 
-    registerdoctor = async (userId, hospitalId, name, image, contents) => {
+    findAllDoctor = async (userId) => {
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            let hospital = hospitaldata.hospitalId;
-            const doctordata = this.hospitalRepository.registerdoctor(
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+            const doctorAlldata = await this.hospitalRepository.findAllDoctor(hospitalId);
+            return doctorAlldata;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    findOneDoctor = async (doctorId) => {
+        try {
+            const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);
+            return doctordata;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    registerdoctor = async (userId, name, file, contents, categories) => {
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError();
+                throw err;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+            const image = await this.uploadToS3(file);
+            const doctordata = await this.hospitalRepository.registerdoctor(
                 hospitalId,
                 name,
                 image,
                 contents
             );
+
+            const department = await Promise.all(
+                categories.map(async (department) => {
+                    const categorydata = await this.hospitalRepository.findOrCreate(department);
+                    return categorydata.id;
+                })
+            );
+
+            const mappings = await Promise.all(
+                department.map(async (department) => ({
+                    categoryId: department,
+                    doctorId: doctordata.doctorId,
+                }))
+            );
+
+            await this.hospitalRepository.categoriesInstance(mappings);
+
             return doctordata;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    editdoctor = async (doctorId, name, file, contents) => {
+        try {
+            const image = await this.uploadToS3(file);
+            const doctordata = await this.hospitalRepository.editdoctor(
+                doctorId,
+                name,
+                image,
+                contents
+            );
+            return doctordata;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    uploadToS3 = async (file) => {
+        const fileContent = fs.readFileSync(file.path);
+        const filename = `${Date.now()}_${file.originalname}`;
+        const params = {
+            Bucket: env.AWS_BUCKET_NAME,
+            Key: `doctors/${filename}`,
+            Body: fileContent,
+            ContentType: file.mimetype,
+        };
+
+        try {
+            const data = await s3.upload(params).promise();
+            fs.unlinkSync(file.path);
+            return data.Location;
+        } catch (error) {
+            throw new Error('Failed to upload image to S3', error);
+        }
+    };
+
+    createWorkingTime = async (workigTimeData) => {
+        const workigtime = [];
+        for (let i = 0; i < workigTimeData.workingTimes.length; i++) {
+            const data = {
+                doctorId: parseInt(workigTimeData.doctorId),
+                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek),
+                startTime: workigTimeData.workingTimes[i].startTime,
+                endTime: workigTimeData.workingTimes[i].endTime,
+                startDate: workigTimeData.workingTimes[i].startDate,
+                endDate: workigTimeData.workingTimes[i].endDate,
+            };
+            workigtime.push(data);
+        }
+        try {
+            const doctorWorkingTimeData = await this.hospitalRepository.createWorkingTime(
+                workigtime
+            );
+            return doctorWorkingTimeData;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    registerImagehospital = async (userId, files) => {
+        const promises = files.map((file, index) => {
+            const fileContent = fs.readFileSync(file.path);
+            const filename = `${Date.now()}_${file.originalname}`;
+            const params = {
+                Bucket: env.AWS_BUCKET_NAME,
+                Key: `doctors/${filename}`,
+                Body: fileContent,
+                ContentType: file.mimetype,
+            };
+            return new Promise((resolve, reject) => {
+                s3.upload(params, (err, data) => {
+                    if (err) {
+                        console.error(err);
+                        reject(new Error(`Failed to upload image ${index + 1} to S3`));
+                    } else {
+                        console.log(`File ${index + 1} uploaded successfully. ${data.Location}`);
+                        fs.unlinkSync(file.path);
+                        resolve(data.Location);
+                    }
+                });
+            });
+        });
+
+        const imageurls = await Promise.all(promises);
+        console.log(imageurls);
+
+        try {
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+
+            const url = [];
+            for (let i = 0; i < imageurls.length; i++) {
+                const data = {
+                    hospitalId: hospitalId,
+                    url: imageurls[i],
+                };
+                url.push(data);
+            }
+            const ImageFile = await this.hospitalRepository.registerImagehospital(url);
+
+            return ImageFile;
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    getOneHospital = async (id) => {
+        try {
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            if (!oneHospital) {
+                return {};
+            }
+
+            //리뷰는 따로 가져와서 프론트에, workingTime
+            //workingTime은 따로 가져와야되는지
+            const doctors = oneHospital.doctors.map((doctor) => {
+                const department = doctor.doctorCategoryMappings.map((category) => {
+                    return category.categories.department;
+                });
+
+                //workingTime은 함수가 아니라서?..
+                //categories는..
+                const workTime = doctor.workingTimes.map((work) => {
+                    return {
+                        day: work.dayOfTheWeek,
+                        start: work.startTime,
+                        end: work.endTime,
+                    };
+                });
+
+                return {
+                    doctors: doctor.name,
+                    doctorImage: doctor.image,
+                    doctorContent: doctor.contents,
+                    department: department.join(','),
+                    workTime: workTime,
+                };
+            });
+            return {
+                hospitalId: oneHospital.hospitalId,
+                hospitalName: oneHospital.name,
+                hospitalAddress: oneHospital.address,
+                hospitalphone: oneHospital.phone,
+                hospitalImage: !oneHospital.hospitalImageFiles[0]
+                    ? '이미지 준비중'
+                    : oneHospital.hospitalImageFiles[0].url,
+                doctors,
+            };
         } catch (err) {
             throw err;
         }
