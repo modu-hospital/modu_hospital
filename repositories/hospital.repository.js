@@ -411,7 +411,6 @@ class HospitalRepository {
         }
     };
 
-    //map에서 병원을 클릭하면 나오는
     //hospitalId 값에 해당하는 병원 상세 정보
     getHospitalInfo = async (id) => {
         try {
@@ -421,17 +420,6 @@ class HospitalRepository {
                         model: this.hospitalImageFileModel,
                         as: 'hospitalImageFiles',
                     },
-                    // {
-                    //     model: this.reviewsModel,
-                    //     as:'reviews',
-                    //     include: [
-                    //         {
-                    //             model: this.userModel,
-                    //             as: 'users',
-                    //             attributes:['loginId']
-                    //         }
-                    //     ]
-                    // },
                     {
                         model: this.doctorModel,
                         as: 'doctors',
@@ -466,19 +454,43 @@ class HospitalRepository {
             throw err;
         }
     };
-    // hospitalId로 해당 병원하나 찝어서 => userId, name , address, phone 가져오기 ㅇ
 
-    // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
+    //병원별 리뷰조회
+    findReview = async(hospitalId) => {
+        try {
+            return await this.reviewsModel.findAll({
+                where:{hospitalId}, 
+                // attributes:['star', 'contents', 'createdAt'],
+                include: [
+                    {
+                        model: this.userModel,
+                        as: 'users',
+                    }
+                ]
+            })
 
-    // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
+        } catch (err) {
+            throw err
+        }
 
-    // hospitalId에 역인 doctor테이블에서(hospitalId)=> doctorId, name, image, contents 가져오기 o
-    // doctorId로 역인 workingTime테이블 doctorId에서=> datOfTheWeek, startTime, endTime 가져오기 o
+        // {
+        //     model: this.doctorModel,
+        //     as: 'doctors',
+        //     paranoid: false,
+        //     required: false,
+        //     where: {
+        //         deletedAt: { [Op.lt]: 1 },
+        //     },
+        //     attributes: ['name', 'image', 'contents'],
+        //     include: [
+        //         {
+        //             model: this.workingTimeModel,
+        //             as: 'workingTimes',
+        //             attributes: ['dayOfTheWeek', 'startTime', 'endTime'],
+        //         },
 
-    // doctorId로 역인 mapping테이블 doctorId에서
-    //=> categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
-    // categoryId로 i역인 category테이블 id에서
-    //=> department 가져오기  #####다른 사람이 인크루드한거 참고하기
+    }
+
 }
 
 module.exports = HospitalRepository;

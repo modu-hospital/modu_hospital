@@ -211,7 +211,7 @@ class UserController {
                 res.status(412).json({ message: err.message });
             } else {
                 const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '10s',
+                    expiresIn: '1h',
                 });
 
                 const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
