@@ -1,5 +1,32 @@
 <style>
 /* body 스타일 */
+#address_modal {
+    display: none;
+    height: 800px;
+    padding: 20px 200px;
+    background-color: #fefefe;
+    border: 2px solid #888;
+    border-radius: 5px;
+    overflow: hidden auto;
+
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 18px;
+}
+
+#address_modal .modal_close_btn {
+    position:absolute;
+    display:inline-block;
+    *display:inline;
+    width:50px;
+    height:50px;
+    text-align:center;
+    margin-right:20px;
+    top: 30px;
+    right: 10px;
+}
+
+#address_modal .modal_close_btn:after {content: "\00d7"; font-size:50pt;line-height:35px;}
+
 #my_modal {
     display: none;
     height: 800px;
@@ -27,7 +54,7 @@
 
 #my_modal .modal_close_btn:after {content: "\00d7"; font-size:50pt;line-height:35px;}
 
-#popup_open_btn {
+.popup_open_btn {
     box-shadow: none;
     background-color: #585858;
     color: #ffffff;
@@ -53,7 +80,7 @@
     white-space: nowrap;
 }
 
-#popup_open_btn:hover {
+.popup_open_btn:hover {
     box-shadow: inset 0 0 0 2px darksalmon;
     color: darksalmon;
 }
@@ -145,7 +172,13 @@ color: #505050;
     color: darksalmon;
 }
 
-    
+.btn_modal {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 15%;
+    max-width: 20%;
+}
+
 </style>
 
 <!-- Main -->
@@ -154,14 +187,14 @@ color: #505050;
         <h1>진료예약</h1>
         <!-- Form -->
         <section>
-            <form action="#">
+            <form action="/reservation" id="reservationForm">
                 <div class="row gtr-uniform">
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-first" name="demo-priority" checked />
+                        <input type="radio" id="demo-priority-first" name="demopriority" checked/>
                         <label for="demo-priority-first">초진</label>
                     </div>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-normal" name="demo-priority" />
+                        <input type="radio" id="demo-priority-normal" name="demopriority" />
                         <label for="demo-priority-normal">재진</label>
                     </div>
                     <div class="col-7">
@@ -219,11 +252,15 @@ color: #505050;
                             name="address"
                             id="address"
                             value=""
+                            disabled
                             placeholder="주소"
                         />
                     </div>
-                    <div class="col-6">
-                        <a id="popup_open_btn" onclick="reservationTime()">예약시간찾기</a>
+                    <div class="btn_modal">
+                        <a class="popup_open_btn" id="popup_open_btn" onclick="reservationTime()">예약시간찾기</a>
+                    </div>
+                    <div class="btn_modal">
+                        <a class="popup_open_btn" id="popup_address_btn" onclick="reservationAddress()">주소찾기</a>
                     </div>
                     <div class="col-6 col-12-xsmall">
                         <input
@@ -276,17 +313,17 @@ color: #505050;
                         Integer ac pellentesque praesent.
                     </p>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-high" name="demo-priority" />
+                        <input type="radio" id="demo-priority-high" value=1 name="demo2priority" />
                         <label for="demo-priority-high">개인정보 동의</label>
                     </div>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-low" name="demo-priority" />
+                        <input type="radio" id="demo-priority-low" value=2 name="demo2priority" checked/>
                         <label for="demo-priority-low">개인정보 미동의</label>
                     </div>
                     <div class="col-12">
                         <ul class="actions">
                             <li>
-                                <input type="submit" value="예약하기" class="primary" />
+                                <input type="button" value="예약하기" class="primary" onclick="reservaionCheck()"/>
                             </li>
                             <li><input type="reset" value="다지우기" /></li>
                         </ul>
@@ -356,3 +393,41 @@ color: #505050;
     </div>
     <a class="modal_close_btn"></a>
 </div>
+
+<div id="address_modal">
+    <div class="mainBox">
+        <div class="contentBox">
+            <div class="textLeft"><span style="color: #505050; font-size:40px; font-weight:700">주소 검색</span>
+            <div class="underline"></div>
+        </div>
+        <input type="hidden" id="currentPage" value="1" style="text-align:center;"/>
+        <input type="hidden" id="countPerPage" value="5" style="text-align:center;"/>
+        <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly/>
+        <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기"/>
+        <div id="wrap">
+            <div>
+                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();" placeholder="도로명주소, 건물명 또는 지번 입력"/>
+                <input type="button" onClick="getAddr();" value="주소검색"/>
+            </div>
+            <div id ="closeBtn"  onClick="addressWindowClose();">
+                <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+            </div>
+            <div>
+                <div id="totoalOutcome">
+                    검색결과 : <span id="totalCnt">0</span>
+                </div>
+                <table id="list"></table>
+            </div>
+            <div id="pagingList" style='text-align:center;'></div>
+        </div>
+        <div style="height:5px;"></div>
+        <input type="text" id="reservationAddress" value="" placeholder="도로명 주소, 지번 주소" readonly/>
+        <div style="height:5px;"></div>
+        <input type="text" id="detailAddress" onkeypress="javascript:if(event.keyCode===13) {inputData()}" value="" placeholder="상세 주소지 입력"/>
+        <input type="button" value="입력" onclick="inputData()" />
+        </div>
+    </div>
+    <a class="modal_close_btn"></a>
+</div>
+
+<script src="/js/reservation.js"></script>
