@@ -17,6 +17,7 @@ function calculationTime(workingTimeDate, reservationDate) {
         let doctorName = workingTimeDate[i].doctorName;
         let hospitalName = workingTimeDate[i].HospitalName;
         let endTime = workingTimeDate[i].endTime;
+        let doctorId = workingTimeDate[i].doctorId;
 
         let startTimeHalf = startTime.split(':')[1];
         let endTimeHalf = endTime.split(':')[1];
@@ -38,6 +39,7 @@ function calculationTime(workingTimeDate, reservationDate) {
             }
             doctorsList.push({
                 hospitalName: hospitalName,
+                doctorId: doctorId,
                 doctorName: doctorName,
                 times: timeObj,
                 count: count,
@@ -59,6 +61,7 @@ function calculationTime(workingTimeDate, reservationDate) {
             }
             doctorsList.push({
                 hospitalName: hospitalName,
+                doctorId: doctorId,
                 doctorName: doctorName,
                 times: timeObj,
                 count: count,
@@ -84,6 +87,7 @@ function calculationTime(workingTimeDate, reservationDate) {
             }
             doctorsList.push({
                 hospitalName: hospitalName,
+                doctorId: doctorId,
                 doctorName: doctorName,
                 times: timeObj,
                 count: count,
@@ -109,6 +113,7 @@ function calculationTime(workingTimeDate, reservationDate) {
             }
             doctorsList.push({
                 hospitalName: hospitalName,
+                doctorId: doctorId,
                 doctorName: doctorName,
                 times: timeObj,
                 count: count,

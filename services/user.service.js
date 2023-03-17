@@ -68,7 +68,6 @@ class UserService {
     };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
-        
         const existUser = await this.userRepository.findUser(loginId);
 
         if (existUser) {

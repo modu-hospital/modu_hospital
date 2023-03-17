@@ -1,17 +1,17 @@
 function openModal() {
-    var modal = document.getElementById('modal');
+    const modal = document.getElementById('modal');
     modal.style.display = 'block';
 }
 
-var modal = document.getElementById('modal');
-var span = document.getElementsByClassName('close')[0];
+let modal = document.getElementById('modal');
+let span = document.getElementsByClassName('close')[0];
 span.onclick = function () {
     modal.style.display = 'none';
 };
 
 // 모달창 외부 클릭시 창 닫기
 window.onclick = function (event) {
-    var modal = document.getElementById('modal');
+    let modal = document.getElementById('modal');
     if (event.target == modal) {
         modal.style.display = 'none';
     }
@@ -21,7 +21,7 @@ window.onclick = function (event) {
 /// @brief 주소검색창 - 키보드 Enter키 입력
 
 function enterSearch() {
-    var evt_code = window.netscape ? event.which : event.keyCode;
+    let evt_code = window.netscape ? event.which : event.keyCode;
 
     if (evt_code == 13) {
         event.keyCode = 0;
@@ -199,7 +199,7 @@ function checkSearchedWord(obj) {
     if (obj.value.length > 0) {
         // 특수문자 제거
 
-        var expText = /[%=><]/;
+        const expText = /[%=><]/;
 
         if (expText.test(obj.value) == true) {
             alert('특수문자를 입력 할수 없습니다.');
@@ -211,7 +211,7 @@ function checkSearchedWord(obj) {
 
         // 특정문자열(sql예약어의 앞뒤공백포함) 제거
 
-        var sqlArray = new Array(
+        let sqlArray = new Array(
             'OR',
             'SELECT',
             'INSERT',
@@ -229,7 +229,7 @@ function checkSearchedWord(obj) {
 
         // sql 예약어
 
-        var regex = '';
+        let regex = '';
 
         for (var num = 0; num < sqlArray.length; num++) {
             regex = new RegExp(sqlArray[num], 'gi');
@@ -250,34 +250,34 @@ function checkSearchedWord(obj) {
 /// @brief 주소검색창 - 페이징 생성
 
 function pageMake(jsonStr) {
-    var total = jsonStr.results.common.totalCount; // 총건수
+    let total = jsonStr.results.common.totalCount; // 총건수
 
-    var pageNum = document.getElementById('currentPage').value; // 현재페이지
+    let pageNum = document.getElementById('currentPage').value; // 현재페이지
 
-    var pageBlock = Number(document.getElementById('countPerPage').value); // 페이지당 출력 개수
+    let pageBlock = Number(document.getElementById('countPerPage').value); // 페이지당 출력 개수
 
-    var paggingStr = '';
+    let paggingStr = '';
 
     // 검색 갯수가 페이지당 출력갯수보다 작으면 페이징을 나타내지 않는다.
 
     if (total > pageBlock) {
-        var totalPages = Math.floor((total - 1) / pageNum) + 1;
+        let totalPages = Math.floor((total - 1) / pageNum) + 1;
 
-        var firstPage = Math.floor((pageNum - 1) / pageBlock) * pageBlock + 1;
+        let firstPage = Math.floor((pageNum - 1) / pageBlock) * pageBlock + 1;
 
         if (firstPage <= 0) {
             firstPage = 1;
         }
 
-        var lastPage = firstPage - 1 + pageBlock;
+        let lastPage = firstPage - 1 + pageBlock;
 
         if (lastPage > totalPages) {
             lastPage = totalPages;
         }
 
-        var nextPage = lastPage + 1;
+        let nextPage = lastPage + 1;
 
-        var prePage = firstPage - pageBlock;
+        let prePage = firstPage - pageBlock;
 
         if (firstPage > pageBlock) {
             paggingStr += "<a href='javascript:;' onClick='goPage(" + prePage + ");'>◀</a>";
@@ -318,8 +318,8 @@ function goPage(pageNum) {
 }
 
 function inputData() {
-    var text = document.getElementById('roadaddress').value;
+    let text = document.getElementById('roadaddress').value;
     document.getElementById('address').value = text;
-    var modal = document.getElementById('modal');
+    let modal = document.getElementById('modal');
     modal.style.display = 'none';
 }
