@@ -6,6 +6,11 @@ class ReservationService {
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
 
+    findReservationById = async (id) => {
+        const reservation = await this.reservationRepository.findReservationById(id);
+        return reservation;
+    };
+
     cancelReservation = async (id) => {
         const reservation = await this.reservationRepository.findReservationById(id);
         if (reservation.status == 'done' || reservation.status == 'reviewed') {

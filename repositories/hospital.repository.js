@@ -1,7 +1,7 @@
 const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
 
-const formatterdDate = '%Y-%m-%d %H:%i'; 
+const formatterdDate = '%Y-%m-%d %H:%i';
 
 class HospitalRepository {
     constructor(
@@ -13,7 +13,7 @@ class HospitalRepository {
         DoctorCategoryMappingModel,
         UserModel,
         HospitalImageFileModel,
-        WorkingTimeModel,
+        WorkingTimeModel
     ) {
         this.reservationModel = ReservationModel;
         this.hospitalModel = HospitalModel;
@@ -276,10 +276,10 @@ class HospitalRepository {
         try {
             const ImageFile = await this.hospitalImageFileModel.bulkCreate(url);
             return ImageFile;
-        } catch (error){
+        } catch (error) {
             throw new Error(error);
         }
-    }
+    };
 
     findAllDoctor = async (hospitalId) => {
         try {
@@ -338,8 +338,8 @@ class HospitalRepository {
     };
 
     createWorkingTime = async (workigtime) => {
-       const data = await this.workingTimeModel.bulkCreate(workigtime); 
-        return data ;
+        const data = await this.workingTimeModel.bulkCreate(workigtime);
+        return data;
     };
 
     // 화면 위치 기준 병원 찾기
@@ -471,14 +471,6 @@ class HospitalRepository {
     // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
 
     // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
-
-    // hospitalId에 역인 doctor테이블에서(hospitalId)=> doctorId, name, image, contents 가져오기 o
-    // doctorId로 역인 workingTime테이블 doctorId에서=> datOfTheWeek, startTime, endTime 가져오기 o
-
-    // doctorId로 역인 mapping테이블 doctorId에서
-    //=> categoryId 가져오기  #####다른 사람이 인크루드한거 참고하기
-    // categoryId로 i역인 category테이블 id에서
-    //=> department 가져오기  #####다른 사람이 인크루드한거 참고하기
 }
 
 module.exports = HospitalRepository;

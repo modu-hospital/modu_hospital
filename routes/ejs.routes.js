@@ -6,6 +6,11 @@ router.get('/', (req, res) => {
     res.render('index.ejs', { components: 'main' });
 });
 
+//유저 메인페이지
+router.get('/users', (req, res) => {
+    res.render('index.ejs', { components: 'user' });
+});
+
 // 서비스관리자 페이지
 router.get('/admin', (req, res) => {
     res.render('index.ejs', { components: 'admin' });
@@ -15,11 +20,16 @@ router.get('/admin', (req, res) => {
 router.get('/users/reservation', (req, res) => {
     res.render('index.ejs', { components: 'reservation' });
 });
-
-router.get('/users/mypage/:userId', (req, res) => {
+// 마이페이지
+router.get('/users/mypage', (req, res) => {
     res.render('index.ejs', { components: 'mypage' });
 });
+//비밀번호 찾기 (이메일 발송) 페이지
+router.get('/findmypassword', (req, res) => {
+    res.render('index.ejs', { components: 'findmypassword' });
+});
 
+// 비밀번호 재설정 페이지
 router.get('/users/resetpassword/:params', (req, res) => {
     res.render('index.ejs', { components: 'resetpassword' });
 });
@@ -54,9 +64,30 @@ router.get('/doctorEdit', (req, res) => {
     res.render('index.ejs', { components: 'doctorEdit' });
 });
 
+//병원상세페이지
+router.get('/hospital/:hospitalId', (req, res) => {
+    res.render('index.ejs', { components: 'hospitaldetail' });
+});
+
+//의사 시간 추가
+router.get('/doctorTime', (req, res) => {
+    const doctorId = req.query.doctorId;
+    res.render('index.ejs', { components: 'doctorTime' });
+});
+
 //page expired
 router.get('/errors/expired', (req, res) => {
     res.status(403).render('expired');
+});
+
+//로그인
+router.get('/login', (req, res) => {
+    res.render('index.ejs', { components: 'login' });
+});
+
+//회원가입
+router.get('/signup', (req, res) => {
+    res.render('index.ejs', { components: 'signup' });
 });
 
 module.exports = router;

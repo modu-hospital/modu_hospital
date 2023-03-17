@@ -49,8 +49,6 @@ class HospitalController {
         try {
             const { id } = req.params;
 
-            console.log(id);
-
             const info = await this.hospitalService.searchHospitalInfo(id);
 
             res.json(info);
@@ -62,16 +60,15 @@ class HospitalController {
     // 예약관리 조회
     findAllReservation = async (req, res, next) => {
         try {
-            // const { currentUser } = res.locals;
-            // const userId = currentUser.id;
-            const userId = 91; // 현재 임시로 들어간 값
+            const currentUser = res.locals.user;
+            const userId = currentUser.userId;
             const reservationdata = await this.hospitalService.findAllReservation(userId);
             res.json({
                 reservationdata: reservationdata,
             });
         } catch (error) {
-                next(error);
-            }
+            next(error);
+        }
     };
 
     approvedReservation = async (req, res, next) => {
@@ -96,9 +93,8 @@ class HospitalController {
 
     getWaitedReservation = async (req, res, next) => {
         try {
-            // const { currentUser } = res.locals;
-            // const userId = currentUser.id;
-            const userId = 91;
+            const currentUser = res.locals.user;
+            const userId = currentUser.userId;
             const waitingdata = await this.hospitalService.getWaitedReservation(userId);
             if (waitingdata.length === 0) {
                 return res.json({ success: true, message: '예약 대기중인 목록이 없습니다.' });
@@ -112,9 +108,8 @@ class HospitalController {
 
     getapprovedReservation = async (req, res, next) => {
         try {
-            // const { currentUser } = res.locals;
-            // const userId = currentUser.id;
-            const userId = 91;
+            const currentUser = res.locals.user;
+            const userId = currentUser.userId;
             const approveddata = await this.hospitalService.getapprovedReservation(userId);
             res.json({ success: true, approveddata: approveddata });
         } catch (error) {
@@ -122,11 +117,9 @@ class HospitalController {
         }
     };
 
-
     registerEditHospital = async (req, res, next) => {
-        // const { currentUser } = res.locals;
-        // cosnt userId = currentUser.id;
-        const userId = 91;
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
         const { name, address, phone } = req.body;
 
         if (!req.hospitalLocation) {
@@ -169,9 +162,8 @@ class HospitalController {
 
     getAllreviews = async (req, res, next) => {
         try {
-            // const { currentUser } = res.locals;
-            // const userId = currentUser.id;
-            const userId = 91;
+            const currentUser = res.locals.user;
+            const userId = currentUser.userId;
             const data = await this.hospitalService.getAllreviews(userId);
             res.json({ data: data });
         } catch (error) {
@@ -181,9 +173,8 @@ class HospitalController {
 
     findOneHospital = async (req, res, next) => {
         try {
-            // const { currentUser } = res.locals;
-            // const userId = currentUser.id;
-            const userId = 91;
+            const currentUser = res.locals.user;
+            const userId = currentUser.userId;
             const data = await this.hospitalService.findOneHospital(userId);
             res.json({ data: data });
         } catch (error) {
@@ -211,20 +202,19 @@ class HospitalController {
             };
             const address_name = address_info.address_name;
 
-            req.hospitalLocation = { location, address_name }; 
+            req.hospitalLocation = { location, address_name };
 
-            return next(); 
+            return next();
         } catch (error) {
             next(error);
         }
     };
 
     registerHospital = async (req, res, next) => {
-        // const { currentUser } = res.locals;
-        // cosnt userId = currentUser.id;
-        const userId = 91;
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
         const { name, address, phone } = req.body;
-        const { location, address_name } = req.hospitalLocation; 
+        const { location, address_name } = req.hospitalLocation;
         const longitude = location.longitude;
         const latitude = location.latitude;
 
@@ -240,33 +230,36 @@ class HospitalController {
 
             return res.json({ data: registerdata });
         } catch (error) {
-            throw error
+            throw error;
         }
     };
 
-    registerImagehospital = async(req, res, next) => {
-        const userId = 91;
+    registerImagehospital = async (req, res, next) => {
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
+
         try {
             const files = req.files;
-            console.log(files);
             const hospital = await this.hospitalService.registerImagehospital(userId, files);
-            return res.json({data: hospital});
-        } catch (error){
+            return res.json({ data: hospital });
+        } catch (error) {
             next(error);
         }
-    }
+    };
 
     registerdoctor = async (req, res, next) => {
-        // userId = 3;
-        const userId = 91;
+        console.log(res.locals.user);
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
+
         const { name, contents, categories } = req.body;
 
-        const unique = Array.from(new Set(categories)); 
+        const unique = Array.from(new Set(categories));
         const replaceCategories = await Promise.all(
             unique.map((categories) => categories.replace(/\s/g, ''))
         );
         try {
-            const file = req.file; 
+            const file = req.file;
             const { doctor } = await this.hospitalService.registerdoctor(
                 userId,
                 name,
@@ -276,7 +269,7 @@ class HospitalController {
             );
             return res.status(201).json({ data: doctor });
         } catch (error) {
-             next(error);
+            next(error);
         }
     };
 
@@ -284,7 +277,7 @@ class HospitalController {
         let doctorId = parseInt(req.params.doctorId);
         const { name, contents } = req.body;
         try {
-            const file = req.file; 
+            const file = req.file;
             const doctor = await this.hospitalService.editdoctor(doctorId, name, file, contents);
             return res.json({ data: doctor });
         } catch (error) {
@@ -292,9 +285,10 @@ class HospitalController {
         }
     };
 
-
     findAllDoctor = async (req, res, next) => {
-        const userId = 91;
+        console.log('###################res.locals', res.locals);
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
         try {
             const doctorAlldata = await this.hospitalService.findAllDoctor(userId);
             return res.json(doctorAlldata);
@@ -312,17 +306,24 @@ class HospitalController {
             next(error);
         }
     };
-    
+
     createWorkingTime = async (req, res, next) => {
         try {
-            const workigTimeData = req.body; 
+            const workigTimeData = req.body;
             const workingTime = await this.hospitalService.createWorkingTime(workigTimeData);
             return res.json(workingTime);
         } catch (error) {
-            next(error); 
+            next(error);
         }
     };
+    //병원 상세 조회
+    getOneHospital = async (req, res, next) => {
+        const { id } = req.params;
 
+        const oneHospital = await this.hospitalService.getOneHospital(id);
+
+        res.json(oneHospital);
+    };
 }
 
 module.exports = HospitalController;

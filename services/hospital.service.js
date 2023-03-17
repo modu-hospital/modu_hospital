@@ -134,6 +134,10 @@ class HospitalService {
 
     findAllReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
@@ -176,8 +180,12 @@ class HospitalService {
 
     getWaitedReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            if(!hospitaldata) {
+            if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
                 throw err;
             }
@@ -218,7 +226,7 @@ class HospitalService {
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
             if (!findOneHospital) {
                 const err = this.createError.hospitalNotFound();
-                throw err; 
+                throw err;
             }
             return await this.hospitalRepository.registerEditHospital(
                 userId,
@@ -235,10 +243,14 @@ class HospitalService {
 
     getAllreviews = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            if(!hospitaldata) {
+            if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
-                throw err; 
+                throw err;
             }
             let hospitalId = hospitaldata.hospitalId;
             const data = await this.hospitalRepository.getAllreviews(hospitalId);
@@ -250,8 +262,12 @@ class HospitalService {
 
     getapprovedReservation = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            if(!hospitaldata) {
+            if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
                 throw err;
             }
@@ -265,6 +281,10 @@ class HospitalService {
 
     findOneHospital = async (userId) => {
         try {
+            if (!userId) {
+                const err = this.createError.requestExpired();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             return hospitaldata;
         } catch (error) {
@@ -273,9 +293,13 @@ class HospitalService {
     };
 
     findAllDoctor = async (userId) => {
+        if (!userId) {
+            const err = this.createError.requestExpired();
+            throw err;
+        }
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
-            if(!hospitaldata) {
+            if (!hospitaldata) {
                 const err = this.createError.hospitalNotFound();
                 throw err;
             }
@@ -330,7 +354,7 @@ class HospitalService {
 
             return doctordata;
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error);
         }
     };
 
@@ -345,11 +369,10 @@ class HospitalService {
             );
             return doctordata;
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error);
         }
     };
 
-    
     uploadToS3 = async (file) => {
         const fileContent = fs.readFileSync(file.path);
         const filename = `${Date.now()}_${file.originalname}`;
@@ -371,36 +394,38 @@ class HospitalService {
 
     createWorkingTime = async (workigTimeData) => {
         const workigtime = [];
-        for (let i = 0; i < workigTimeData.workingTimes.length; i++){
+        for (let i = 0; i < workigTimeData.workingTimes.length; i++) {
             const data = {
-                doctorId: parseInt(workigTimeData.doctorId), 
-                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek), 
+                doctorId: parseInt(workigTimeData.doctorId),
+                dayOfTheWeek: parseInt(workigTimeData.workingTimes[i].dayOfTheWeek),
                 startTime: workigTimeData.workingTimes[i].startTime,
                 endTime: workigTimeData.workingTimes[i].endTime,
                 startDate: workigTimeData.workingTimes[i].startDate,
-                endDate: workigTimeData.workingTimes[i].endDate
+                endDate: workigTimeData.workingTimes[i].endDate,
             };
             workigtime.push(data);
         }
         try {
-            const doctorWorkingTimeData = await this.hospitalRepository.createWorkingTime(workigtime);
+            const doctorWorkingTimeData = await this.hospitalRepository.createWorkingTime(
+                workigtime
+            );
             return doctorWorkingTimeData;
-        } catch (error){
+        } catch (error) {
             throw new Error(error);
         }
     };
 
-    registerImagehospital = async(userId, files) => {
+    registerImagehospital = async (userId, files) => {
         const promises = files.map((file, index) => {
-            const fileContent = fs.readFileSync(file.path); 
+            const fileContent = fs.readFileSync(file.path);
             const filename = `${Date.now()}_${file.originalname}`;
             const params = {
                 Bucket: env.AWS_BUCKET_NAME,
                 Key: `doctors/${filename}`,
                 Body: fileContent,
                 ContentType: file.mimetype,
-              };
-              return new Promise((resolve, reject) => {
+            };
+            return new Promise((resolve, reject) => {
                 s3.upload(params, (err, data) => {
                     if (err) {
                         console.error(err);
@@ -410,12 +435,12 @@ class HospitalService {
                         fs.unlinkSync(file.path);
                         resolve(data.Location);
                     }
-                })
-              })
+                });
+            });
         });
 
         const imageurls = await Promise.all(promises);
-        console.log(imageurls)
+        console.log(imageurls);
 
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
@@ -429,17 +454,17 @@ class HospitalService {
             for (let i = 0; i < imageurls.length; i++) {
                 const data = {
                     hospitalId: hospitalId,
-                    url: imageurls[i]
+                    url: imageurls[i],
                 };
                 url.push(data);
             }
             const ImageFile = await this.hospitalRepository.registerImagehospital(url);
 
-            return ImageFile; 
+            return ImageFile;
         } catch (error) {
             throw new Error(error);
         }
-    }
+    };
 
     getOneHospital = async (id) => {
         try {
