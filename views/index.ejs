@@ -51,22 +51,24 @@
             <%- include('header.ejs') %>
 
             <!-- page -->
-            <% if (components === "main") { %> <%- include('main.ejs') %> <% } %> <% if (components
-            === "mypage") { %> <%- include('mypage.ejs') %> <% } %> <% if (components === "map") {
-            %> <%- include('map.ejs') %> <% } %> <% if (components === "hospital") { %> <%-
-            include('hospital.ejs') %> <% } %> <% if (components === "hospitalRegister") { %> <%-
-            include('hospitalRegister.ejs') %> <% } %> <% if (components === "hospitalEdit") { %>
-            <%- include('hospitalEdit.ejs') %> <% } %> <% if (components === "doctorRegister") { %>
-            <%- include('doctorRegister.ejs') %> <% } %> <% if (components === "doctorEdit") { %>
-            <%- include('doctorEdit.ejs') %> <% } %> <% if (components === "reservation") { %> <%-
-            include('reservation.ejs') %> <% } %> <% if (components === "admin") { %> <%-
-            include('admin.ejs') %> <% } %> <% if (components === "resetpassword") { %> <%-
-            include('resetpassword') %> <% } %> <% if (components === "hospitaldetail") { %> <%-
-            include('hospitaldetail.ejs') %> <% } %> <% if (components === "login") { %> <%-
-            include('login.ejs') %> <% } %> <% if (components === "signup") { %> <%-
-            include('signup.ejs') %> <% } %> <% if (components === "doctorTime") { %> <%-
-            include('doctorTime.ejs') %> <% } %>
-
+            <% 
+            if (components === "main") { %> <%- include('main.ejs') %> <% }
+            else if (components === "mypage") { %> <%- include('mypage.ejs') %> <% }
+            else if (components === "map") { %> <%- include('map.ejs') %> <% }
+            else if (components === "hospital") { %> <%- include('hospital.ejs') %> <% }
+            else if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% }
+            else if (components === "hospitalEdit") { %> <%- include('hospitalEdit.ejs') %> <% }
+            else if (components === "doctorRegister") { %> <%- include('doctorRegister.ejs') %> <% }
+            else if (components === "doctorEdit") { %> <%- include('doctorEdit.ejs') %> <% }
+            else if (components === "reservation") { %> <%- include('reservation.ejs') %> <% }
+            else if (components === "admin") { %> <%- include('admin.ejs') %> <% }
+            else if (components === "hospitaldetail") { %> <%- include('hospitaldetail.ejs') %> <% }
+            else if (components === "login") { %> <%- include('login.ejs') %> <% }
+            else if (components === "signup") { %> <%- include('signup.ejs') %> <% }
+            else if (components === "doctorTime") { %> <%- include('doctorTime.ejs') %> <% } 
+            else if (components === "findmypassword") { %> <%- include('findmypassword.ejs') %> <% }
+            else if (components === "resetpassword") { %> <%- include('resetpassword') %> <% } 
+            %>
             <!-- Footer -->
             <%- include('footer.ejs') %>
         </div>
