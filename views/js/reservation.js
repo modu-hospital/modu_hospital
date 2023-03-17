@@ -66,10 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function viewModal(id) {
     let zIndex = 9999;
-    let modal = document.getElementById(id);
+    let mymodal = document.getElementById(id);
 
     // 모달 div 뒤에 희끄무레한 레이어
     let background = document.createElement('div');
+
     background.setStyle({
         position: 'fixed',
         zIndex: zIndex,
@@ -82,14 +83,15 @@ function viewModal(id) {
         backgroundColor: 'rgba(0,0,0,0.4)',
     });
     document.body.append(background);
+    background.setAttribute('id', 'background');
 
     // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
-    modal.querySelector('.modal_close_btn').addEventListener('click', function () {
+    mymodal.querySelector('.modal_close_btn').addEventListener('click', function () {
         background.remove();
-        modal.style.display = 'none';
+        mymodal.style.display = 'none';
     });
 
-    modal.setStyle({
+    mymodal.setStyle({
         position: 'fixed',
         display: 'block',
         boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
@@ -115,6 +117,11 @@ Element.prototype.setStyle = function (styles) {
 function reservationTime() {
     // 모달창 띄우기
     viewModal('my_modal');
+}
+
+function reservationAddress() {
+    // 모달창 띄우기
+    viewModal('address_modal');
 }
 
 //---------------- calendar --------------------------
@@ -298,74 +305,8 @@ function buildCalendar() {
             };
         }
     }
-
-    // 예약이 가득찬 날의 경우 cell 비활성화 및 색상 변경
-    // 조건문. 위에서 구해놓은 monthEquals로 달에 알맞은 정보를 담은 Array를 사용하기 위함 : 요일을 29~31개 만들때마다 조회하는 것보다 이게 효율적
-    // checkMonth = thisMonth(nowMonth, realMonth);
-    // fullDate = [];
-    // if (checkMonth === 0) {
-    //     fullDate = thisMonthFullDateList;
-    // }
-    // if (checkMonth === 1) {
-    //     fullDate = nextMonthFullDateList;
-    // }
-    // // 예약불가 처리방법
-    // for (let i = 0; i < fullDate.length; i++) {
-    //     // fullDate : 지금 만드는 달의 날짜 중 예약이 꽉 찬 날을 int로 보유
-    //     console.log('꽉 찬날 : ' + fullDate[i]);
-    //     cell = document.getElementById(fullDate[i]); // fullDate를 순차탐색해 해당하는 날짜의 id를 가진 cell을 호출
-    //     console.log('꽉 찬날 : ' + cell.innerHTML);
-    //     cell.style.backgroundColor = '#E0E0E0'; // 배경색과 글자색을 예약불가일과 동일하게 변경
-    //     cell.style.color = '#C6C6C6';
-    //     cell.onclick = function () {}; // 클릭이벤트함수를 빈 함수로 덮어씌워 클릭이벤트를 초기화
-    // }
-
-    // // 달의 마지막 날 뒤 행의 빈 공간을 셀로 채우기
-    // if (cnt % 7 != 0) {
-    //     for (i = 0; i < 7 - (cnt % 7); i++) {
-    //         cell = row.insertCell();
-    //     }
-    // }
 }
 
-// row1 = calendarTable.insertRow();
-// for (i = 1; i <= lastDate.getDate(); i++) {
-//     cell = row.insertCell();
-//     cnt += 1;
-
-//     cell.setAttribute('id', i);
-//     cell.innerHTML = i;
-//     cell.align = 'center';
-
-//     cell.onclick = function () {
-//         clickedYear = today.getFullYear();
-//         clickedMonth = 1 + today.getMonth();
-//         clickedDate = this.getAttribute('id');
-
-//         clickedDate = clickedDate >= 10 ? clickedDate : '0' + clickedDate;
-//         clickedMonth = clickedMonth >= 10 ? clickedMonth : '0' + clickedMonth;
-//         clickedYMD = clickedYear + '-' + clickedMonth + '-' + clickedDate;
-
-//         opener.document.getElementById('date').value = clickedYMD;
-//         self.close();
-//     };
-
-//     if (cnt % 7 == 1) {
-//         cell.innerHTML = '<font color=#F79DC2>' + i + '</font>';
-//     }
-
-//     if (cnt % 7 == 0) {
-//         cell.innerHTML = '<font color=skyblue>' + i + '</font>';
-//         row = calendar.insertRow();
-//     }
-// }
-
-// 사용자가 입력한 예약불가능 일자와 대조하기 위해 0~7의 환형 계산구조
-// cnt를 매개변수로 넣어 현재 일이 '무슨 요일'인지 반환(1: 일, 2: 월, 3: 화, 4: 수, 5: 목, 6: 금, 7: 토)
-// result에서 1을 빼고 연산하는 이유 : 이후 배열의 인덱스로 사용해 해당값을 조회해야 함. 배열의 인덱스는 0부터 시작이기 때문
-// i(일수)대신 cnt를 사용하는 이유 : i와 cnt는 같이 1씩 증가하지만 시작이 다름. i(요일)의 시작은 월의 첫 날, cnt의 시작은 첫 행 첫번째 셀
-// i 자체로는 '무슨 요일'인지 파악할 수 없음
-// cnt로 i(일)가 '무슨' 요일인지 7로 나머지 연산을 해서 알 수 있음
 function exchangeToPosibleDay(num) {
     result = num % 7;
     result -= 1;
@@ -393,6 +334,7 @@ let startHour;
 let startMinute;
 let endHour;
 let endMinute;
+let doctorname;
 // 선택된 시간중 가장 빠른/늦은 시간;
 let selectedFirstTime = 24 * 1;
 let selectedFinalTime = 0 * 1;
@@ -435,77 +377,130 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
             for (let i = 0; i < response.length; i++) {
                 // 객체의 길이만큼 반복
                 let hospitalName = response[i].hospitalName;
+                let doctorId = response[i].doctorId;
                 let doctorName = response[i].doctorName;
                 let time = response[i].times;
                 console.log(`첫번째 for문 ${i}번째의 ${hospitalName}`);
                 if (i < 1) {
                     row = doctorTable.insertRow();
                     cell = row.insertCell();
-                    cell.setAttribute('id', doctorName);
+                    cell.setAttribute('id', `doc + ${doctorId}`);
                     cell.innerHTML = '담당의사 : ' + doctorName;
                     for (let j = 0; j < Object.keys(time).length; j++) {
-                        if (Object.values(time)[j].length === 0) {
-                            // times의 value가 "" 이면 startTime 지정 / 이름이면 미지정
+                        if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
+                            // 30분단위 출력
 
-                            if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
-                                // 30분단위 출력
+                            startHour = Object.keys(time)[j].split(':')[0] * 1;
+                            startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                            endHour = Object.keys(time)[j].split(':')[0] * 1;
+                            endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
 
-                                startHour = Object.keys(time)[j].split(':')[0] * 1;
-                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
-                                endHour = Object.keys(time)[j].split(':')[0] * 1;
-                                endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
+                            // 시간표테이블 생성
 
-                                // 시간표테이블 생성
+                            cellTime = startHour;
+                            // 시작시간부터 30분씩 순차적으로 셀 생성
+                            cellStartTimeText = cellTime + ':00';
+                            cellEndTimeText = cellTime + ':30';
+                            inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
 
-                                cellTime = startHour;
-                                // 시작시간부터 30분씩 순차적으로 셀 생성
-                                cellStartTimeText = cellTime + ':00';
-                                cellEndTimeText = cellTime + ':30';
-                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                            // 셀 입력을 위해 테이블 개행
+                            row = timeTable.insertRow();
+                            //해당 row의 셀 생성
+                            cell = row.insertCell();
+                            // cell에 id 부여
+                            cell.setAttribute('id', `${cellTime}-${doctorId}`); // id는 행의 시작시간
 
-                                // 셀 입력을 위해 테이블 개행
-                                row = timeTable.insertRow();
-                                //해당 row의 셀 생성
-                                cell = row.insertCell();
-                                // cell에 id 부여
-                                cell.setAttribute('id', cellTime); // id는 행의 시작시간
-                                // 셀에 입력
-                                cell.innerHTML = inputCellText;
-                            } else {
-                                startHour = Object.keys(time)[j].split(':')[0] * 1;
-                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
-                                endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
-                                endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
+                            // 셀에 입력
+                            cell.innerHTML = inputCellText;
 
-                                // 시간표테이블 생성
+                            // 시간표 테이블의 클릭이벤트
+                            cell.onclick = function () {
+                                cellTime = this.getAttribute('id');
+                                cellTime = cellTime.split('-')[0];
+                                doctorname = cellTime.split('-')[1];
+                                console.log(cellTime);
+                                cellTime = cellTime * 1;
+                                console.log('selected : ' + cellTime);
 
-                                cellTime = startHour;
-                                // 시작시간부터 30분씩 순차적으로 셀 생성
-                                cellStartTimeText = cellTime + ':30';
-                                cellEndTimeText = cellTime + 1 + ':00';
-                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
-                                // 셀 입력을 위해 테이블 개행
-                                row = timeTable.insertRow();
-                                //해당 row의 셀 생성
-                                cell = row.insertCell();
-                                // cell에 id 부여
-                                cell.setAttribute('id', cellTime + 0.5); // id는 행의 시작시간
-                                // 셀에 입력
-                                cell.innerHTML = inputCellText;
-                            }
+                                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
+                                if (selectedCellTime != null) {
+                                    selectedCellTime.bgColor = '#FFFFFF';
+                                }
+                                selectedCellTime = this;
+                                this.bgColor = '#fbedaa';
+
+                                //하단의 예약일시에 시간 표시
+                                if (cellTime - Math.floor(cellTime) === 0) {
+                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                } else {
+                                    resTime =
+                                        Math.floor(cellTime) +
+                                        ':30 ~ ' +
+                                        Math.floor(cellTime + 1) +
+                                        ':00';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                }
+                            };
                         } else {
-                            console.log(
-                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문의 ${
-                                    Object.values(time)[j].length === 0
-                                }방에 ${j}번째 startTime 미지정방에 진입했다.`
-                            );
+                            startHour = Object.keys(time)[j].split(':')[0] * 1;
+                            startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                            endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
+                            endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
 
-                            console.log(
-                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문 ${j}번째 두번째 if문 ${j}번째의 조건이 ${
-                                    Object.values(time)[j].length === 0
-                                }이기 때문에 ${Object.keys(time)[j]}은 예약이 불가능한 시간대이다.`
-                            );
+                            // 시간표테이블 생성
+
+                            cellTime = startHour;
+                            // 시작시간부터 30분씩 순차적으로 셀 생성
+                            cellStartTimeText = cellTime + ':30';
+                            cellEndTimeText = cellTime + 1 + ':00';
+                            inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                            // 셀 입력을 위해 테이블 개행
+                            row = timeTable.insertRow();
+                            //해당 row의 셀 생성
+                            cell = row.insertCell();
+                            // cell에 id 부여
+                            cell.setAttribute('id', `${cellTime + 0.5}-${doctorId}`); // id는 행의 시작시간
+                            // 셀에 입력
+                            cell.innerHTML = inputCellText;
+
+                            cell.onclick = function () {
+                                cellTime = this.getAttribute('id');
+                                cellTime = cellTime.split('-')[0];
+                                doctorname = cellTime.split('-')[1];
+                                console.log(cellTime);
+                                cellTime = cellTime * 1;
+                                console.log('selected : ' + cellTime);
+
+                                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
+                                if (selectedCellTime != null) {
+                                    selectedCellTime.bgColor = '#FFFFFF';
+                                }
+                                selectedCellTime = this;
+                                this.bgColor = '#fbedaa';
+
+                                //하단의 예약일시에 시간 표시
+                                if (cellTime - Math.floor(cellTime) === 0) {
+                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                } else {
+                                    resTime =
+                                        Math.floor(cellTime) +
+                                        ':30 ~ ' +
+                                        Math.floor(cellTime + 1) +
+                                        ':00';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                }
+                            };
                         }
                     }
                 } else {
@@ -513,107 +508,131 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                     // i 가 1씩 증가할때마다 테이블이 옆으로 붙어야함
                     row = doctorTable.insertRow();
                     cell = doctorTable.rows[0].insertCell(-1);
-                    cell.setAttribute('id', doctorName);
+                    cell.setAttribute('id', `doc + ${doctorId}`);
                     cell.innerHTML = '담당의사 : ' + doctorName;
                     // 열 추가 되는 부분
                     for (let j = 0; j < Object.keys(time).length; j++) {
-                        if (Object.values(time)[j].length === 0) {
-                            // times의 value가 "" 이면 startTime 지정 / 이름이면 미지정
+                        if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
+                            // 30분단위 출력
 
-                            if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
-                                // 30분단위 출력
+                            startHour = Object.keys(time)[j].split(':')[0] * 1;
+                            startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                            endHour = Object.keys(time)[j].split(':')[0] * 1;
+                            endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
 
-                                startHour = Object.keys(time)[j].split(':')[0] * 1;
-                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
-                                endHour = Object.keys(time)[j].split(':')[0] * 1;
-                                endMinute = Object.keys(time)[j].split(':')[1] * 1 + 30;
+                            // 시간표테이블 생성
 
-                                // 시간표테이블 생성
+                            cellTime = startHour;
+                            // 시작시간부터 30분씩 순차적으로 셀 생성
+                            cellStartTimeText = cellTime + ':00';
+                            cellEndTimeText = cellTime + ':30';
+                            inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                            // 셀 입력을 위해 테이블 개행
+                            row = timeTable.insertRow();
+                            console.log('row: ', row);
+                            //해당 row의 셀 생성
+                            // cell = row.insertCell();
+                            cell = timeTable.rows[j].insertCell(-1);
+                            console.log('cell: ', cell);
+                            // cell에 id 부여
+                            cell.setAttribute('id', `${cellTime}-${doctorId}`); // id는 행의 시작시간
+                            // 셀에 입력
+                            cell.innerHTML = inputCellText;
 
-                                cellTime = startHour;
-                                // 시작시간부터 30분씩 순차적으로 셀 생성
-                                cellStartTimeText = cellTime + ':00';
-                                cellEndTimeText = cellTime + ':30';
-                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
-                                // 셀 입력을 위해 테이블 개행
-                                row = timeTable.insertRow();
-                                console.log('row: ', row);
-                                //해당 row의 셀 생성
-                                // cell = row.insertCell();
-                                cell = timeTable.rows[j].insertCell(-1);
-                                console.log('cell: ', cell);
-                                // cell에 id 부여
-                                cell.setAttribute('id', cellTime); // id는 행의 시작시간
-                                // 셀에 입력
-                                cell.innerHTML = inputCellText;
-                            } else {
-                                startHour = Object.keys(time)[j].split(':')[0] * 1;
-                                startMinute = Object.keys(time)[j].split(':')[1] * 1;
-                                endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
-                                endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
-                                // 시간표테이블 생성
-                                cellTime = startHour;
-                                // 시작시간부터 30분씩 순차적으로 셀 생성
-                                cellStartTimeText = cellTime + ':30';
-                                cellEndTimeText = cellTime + 1 + ':00';
-                                inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                                console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
-                                // 셀 입력을 위해 테이블 개행
-                                row = timeTable.insertRow();
-                                console.log('row: ', row);
-                                //해당 row의 셀 생성
-                                // cell = row.insertCell();
-                                cell = timeTable.rows[j].insertCell(-1);
-                                // console.log('cell: ', cell);
-                                // cell에 id 부여
-                                cell.setAttribute('id', cellTime + 0.5); // id는 행의 시작시간
-                                // 셀에 입력
-                                cell.innerHTML = inputCellText;
-                            }
+                            // 시간표 테이블의 클릭이벤트
+                            cell.onclick = function () {
+                                cellTime = this.getAttribute('id');
+                                cellTime = cellTime.split('-')[0];
+                                doctorname = cellTime.split('-')[1];
+                                console.log(cellTime);
+                                cellTime = cellTime * 1;
+                                console.log('selected : ' + cellTime);
+
+                                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
+                                if (selectedCellTime != null) {
+                                    selectedCellTime.bgColor = '#FFFFFF';
+                                }
+                                selectedCellTime = this;
+                                this.bgColor = '#fbedaa';
+
+                                //하단의 예약일시에 시간 표시
+                                if (cellTime - Math.floor(cellTime) === 0) {
+                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                } else {
+                                    resTime =
+                                        Math.floor(cellTime) +
+                                        ':30 ~ ' +
+                                        Math.floor(cellTime + 1) +
+                                        ':00';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                }
+                            };
                         } else {
-                            console.log(
-                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문의 ${
-                                    Object.values(time)[j].length === 0
-                                }방에 ${j}번째 startTime 미지정방에 진입했다.`
-                            );
+                            startHour = Object.keys(time)[j].split(':')[0] * 1;
+                            startMinute = Object.keys(time)[j].split(':')[1] * 1;
+                            endHour = Object.keys(time)[j].split(':')[0] * 1 + 1;
+                            endMinute = Object.keys(time)[j].split(':')[1] * 1 - 30;
+                            // 시간표테이블 생성
+                            cellTime = startHour;
+                            // 시작시간부터 30분씩 순차적으로 셀 생성
+                            cellStartTimeText = cellTime + ':30';
+                            cellEndTimeText = cellTime + 1 + ':00';
+                            inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
+                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+                            // 셀 입력을 위해 테이블 개행
+                            row = timeTable.insertRow();
+                            console.log('row: ', row);
+                            //해당 row의 셀 생성
+                            // cell = row.insertCell();
+                            cell = timeTable.rows[j].insertCell(-1);
+                            // console.log('cell: ', cell);
+                            // cell에 id 부여
+                            cell.setAttribute('id', `${cellTime + 0.5}-${doctorId}`); // id는 행의 시작시간
+                            // 셀에 입력
+                            cell.innerHTML = inputCellText;
 
-                            console.log(
-                                `첫번째 for문 ${i}번째 두번째 for문 ${j}번째 첫번째 if문 ${j}번째 두번째 if문 ${j}번째의 조건이 ${
-                                    Object.values(time)[j].length === 0
-                                }이기 때문에 ${Object.keys(time)[j]}은 예약이 불가능한 시간대이다.`
-                            );
+                            cell.onclick = function () {
+                                cellTime = this.getAttribute('id');
+                                cellTime = cellTime.split('-')[0];
+                                doctorname = cellTime.split('-')[1];
+                                console.log(cellTime);
+                                cellTime = cellTime * 1;
+                                console.log('selected : ' + cellTime);
+
+                                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
+                                if (selectedCellTime != null) {
+                                    selectedCellTime.bgColor = '#FFFFFF';
+                                }
+                                selectedCellTime = this;
+                                this.bgColor = '#fbedaa';
+
+                                //하단의 예약일시에 시간 표시
+                                if (cellTime - Math.floor(cellTime) === 0) {
+                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                } else {
+                                    resTime =
+                                        Math.floor(cellTime) +
+                                        ':30 ~ ' +
+                                        Math.floor(cellTime + 1) +
+                                        ':00';
+
+                                    resTimeForm = document.getElementById('selectedTime');
+                                    resTimeForm.value = resTime;
+                                }
+                            };
                         }
                     }
                 }
             }
-            // 시간표 테이블의 클릭이벤트
-            cell.onclick = function () {
-                cellTime = this.getAttribute('id');
-                console.log(cellTime);
-                cellTime = cellTime * 1;
-                console.log('selected : ' + cellTime);
-
-                // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
-                if (selectedCellTime != null) {
-                    selectedCellTime.bgColor = '#FFFFFF';
-                }
-                selectedCellTime = this;
-                this.bgColor = '#fbedaa';
-
-                //하단의 예약일시에 시간 표시
-                if (getOnlyDecimal(cellTime, 1) === 0) {
-                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
-
-                    resTimeForm = document.getElementById('selectedTime');
-                    resTimeForm.value = resTime;
-                } else {
-                    resTime = Math.floor(cellTime) + ':30 ~ ' + Math.floor(cellTime + 1) + ':00';
-
-                    resTimeForm = document.getElementById('selectedTime');
-                    resTimeForm.value = resTime;
-                }
-            };
         },
     });
 }
@@ -635,13 +654,6 @@ function selectedTimeInit() {
 
     selectedFirstTime = 24 * 1;
     selectedFinalTime = 0 * 1;
-}
-
-//소수점만 출력
-function getOnlyDecimal(number, length) {
-    let result = number % 1;
-    result = Number(result.toFixed(length));
-    return result;
 }
 
 // function submitRes() {
@@ -674,9 +686,306 @@ function getOnlyDecimal(number, length) {
 buildCalendar();
 
 function submitRes() {
-    const a = $('#selectedDate').val();
-    const b = $('#selectedTime').val();
+    let mymodal = document.getElementById('my_modal');
+    let background = document.getElementById('background');
+    const outputDate = $('#selectedDate').val();
+    const outputTime = $('#selectedTime').val();
 
-    $('input[name=reservationSelectedDate]').attr('value', a);
-    $('input[name=reservationSelectedTime]').attr('value', b);
+    if (outputTime.length > 0) {
+        $('input[name=reservationSelectedDate]').attr('value', outputDate);
+        $('input[name=reservationSelectedTime]').attr('value', outputTime);
+
+        background.remove();
+        mymodal.style.display = 'none';
+    } else {
+        alert('예약일시를 선택해주세요.');
+    }
+    tableinit();
+}
+
+function enterSearch() {
+    let evt_code = window.netscape ? event.which : event.keyCode;
+
+    if (evt_code == 13) {
+        event.keyCode = 0;
+
+        getAddr();
+    }
+}
+
+/// @brief 주소검색창 - 데이터 조회
+function getAddr() {
+    let totalCnt = document.getElementById('totalCnt');
+    let keyword = document.getElementById('searchAddr');
+
+    // 적용예 (api 호출 전에 검색어 체크)
+
+    if (!checkSearchedWord(keyword)) {
+        return;
+    }
+
+    jQuery.ajax({
+        url: 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
+        type: 'POST',
+        data: {
+            confmKey: 'devU01TX0FVVEgyMDIzMDExOTEwMTM0ODExMzQ0MzE=',
+            currentPage: document.getElementById('currentPage').value,
+            countPerPage: document.getElementById('countPerPage').value,
+            keyword: keyword.value,
+            resultType: 'json',
+        },
+        dataType: 'jsonp',
+        crossDomain: true,
+        success: function (jsonStr) {
+            jQuery('#list').html('');
+            let errCode = jsonStr.results.common.errorCode;
+            let errDesc = jsonStr.results.common.errorMessage;
+            if (errCode == '0') {
+                if (jsonStr != null) {
+                    makeListJson(jsonStr);
+                    totalCnt.style.display = '';
+                }
+            } else {
+                alert(errDesc);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('에러발생');
+        },
+    });
+}
+/// @brief 주소검색창 - 주소지 선택
+function makeListJson(jsonStr) {
+    let htmlStr =
+        "<thead><tr><th style='width:70px;'>우편번호</th><th>주소</th></tr></thead><tbody>";
+    if (jsonStr.results.common.totalCount > 0) {
+        jQuery('#totoalOutcome').css('display', 'block');
+        jQuery('#totalCnt').html(jsonStr.results.common.totalCount);
+        jQuery(jsonStr.results.juso).each(function () {
+            let zipNo = this.zipNo; // 우편번호
+            let roadAddr = this.roadAddr; // 도로명 주소
+            let jibunAddr = this.jibunAddr; // 지번 주소
+            htmlStr += '<tr>';
+            htmlStr += '<td>';
+            htmlStr +=
+                "<a href='javascript:;' onClick='inputTextAddress(\"" +
+                zipNo +
+                '", "' +
+                roadAddr +
+                '");\'>';
+            htmlStr += zipNo;
+            htmlStr += '</a>';
+            htmlStr += '</td>';
+            htmlStr += '<td>';
+            htmlStr +=
+                "<a href='javascript:;' onClick='inputTextAddress(\"" +
+                zipNo +
+                '", "' +
+                roadAddr +
+                '");\'>';
+            htmlStr += '도로명 : ' + roadAddr;
+            htmlStr += '</a>';
+            htmlStr += '<br/>';
+            htmlStr +=
+                "<a href='javascript:;' onClick='inputTextAddress(\"" +
+                zipNo +
+                '", "' +
+                jibunAddr +
+                '");\'>';
+            htmlStr += '지번 : ' + jibunAddr;
+            htmlStr += '</a>';
+            htmlStr += '</td>';
+            htmlStr += '</tr>';
+        });
+
+        pageMake(jsonStr);
+    } else {
+        htmlStr +=
+            "<tr><td colspan='2'>조회된 데이터가 않습니다.<br/>다시 검색하여 주시기 바랍니다.</td></tr>";
+    }
+    htmlStr += '</tbody>';
+    jQuery('#list').html(htmlStr);
+}
+/// @brief 주소검색창 - 주소지 삽입
+function inputTextAddress(zipcode, reservationAddress) {
+    document.getElementById('zipCode').value = zipcode;
+    document.getElementById('reservationAddress').value = reservationAddress;
+}
+/// @brief 주소검색창 - 열기
+function addressWindowOpen() {
+    jQuery('#wrap').slideDown();
+    jQuery('#searchAddr').focus();
+}
+/// @brief 주소검색창 - 닫기
+function addressWindowClose() {
+    jQuery('#wrap').slideUp();
+    jQuery('#searchAddr').val('');
+    jQuery('#totoalOutcome').css('display', 'none');
+    jQuery('#list').empty();
+    jQuery('#pagingList').empty();
+    jQuery('#currentPage').val('1');
+}
+/// @brief 주소검색창 - 특수문자 제거
+function checkSearchedWord(obj) {
+    if (obj.value.length > 0) {
+        // 특수문자 제거
+        const expText = /[%=><]/;
+        if (expText.test(obj.value) == true) {
+            alert('특수문자를 입력 할수 없습니다.');
+            obj.value = obj.value.split(expText).join('');
+            return false;
+        }
+        // 특정문자열(sql예약어의 앞뒤공백포함) 제거
+        let sqlArray = new Array(
+            'OR',
+            'SELECT',
+            'INSERT',
+            'DELETE',
+            'UPDATE',
+            'CREATE',
+            'DROP',
+            'EXEC',
+            'UNION',
+            'FETCH',
+            'DECLARE',
+            'TRUNCATE'
+        );
+        // sql 예약어
+        let regex = '';
+        for (let num = 0; num < sqlArray.length; num++) {
+            regex = new RegExp(sqlArray[num], 'gi');
+            if (regex.test(obj.value)) {
+                alert('"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.');
+                obj.value = obj.value.replace(regex, '');
+                return false;
+            }
+        }
+    }
+    return true;
+}
+/// @brief 주소검색창 - 페이징 생성
+function pageMake(jsonStr) {
+    let total = jsonStr.results.common.totalCount; // 총건수
+    let pageNum = document.getElementById('currentPage').value; // 현재페이지
+    let pageBlock = Number(document.getElementById('countPerPage').value); // 페이지당 출력 개수
+    let paggingStr = '';
+    // 검색 갯수가 페이지당 출력갯수보다 작으면 페이징을 나타내지 않는다.
+    if (total > pageBlock) {
+        let totalPages = Math.floor((total - 1) / pageNum) + 1;
+        let firstPage = Math.floor((pageNum - 1) / pageBlock) * pageBlock + 1;
+        if (firstPage <= 0) {
+            firstPage = 1;
+        }
+        let lastPage = firstPage - 1 + pageBlock;
+        if (lastPage > totalPages) {
+            lastPage = totalPages;
+        }
+        let nextPage = lastPage + 1;
+        let prePage = firstPage - pageBlock;
+        if (firstPage > pageBlock) {
+            paggingStr += "<a href='javascript:;' onClick='goPage(" + prePage + ");'>◀</a>";
+            paggingStr += '&nbsp;';
+        }
+        for (let num = firstPage; lastPage >= num; num++) {
+            if (pageNum == num) {
+                paggingStr +=
+                    "<a style='font-weight:bold;color:#0000FF;' href='javascript:;'>" +
+                    num +
+                    '</a>';
+                paggingStr += '&nbsp;';
+            } else {
+                paggingStr +=
+                    "<a href='javascript:;' onClick='goPage(" + num + ");'>" + num + '</a>';
+                paggingStr += '&nbsp;';
+            }
+        }
+        if (lastPage < totalPages) {
+            paggingStr += "<a href='javascript:;' onClick='goPage(" + nextPage + ");'>▶</a>";
+        }
+    }
+    jQuery('#pagingList').html(paggingStr);
+}
+/// @brief 페이징 이동
+function goPage(pageNum) {
+    document.getElementById('currentPage').value = pageNum;
+    getAddr();
+}
+
+function inputData() {
+    let addressTable = document.getElementById('list');
+    let totalCnt = document.getElementById('totalCnt');
+    let zipCode = document.getElementById('zipCode');
+    let searchAddr = document.getElementById('searchAddr');
+    let resDateForm = document.getElementById('reservationAddress');
+    let resTimeForm = document.getElementById('detailAddress');
+    let addressModal = document.getElementById('address_modal');
+    let background = document.getElementById('background');
+    const reservationAddress = $('#reservationAddress').val();
+    const detailAddress = $('#detailAddress').val();
+
+    if (detailAddress.length > 0) {
+        $('input[name=address]').attr('value', `${reservationAddress} ${detailAddress}`);
+
+        background.remove();
+        addressModal.style.display = 'none';
+    } else {
+        alert('주소를 입력해주세요.');
+    }
+
+    resTimeForm.value = '';
+    resDateForm.value = '';
+    zipCode.value = '';
+    searchAddr.value = '';
+    totalCnt.style.display = 'none';
+
+    while (addressTable.rows.length > 0) {
+        addressTable.deleteRow(addressTable.rows.length - 1);
+    }
+    jQuery('#pagingList').empty();
+}
+
+function reservaionCheck() {
+    const relationship = $('#relationCategory').val();
+    const selfwrite = $('#selfWrite').val();
+    const name = $('#patientName').val();
+    const proxyname = $('#proxyName').val();
+    const idnumber = $('#idNumber').val();
+    const phone = $('#phone').val();
+    const address = $('#address').val();
+    const reservationdate = $('#reservationSelectedDate').val();
+    const reservationtime = $('#reservationSelectedTime').val();
+
+    console.log(
+        relationship,
+        selfwrite,
+        name,
+        proxyname,
+        idnumber,
+        phone,
+        address,
+        reservationdate,
+        reservationtime
+    );
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/reservation',
+        data: {
+            relationship: relationship,
+            selfwrite: selfwrite,
+            name: name,
+            idnumber: idnumber,
+            phone: phone,
+            address: address,
+            reservationdate: reservationdate,
+            reservationtime: reservationtime,
+        },
+        success: function (response) {
+            location.href = 'http://localhost:3000/users/reservation';
+            alert('예약신청이 완료되었습니다.');
+        },
+        error: function (error) {
+            alert(error.responseJSON.errorMessage);
+        },
+    });
 }
