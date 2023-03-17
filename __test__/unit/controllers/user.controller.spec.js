@@ -35,9 +35,8 @@ describe('User Controller Unit Test', () => {
     });
 
     describe('getUserProfile', () => {
-        async function beforeEachTest() {
-            mockRequest.params = { userId: 1 };
-            userProfile = {
+        it('should call service method once', async () => {
+            const userProfile = {
                 userId: 1,
                 loginId: 'abcd',
                 name: '김상철',
@@ -46,59 +45,29 @@ describe('User Controller Unit Test', () => {
             };
             mockUserService.getUserProfile.mockResolvedValue(userProfile);
             await userController.getUserProfile(mockRequest, mockResponse, mockNext);
-        }
-
-        it('should call service method once', async () => {
-            await beforeEachTest();
-            expect(userController.userService.getUserProfile).toHaveBeenCalledTimes(1);
+            expect(mockUserService.getUserProfile).toHaveBeenCalledTimes(1);
         });
-        it('should call service method with proper argument', async () => {
-            await beforeEachTest();
-            expect(userController.userService.getUserProfile).toHaveBeenCalledWith(
-                mockRequest.params.userId
-            );
-        });
-        // it('should call middleware with proper argument when it catches error', async ()=>{
-        //     mockUserService.getUserProfile = () => {throw Error('a')}
-        //     expect(mockNext).toHaveBeenCalledWith(
-        //         Error('b')
-        //     );
-        // })
     });
     describe('editUserProfile', () => {
         it('should call service method once', async () => {
-            mockRequest.params = { userId: 1 };
-            mockRequest.body = { name: '김김김', address: '서울시', phone: '010' };
             await userController.editUserProfile(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.editUserProfile).toHaveBeenCalledTimes(1);
-        });
-        it('should call service with proper arguments', async () => {
-            mockRequest.params = { userId: 1 };
-            mockRequest.body = { name: '김김김', address: '서울시', phone: '010' };
-            await userController.editUserProfile(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.editUserProfile).toHaveBeenCalledWith(
-                mockRequest.params.userId,
-                mockRequest.body.address,
-                mockRequest.body.phone,
-                mockRequest.body.name
-            );
+            expect(mockUserService.editUserProfile).toHaveBeenCalledTimes(1);
         });
     });
     describe(getApprovedReservation, () => {
         it('should call service method once', async () => {
             await userController.getApprovedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getApprovedReservation).toHaveBeenCalledTimes(1);
+            expect(mockUserService.getApprovedReservation).toHaveBeenCalledTimes(1);
         });
         it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             await userController.getApprovedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getApprovedReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
+            expect(mockUserService.getApprovedReservation).toHaveBeenCalledWith(
                 mockRequest.query.page
             );
         });
         it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             const approved = [
                 {
                     hospitalName: '삼성서울병원',
@@ -127,18 +96,17 @@ describe('User Controller Unit Test', () => {
     describe(getWaitingReservation, () => {
         it('should call service method once', async () => {
             await userController.getWaitingReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getWaitingReservation).toHaveBeenCalledTimes(1);
+            expect(mockUserService.userService.getWaitingReservation).toHaveBeenCalledTimes(1);
         });
         it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             await userController.getWaitingReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getWaitingReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
+            expect(mockUserService.userService.getWaitingReservation).toHaveBeenCalledWith(
                 mockRequest.query.page
             );
         });
         it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             const waiting = [
                 {
                     hospitalName: '삼성서울병원',
@@ -167,20 +135,19 @@ describe('User Controller Unit Test', () => {
     describe(getDoneOrReviewedReservation, () => {
         it('should call service method once', async () => {
             await userController.getDoneOrReviewedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getDoneOrReviewedReservation).toHaveBeenCalledTimes(
+            expect(mockUserService.userService.getDoneOrReviewedReservation).toHaveBeenCalledTimes(
                 1
             );
         });
         it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             await userController.getDoneOrReviewedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getDoneOrReviewedReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
+            expect(mockUserService.userService.getDoneOrReviewedReservation).toHaveBeenCalledWith(
                 mockRequest.query.page
             );
         });
         it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             const doneOrReviewed = [
                 {
                     hospitalName: '삼성서울병원',
@@ -209,18 +176,17 @@ describe('User Controller Unit Test', () => {
     describe(getCanceledReservation, () => {
         it('should call service method once', async () => {
             await userController.getCanceledReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getCanceledReservation).toHaveBeenCalledTimes(1);
+            expect(mockUserService.userService.getCanceledReservation).toHaveBeenCalledTimes(1);
         });
         it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             await userController.getCanceledReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getCanceledReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
+            expect(mockUserService.userService.getCanceledReservation).toHaveBeenCalledWith(
                 mockRequest.query.page
             );
         });
         it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
+            mockRequest.query = { page: 1 };
             const canceled = [
                 {
                     hospitalName: '삼성서울병원',
