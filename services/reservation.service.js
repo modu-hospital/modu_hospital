@@ -7,9 +7,9 @@ class ReservationService {
     createError = new CreateError();
 
     findReservationById = async (id) => {
-        const reservation = await this.reservationRepository.findReservationById(id)
-        return reservation
-    }
+        const reservation = await this.reservationRepository.findReservationById(id);
+        return reservation;
+    };
 
     cancelReservation = async (id) => {
         const reservation = await this.reservationRepository.findReservationById(id);
