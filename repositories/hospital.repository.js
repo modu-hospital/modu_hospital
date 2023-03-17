@@ -472,23 +472,6 @@ class HospitalRepository {
         } catch (err) {
             throw err
         }
-
-        // {
-        //     model: this.doctorModel,
-        //     as: 'doctors',
-        //     paranoid: false,
-        //     required: false,
-        //     where: {
-        //         deletedAt: { [Op.lt]: 1 },
-        //     },
-        //     attributes: ['name', 'image', 'contents'],
-        //     include: [
-        //         {
-        //             model: this.workingTimeModel,
-        //             as: 'workingTimes',
-        //             attributes: ['dayOfTheWeek', 'startTime', 'endTime'],
-        //         },
-
     }
 
 }

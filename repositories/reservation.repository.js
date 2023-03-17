@@ -4,7 +4,7 @@ class ReservationRepository {
         this.sequelize = sequelize;
     }
     findReservationById = async (id) => {
-        const reservation = await this.models.Reservation.findOne({ where: { id } });
+        const reservation = await this.models.Reservation.findByPk(id);
         return reservation;
     };
 
