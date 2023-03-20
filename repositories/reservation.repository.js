@@ -104,6 +104,33 @@ class ReservationRepository {
 
         return review;
     };
+
+    reservaionInputData = async (
+        doctorId,
+        userId,
+        relationship,
+        selfwrite,
+        name,
+        idnumber,
+        phone,
+        address,
+        reservationdate,
+        reservationtime
+    ) => {
+        const registerData = await this.models.Reservation.create({
+            doctorId: doctorId,
+            userId: userId,
+            relationship: relationship,
+            selfwrite: selfwrite,
+            name: name,
+            idnumber: idnumber,
+            phone: phone,
+            address: address,
+            reservationdate: reservationdate,
+            reservationtime: reservationtime,
+        });
+        return registerData;
+    };
 }
 
 module.exports = ReservationRepository;

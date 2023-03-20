@@ -55,6 +55,62 @@ class ReservationService {
         );
         return review;
     };
+
+    reservaionInputData = async (
+        doctorId,
+        userId,
+        relationship,
+        selfwrite,
+        name,
+        idnumber,
+        phone,
+        address,
+        reservationdate,
+        reservationtime
+    ) => {
+        console.log('if 이전:', relationship);
+        if (relationship === '본인') {
+            relationship = 1;
+        } else if (relationship === '직계') {
+            relationship = 2;
+        } else if (relationship === '배우자 및 배우자의 직계') {
+            relationship = 3;
+        } else if (relationship === '형제·자매') {
+            relationship = 4;
+        } else if (relationship === '기타') {
+            relationship = 5;
+        } else {
+            const err = await this.createError.notSelectRelationShip();
+            console.log(err);
+            throw err;
+        }
+        console.log('if 이후:', relationship);
+
+        const registerData = await this.reservationRepository.reservaionInputData(
+            doctorId,
+            userId,
+            relationship,
+            selfwrite,
+            name,
+            idnumber,
+            phone,
+            address,
+            reservationdate,
+            reservationtime
+        );
+
+        return {
+            relationship: registerData.relationship,
+            selfwrite: registerData.selfwrite,
+            name: registerData.name,
+            proxyname: registerData.proxyname,
+            idnumber: registerData.idnumber,
+            phone: registerData.phone,
+            address: registerData.address,
+            reservationdate: registerData.reservationdate,
+            reservationtim: registerData.reservationtim,
+        };
+    };
 }
 
 module.exports = ReservationService;

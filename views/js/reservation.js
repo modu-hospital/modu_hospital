@@ -384,7 +384,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                 if (i < 1) {
                     row = doctorTable.insertRow();
                     cell = row.insertCell();
-                    cell.setAttribute('id', `doc + ${doctorId}`);
+                    cell.setAttribute('id', `doc${doctorId}`);
                     cell.innerHTML = '담당의사 : ' + doctorName;
                     for (let j = 0; j < Object.keys(time).length; j++) {
                         if (Object.keys(time)[j].split(':')[1] * 1 === 0) {
@@ -416,11 +416,12 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             // 시간표 테이블의 클릭이벤트
                             cell.onclick = function () {
                                 cellTime = this.getAttribute('id');
-                                cellTime = cellTime.split('-')[0];
-                                doctorname = cellTime.split('-')[1];
-                                console.log(cellTime);
-                                cellTime = cellTime * 1;
-                                console.log('selected : ' + cellTime);
+                                reserveTime = cellTime.split('-')[0];
+                                doctorId = cellTime.split('-')[1];
+                                console.log(reserveTime);
+                                console.log(doctorId);
+                                reserveTime = reserveTime * 1;
+                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -430,20 +431,27 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 this.bgColor = '#fbedaa';
 
                                 //하단의 예약일시에 시간 표시
-                                if (cellTime - Math.floor(cellTime) === 0) {
-                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+                                if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
+                                    resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 } else {
                                     resTime =
-                                        Math.floor(cellTime) +
+                                        Math.floor(reserveTime) +
                                         ':30 ~ ' +
-                                        Math.floor(cellTime + 1) +
+                                        Math.floor(reserveTime + 1) +
                                         ':00';
 
+                                    resDoctor = doctorId;
+
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 }
                             };
                         } else {
@@ -471,11 +479,12 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                             cell.onclick = function () {
                                 cellTime = this.getAttribute('id');
-                                cellTime = cellTime.split('-')[0];
-                                doctorname = cellTime.split('-')[1];
-                                console.log(cellTime);
-                                cellTime = cellTime * 1;
-                                console.log('selected : ' + cellTime);
+                                reserveTime = cellTime.split('-')[0];
+                                doctorId = cellTime.split('-')[1];
+                                console.log(reserveTime);
+                                console.log(doctorId);
+                                reserveTime = reserveTime * 1;
+                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -485,20 +494,28 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 this.bgColor = '#fbedaa';
 
                                 //하단의 예약일시에 시간 표시
-                                if (cellTime - Math.floor(cellTime) === 0) {
-                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+                                if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
+
+                                    resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 } else {
                                     resTime =
-                                        Math.floor(cellTime) +
+                                        Math.floor(reserveTime) +
                                         ':30 ~ ' +
-                                        Math.floor(cellTime + 1) +
+                                        Math.floor(reserveTime + 1) +
                                         ':00';
 
+                                    resDoctor = doctorId;
+
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 }
                             };
                         }
@@ -508,7 +525,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                     // i 가 1씩 증가할때마다 테이블이 옆으로 붙어야함
                     row = doctorTable.insertRow();
                     cell = doctorTable.rows[0].insertCell(-1);
-                    cell.setAttribute('id', `doc + ${doctorId}`);
+                    cell.setAttribute('id', `doc${doctorId}`);
                     cell.innerHTML = '담당의사 : ' + doctorName;
                     // 열 추가 되는 부분
                     for (let j = 0; j < Object.keys(time).length; j++) {
@@ -543,11 +560,12 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             // 시간표 테이블의 클릭이벤트
                             cell.onclick = function () {
                                 cellTime = this.getAttribute('id');
-                                cellTime = cellTime.split('-')[0];
-                                doctorname = cellTime.split('-')[1];
-                                console.log(cellTime);
-                                cellTime = cellTime * 1;
-                                console.log('selected : ' + cellTime);
+                                reserveTime = cellTime.split('-')[0];
+                                doctorId = cellTime.split('-')[1];
+                                console.log(reserveTime);
+                                console.log(doctorId);
+                                reserveTime = reserveTime * 1;
+                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -557,20 +575,28 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 this.bgColor = '#fbedaa';
 
                                 //하단의 예약일시에 시간 표시
-                                if (cellTime - Math.floor(cellTime) === 0) {
-                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+                                if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
+
+                                    resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 } else {
                                     resTime =
-                                        Math.floor(cellTime) +
+                                        Math.floor(reserveTime) +
                                         ':30 ~ ' +
-                                        Math.floor(cellTime + 1) +
+                                        Math.floor(reserveTime + 1) +
                                         ':00';
 
+                                    resDoctor = doctorId;
+
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 }
                             };
                         } else {
@@ -599,11 +625,12 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                             cell.onclick = function () {
                                 cellTime = this.getAttribute('id');
-                                cellTime = cellTime.split('-')[0];
-                                doctorname = cellTime.split('-')[1];
-                                console.log(cellTime);
-                                cellTime = cellTime * 1;
-                                console.log('selected : ' + cellTime);
+                                reserveTime = cellTime.split('-')[0];
+                                doctorId = reserveTime.split('-')[1];
+                                console.log(reserveTime);
+                                console.log(doctorId);
+                                reserveTime = reserveTime * 1;
+                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -613,20 +640,29 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 this.bgColor = '#fbedaa';
 
                                 //하단의 예약일시에 시간 표시
-                                if (cellTime - Math.floor(cellTime) === 0) {
-                                    resTime = cellTime + ':00 ~ ' + cellTime + ':30';
+                                if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
+
+                                    resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 } else {
                                     resTime =
-                                        Math.floor(cellTime) +
+                                        Math.floor(reserveTime) +
                                         ':30 ~ ' +
-                                        Math.floor(cellTime + 1) +
+                                        Math.floor(reserveTime + 1) +
                                         ':00';
 
+                                    resDoctor = doctorId;
+
                                     resTimeForm = document.getElementById('selectedTime');
+                                    resDoctorForm = document.getElementById('selectedDoctor');
+                                    console.log(resDoctorForm);
                                     resTimeForm.value = resTime;
+                                    resDoctorForm.value = resDoctor;
                                 }
                             };
                         }
@@ -649,8 +685,10 @@ function tableinit() {
 function selectedTimeInit() {
     resDateForm = document.getElementById('selectedDate');
     resTimeForm = document.getElementById('selectedTime');
+    resDoctorForm = document.getElementById('selectedDoctor');
     resTimeForm.value = '';
     resDateForm.value = '';
+    resDoctorForm.value = '';
 
     selectedFirstTime = 24 * 1;
     selectedFinalTime = 0 * 1;
@@ -690,10 +728,12 @@ function submitRes() {
     let background = document.getElementById('background');
     const outputDate = $('#selectedDate').val();
     const outputTime = $('#selectedTime').val();
+    const outputDortor = $('#selectedDoctor').val();
 
     if (outputTime.length > 0) {
         $('input[name=reservationSelectedDate]').attr('value', outputDate);
         $('input[name=reservationSelectedTime]').attr('value', outputTime);
+        $('input[name=pickUpDoctor]').attr('value', outputDortor);
 
         background.remove();
         mymodal.style.display = 'none';
@@ -945,6 +985,7 @@ function inputData() {
 }
 
 function reservaionCheck() {
+    const pickupdoctor = $('#pickUpDoctor').val();
     const relationship = $('#relationCategory').val();
     const selfwrite = $('#selfWrite').val();
     const name = $('#patientName').val();
@@ -956,6 +997,7 @@ function reservaionCheck() {
     const reservationtime = $('#reservationSelectedTime').val();
 
     console.log(
+        pickupdoctor,
         relationship,
         selfwrite,
         name,
@@ -966,10 +1008,9 @@ function reservaionCheck() {
         reservationdate,
         reservationtime
     );
-
     $.ajax({
         type: 'POST',
-        url: '/api/reservation',
+        url: `/api/users/reservation/${pickupdoctor}`,
         data: {
             relationship: relationship,
             selfwrite: selfwrite,
@@ -981,11 +1022,11 @@ function reservaionCheck() {
             reservationtime: reservationtime,
         },
         success: function (response) {
-            location.href = 'http://localhost:3000/users/reservation';
+            location.href = '/users/reservation';
             alert('예약신청이 완료되었습니다.');
         },
         error: function (error) {
-            alert(error.responseJSON.errorMessage);
+            console.log(error);
         },
     });
 }

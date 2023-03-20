@@ -316,6 +316,52 @@ class UserController {
             next(err);
         }
     };
+
+    reservaionInput = async (req, res, next) => {
+        try {
+            const { doctorId } = req.params;
+            const { userId } = res.locals.user;
+            const {
+                relationship,
+                selfwrite,
+                name,
+                idnumber,
+                phone,
+                address,
+                reservationdate,
+                reservationtime,
+            } = req.body;
+            console.log(
+                doctorId,
+                userId,
+                relationship,
+                selfwrite,
+                name,
+                idnumber,
+                phone,
+                address,
+                reservationdate,
+                reservationtime
+            );
+
+            const reservaionInputData = await this.reservationService.reservaionInputData(
+                doctorId,
+                userId,
+                relationship,
+                selfwrite,
+                name,
+                idnumber,
+                phone,
+                address,
+                reservationdate,
+                reservationtime
+            );
+
+            res.status(201).json({ result: 'success', data: reservaionInputData });
+        } catch (err) {
+            next(err);
+        }
+    };
 }
 
 module.exports = UserController;
