@@ -65,7 +65,8 @@ router.get('/doctorEdit', (req, res) => {
 });
 
 //병원상세페이지
-router.get('/hospital/:hospitalId', (req, res) => {
+router.get('/:hospitalId', (req, res) => {
+    const id = req.query.id;
     res.render('index.ejs', { components: 'hospitaldetail' });
 });
 
