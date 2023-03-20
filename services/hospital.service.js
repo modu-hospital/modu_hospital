@@ -40,17 +40,12 @@ class HospitalService {
 
     findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
-            const longitude = [];
-            const latitude = [];
-            longitude.push(leftLongitude, rightLongitude);
-            latitude.push(rightLatitude, leftLatitude);
-            longitude.sort((a, b) => {
-                return a - b;
-            });
-            latitude.sort((a, b) => {
-                return a - b;
-            });
-            const hospitals = await this.hospitalRepository.findNearHospitals(longitude, latitude);
+            const hospitals = await this.hospitalRepository.findNearHospitals(
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
+            );
 
             return hospitals;
         } catch (err) {
@@ -60,23 +55,11 @@ class HospitalService {
 
     findNearHospitalsInfo = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
-            const longitude = [];
-            const latitude = [];
-
-            longitude.push(leftLongitude, rightLongitude);
-
-            latitude.push(rightLatitude, leftLatitude);
-
-            longitude.sort((a, b) => {
-                return a - b;
-            });
-
-            latitude.sort((a, b) => {
-                return a - b;
-            });
             const hospitals = await this.hospitalRepository.findNearHospitalsInfo(
-                longitude,
-                latitude
+                rightLongitude,
+                rightLatitude,
+                leftLongitude,
+                leftLatitude
             );
 
             // return hospitals
@@ -103,8 +86,6 @@ class HospitalService {
             if (!hospital) {
                 return {};
             }
-
-            // return hospital
 
             const doctors = hospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
