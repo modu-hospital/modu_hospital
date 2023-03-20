@@ -105,3 +105,33 @@ form.addEventListener('submit', async (e) => {
     
 </script>
 
+<!-- function createProfileCards(data) {
+    var container = document.getElementById("cards-container");
+    for (let i = 0; i < data.length; i++) {
+        var card = document.createElement("div");
+        card.className = "profile-card";
+        var image = document.createElement("img");
+        image.src = data[i].image;
+        image.alt = "프로필 사진";
+        var name = document.createElement("h1");
+        name.textContent = data[i].name;
+        var contents = document.createElement("p");
+        contents.textContent = data[i].contents;
+        var editButton = document.createElement("button");
+        editButton.textContent = "수정 하기";
+        editButton.onclick = function() {                   
+            location.href = `/doctorEdit/?doctorId=${data[i].doctorId}`
+        };
+var createButton = document.createElement("button");
+createButton.textContent = "시간 등록";
+createButton.onclick = function(){
+  location.href = `/doctorTime/?doctorId=${data[i].doctorId}`
+}
+        card.appendChild(image);
+        card.appendChild(name);
+        card.appendChild(contents);
+        card.appendChild(editButton);
+card.appendChild(createButton);
+        container.appendChild(card);
+    } -->
+

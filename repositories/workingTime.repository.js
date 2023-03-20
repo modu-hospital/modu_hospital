@@ -23,7 +23,7 @@ class WorkingtimeRepository {
     };
 
     findWorkingDateByYMDW = async (selectedYMD, week) => {
-        const query = `SELECT h.name AS HospitalName, d.name AS doctorName, DATE_FORMAT(wt.startTime, '%H:%i') AS startTime, DATE_FORMAT(wt.endTime, '%H:%i') AS endTime, DATE_FORMAT(wt.startDate  , '%Y-%m-%d') AS startDate, DATE_FORMAT(wt.endDate  , '%Y-%m-%d') AS endDate FROM hospitals AS h
+        const query = `SELECT h.name AS HospitalName, d.doctorId AS doctorId, d.name AS doctorName, DATE_FORMAT(wt.startTime, '%H:%i') AS startTime, DATE_FORMAT(wt.endTime, '%H:%i') AS endTime, DATE_FORMAT(wt.startDate  , '%Y-%m-%d') AS startDate, DATE_FORMAT(wt.endDate  , '%Y-%m-%d') AS endDate FROM hospitals AS h
         INNER JOIN doctors AS d on h.hospitalId = d.hospitalId
         INNER JOIN workingTimes AS wt on d.doctorId = wt.doctorId
         WHERE h.hospitalId = 3 AND wt.dayOfTheWeek = ${week} AND DATE_FORMAT(wt.endDate  , '%Y%m%d') > ${selectedYMD} AND ${selectedYMD} > DATE_FORMAT(wt.startDate  , '%Y%m%d')
