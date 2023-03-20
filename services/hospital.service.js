@@ -471,6 +471,7 @@ class HospitalService {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
             const reviews = await this.hospitalRepository.findReview(id)
             // console.log("reviews", reviews)
+            console.log(oneHospital)
             
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
