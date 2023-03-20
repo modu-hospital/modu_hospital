@@ -15,7 +15,13 @@ class CategoryRepository {
         this.hospitalImageFileModel = HospitalImageFileModel;
     }
 
-    findHospitalsThatFitsDepartment = async (department, longitude, latitude) => {
+    findHospitalsThatFitsDepartment = async (
+        department,
+        rightLongitude,
+        rightLatitude,
+        leftLongitude,
+        leftLatitude
+    ) => {
         return await this.categoryModel.findOne({
             where: { department },
             include: [
@@ -39,8 +45,18 @@ class CategoryRepository {
                                     as: 'hospitals',
                                     where: {
                                         deletedAt: { [Op.lt]: 1 },
-                                        longitude: { [Op.between]: longitude },
-                                        latitude: { [Op.between]: latitude },
+                                        longitude: {
+                                            [Op.and]: [
+                                                { [Op.gte]: leftLongitude },
+                                                { [Op.lte]: rightLongitude },
+                                            ],
+                                        },
+                                        latitude: {
+                                            [Op.and]: [
+                                                { [Op.gte]: leftLatitude },
+                                                { [Op.lte]: rightLatitude },
+                                            ],
+                                        },
                                     },
                                     required: false,
                                     include: [
