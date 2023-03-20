@@ -450,10 +450,13 @@ class HospitalRepository {
                     },
                 ],
             });
+            
         } catch (err) {
             throw err;
         }
     };
+    
+    
 
     //병원별 리뷰조회
     findReview = async(hospitalId) => {
