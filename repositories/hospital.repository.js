@@ -343,12 +343,16 @@ class HospitalRepository {
     };
 
     // 화면 위치 기준 병원 찾기
-    findNearHospitals = async (longitude, latitude) => {
+    findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const hospitals = await this.hospitalModel.findAll({
                 where: {
-                    longitude: { [Op.between]: longitude },
-                    latitude: { [Op.between]: latitude },
+                    longitude: {
+                        [Op.and]: [{ [Op.gte]: leftLongitude }, { [Op.lte]: rightLongitude }],
+                    },
+                    latitude: {
+                        [Op.and]: [{ [Op.gte]: leftLatitude }, { [Op.lte]: rightLatitude }],
+                    },
                 },
                 attributes: ['hospitalId', 'address'],
             });
@@ -359,12 +363,16 @@ class HospitalRepository {
     };
 
     // 화면 위치 기준 병원 정보
-    findNearHospitalsInfo = async (longitude, latitude) => {
+    findNearHospitalsInfo = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const hospitals = await this.hospitalModel.findAll({
                 where: {
-                    longitude: { [Op.between]: longitude },
-                    latitude: { [Op.between]: latitude },
+                    longitude: {
+                        [Op.and]: [{ [Op.gte]: leftLongitude }, { [Op.lte]: rightLongitude }],
+                    },
+                    latitude: {
+                        [Op.and]: [{ [Op.gte]: leftLatitude }, { [Op.lte]: rightLatitude }],
+                    },
                 },
                 attributes: ['hospitalId', 'name', 'address', 'phone'],
                 include: [{ model: this.hospitalImageFileModel, as: 'hospitalImageFiles' }],
@@ -411,7 +419,6 @@ class HospitalRepository {
         }
     };
 
-    //map에서 병원을 클릭하면 나오는
     //hospitalId 값에 해당하는 병원 상세 정보
     getHospitalInfo = async (id) => {
         try {
@@ -421,17 +428,6 @@ class HospitalRepository {
                         model: this.hospitalImageFileModel,
                         as: 'hospitalImageFiles',
                     },
-                    // {
-                    //     model: this.reviewsModel,
-                    //     as:'reviews',
-                    //     include: [
-                    //         {
-                    //             model: this.userModel,
-                    //             as: 'users',
-                    //             attributes:['loginId']
-                    //         }
-                    //     ]
-                    // },
                     {
                         model: this.doctorModel,
                         as: 'doctors',
@@ -462,15 +458,33 @@ class HospitalRepository {
                     },
                 ],
             });
+            
         } catch (err) {
             throw err;
         }
     };
-    // hospitalId로 해당 병원하나 찝어서 => userId, name , address, phone 가져오기 ㅇ
+    
+    
 
-    // hospitalId로 역인 hospitalImageFile 테이블 (hospitalId) 에서 => url, 가져오기 ㅇ
+    //병원별 리뷰조회
+    findReview = async(hospitalId) => {
+        try {
+            return await this.reviewsModel.findAll({
+                where:{hospitalId}, 
+                // attributes:['star', 'contents', 'createdAt'],
+                include: [
+                    {
+                        model: this.userModel,
+                        as: 'users',
+                    }
+                ]
+            })
 
-    // hospitalId로 역인 reviews테이블 (hospitalsId)에서 => star, contents 가져오기 ㅇ
+        } catch (err) {
+            throw err
+        }
+    }
+
 }
 
 module.exports = HospitalRepository;
