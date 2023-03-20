@@ -322,7 +322,7 @@ class HospitalController {
 
         const oneHospital = await this.hospitalService.getOneHospital(id);
 
-        res.json(oneHospital);
+        res.json({oneHospital});
     };
 }
 

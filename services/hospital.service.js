@@ -468,13 +468,44 @@ class HospitalService {
 
     getOneHospital = async (id) => {
         try {
-            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
+            const reviews = await this.hospitalRepository.findReview(id)
+            // console.log("reviews", reviews)
+            
+            const url = [];
+            for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
+                const data = {
+                    url: oneHospital.hospitalImageFiles[i].url,
+                };
+                url.push(data);
+            }
+
+            // 이름이 안 찍힘
+            const reviewStarContents = []
+            for (let i = 0; i < reviews.length; i++) {
+
+                // const name = []
+                // for (let j = 0; j < reviews.users; i++) {
+                //     const data = {
+                //         name: reviews[i].users[j].name,
+                //     };
+                //     url.push(data);
+                // }
+
+                const data = {
+                    userId: reviews[i].userId,
+                    star: reviews[i].star,
+                    contents: reviews[i].contents,
+                    name: reviews[i].users,
+                    createdAt: reviews[i].createdAt
+                };
+                reviewStarContents.push(data);
+            }
+
             if (!oneHospital) {
                 return {};
             }
 
-            //리뷰는 따로 가져와서 프론트에, workingTime
-            //workingTime은 따로 가져와야되는지
             const doctors = oneHospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
                     return category.categories.department;
@@ -503,9 +534,10 @@ class HospitalService {
                 hospitalName: oneHospital.name,
                 hospitalAddress: oneHospital.address,
                 hospitalphone: oneHospital.phone,
-                hospitalImage: !oneHospital.hospitalImageFiles[0]
+                hospitalImage: !url
                     ? '이미지 준비중'
-                    : oneHospital.hospitalImageFiles[0].url,
+                    : url,
+                reviews: reviewStarContents,
                 doctors,
             };
         } catch (err) {

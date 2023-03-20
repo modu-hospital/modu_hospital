@@ -7,6 +7,7 @@ class TokenController {
     tokenService = new TokenService();
     validation = new Validation();
 
+    // 프론트 로그인에 토큰 api 연결하기 전까지 주석 유지:)
     // 리프레시 토큰이 만료가 되면 로그아웃
     // refreshToken이 살아있고 accessToken만 만료시 api로 엑세스 토큰 새로만드는 기능
     // 미드웨어에서는 검증할때만
@@ -39,12 +40,12 @@ class TokenController {
 
         console.log('컨트롤러', refreshToken);
         const user = await this.tokenService.findUserId(userId);
+        console.log(user)
 
         console.log(user.loginId);
 
         const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
         console.log(refreshTokenVerify);
-
         if (refreshTokenVerify) {
             const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '10',
@@ -56,34 +57,6 @@ class TokenController {
             res.send('로그인 다시 하세요');
         }
 
-        //refreshToken verify
-        // jwt.verify(refreshToken, JWT_SECRET_KEY, function(err, decoded) {
-        //     const {loginId} = decoded
-        //     console.log("loginId", loginId)
-
-        //     const newAccessToken = jwt.sign({loginId: user.loginId}, process.env.JWT_SECRET_KEY)
-
-        //     return newAccessToken
-        // })
-
-        //loginId를 어디서 가져올까
-
-        // refresh verify 만
-
-        // const newAccessToken = jwt.sign({loginId: user.loginId}, process.env.JWT_SECRET_KEY)
-        //auth 에서 refreshToken이 만료되거나 없으면 로그인 다시하게끔 해줌 근데 auth 안 거칠거
-        //
-
-        // const newAccessToken = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, (err, decode) => {
-        //     //refreshToken으로 verify 한게 왜 newAccessToken..?..
-        //     if(err) {
-        //         res.send("로그인 다시 하세요")
-        //     } else {
-        //         const newAccessToken = jwt.sign({loginId: user.loginId}, process.env.JWT_SECRET_KEY)
-        //         //재발급할때 그냥 refreshToken으로 재발급하는지
-        //         res.send(newAccessToken)
-        //     }
-        // })
         res.status(200).json({ message: 'newAccessToken 발급 성공' });
     };
 }

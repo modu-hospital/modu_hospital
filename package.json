@@ -4,7 +4,7 @@
   "description": "--- ## Description 내 주변 병원들을 손쉽게 찾을 수 있을 뿐만 아니라 리뷰를 통해 해당병원이 자신과 맞는지 알아볼 수 있는 플랫폼",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles",
     "test:watch":"jest --watch",
     "test:cov":"jest --coverage",
     "start": "nodemon app",
