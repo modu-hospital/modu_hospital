@@ -239,9 +239,9 @@
 <script>
   $(document).ready(function () {
     reservationList();
-    // waitedreservationList();
-    // approvedreservationList();
-    // reviewList();
+    waitedreservationList();
+    approvedreservationList();
+    reviewList();
   });
 
 
@@ -327,6 +327,7 @@
             },
             success: function (response) {
               // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
+              window.location.href = "/hospital"
             },
             error: function (xhr, status, error) {
               // 에러가 발생했을 때 실행할 코드를 작성합니다.
@@ -431,7 +432,7 @@
             },
             success: function (response) {
               // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
-              alert(xhr.responseJSON.message);
+              window.location.href = "/hospital"
             },
             error: function (xhr, status, error) {
               // 에러가 발생했을 때 실행할 코드를 작성합니다.
@@ -529,6 +530,7 @@
             },
             success: function (response) {
               // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
+              window.location.href = "/hospital"
             },
             error: function (xhr, status, error) {
               // 실패 시 알림 메시지 출력
@@ -671,5 +673,5 @@
   }
 
   // 페이지 로드 시 카드를 로드하는 함수 호출
-  // loadProfileCards();
+  loadProfileCards();
 </script>

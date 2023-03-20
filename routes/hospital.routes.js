@@ -34,7 +34,7 @@ router.post(
 
 //병원 정보 수정
 router.put(
-    '/register/edit',
+    '/register/edit', auth,
     hospitalController.findHospitalLocation,
     hospitalController.registerEditHospital
 );

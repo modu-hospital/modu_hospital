@@ -208,6 +208,12 @@ class HospitalService {
                 const err = this.createError.roleNotAllow();
                 throw err;
             }
+            const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
+            console.log("#########안나",findOneHospital.hospitalId)
+            if (findOneHospital.length === true) {
+                const err = this.createError.hospitalIsExisted();
+                throw err;
+            }
             const registalHospitalData = await this.hospitalRepository.registerHospital(
                 userId,
                 name,
