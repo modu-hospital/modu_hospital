@@ -131,10 +131,10 @@
   <button id="listBtn" type="menu"></button>
 </div>
 <script type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc"></script>
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c"></script>
 <script type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services,clusterer,drawing"></script>
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c&libraries=services,clusterer,drawing"></script>
 <script>
   window.onload = function () {
     load()
@@ -208,7 +208,7 @@
 
 
       let data = getData(map)
-      fetch(`http://localhost:3000/api/hospitals/around`, {
+      fetch(`/api/hospitals/around`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -309,7 +309,7 @@
 
 
       let data = getData(map)
-      fetch(`http://localhost:3000/api/hospitals/around`, {
+      fetch(`/api/hospitals/around`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -345,7 +345,7 @@
           }
         })
 
-      fetch(`http://localhost:3000/api/hospitals/around/info`, {
+      fetch(`/api/hospitals/around/info`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -438,7 +438,7 @@
 
       const data = getData(map)
 
-      fetch(`http://localhost:3000/api/hospitals/around/info`, {
+      fetch(`/api/hospitals/around/info`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -474,7 +474,7 @@
   function fetchData(map, geocoder) {
     const data = getData(map)
     globalMarker.map(marker => marker.setMap(null))
-    fetch(`http://localhost:3000/api/hospitals/around`, {
+    fetch(`/api/hospitals/around`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -492,7 +492,7 @@
 
           const data = getData(map)
 
-          fetch(`http://localhost:3000/api/hospitals/around/info`, {
+          fetch(`/api/hospitals/around/info`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -554,7 +554,7 @@
 
           const data = getData(map)
 
-          fetch(`http://localhost:3000/api/hospitals/around/info`, {
+          fetch(`/api/hospitals/around/info`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -621,7 +621,7 @@
 
           const coordinate = getData(map)
 
-          fetch(`http://localhost:3000/api/hospitals/around/info`, {
+          fetch(`/api/hospitals/around/info`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -688,7 +688,7 @@
       // 마커 위에 인포윈도우를 표시합니다
       const id = marker.id
       document.getElementById("menuIcon").checked = true;
-      fetch(`http://localhost:3000/api/hospitals/info/${id}`)
+      fetch(`/api/hospitals/info/${id}`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById('list').innerHTML = ``
@@ -740,7 +740,7 @@
       const department = clickBtn()
       data.department = department
 
-      fetch(`http://localhost:3000/api/categories/search`, {
+      fetch(`/api/categories/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -799,7 +799,7 @@
 
 
 
-      fetch(`http://localhost:3000/api/categories/search`, {
+      fetch(`/api/categories/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -819,7 +819,7 @@
             const department = clickBtn()
             data.department = department
 
-            fetch(`http://localhost:3000/api/categories/search`, {
+            fetch(`/api/categories/search`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -879,7 +879,7 @@
             const department = clickBtn()
             data.department = department
 
-            fetch(`http://localhost:3000/api/categories/search`, {
+            fetch(`/api/categories/search`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
