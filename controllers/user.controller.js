@@ -74,7 +74,6 @@ class UserController {
         try {
             const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY)
                 .userId;
-                console.log('aaaaaaaa')
             const userProfile = await this.userService.getUserProfile(userId);
             return res.status(200).json(userProfile);
         } catch (err) {
@@ -180,6 +179,7 @@ class UserController {
                 process.env.JWT_SECRET_KEY
             );
             const reservation = await this.reservationService.findReservationById(reservationId);
+            console.log(reservation.userId != accessToken.userId)
             if (reservation.userId != accessToken.userId) {
                 throw this.createError.notAuthorized();
             }
@@ -310,7 +310,7 @@ class UserController {
                 confirm,
                 token
             );
-            return res.status(200).json({ message: '비밀번호 재설정이 완료되었습니다.' });
+            return res.status(201).json({ message: '비밀번호 재설정이 완료되었습니다.' });
         } catch (err) {
             next(err);
         }
@@ -326,12 +326,12 @@ class UserController {
     };
     editUserPassword = async (req, res, next) => {
         try {
-            const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY);
+            const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY).userId;
             const { password, confirm } = await this.validation.editUserPassword.validateAsync(
                 req.body
             );
             await this.userService.editPassword(userId, password, confirm);
-            return res.status(200).json({ message: '비밀번호 변경이 완료되었습니다' });
+            return res.status(201).json({ message: '비밀번호 변경이 완료되었습니다' });
         } catch (err) {
             next(err);
         }
