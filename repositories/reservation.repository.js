@@ -1,4 +1,4 @@
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 
 class ReservationRepository {
     constructor(sequelize) {
@@ -27,7 +27,14 @@ class ReservationRepository {
                     model: this.models.Doctor,
                     as: 'doctors',
                     attributes: [],
-                    include: [{ paranoid: false,model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                    include: [
+                        {
+                            paranoid: false,
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            attributes: [],
+                        },
+                    ],
                 },
             ],
             where: { userId, status: 'approved' },
@@ -54,7 +61,14 @@ class ReservationRepository {
                     model: this.models.Doctor,
                     as: 'doctors',
                     attributes: [],
-                    include: [{ paranoid: false,model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                    include: [
+                        {
+                            paranoid: false,
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            attributes: [],
+                        },
+                    ],
                 },
             ],
             where: { userId, status: 'waiting' },
@@ -81,25 +95,29 @@ class ReservationRepository {
                     model: this.models.Doctor,
                     as: 'doctors',
                     attributes: [],
-                    include: [{paranoid: false, model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                    include: [
+                        {
+                            paranoid: false,
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            attributes: [],
+                        },
+                    ],
                 },
             ],
             where: {
                 userId: userId,
-                [Op.or]: [
-                  { status: 'done' },
-                  { status: 'reviewed' },
-                ],
-              },
+                [Op.or]: [{ status: 'done' }, { status: 'reviewed' }],
+            },
             order: [['date', 'DESC']],
             limit: reservationsPerPage,
             offset: reservationsPerPage * (page - 1),
         });
-        return doneOrReviewed
+        return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
         const reservationsPerPage = 3;
-        const doneOrReviewed =await this.models.Reservation.findAll({
+        const doneOrReviewed = await this.models.Reservation.findAll({
             attributes: [
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
@@ -114,7 +132,14 @@ class ReservationRepository {
                     model: this.models.Doctor,
                     as: 'doctors',
                     attributes: [],
-                    include: [{paranoid: false, model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                    include: [
+                        {
+                            paranoid: false,
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            attributes: [],
+                        },
+                    ],
                 },
             ],
             where: { userId, status: 'canceled' },
