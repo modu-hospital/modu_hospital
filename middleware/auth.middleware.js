@@ -92,7 +92,6 @@ const authMiddleware = async (req, res, next) => {
 
     //현재로그인이 된 아이디 값과 refreshToken에 들어있는 아이디 값은 refreshToken
     const { userId } = accessTokenValidate;
-    console.log(accessTokenValidate);
 
     const user = await User.findByPk(userId);
 
