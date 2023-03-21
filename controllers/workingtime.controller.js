@@ -16,38 +16,6 @@ class WorkingtimeController {
         );
         return res.status(200).json(findWorkingDate);
     };
-
-    reservaionInput = async (req, res, next) => {
-        try {
-            const {
-                relationship,
-                selfwrite,
-                name,
-                proxyname,
-                idnumber,
-                phone,
-                address,
-                reservationdate,
-                reservationtime,
-            } = req.body;
-
-            const reservaionInputData = await this.workingtimeService.reservaionInputData(
-                relationship,
-                selfwrite,
-                name,
-                proxyname,
-                idnumber,
-                phone,
-                address,
-                reservationdate,
-                reservationtime
-            );
-
-            res.status(201).json({ result: 'success', data: reservaionInputData });
-        } catch (err) {
-            console.error(err);
-        }
-    };
 }
 
 module.exports = WorkingtimeController;
