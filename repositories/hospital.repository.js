@@ -392,11 +392,7 @@ class HospitalRepository {
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        paranoid: false,
                         required: false,
-                        where: {
-                            deletedAt: { [Op.lt]: 1 },
-                        },
                         attributes: ['name', 'image'],
                         include: [
                             {

@@ -203,6 +203,10 @@ li:last-child {
   justify-content: space-between;
 }
 
+.doctorImg {
+  margin-left: 10px;
+}
+
 .info {
   width: 380px;
   margin-left: 10px;
