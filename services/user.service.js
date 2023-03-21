@@ -75,6 +75,8 @@ class UserService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+        const encryptIdNumber = cryptor.encrypt(idNumber, TWO_WAY_ENCRYPTION)
+        const decrytIdNumber = crypter.decrypt(encryptIdNumber, TWO_WAY_ENCRYPTION);
 
         // 추가 고민
         // const hashedIdNumber = await bcrypt.hash(password, 12);
@@ -84,7 +86,7 @@ class UserService {
             loginId,
             hashedPassword,
             phone,
-            idNumber,
+            encryptIdNumber,
             role
         );
 
