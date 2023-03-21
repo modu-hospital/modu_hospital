@@ -23,30 +23,18 @@ class CategoryService {
         leftLongitude,
         leftLatitude
     ) => {
-        const longitude = [];
-        const latitude = [];
-        longitude.push(leftLongitude, rightLongitude);
-        latitude.push(rightLatitude, leftLatitude);
-        longitude.sort((a, b) => {
-            return a - b;
-        });
-        latitude.sort((a, b) => {
-            return a - b;
-        });
-
         const hospitals = await Promise.all(
             departments.split(',').map(async (department) => {
                 return await this.categoryRepository.findHospitalsThatFitsDepartment(
                     department,
-                    longitude,
-                    latitude
+                    rightLongitude,
+                    rightLatitude,
+                    leftLongitude,
+                    leftLatitude
                 );
             })
         );
 
-        // return hospitals;
-
-        // 아직 등록되지 않은 진료과목 선택 시
         const empty = hospitals.filter((hospital) => !hospital);
         if (empty.length > 0) {
             return [];
@@ -58,8 +46,6 @@ class CategoryService {
                 if (!department.categoriesMapping[i].doctors.hospitals) {
                     return;
                 }
-
-                // console.log(department.categoriesMapping[i].doctors.hospitals.hospitalImageFiles[0].url)
 
                 if (department.categoriesMapping[i].doctors.hospitals) {
                     let data = {
