@@ -471,7 +471,7 @@ class HospitalService {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
             const reviews = await this.hospitalRepository.findReview(id)
             // console.log("reviews", reviews)
-            console.log(oneHospital)
+            console.log("oneHospital", oneHospital.doctors)
             
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
@@ -530,6 +530,8 @@ class HospitalService {
                     workTime: workTime,
                 };
             });
+
+            console.log("doctors", doctors)
             return {
                 hospitalId: oneHospital.hospitalId,
                 hospitalName: oneHospital.name,

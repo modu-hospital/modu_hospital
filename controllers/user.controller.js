@@ -198,7 +198,7 @@ class UserController {
                 idNumber,
                 role
             );
-            res.json(user);
+            return res.json(user);
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -206,11 +206,13 @@ class UserController {
             res.status(500).json({ message: err.message });
         }
     };
+    
     customerSignup = async (req, res) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
+           
             const user = await this.userService.signup(
                 name,
                 loginId,
@@ -219,7 +221,7 @@ class UserController {
                 idNumber,
                 role
             );
-            res.json(user);
+            return res.json(user);
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -233,32 +235,29 @@ class UserController {
             const { loginId, password } = req.body;
             const user = await this.userService.login(loginId, password);
 
-            if (!user) {
-                res.status(412).json({ message: err.message });
-            } else {
-                const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '1h',
-                });
+            const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
+                expiresIn: '1h',
+            });
 
-                const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '7d',
-                });
+            const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+                expiresIn: '7d',
+            });
 
-                res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
-                res.cookie('refreshToken', refreshToken);
+            res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
+            res.cookie('refreshToken', refreshToken);
 
-                const save = await this.userService.saveToken(user.userId, refreshToken);
+            const save = await this.userService.saveToken(user.userId, refreshToken);
 
-                res.status(200).json({ accessToken, refreshToken, save });
-            }
+            return res.status(200).json({ accessToken, refreshToken, save });
         } catch (err) {
             next(err);
         }
     };
 
     logout = async (req, res) => {
-        res.clearCookie(); //res.cookie('accessToken', '')
-        return res.status(200).json({ message: '로그아웃 되었습니다.' });
+        res.clearCookie('accessToken'); //res.cookie('accessToken', '')
+        res.clearCookie('refreshToken')
+        return res.status(200).json({ message: '로그아웃 되었습니다.' });        
     };
 
     // sendEmailForCertification = async (req,res,next) => {
