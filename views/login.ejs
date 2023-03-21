@@ -25,21 +25,20 @@
                 <p><a href="/signup">계정이 없으신가요?</a></p>
             </div>
         </form>
-        <script>
-            document.getElementById('login').addEventListener('click', (event) => {
-                event.preventDefault();
+<script>
+    document.getElementById('login').addEventListener('click', (event) => {
+        event.preventDefault();
 
-                const data = {
-                    loginId: document.getElementById('loginId').value,
-                    password: document.getElementById('password').value,
-                };
+        const data = {
+            loginId: document.getElementById('loginId').value,
+            password: document.getElementById('password').value,
+        };
 
-    fetch("/api/users/login", {
+        fetch("/api/users/login", {
         credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-
             },
             body: JSON.stringify(data), //
         })
@@ -60,13 +59,11 @@
             // }
             location.href = '/';
         })
-
-
-                    .catch((err) => {
-                        alert(err.message);
-                        window.location.reload();
-                    });
-            });
-        </script>
+        .catch((err) => {
+            alert(err.message);
+            window.location.reload();
+        });
+    });
+</script>
     </body>
 </html>
