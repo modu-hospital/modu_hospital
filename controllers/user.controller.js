@@ -74,7 +74,7 @@ class UserController {
         try {
             const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY)
                 .userId;
-                console.log('aaaaaaaa')
+            console.log('aaaaaaaa');
             const userProfile = await this.userService.getUserProfile(userId);
             return res.status(200).json(userProfile);
         } catch (err) {
@@ -245,7 +245,6 @@ class UserController {
         try {
             const { loginId, password } = req.body;
             const user = await this.userService.login(loginId, password);
-
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '1h',
