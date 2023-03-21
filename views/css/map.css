@@ -215,7 +215,7 @@ li:last-child {
 }
 
 .division {
-  margin-top: 50px;
+  margin-top: 5vh;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
