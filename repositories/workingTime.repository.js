@@ -1,12 +1,20 @@
 const { Op } = require('sequelize');
 
 class WorkingtimeRepository {
-    constructor(UserModel, HospitalModel, DoctorModel, sequelize, WorkingTimeModel) {
+    constructor(
+        UserModel,
+        HospitalModel,
+        DoctorModel,
+        sequelize,
+        WorkingTimeModel,
+        ReservationModel
+    ) {
         this.userModel = UserModel;
         this.hospitalModel = HospitalModel;
         this.doctorModel = DoctorModel;
         this.sequelize = sequelize;
         this.workingTimeModel = WorkingTimeModel;
+        this.reservationModel = ReservationModel;
     }
 
     findReservationDateByWeek = async (selectedYMD, week) => {

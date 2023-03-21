@@ -15,6 +15,7 @@ class UserController {
         try {
             const pageNum = req.query.page || 1;
             const type = req.query.type;
+            console.log('컨트롤러의: pageNum: ', pageNum, 'type: ', type);
             const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
             return res.status(200).json(PaginationByRole);
         } catch (err) {
@@ -23,17 +24,26 @@ class UserController {
     };
 
     // (admin) role별 조회
-    getRoleUser = async (req, res, next) => {
-        try {
-            const { role } = req.params;
-            const pageNum = req.query.page || 1;
-            const type = req.query.type;
+    // getRoleUser = async (req, res, next) => {
+    //     try {
+    //         const { role } = req.params;
+    //         const pageNum = req.query.page || 1;
+    //         const type = req.query.type;
 
-            const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
-            return res.status(200).send(roleUserInfo);
-        } catch (err) {
-            next(err);
-        }
+    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
+    //         return res.status(200).send(roleUserInfo);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // };
+
+    getAllSearch = async (req, res) => {
+        const search = req.query.search;
+        const pageNum = req.query.page || 1;
+        const type = req.query.type;
+        console.log('컨트롤러의 search: : ', search, 'pageNum: ', pageNum, 'type: ', type);
+        const getSearchList = await this.userService.getSearchList(search, pageNum, type);
+        return res.status(200).json(getSearchList);
     };
 
     // (admin) defalutDelete
@@ -64,6 +74,7 @@ class UserController {
         try {
             const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY)
                 .userId;
+                console.log('aaaaaaaa')
             const userProfile = await this.userService.getUserProfile(userId);
             return res.status(200).json(userProfile);
         } catch (err) {
@@ -198,7 +209,7 @@ class UserController {
                 idNumber,
                 role
             );
-            res.json(user);
+            return res.json(user);
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -206,11 +217,13 @@ class UserController {
             res.status(500).json({ message: err.message });
         }
     };
+
     customerSignup = async (req, res) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
+
             const user = await this.userService.signup(
                 name,
                 loginId,
@@ -219,7 +232,7 @@ class UserController {
                 idNumber,
                 role
             );
-            res.json(user);
+            return res.json(user);
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -233,31 +246,29 @@ class UserController {
             const { loginId, password } = req.body;
             const user = await this.userService.login(loginId, password);
 
-            if (!user) {
-                res.status(412).json({ message: err.message });
-            } else {
-                const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '1h',
-                });
 
-                const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '7d',
-                });
+            const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
+                expiresIn: '1h',
+            });
 
-                res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
-                res.cookie('refreshToken', refreshToken);
+            const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+                expiresIn: '7d',
+            });
 
-                const save = await this.userService.saveToken(user.userId, refreshToken);
+            res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
+            res.cookie('refreshToken', refreshToken);
 
-                res.status(200).json({ accessToken, refreshToken, save });
-            }
+            const save = await this.userService.saveToken(user.userId, refreshToken);
+
+            return res.status(200).json({ accessToken, refreshToken, save });
         } catch (err) {
             next(err);
         }
     };
 
     logout = async (req, res) => {
-        res.clearCookie(); //res.cookie('accessToken', '')
+        res.clearCookie('accessToken'); //res.cookie('accessToken', '')
+        res.clearCookie('refreshToken');
         return res.status(200).json({ message: '로그아웃 되었습니다.' });
     };
 
@@ -312,6 +323,43 @@ class UserController {
             );
             await this.userService.editPassword(userId, password, confirm);
             return res.status(200).json({ message: '비밀번호 변경이 완료되었습니다' });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    reservaionInput = async (req, res, next) => {
+        try {
+            const { doctorId } = req.params;
+            const { userId } = res.locals.user;
+            const {
+                relationship,
+                name,
+                idnumber,
+                phone,
+                reservationdate,
+                reservationtime,
+                contents,
+                proxyName,
+                address,
+            } = req.body;
+
+            const reservaionInputData = await this.reservationService.reservaionInputData(
+                doctorId,
+                userId,
+                relationship,
+                name,
+                idnumber,
+                phone,
+                address,
+                reservationdate,
+                reservationtime,
+                contents,
+                proxyName,
+                address
+            );
+
+            res.status(201).json({ result: 'success', data: reservaionInputData });
         } catch (err) {
             next(err);
         }

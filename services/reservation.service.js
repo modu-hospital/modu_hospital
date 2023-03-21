@@ -1,4 +1,6 @@
 const ReservationRepository = require('../repositories/reservation.repository');
+const crypter = require('../lib/encrypt');
+const { TWO_WAY_ENCRYPTION } = process.env;
 const CreateError = require('../lib/errors');
 const { sequelize } = require('../models');
 
@@ -54,6 +56,84 @@ class ReservationService {
             contents
         );
         return review;
+    };
+
+    reservaionInputData = async (
+        doctorId,
+        userId,
+        relationship,
+        name,
+        idnumber,
+        phone,
+        address,
+        reservationdate,
+        reservationtime,
+        contents,
+        proxyName
+    ) => {
+        let encryt = crypter.encrypt(idnumber, TWO_WAY_ENCRYPTION);
+
+        console.log(encryt);
+
+        // relationship 숫자형 변환
+        if (relationship === '본인') {
+            relationship = 1;
+        } else if (relationship === '직계') {
+            relationship = 2;
+        } else if (relationship === '배우자 및 배우자의 직계') {
+            relationship = 3;
+        } else if (relationship === '형제·자매') {
+            relationship = 4;
+        } else if (relationship === '기타') {
+            relationship = 5;
+        } else {
+            const err = await this.createError.notSelectRelationShip();
+            console.log(err);
+            throw err;
+        }
+        // 날짜 + 시간
+        const date = reservationdate;
+        const time = reservationtime;
+
+        if (time.length < 13) {
+            time = '0' + time.split(' ~ ')[0] + ':00';
+        } else {
+            time = time.split(' ~ ')[0] + ':00';
+        }
+
+        reservationdate = date + ' ' + time;
+        const status = 'waiting';
+
+        const registerData = await this.reservationRepository.reservaionInputData(
+            doctorId,
+            userId,
+            relationship,
+            name,
+            phone,
+            reservationdate,
+            contents,
+            encryt,
+            status,
+            proxyName,
+            address
+        );
+
+        let decryt = crypter.decrypt(encryt, TWO_WAY_ENCRYPTION);
+        console.log(decryt);
+
+        return {
+            doctorId: registerData.doctorId,
+            userId: registerData.userId,
+            relationship: registerData.relationship,
+            name: registerData.name,
+            phone: registerData.phone,
+            reservationdate: registerData.reservationdate,
+            contents: registerData.contents,
+            encryt: registerData.encryt,
+            status: registerData.status,
+            proxyName: registerData.proxyName,
+            address: registerData.address,
+        };
     };
 }
 

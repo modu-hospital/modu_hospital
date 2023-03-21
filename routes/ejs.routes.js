@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const CreateError = require('../lib/errors');
 
 // 메인페이지
 router.get('/', (req, res) => {
@@ -69,7 +70,7 @@ router.get('/doctorEdit', (req, res) => {
 });
 
 //병원상세페이지
-router.get('/:hospitalId', (req, res) => {
+router.get('/hospitals/:hospitalId', (req, res) => {
     const id = req.query.id;
     res.render('index.ejs', { components: 'hospitaldetail' });
 });

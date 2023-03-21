@@ -458,33 +458,28 @@ class HospitalRepository {
                     },
                 ],
             });
-            
         } catch (err) {
             throw err;
         }
     };
-    
-    
 
     //병원별 리뷰조회
-    findReview = async(hospitalId) => {
+    findReview = async (hospitalId) => {
         try {
             return await this.reviewsModel.findAll({
-                where:{hospitalId}, 
+                where: { hospitalId },
                 // attributes:['star', 'contents', 'createdAt'],
                 include: [
                     {
                         model: this.userModel,
                         as: 'users',
-                    }
-                ]
-            })
-
+                    },
+                ],
+            });
         } catch (err) {
-            throw err
+            throw err;
         }
-    }
-
+    };
 }
 
 module.exports = HospitalRepository;

@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles",
-    "test:watch":"jest --watch",
-    "test:cov":"jest --coverage",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
     "start": "nodemon app",
     "prettify": "prettier --write *.js **/*.js",
     "test:unit": "jest __test__/unit --forceExit",
@@ -29,6 +29,7 @@
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "cookie-parser": "^1.4.6",
+    "crypto-js": "^4.1.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "fullcalendar": "^6.1.4",

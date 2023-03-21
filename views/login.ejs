@@ -1,177 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>로그인</title>
-</head>
-<body>
-
-<form action="" method="post">
-    <table>
-        <tr>
-            <td>Email : </td>
-            <td><input type="text" id="loginId" name="loginId"></td>
-        </tr>
-        <tr>
-            <td>password : </td>
-            <td><input type="password" id="password" name="password"></td>
-        </tr>
-        <!-- <tr>
+    <head>
+        <meta charset="UTF-8" />
+        <title>로그인</title>
+    </head>
+    <body>
+        <form action="" method="post">
+            <table>
+                <tr id="Id">
+                    <td>Email :</td>
+                    <td><input type="text" id="loginId" name="loginId" /></td>
+                </tr>
+                <tr id="pw">
+                    <td>password :</td>
+                    <td><input type="password" id="password" name="password" /></td>
+                </tr>
+                <!-- <tr>
             <td><input type="submit" value="로그인"></td>
         </tr> -->
+            </table>
+            <div>
+                <button class="button login__submit" id="login">로그인</button>
+                <p><a href="/findmypassword">비밀번호를 잊으셨나요?</a></p>
+                <p><a href="/signup">계정이 없으신가요?</a></p>
+            </div>
+        </form>
+        <script>
+            document.getElementById('login').addEventListener('click', (event) => {
+                event.preventDefault();
 
-        
-    </table>
-    <div>
-        <button class="button login__submit" id="login">로그인</button>
-        <p><a href="/findmypassword">비밀번호를 잊으셨나요?</a></p>
-        <p><a href="/signup">계정이 없으신가요?</a></p>
-    </div>
-</form>
-<script>
-    document.getElementById("login").addEventListener("click", (event) => {
-    event.preventDefault()
+                const data = {
+                    loginId: document.getElementById('loginId').value,
+                    password: document.getElementById('password').value,
+                };
 
-    const data = {
-      loginId: document.getElementById("loginId").value,
-      password : document.getElementById("password").value
-    }
+                fetch('/api/users/login', {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data), //
+                })
+                    //원래 적혀 있었던 코드
+                    .then((response) => {
+                        //요청한 api 응답이 들어왔을 때 실행됨
+                        if (response.status === 412) {
+                            //에러처리 해준 status 기입
+                            alert('이메일 또는 비밀번호가 틀렸습니다');
+                            window.location.reload();
+                        }
+                        if (response.status === 422) {
+                            alert('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
+                            window.location.reload();
+                        }
+                        location.href = '/';
+                    })
 
-
-    fetch("http://localhost:3000/api/users/login", {
-        credentials: 'include',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // `Authorization`: `Bearer ${refreshToken}`
-                // 'Authorization':'Bearer ${refreshToken}'
-            },
-            body: JSON.stringify({data}), //
-        })
-        //원래 적혀 있었던 코드
-        .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
-            if (response.status === 412) {//에러처리 해준 status 기입
-                alert('이메일 또는 비밀번호가 틀렸습니다');
-            }
-            if (response.status === 422) {
-                throw new Error('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
-            }
-            //내가 하고 싶은건:
-            //로그인 잘못 입력시 이메일또는 비번이 틀렸습니다
-            //라고 알림창이 뜨고 다시 로그인창 새로고침
-        })
-        .then((data) => {
-            location.href = '/';
-        })
-        .catch((err) => {
-            alert(err.message);
-            window.location.reload();
-        });
-
-        //해봄
-        // .then(response => response.json())
-        // .then(response => {
-        //     if (response.token) {
-        //         localStorage.setItem('refreshToken', response.json)
-        //     }
-        // })
-
-        //해보는 중
-        // .then(response => response.json())
-        // .then(response => {
-        //     if (response.token) {
-        //         localStorage.setItem('refreshToken', response.json)
-        //     }
-        // })
-
-        //원래 적혀 있었던 코드
-        // .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
-        //     if (response.status === 412) {//에러처리 해준 status 기입
-        //         alert('이메일 또는 비밀번호가 틀렸습니다');
-        //     }
-        //     if (response.status === 422) {
-        //         throw new Error('잘못된 형식입니다.');
-        //     }
-        // })
-        // .then((data) => {
-        //     location.href = '/';
-        // })
-        // .catch((err) => {
-        //     alert(err.message);
-        //     window.location.reload();
-        // });
-
-
-
-    // fetch("http://localhost:3000/api/users/login", {
-    //     credentials: 'include',
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(data), //
-    //     }) 
-    //         .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
-    //             if (response.status === 412) {//에러처리 해준 status 기입
-    //                 alert('이메일 또는 비밀번호가 틀렸습니다');
-    //             }
-    //             if (response.status === 422) {
-    //                 throw new Error('잘못된 형식입니다.');
-    //             }
-    //         })
-    //         .then((data) => {
-    //             location.href = '/';
-    //         })
-    //         .catch((err) => {
-    //             alert(err.message);
-    //             window.location.reload();
-    //         });
-
-
-
-    // fetch("http://localhost:3000/api/users/login", {
-    //   credentials: "include",
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type" : "application/json" //데이터 타입
-    //   },
-    //   body: JSON.stringify(data)
-    // }).then(response => {
-    //     //const token = res.headers //res.headers에 set-cookie에 담겨서 온다(아직 헤더에 안 담아줌)
-    //     const refreshToken = data["refreshToken"]
-    //     localStorage.setItem('refreshToken', refreshToken) //쿠키 저장??
-
-    //     if (res.status === 200 || res.status === 201) {
-    //         res.json()
-    //     }.then((data) => {
-
-    //     })
-
-     
-//     })
-//     .then((data) => {
-//       location.replace("/")
-//     }).catch(err => {
-//       alert(err.message)
-//       window.location.reload()
-//     })
-  })
-    
-</script>
-
-</body>
+                    .catch((err) => {
+                        alert(err.message);
+                        window.location.reload();
+                    });
+            });
+        </script>
+    </body>
 </html>
-
-
-<!-- 로그아웃  
-    function signOut() {
-    $.ajax({
-        type: "get",
-        url: 'http://localhost:8080/logOut',
-        data: {},
-        dataType:'text',
-        success: function(res) {
-            location.reload();
-        }
-    });
-} -->

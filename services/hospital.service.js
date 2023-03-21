@@ -113,10 +113,18 @@ class HospitalService {
         }
     };
 
-    findAllReservation = async (userId) => {
+    findAllReservation = async (userId, role) => {
         try {
             if (!userId) {
-                const err = this.createError.requestExpired();
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
                 throw err;
             }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
@@ -159,10 +167,18 @@ class HospitalService {
         }
     };
 
-    getWaitedReservation = async (userId) => {
+    getWaitedReservation = async (userId, role) => {
         try {
             if (!userId) {
-                const err = this.createError.requestExpired();
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
                 throw err;
             }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
@@ -178,8 +194,25 @@ class HospitalService {
         }
     };
 
-    registerHospital = async (userId, name, address, phone, longitude, latitude) => {
+    registerHospital = async (userId, name, address, phone, longitude, latitude, role) => {
         try {
+            if (!userId) {
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
+            if (findOneHospital) {
+                const err = this.createError.hospitalIsExisted();
+                throw err;
+            }
             const registalHospitalData = await this.hospitalRepository.registerHospital(
                 userId,
                 name,
@@ -197,13 +230,25 @@ class HospitalService {
                 longitude: registalHospitalData.longitude,
                 latitude: registalHospitalData.latitude,
             };
-        } catch (error) {
-            new Error(error);
+        } catch (err) {
+            throw err;
         }
     };
 
-    registerEditHospital = async (userId, name, address, phone, longitude, latitude) => {
+    registerEditHospital = async (userId, name, address, phone, longitude, latitude, role) => {
         try {
+            if (!userId) {
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
             if (!findOneHospital) {
                 const err = this.createError.hospitalNotFound();
@@ -222,10 +267,18 @@ class HospitalService {
         }
     };
 
-    getAllreviews = async (userId) => {
+    getAllreviews = async (userId, role) => {
         try {
             if (!userId) {
-                const err = this.createError.requestExpired();
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
                 throw err;
             }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
@@ -241,10 +294,18 @@ class HospitalService {
         }
     };
 
-    getapprovedReservation = async (userId) => {
+    getapprovedReservation = async (userId, role) => {
         try {
             if (!userId) {
-                const err = this.createError.requestExpired();
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
                 throw err;
             }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
@@ -260,22 +321,42 @@ class HospitalService {
         }
     };
 
-    findOneHospital = async (userId) => {
+    findOneHospital = async (userId, role) => {
         try {
             if (!userId) {
-                const err = this.createError.requestExpired();
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
                 throw err;
             }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
             return hospitaldata;
         } catch (error) {
             throw new Error(error);
         }
     };
 
-    findAllDoctor = async (userId) => {
+    findAllDoctor = async (userId, role) => {
         if (!userId) {
-            const err = this.createError.requestExpired();
+            const err = this.createError.UserNotLogined();
+            throw err;
+        }
+        if (role === 'waiting') {
+            const err = this.createError.roleNotAllow();
+            throw err;
+        }
+        if (role === 'customer') {
+            const err = this.createError.roleNotAllow();
             throw err;
         }
         try {
@@ -295,17 +376,33 @@ class HospitalService {
     findOneDoctor = async (doctorId) => {
         try {
             const doctordata = await this.hospitalRepository.findOneDoctor(doctorId);
+            if (!doctordata) {
+                const err = this.createError.DoctorNotFound();
+                throw err;
+            }
             return doctordata;
         } catch (error) {
             throw new Error(error);
         }
     };
 
-    registerdoctor = async (userId, name, file, contents, categories) => {
+    registerdoctor = async (userId, name, file, contents, categories, role) => {
         try {
+            if (!userId) {
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
-                const err = this.createError();
+                const err = this.createError.hospitalNotFound();
                 throw err;
             }
             let hospitalId = hospitaldata.hospitalId;
@@ -396,7 +493,19 @@ class HospitalService {
         }
     };
 
-    registerImagehospital = async (userId, files) => {
+    registerImagehospital = async (userId, files, role) => {
+        if (!userId) {
+            const err = this.createError.UserNotLogined();
+            throw err;
+        }
+        if (role === 'waiting') {
+            const err = this.createError.roleNotAllow();
+            throw err;
+        }
+        if (role === 'customer') {
+            const err = this.createError.roleNotAllow();
+            throw err;
+        }
         const promises = files.map((file, index) => {
             const fileContent = fs.readFileSync(file.path);
             const filename = `${Date.now()}_${file.originalname}`;
@@ -421,8 +530,6 @@ class HospitalService {
         });
 
         const imageurls = await Promise.all(promises);
-        console.log(imageurls);
-
         try {
             const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
             if (!hospitaldata) {
@@ -449,10 +556,10 @@ class HospitalService {
 
     getOneHospital = async (id) => {
         try {
-            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
-            const reviews = await this.hospitalRepository.findReview(id)
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            const reviews = await this.hospitalRepository.findReview(id);
             // console.log("reviews", reviews)
-            console.log(oneHospital)
+            console.log("oneHospital", oneHospital.doctors)
             
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
@@ -463,9 +570,8 @@ class HospitalService {
             }
 
             // 이름이 안 찍힘
-            const reviewStarContents = []
+            const reviewStarContents = [];
             for (let i = 0; i < reviews.length; i++) {
-
                 // const name = []
                 // for (let j = 0; j < reviews.users; i++) {
                 //     const data = {
@@ -479,7 +585,7 @@ class HospitalService {
                     star: reviews[i].star,
                     contents: reviews[i].contents,
                     name: reviews[i].users,
-                    createdAt: reviews[i].createdAt
+                    createdAt: reviews[i].createdAt,
                 };
                 reviewStarContents.push(data);
             }
@@ -511,14 +617,14 @@ class HospitalService {
                     workTime: workTime,
                 };
             });
+
+            console.log("doctors", doctors)
             return {
                 hospitalId: oneHospital.hospitalId,
                 hospitalName: oneHospital.name,
                 hospitalAddress: oneHospital.address,
                 hospitalphone: oneHospital.phone,
-                hospitalImage: !url
-                    ? '이미지 준비중'
-                    : url,
+                hospitalImage: !url ? '이미지 준비중' : url,
                 reviews: reviewStarContents,
                 doctors,
             };

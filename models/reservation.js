@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             userId: DataTypes.INTEGER,
             relationship: DataTypes.STRING,
             name: DataTypes.STRING,
+            proxyName: DataTypes.STRING,
             phone: DataTypes.STRING,
             date: DataTypes.DATE,
             contents: DataTypes.STRING,

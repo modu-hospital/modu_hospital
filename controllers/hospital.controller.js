@@ -62,7 +62,8 @@ class HospitalController {
         try {
             const currentUser = res.locals.user;
             const userId = currentUser.userId;
-            const reservationdata = await this.hospitalService.findAllReservation(userId);
+            const role = currentUser.role;
+            const reservationdata = await this.hospitalService.findAllReservation(userId, role);
             res.json({
                 reservationdata: reservationdata,
             });
@@ -95,7 +96,8 @@ class HospitalController {
         try {
             const currentUser = res.locals.user;
             const userId = currentUser.userId;
-            const waitingdata = await this.hospitalService.getWaitedReservation(userId);
+            const role = currentUser.role;
+            const waitingdata = await this.hospitalService.getWaitedReservation(userId, role);
             if (waitingdata.length === 0) {
                 return res.json({ success: true, message: '예약 대기중인 목록이 없습니다.' });
             }
@@ -110,7 +112,8 @@ class HospitalController {
         try {
             const currentUser = res.locals.user;
             const userId = currentUser.userId;
-            const approveddata = await this.hospitalService.getapprovedReservation(userId);
+            const role = currentUser.role;
+            const approveddata = await this.hospitalService.getapprovedReservation(userId, role);
             res.json({ success: true, approveddata: approveddata });
         } catch (error) {
             next(error);
@@ -120,6 +123,7 @@ class HospitalController {
     registerEditHospital = async (req, res, next) => {
         const currentUser = res.locals.user;
         const userId = currentUser.userId;
+        const role = currentUser.role;
         const { name, address, phone } = req.body;
 
         if (!req.hospitalLocation) {
@@ -128,7 +132,8 @@ class HospitalController {
                     userId,
                     name,
                     address,
-                    phone
+                    phone,
+                    role
                 );
                 res.json({
                     data: registerEditdata,
@@ -164,7 +169,8 @@ class HospitalController {
         try {
             const currentUser = res.locals.user;
             const userId = currentUser.userId;
-            const data = await this.hospitalService.getAllreviews(userId);
+            const role = currentUser.role;
+            const data = await this.hospitalService.getAllreviews(userId, role);
             res.json({ data: data });
         } catch (error) {
             next(error);
@@ -175,7 +181,8 @@ class HospitalController {
         try {
             const currentUser = res.locals.user;
             const userId = currentUser.userId;
-            const data = await this.hospitalService.findOneHospital(userId);
+            const role = currentUser.role;
+            const data = await this.hospitalService.findOneHospital(userId, role);
             res.json({ data: data });
         } catch (error) {
             next(error);
@@ -213,6 +220,7 @@ class HospitalController {
     registerHospital = async (req, res, next) => {
         const currentUser = res.locals.user;
         const userId = currentUser.userId;
+        const role = currentUser.role;
         const { name, address, phone } = req.body;
         const { location, address_name } = req.hospitalLocation;
         const longitude = location.longitude;
@@ -225,7 +233,8 @@ class HospitalController {
                 address,
                 phone,
                 longitude,
-                latitude
+                latitude,
+                role
             );
 
             return res.json({ data: registerdata });
@@ -237,10 +246,10 @@ class HospitalController {
     registerImagehospital = async (req, res, next) => {
         const currentUser = res.locals.user;
         const userId = currentUser.userId;
-
+        const role = currentUser.role;
         try {
             const files = req.files;
-            const hospital = await this.hospitalService.registerImagehospital(userId, files);
+            const hospital = await this.hospitalService.registerImagehospital(userId, files, role);
             return res.json({ data: hospital });
         } catch (error) {
             next(error);
@@ -248,10 +257,9 @@ class HospitalController {
     };
 
     registerdoctor = async (req, res, next) => {
-        console.log(res.locals.user);
         const currentUser = res.locals.user;
         const userId = currentUser.userId;
-
+        const role = currentUser.role;
         const { name, contents, categories } = req.body;
 
         const unique = Array.from(new Set(categories));
@@ -265,7 +273,8 @@ class HospitalController {
                 name,
                 file,
                 contents,
-                replaceCategories
+                replaceCategories,
+                role
             );
             return res.status(201).json({ data: doctor });
         } catch (error) {
@@ -286,11 +295,11 @@ class HospitalController {
     };
 
     findAllDoctor = async (req, res, next) => {
-        console.log('###################res.locals', res.locals);
         const currentUser = res.locals.user;
         const userId = currentUser.userId;
+        const role = currentUser.role;
         try {
-            const doctorAlldata = await this.hospitalService.findAllDoctor(userId);
+            const doctorAlldata = await this.hospitalService.findAllDoctor(userId, role);
             return res.json(doctorAlldata);
         } catch (error) {
             next(error);
@@ -322,7 +331,7 @@ class HospitalController {
 
         const oneHospital = await this.hospitalService.getOneHospital(id);
 
-        res.json({oneHospital});
+        res.json({ oneHospital });
     };
 }
 
