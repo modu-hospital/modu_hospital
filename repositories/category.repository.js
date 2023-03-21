@@ -32,19 +32,13 @@ class CategoryRepository {
                         {
                             model: this.doctorModel,
                             as: 'doctors',
-                            paranoid: false,
                             required: false,
                             attributes: ['name'],
-                            where: {
-                                deletedAt: { [Op.lt]: 1 },
-                            },
                             include: [
                                 {
                                     model: this.hospitalModel,
-                                    paranoid: false,
                                     as: 'hospitals',
                                     where: {
-                                        deletedAt: { [Op.lt]: 1 },
                                         longitude: {
                                             [Op.and]: [
                                                 { [Op.gte]: leftLongitude },
