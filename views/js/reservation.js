@@ -576,8 +576,9 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                                 //하단의 예약일시에 시간 표시
                                 if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    console.log('안녕하세요');
                                     resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
-
+                                    console.log(resTime);
                                     resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
@@ -585,6 +586,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
                                 } else {
+                                    console.log('안녕하세요2');
                                     resTime =
                                         Math.floor(reserveTime) +
                                         ':30 ~ ' +
@@ -626,9 +628,9 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             cell.onclick = function () {
                                 cellTime = this.getAttribute('id');
                                 reserveTime = cellTime.split('-')[0];
-                                doctorId = reserveTime.split('-')[1];
+                                doctorId = cellTime.split('-')[1];
                                 console.log(reserveTime);
-                                console.log(doctorId);
+                                console.log('doctorId: ', doctorId);
                                 reserveTime = reserveTime * 1;
                                 console.log('selected : ' + reserveTime);
 
@@ -641,6 +643,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                                 //하단의 예약일시에 시간 표시
                                 if (reserveTime - Math.floor(reserveTime) === 0) {
+                                    console.log('안녕하세요3');
                                     resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
 
                                     resDoctor = doctorId;
@@ -650,13 +653,17 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
                                 } else {
+                                    console.log('안녕하세요4');
                                     resTime =
                                         Math.floor(reserveTime) +
                                         ':30 ~ ' +
                                         Math.floor(reserveTime + 1) +
                                         ':00';
 
+                                    console.log(resTime);
+
                                     resDoctor = doctorId;
+                                    console.log(resDoctor);
 
                                     resTimeForm = document.getElementById('selectedTime');
                                     resDoctorForm = document.getElementById('selectedDoctor');
@@ -996,17 +1003,6 @@ function reservaionCheck() {
     const reservationtime = $('#reservationSelectedTime').val();
     const contents = $('#contents').val();
 
-    // console.log(
-    //     pickupdoctor,
-    //     relationship,
-    //     name,
-    //     idnumber,
-    //     phone,
-    //     address,
-    //     reservationdate,
-    //     reservationtime,
-    //     proxyname
-    // );
     $.ajax({
         type: 'POST',
         url: `/api/users/reservation/${pickupdoctor}`,

@@ -73,8 +73,6 @@ class ReservationService {
     ) => {
         let encryt = crypter.encrypt(idnumber, TWO_WAY_ENCRYPTION);
 
-        console.log(encryt);
-
         // relationship 숫자형 변환
         if (relationship === '본인') {
             relationship = 1;
@@ -88,20 +86,19 @@ class ReservationService {
             relationship = 5;
         } else {
             const err = await this.createError.notSelectRelationShip();
-            console.log(err);
             throw err;
         }
         // 날짜 + 시간
-        const date = reservationdate;
-        const time = reservationtime;
-
-        if (time.length < 13) {
-            time = '0' + time.split(' ~ ')[0] + ':00';
+        let date = reservationdate;
+        let time = reservationtime;
+        if (time.split(' ~ ')[0].split(':')[1] === '00') {
+            time = Number(time.split(' ~ ')[0].split(':')[0]) + 9 + ':00:00';
         } else {
-            time = time.split(' ~ ')[0] + ':00';
+            time = Number(time.split(' ~ ')[0].split(':')[0]) + 9 + ':30:00';
         }
 
-        reservationdate = date + ' ' + time;
+        reservationdate = new Date(date + ' ' + time);
+
         const status = 'waiting';
 
         const registerData = await this.reservationRepository.reservaionInputData(
@@ -119,7 +116,6 @@ class ReservationService {
         );
 
         let decryt = crypter.decrypt(encryt, TWO_WAY_ENCRYPTION);
-        console.log(decryt);
 
         return {
             doctorId: registerData.doctorId,

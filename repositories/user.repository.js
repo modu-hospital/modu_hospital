@@ -128,8 +128,6 @@ class UserRepository {
     };
 
     getSearchList = async (search, limit, offset, type) => {
-        console.log('레파에서: ', search);
-        console.log('레파에서: ', offset, limit);
         let users;
         const tabType = { offset, limit };
         if (type === 'customer') {
@@ -137,7 +135,15 @@ class UserRepository {
                 ...tabType,
                 where: {
                     [Op.and]: [
-                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
                         { role: 'customer' },
                     ],
                 },
@@ -147,7 +153,15 @@ class UserRepository {
                 ...tabType,
                 where: {
                     [Op.and]: [
-                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
                         { role: 'partner' },
                     ],
                 },
@@ -157,7 +171,15 @@ class UserRepository {
                 ...tabType,
                 where: {
                     [Op.and]: [
-                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
                         { role: 'waiting' },
                     ],
                 },
@@ -167,7 +189,13 @@ class UserRepository {
                 offset,
                 limit,
                 where: {
-                    [Op.or]: [{ address: { [Op.substring]: search } }],
+                    [Op.or]: [
+                        { name: { [Op.substring]: search } },
+                        { loginId: { [Op.substring]: search } },
+                        { phone: { [Op.substring]: search } },
+                        { address: { [Op.substring]: search } },
+                        { createdAt: { [Op.substring]: search } },
+                    ],
                 },
             });
         }
