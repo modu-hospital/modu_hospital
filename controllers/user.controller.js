@@ -248,15 +248,21 @@ class UserController {
 
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '1h',
+                expiresIn: '10s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
                 expiresIn: '7d',
             });
 
-            res.cookie('accessToken', accessToken); //쿠키 저장은 프론트에서 저장
-            res.cookie('refreshToken', refreshToken);
+            res.cookie('accessToken', accessToken, {
+                secure: false,
+                httpOnly: true,
+            }); //쿠키 저장은 프론트에서 저장
+            res.cookie('refreshToken', refreshToken, {
+                secure: false,
+                httpOnly: true,
+            });
 
             const save = await this.userService.saveToken(user.userId, refreshToken);
 
@@ -267,9 +273,12 @@ class UserController {
     };
 
     logout = async (req, res) => {
-        res.clearCookie('accessToken'); //res.cookie('accessToken', '')
-        res.clearCookie('refreshToken');
-        return res.status(200).json({ message: '로그아웃 되었습니다.' });
+        try {
+            res.cookie('accessToken', '');
+            res.status(200).json({ message: '로그아웃 되었습니다.' });
+        } catch (error) {
+            res.status(500).json(error);
+        }
     };
 
     // sendEmailForCertification = async (req,res,next) => {

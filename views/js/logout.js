@@ -1,12 +1,12 @@
 document.getElementById('logout').addEventListener('click', (event) => {
     event.preventDefault();
     fetch('/api/users/logout', {
-        method:'post',
+        method: 'post',
         credentials: 'include',
     }).then((response) => {
-        alert('로그아웃 되었습니다')
+        alert('로그아웃 되었습니다');
         location.href = '/';
-    })
+    });
 });
 // function logout() {
 //     $.ajax({
