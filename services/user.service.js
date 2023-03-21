@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
+const cryptor = require('../lib/encrypt')
+const {TWO_WAY_ENCRYPTION} = process.env
 const env = process.env;
 
 class UserService {
@@ -75,6 +77,8 @@ class UserService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+        const encryptIdNumber = cryptor.encrypt(idNumber, TWO_WAY_ENCRYPTION);
+        const decrytIdNumber = cryptor.decrypt(encryptIdNumber, TWO_WAY_ENCRYPTION);
 
         // 추가 고민
         // const hashedIdNumber = await bcrypt.hash(password, 12);
@@ -84,16 +88,13 @@ class UserService {
             loginId,
             hashedPassword,
             phone,
-            idNumber,
+            encryptIdNumber,
             role
         );
 
         return sign;
     };
 
-    //@@@@@@@@@@@@@@문제
-    //비밀번호가 틀리면 비밀번호 바꾸라고??하는건지
-    // 비밀번호 업데이트 하라고?? 뜸,,, 이게 뭔지
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
@@ -137,7 +138,7 @@ class UserService {
         return { allUser: allUser, lastPage: lastPage };
     };
 
-    getSearchList = async (search, pageNum, type) => {
+    findUserRole = async (role, pageNum, type) => {
         const limit = 10;
         const offset = (pageNum - 1) * limit;
         const allUser = await this.userRepository.getSearchList(search, limit, offset, type);

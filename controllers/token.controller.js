@@ -48,7 +48,12 @@ class TokenController {
         console.log(refreshTokenVerify);
         if (refreshTokenVerify) {
             const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10',
+                expiresIn: '10s',
+            });
+
+            res.cookie('accessToken', newAccessToken, {
+                secure: false,
+                httpOnly: true,
             });
             return res.json({ newAccessToken });
         } else {
