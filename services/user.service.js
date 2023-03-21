@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
-require('dotenv').config();
 const env = process.env;
 
 class UserService {

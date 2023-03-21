@@ -4,7 +4,7 @@ body {
 }
 
 button {
-  background-color: #8ab3ff;
+  background-color: #216cad;
   color: #ffffff;
   border: none;
 }
@@ -21,7 +21,7 @@ a {
 }
 
 #homeIcon {
-  color: #b9deff;
+  color: #216cad;
   font-size: 3vh;
   font-weight: bold;
 }
@@ -60,7 +60,7 @@ input[id="menuIcon"]+label span {
   width: 100%;
   height: 5px;
   border-radius: 30px;
-  background: #8ab3ff;
+  background: #216cad;
   transition: all .35s;
 }
 
@@ -129,7 +129,7 @@ input[id="departmentCheckbox"]+label span {
   width: 100%;
   height: 5px;
   border-radius: 30px;
-  background: #8ab3ff;
+  background: #216cad;
   transition: all .35s;
 }
 

@@ -209,8 +209,7 @@ class HospitalService {
                 throw err;
             }
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
-            console.log("#########안나",findOneHospital.hospitalId)
-            if (findOneHospital.length === true) {
+            if (findOneHospital) {
                 const err = this.createError.hospitalIsExisted();
                 throw err;
             }
@@ -231,8 +230,8 @@ class HospitalService {
                 longitude: registalHospitalData.longitude,
                 latitude: registalHospitalData.latitude,
             };
-        } catch (error) {
-            new Error(error);
+        } catch (err) {
+            throw err;
         }
     };
 
@@ -557,8 +556,8 @@ class HospitalService {
 
     getOneHospital = async (id) => {
         try {
-            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
-            const reviews = await this.hospitalRepository.findReview(id)
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            const reviews = await this.hospitalRepository.findReview(id);
             // console.log("reviews", reviews)
             console.log("oneHospital", oneHospital.doctors)
             
@@ -571,9 +570,8 @@ class HospitalService {
             }
 
             // 이름이 안 찍힘
-            const reviewStarContents = []
+            const reviewStarContents = [];
             for (let i = 0; i < reviews.length; i++) {
-
                 // const name = []
                 // for (let j = 0; j < reviews.users; i++) {
                 //     const data = {
@@ -587,7 +585,7 @@ class HospitalService {
                     star: reviews[i].star,
                     contents: reviews[i].contents,
                     name: reviews[i].users,
-                    createdAt: reviews[i].createdAt
+                    createdAt: reviews[i].createdAt,
                 };
                 reviewStarContents.push(data);
             }
@@ -626,9 +624,7 @@ class HospitalService {
                 hospitalName: oneHospital.name,
                 hospitalAddress: oneHospital.address,
                 hospitalphone: oneHospital.phone,
-                hospitalImage: !url
-                    ? '이미지 준비중'
-                    : url,
+                hospitalImage: !url ? '이미지 준비중' : url,
                 reviews: reviewStarContents,
                 doctors,
             };
