@@ -49,26 +49,26 @@ function check_pw(){
  if(pw.length < 6 || pw.length>16){
      window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
      document.getElementById('password').value='';
- }
+    }
  for(var i=0;i<SC.length;i++){
      if(pw.indexOf(SC[i]) != -1){
          check_SC = 1;
-     }
- }
+        }
+    }
  if(check_SC == 0){
      window.alert('!,@,#,$,%,*,^,&,(,),: 의 특수문자가 들어가 있지 않습니다.')
      document.getElementById('password').value='';
- }
+    }
  if(document.getElementById('password').value !='' && document.getElementById('confirm').value!=''){
      if(document.getElementById('password').value==document.getElementById('confirm').value){
          document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
          document.getElementById('check').style.color='blue';
-     }
+        }
      else{
          document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
          document.getElementById('check').style.color='red';
-     }
- }
+        }
+    }
 }
 
     document.getElementById('signup').addEventListener('click', (event) => {
@@ -76,7 +76,7 @@ function check_pw(){
 
         const data = {
             name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
+            loginId: document.getElementById('email').value,
             password: document.getElementById('password').value,
             confirm: document.getElementById('confirm').value,
             phone: document.getElementById('phone').value,
@@ -92,56 +92,23 @@ function check_pw(){
             },
             body: JSON.stringify(data),
         })
-            .then((response) => {
-                if (response.status === 412) {
-                    throw new Error('이미 존재하는 이메일 입니다.');
-                }
-                if (response.status === 422) {
-                    throw new Error('잘못된 형식입니다.');
-                }
-                response.json();
-            })
-            .then((data) => {
-                location.href = '/';
-            })
-            .catch((err) => {
-                alert(err.message);
-                window.location.reload();
-            });
-    })
+        // .then(res => res.json())
+        .then((response) => { //response= data
+            if (response.status === 412) {
+                throw new Error('이미 존재하는 이메일 입니다.');
+            }
+            if (response.status === 422) {
+                throw new Error('잘못된 형식입니다.');
+            }
+            // console.log(response)
+            location.href = '/';
+        })
+        .catch((err) => {
+            alert(err.message);
+            window.location.reload();
+        });
 
-
-    //         fetch('localhost:3000/api/users/signup/customer', {
-    //     method : "POST",
-    //     body : JSON.stringify({
-    //         name : name,
-    //         loginId : email,
-    //         password : password,
-    //         confirm : confirm,
-    //         phone : phone,
-    //         idNumber : idNumber
-
-    //     }),
-    //     headers : {
-    //         'Content-Type' : 'application/json',
-    //         'Accept' : 'application/json'
-    //     }
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //     console.log(res)
-    // })
-
-//         fetch('API 주소 넣어주기',{
-// 	headers : {
-//     	//헤더에 들어갈 것들
-//     }
-// }).then(response => response.json())
-//   .then(response => {
-//   	//fetch 이후 작동할 코드들이 들어간다.
-//   })
-
-        //파트너 맺기? 누르면 partner로 api 연결
+})
 </script>
 
 </body>

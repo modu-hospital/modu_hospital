@@ -5,21 +5,21 @@ const auth = require('../middleware/auth.middleware');
 const UserController = require('../controllers/user.controller');
 const userController = new UserController();
 
-router.get('/mypage/userdata', userController.getUserProfile);
+router.get('/mypage/userdata', auth, userController.getUserProfile);
 
-router.get('/mypage/approved', userController.getApprovedReservation);
+router.get('/mypage/approved', auth, userController.getApprovedReservation);
 
-router.get('/mypage/waiting', userController.getWaitingReservation);
+router.get('/mypage/waiting', auth, userController.getWaitingReservation);
 
-router.get('/mypage/doneorreviewed', userController.getDoneOrReviewedReservation);
+router.get('/mypage/doneorreviewed', auth, userController.getDoneOrReviewedReservation);
 
-router.get('/mypage/canceled', userController.getCanceledReservation);
+router.get('/mypage/canceled', auth, userController.getCanceledReservation);
 
-router.patch('/mypage/editprofile', userController.editUserProfile);
+router.patch('/mypage/editprofile', auth, userController.editUserProfile);
 
-router.patch('/mypage/cancel/:id', userController.cancelReservation);
+router.patch('/mypage/cancel/:id', auth, userController.cancelReservation);
 
-router.post('/mypage/review/:id', userController.createReview);
+router.post('/mypage/review/:id', auth, userController.createReview);
 
 router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
