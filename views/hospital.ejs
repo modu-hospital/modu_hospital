@@ -215,7 +215,7 @@
             <button onclick="location.href='/register'">우리 병원 등록하기</button>
             <button onclick="location.href='/edit'">우리 병원 수정하기</button>
           </div>
-          <form action="/api/hospitals/register/image" method="POST" enctype="multipart/form-data">
+          <form id="imageForm" action="/api/hospitals/register/image" method="POST" enctype="multipart/form-data">
             <input type="file" name="images" multiple>
             <input type="submit" value="Upload">
           </form>
@@ -674,4 +674,28 @@
 
   // 페이지 로드 시 카드를 로드하는 함수 호출
   loadProfileCards();
+
+  $(document).ready(function() {
+    $('#imageForm').submit(function(e) {
+      e.preventDefault();
+
+      var formData = new FormData(this);
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          alert('파일 업로드가 완료되었습니다!');
+          window.location.href = "/hospital"
+        },
+        error: function(xhr, status, error) {
+          alert('파일 업로드 중 오류가 발생했습니다.');
+          console.error(xhr, status, error);
+        }
+      });
+    });
+  });
 </script>

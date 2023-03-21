@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>로그인</title>
-</head>
-<body>
-
-<form action="" method="post">
-    <table>
-        <tr id="Id">            <td>Email : </td>
-            <td><input type="text" id="loginId" name="loginId"></td>
-        </tr>
-        <tr id="pw">
-            <td>password : </td>
-            <td><input type="password" id="password" name="password"></td>
-        </tr>
-        <!-- <tr>
+    <head>
+        <meta charset="UTF-8" />
+        <title>로그인</title>
+    </head>
+    <body>
+        <form action="" method="post">
+            <table>
+                <tr id="Id">
+                    <td>Email :</td>
+                    <td><input type="text" id="loginId" name="loginId" /></td>
+                </tr>
+                <tr id="pw">
+                    <td>password :</td>
+                    <td><input type="password" id="password" name="password" /></td>
+                </tr>
+                <!-- <tr>
             <td><input type="submit" value="로그인"></td>
         </tr> -->
+            </table>
+            <div>
+                <button class="button login__submit" id="login">로그인</button>
+                <p><a href="/findmypassword">비밀번호를 잊으셨나요?</a></p>
+                <p><a href="/signup">계정이 없으신가요?</a></p>
+            </div>
+        </form>
+        <script>
+            document.getElementById('login').addEventListener('click', (event) => {
+                event.preventDefault();
 
-        
-    </table>
-    <div>
-        <button class="button login__submit" id="login">로그인</button>
-        <p><a href="/findmypassword">비밀번호를 잊으셨나요?</a></p>
-        <p><a href="/signup">계정이 없으신가요?</a></p>
-    </div>
-</form>
-<script>
-
-    document.getElementById("login").addEventListener("click", (event) => {
-    event.preventDefault()
-
-    const data = {
-      loginId: document.getElementById("loginId").value,
-      password : document.getElementById("password").value
-    }
+                const data = {
+                    loginId: document.getElementById('loginId').value,
+                    password: document.getElementById('password').value,
+                };
 
     fetch("/api/users/login", {
         credentials: 'include',
@@ -65,14 +62,11 @@
         })
 
 
-        .catch((err) => {
-            alert(err.message);
-            window.location.reload();
-        });
-    })
- 
-    
-</script>
-
-</body>
+                    .catch((err) => {
+                        alert(err.message);
+                        window.location.reload();
+                    });
+            });
+        </script>
+    </body>
 </html>

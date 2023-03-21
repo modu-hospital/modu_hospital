@@ -95,6 +95,7 @@ const authMiddleware = async (req, res, next) => {
     const user = await User.findByPk(userId);
 
     res.locals.user = user;
+    console.log(res.locals.user);
 
     next();
 };

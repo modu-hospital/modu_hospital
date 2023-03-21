@@ -1,3 +1,5 @@
+const {Op} = require('sequelize');
+
 class ReservationRepository {
     constructor(sequelize) {
         this.models = sequelize.models;
@@ -10,61 +12,115 @@ class ReservationRepository {
 
     getApprovedReservation = async (userId, page) => {
         const reservationsPerPage = 3;
-        const query = `
-        SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId
-        inner join hospitals as h on d.hospitalId = h.hospitalId
-        WHERE r.userId = ${userId} and r.status = "approved"
-        ORDER BY r.date DESC
-        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
-        `;
-        const approved = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
+        const approved = await this.models.Reservation.findAll({
+            attributes: [
+                [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
+                [this.sequelize.col('doctors.name'), 'doctorName'],
+                [this.sequelize.col('doctors.image'), 'doctorImage'],
+                'date',
+                'id',
+                'status',
+            ],
+            include: [
+                {
+                    paranoid: false,
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    attributes: [],
+                    include: [{ paranoid: false,model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                },
+            ],
+            where: { userId, status: 'approved' },
+            order: [['date', 'DESC']],
+            limit: reservationsPerPage,
+            offset: reservationsPerPage * (page - 1),
         });
         return approved;
     };
     getWaitingReservation = async (userId, page) => {
         const reservationsPerPage = 3;
-        const query = `
-        SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId
-        inner join hospitals as h on d.hospitalId = h.hospitalId
-        WHERE r.userId = ${userId} and r.status = 'waiting'
-        ORDER BY r.date DESC
-        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
-        `;
-        const waiting = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
+        const waiting = await this.models.Reservation.findAll({
+            attributes: [
+                [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
+                [this.sequelize.col('doctors.name'), 'doctorName'],
+                [this.sequelize.col('doctors.image'), 'doctorImage'],
+                'date',
+                'id',
+                'status',
+            ],
+            include: [
+                {
+                    paranoid: false,
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    attributes: [],
+                    include: [{ paranoid: false,model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                },
+            ],
+            where: { userId, status: 'waiting' },
+            order: [['date', 'DESC']],
+            limit: reservationsPerPage,
+            offset: reservationsPerPage * (page - 1),
         });
         return waiting;
     };
     getDoneOrReviewedReservation = async (userId, page) => {
         const reservationsPerPage = 3;
-        const query = `
-        SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId
-        inner join hospitals as h on d.hospitalId = h.hospitalId
-        WHERE r.userId = ${userId} and r.status = "done" or r.status = 'reviewed'
-        ORDER BY r.date DESC
-        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
-        `;
-        const doneOrReviewed = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
+        const doneOrReviewed = await this.models.Reservation.findAll({
+            attributes: [
+                [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
+                [this.sequelize.col('doctors.name'), 'doctorName'],
+                [this.sequelize.col('doctors.image'), 'doctorImage'],
+                'date',
+                'id',
+                'status',
+            ],
+            include: [
+                {
+                    paranoid: false,
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    attributes: [],
+                    include: [{paranoid: false, model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                },
+            ],
+            where: {
+                userId: userId,
+                [Op.or]: [
+                  { status: 'done' },
+                  { status: 'reviewed' },
+                ],
+              },
+            order: [['date', 'DESC']],
+            limit: reservationsPerPage,
+            offset: reservationsPerPage * (page - 1),
         });
-        return doneOrReviewed;
+        return doneOrReviewed
     };
     getCanceledReservation = async (userId, page) => {
         const reservationsPerPage = 3;
-        const query = `
-        SELECT h.name as hospitalName ,d.name as doctorName, d.image as doctorImage, r.date,r.id,r.status from reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId
-        inner join hospitals as h on d.hospitalId = h.hospitalId
-        WHERE r.userId = ${userId} and r.status = 'canceled'
-        ORDER BY r.date DESC
-        LIMIT ${reservationsPerPage * (page - 1)}, ${page * reservationsPerPage};
-        `;
-        const doneOrReviewed = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
+        const doneOrReviewed =await this.models.Reservation.findAll({
+            attributes: [
+                [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
+                [this.sequelize.col('doctors.name'), 'doctorName'],
+                [this.sequelize.col('doctors.image'), 'doctorImage'],
+                'date',
+                'id',
+                'status',
+            ],
+            include: [
+                {
+                    paranoid: false,
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    attributes: [],
+                    include: [{paranoid: false, model: this.models.Hospital, as: 'hospitals', attributes: [] }],
+                },
+            ],
+            where: { userId, status: 'canceled' },
+            order: [['date', 'DESC']],
+            limit: reservationsPerPage,
+            offset: reservationsPerPage * (page - 1),
         });
         return doneOrReviewed;
     };
@@ -103,6 +159,35 @@ class ReservationRepository {
         );
 
         return review;
+    };
+
+    reservaionInputData = async (
+        doctorId,
+        userId,
+        relationship,
+        name,
+        phone,
+        reservationdate,
+        contents,
+        idnumber,
+        status,
+        proxyName,
+        address
+    ) => {
+        const registerData = await this.models.Reservation.create({
+            doctorId: doctorId,
+            userId: userId,
+            relationship: relationship,
+            name: name,
+            phone: phone,
+            date: reservationdate,
+            contents: contents,
+            idNumber: idnumber,
+            status: status,
+            proxyName: proxyName,
+            address: address,
+        });
+        return registerData;
     };
 }
 

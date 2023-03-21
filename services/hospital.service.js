@@ -209,8 +209,7 @@ class HospitalService {
                 throw err;
             }
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
-            console.log('#########안나', findOneHospital.hospitalId);
-            if (findOneHospital.length === true) {
+            if (findOneHospital) {
                 const err = this.createError.hospitalIsExisted();
                 throw err;
             }
@@ -231,8 +230,8 @@ class HospitalService {
                 longitude: registalHospitalData.longitude,
                 latitude: registalHospitalData.latitude,
             };
-        } catch (error) {
-            new Error(error);
+        } catch (err) {
+            throw err;
         }
     };
 

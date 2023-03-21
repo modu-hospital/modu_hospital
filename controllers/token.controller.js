@@ -40,12 +40,12 @@ class TokenController {
 
         console.log('컨트롤러', refreshToken);
         const user = await this.tokenService.findUserId(userId);
+        console.log(user)
 
         console.log(user.loginId);
 
         const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
         console.log(refreshTokenVerify);
-
         if (refreshTokenVerify) {
             const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '10s',

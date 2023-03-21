@@ -418,7 +418,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -463,12 +463,13 @@
 
         <div style="height:5px;"></div>
 
-        <input type="button" value="입력" onclick="inputAddress()" />
+        <input type="button" value="입력" onclick="inputData()" />
             </div>
         </div>
     </div>
 </div>
 
+<script src="/js/road.js"></script>
 <script>
     $(document).ready(function () {
         getUserData();
@@ -528,14 +529,14 @@
                         let temp_html = ` 
                 <div class="col-2 mb-3" float="left" width="60px">
                 <img width="60px" src='${approved[i].doctorImage}'>
-            </div>
-            <div class="col-7 float="left" mb-3">
-                <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
-                <p class="text-muted">${approved[i].date}</p>
-            </div>
-            <div class="col-2">
-            <button data-reservationId="${approved[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
-            </div>`;
+                </div>
+                <div class="col-7 float="left" mb-3">
+                    <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
+                    <p class="text-muted">${approved[i].date}</p>
+                </div>
+                <div class="col-2">
+                <button data-reservationId="${approved[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
+                </div>`;
                         $('#approved').append(temp_html);
                     }
                 }
@@ -596,7 +597,7 @@
                             let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
             <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
         </div>
-        <div class="col-6 mb-3">
+        <div class="col-5 mb-3">
             <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
             <p class="text-muted">${doneOrReviewed[i].date}</p>
         </div>
@@ -610,7 +611,7 @@
                             let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
                 <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
             </div>
-            <div class="col-6 mb-3">
+            <div class="col-7 mb-3">
                 <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
                 <p class="text-muted">${doneOrReviewed[i].date}</p>
             </div>
@@ -717,64 +718,40 @@
     function showAddressModal() {
         $('#alertModalLabel').html('주소검색');
         const modalText = `
-        <div class="modal-body">
-            현재 페이지 :
-            <input type="number" id="currentPage" value="1" style="text-align: center" />
-            <div style="height: 5px"></div>
-            페이지당 출력 개수 :
-            <input type="number" id="countPerPage" value="5" style="text-align: center" />
-            <hr />
-            <br />
+        <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
 
-            <input
-                type="text"
-                id="zipCode"
-                value=""
-                onClick="addressWindowOpen();"
-                placeholder="00000"
-                readonly
-            />
+        <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
 
-            <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
-
-            <div id="wrap">
-                <div id="closeBtn" onClick="addressWindowClose();">
-                    <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        id="searchAddr"
-                        value=""
-                        onkeydown="enterSearch();"
-                        placeholder="도로명주소, 건물명 또는 지번 입력"
-                    />
-                    <input type="button" onClick="getAddr();" value="주소검색" />
-                </div>
-
-                <div>
-                    <div id="totoalOutcome">검색결과 : <span id="totalCnt">0</span></div>
-                    <table id="list"></table>
-                </div>
-
-                <div id="pagingList" style="text-align: center"></div>
-            </div>
-
-            <div style="height: 5px"></div>
-
-            <input
-                type="text"
-                id="roadaddress"
-                value=""
-                placeholder="도로명 주소, 지번 주소"
-                readonly
-            />
-
-            <div style="height: 5px"></div>
-
-            <input type="button" value="입력" onclick="inputData()" />
+        <div id="wrap">
+             <div id="closeBtn" onClick="addressWindowClose();">
+             <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
         </div>
-        
+    <div>
+        <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
+            placeholder="도로명주소, 건물명 또는 지번 입력" />
+        <input type="button" onClick="getAddr();" value="주소검색" />
+    </div>
+
+    <div>
+        <div id="totoalOutcome">
+
+            검색결과 : <span id="totalCnt">0</span>
+
+        </div>
+        <table id="list"></table>
+
+    </div>
+
+    <div id="pagingList" style='text-align:center;'></div>
+
+</div>
+
+<div style="height:5px;"></div>
+
+<input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
+
+<div style="height:5px;"></div>
+
       `
         $('#alertText').html(modalText);
         $('#modal-confirm').html('확인');

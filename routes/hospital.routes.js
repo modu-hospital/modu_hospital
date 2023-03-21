@@ -27,8 +27,8 @@ router.get('/reviews', auth, hospitalController.getAllreviews);
 //우리병원 정보 등록(주소api를 호출하여 위도 경도 정보를 가져오기)
 router.post(
     '/location',
-    hospitalController.findHospitalLocation,
     auth,
+    hospitalController.findHospitalLocation,
     hospitalController.registerHospital
 );
 
