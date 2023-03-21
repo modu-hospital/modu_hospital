@@ -138,10 +138,18 @@ class UserService {
         return { allUser: allUser, lastPage: lastPage };
     };
 
-    findUserRole = async (role, pageNum, type) => {
+    // findUserRole = async (role, pageNum, type) => {
+    //     const limit = 10;
+    //     const offset = (pageNum - 1) * limit;
+    //     const allUser = await this.userRepository.PaginationByRole(limit, offset, role, type);
+    //     const lastPage = Math.ceil(allUser.count / limit);
+    //     return { allUser: allUser, lastPage: lastPage };
+    // };
+
+    getSearchList = async (search, pageNum, type) => {
         const limit = 10;
         const offset = (pageNum - 1) * limit;
-        const allUser = await this.userRepository.PaginationByRole(limit, offset, role, type);
+        const allUser = await this.userRepository.getSearchList(search, limit, offset, type);
         const lastPage = Math.ceil(allUser.count / limit);
         return { allUser: allUser, lastPage: lastPage };
     };

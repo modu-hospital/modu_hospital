@@ -104,6 +104,49 @@ class ReservationRepository {
 
         return review;
     };
+
+    reservaionInputData = async (
+        doctorId,
+        userId,
+        relationship,
+        name,
+        phone,
+        reservationdate,
+        contents,
+        idnumber,
+        status,
+        proxyName,
+        address
+    ) => {
+        console.log(
+            '레파지토리에서 : ',
+            doctorId,
+            userId,
+            relationship,
+            name,
+            phone,
+            reservationdate,
+            contents,
+            idnumber,
+            status,
+            proxyName,
+            address
+        );
+        const registerData = await this.models.Reservation.create({
+            doctorId: doctorId,
+            userId: userId,
+            relationship: relationship,
+            name: name,
+            phone: phone,
+            reservationdate: reservationdate,
+            contents: contents,
+            idnumber: idnumber,
+            status: status,
+            proxyName: proxyName,
+            address: address,
+        });
+        return registerData;
+    };
 }
 
 module.exports = ReservationRepository;
