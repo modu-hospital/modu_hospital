@@ -1,23 +1,20 @@
 
 <style>
-    /* .doctor_profile{
-        
+    .container {
+        width: 300px;
+    }
 
-    } */
-
-
-
+    .inner {
+        width: 100px;
+        float: left;
+    }
 </style>
-<div>
+<div style="margin: 0">
 
-    <div style="overflow-x: auto;" class="kind_wrap">
-        <div class="kind_slider" id="hospital-image">
+    <div class="container">
+        <div class="inner" id="hospital-image">
             <img src ="" alt="병원사진">
         </div>
-    </div>
-    <div class="arrow">
-        <a href="" class="prev">이전</a>
-        <a href="" class="next">다음</a>
     </div>
      
     <div>
@@ -31,13 +28,15 @@
         병원 오픈 시간대
     </div>
     <div>
-        <div>
-            <img src="" class="doctor_profile" alt="의사사진">
-        </div>
-        <div>의사 이름</div>
-        <div>의사소개글</div>
-        <div>각의사진료과</div>
-        <div>근무날</div>
+        <table id="doctorsList">
+            <tr>
+                <th>의사이름</th>
+                <th>의사사진</th>
+                <th>의사소개</th>
+                <th>진료과</th>
+                <th>근무날</th>
+            </tr>
+        </table>
     </div>
     <div class="review">
         <table id="reviewList">
@@ -65,36 +64,36 @@
         getworktime()
     })
 
-    const id = window.location.pathname.split('/')[1]
-    function getworktime() {
-        $.ajax({
-            type: 'GET',
-            url: `/api/hospitals/detail/${id}`,
-            dataType: 'json',
-            success: function (response) {
-                const hospitalData = response;
+    const id = window.location.pathname.split('/')[2]
+    // function getworktime() {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: `/api/hospitals/detail/${id}`,
+    //         dataType: 'json',
+    //         success: function (response) {
+    //             const hospitalData = response;
 
-                console.log("hospitalData.oneHospital", hospitalData.oneHospital.doctors[9].workTime[0].day)
+    //             console.log("hospitalData.oneHospital", hospitalData.oneHospital)
 
-                for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
-                    for(let j = 0; j < hospitalData.oneHospital.doctors[i].workTime.length; j++)
-                    // let workday = hospitalData.oneHospital.doctors[i].workTime[j].day;
+    //             for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
+    //                 // for(let j = 0; j < hospitalData.oneHospital.doctors[i].workTime.length; j++)
+    //                 // let workday = hospitalData.oneHospital.doctors[i].workTime[j].day;
                     
-                //     let temp_html = `
+    //                 let temp_html = `
                     
-                //         <ul>
-                //             <img width="200px" src ="${hospitalimage}" alt="병원사진">
-                //         </ul>
-                //    `;
+    //                     <ul>
+    //                         <img width="200px" src ="${hospitalimage}" alt="병원사진">
+    //                     </ul>
+    //                `;
 
-                    $('#hospital-image').append(temp_html);
-                }
-            },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
-        });
-    }
+    //                 $('#hospital-image').append(temp_html);
+    //             }
+    //         },
+    //         error: function(error){
+    //             console.log(error.responseJSON)
+    //         }
+    //     });
+    // }
 
     //첫번째 이미지 안 찍힘
     function gethospitalimage() {
@@ -138,11 +137,11 @@
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let department = hospitalData.oneHospital.doctors[i].department;
                     
-                    let temp_html = `<tbody>
+                    let temp_html = `
                         <tr>
-                        <td>${department}</td>
+                            <td>${department}</td>
                         </tr>
-                    </tbody>`;
+                   `;
 
                     $('#departmentList').append(temp_html);
                 }
@@ -161,13 +160,24 @@
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
+                console.log("의사에서 ", hospitalData.oneHospital.doctors)
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let doctors = hospitalData.oneHospital.doctors[i].doctors;
                     let doctorImage = hospitalData.oneHospital.doctors[i].doctorImage;
                     let doctorContent = hospitalData.oneHospital.doctors[i].doctorContent;
                     let department = hospitalData.oneHospital.doctors[i].department;
+
                     let workTime = hospitalData.oneHospital.doctors[i].workTime;
+                    let workTimeSum = "";
+                    console.log("workTime", workTime[0])
+                    for (let j = 0; j < workTime.length; j++){
+                        let day = workTime[j].day
+                        let start = workTime[j].start
+                        let end = workTime[j].end
+                        workTimeSum += `${day}요일 ${start}~${end}`
+                    }
+
 
                     let temp_html = `<tbody>
                         <tr>
@@ -175,9 +185,13 @@
                         <th><img width="60px" src="${doctorImage}" alt="의사사진">의사사진</th>
                         <td>${doctorContent}</td>
                         <td>${department}</td>
-                        <td>${workTime}</td>
+                        <td>${workTimeSum}</td>
                         </tr>
                     </tbody>`;
+
+                    console.log("temp_html", temp_html)
+
+            
 
                     $('#doctorsList').append(temp_html);
                 }
@@ -196,24 +210,28 @@
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
+                console.log("리뷰에서", hospitalData.oneHospital.reviews[0].name.name)
 
                 for (let i = 0; i < hospitalData.oneHospital.reviews.length; i++) {
-                    let userId = hospitalData.oneHospital.reviews[i].userId;
-                    let name = hospitalData.oneHospital.reviews[i].name;
+                    // let userId = hospitalData.oneHospital.reviews[i].userId;
+                    let name = hospitalData.oneHospital.reviews[i].name.name;
                     let contents = hospitalData.oneHospital.reviews[i].contents;
                     let star = hospitalData.oneHospital.reviews[i].star;
                     let createdAt = hospitalData.oneHospital.reviews[i].createdAt;
 
                     let temp_html = `<tbody>
                         <tr>
-                        <th scope="row">${i + 1}</th>
-                        <td>${name}</td>
-                        // 서버에서 name 값 안들어옴
-                        <td>${contents}</td>
-                        <td>${star}</td>
-                        <td>${createdAt}</td>
+                            <th scope="row">${i + 1}</th>
+                            <th>${name}</th>
+                            <th>${contents}</th>
+                            <th>${star}</th>
+                            <th>${createdAt}</th>
                         </tr>
                     </tbody>`;
+
+                   
+            
+
 
                     $('#reviewList').append(temp_html);
                 }
@@ -223,6 +241,8 @@
             }
         });
     }
+
+
 // 병원 상세 페이지를 클릭했을 때
 // 그 병원의 의사의 근무시간의 요일 스타트 타임 엔드 타임만 가져와서
 // 프론트에 넣으면 됨?
@@ -238,31 +258,30 @@
 
 
 
-
-        // $.ajax({
-        //     url: ``,
-        //     type: 'get',
-        //     headers: {
-        //         'X-Refresh-Token': refreshToken
-        //         // 'Authentication': document.cookie(res.accessToken)
-        //     },
-        //     success: function(response) {
-        //         const newAccessToken = response.access_token;
-                
-        //     },
-        //     error: function(error) {
-        //         $.ajax({
-        //             url:`/api/token/${userId}`,
-        //             headers: {
-        //                 'Authorization': 'Bearer ' + newAccessToken
-        //             },
-        //             success: function(response) {
-        //                 const newAccessToken = response.access_token;
-        //             }
-        //         });
-        //         console.log(error);
-        //     }
-        // });
+    // $.ajax({
+    //     url: ``,
+    //     type: 'get',
+    //     headers: {
+    //         'X-Refresh-Token': refreshToken
+    //         // 'Authentication': document.cookie(res.accessToken)
+    //     },
+    //     success: function(response) {
+    //         const newAccessToken = response.access_token;
+            
+    //     },
+    //     error: function(error) {
+    //         $.ajax({
+    //             url:`/api/token/${userId}`,
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + newAccessToken
+    //             },
+    //             success: function(response) {
+    //                 const newAccessToken = response.access_token;
+    //             }
+    //         });
+    //         console.log(error);
+    //     }
+    // });
     
 
 </script>
