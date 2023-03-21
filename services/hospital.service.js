@@ -209,7 +209,7 @@ class HospitalService {
                 throw err;
             }
             const findOneHospital = await this.hospitalRepository.findOneHospital(userId);
-            console.log("#########안나",findOneHospital.hospitalId)
+            console.log('#########안나', findOneHospital.hospitalId);
             if (findOneHospital.length === true) {
                 const err = this.createError.hospitalIsExisted();
                 throw err;
@@ -557,12 +557,13 @@ class HospitalService {
 
     getOneHospital = async (id) => {
         try {
-            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
-            // const reviews = await this.hospitalRepository.getAllreviews(id)
-            const reviews = await this.hospitalRepository.findReview(id)
-            // console.log("oneHospital", oneHospital)
-            console.log("reviews.user", reviews) //users 자제가 없음
-            
+            const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+            const reviews = await this.hospitalRepository.findReview(id);
+            // console.log("reviews", reviews)
+
+            //getAllReviews
+            // console.log("reviews", reviews[0].reviews[0].content)
+
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
                 const data = {
@@ -571,38 +572,9 @@ class HospitalService {
                 url.push(data);
             }
 
-            // console.log("reviews@@@@@@@@", reviews[0].reviews[0].star)
-
-            // userId랑 name만 찍힘 /getAllreviews
-            // const review = []
-            // for (let i = 0; i < reviews.length; i++) {
-
-            //     const reviewStarContents = []
-            //     for (let j = 0; j < reviewStarContents.length; i++) {
-            //         const data = {
-            //             star: reviewStarContents[j].star,
-            //             contents: reviewStarContents[j].contents,
-            //         };
-            //         reviewStarContents.push(data);
-            //     }
-
-            //     console.log("reviewStarContents", reviewStarContents)
-
-            //     const data = {
-            //         userId: reviews[i].userId,
-            //         // contents: reviews[i].contents,
-            //         // reviews: reviews[0].reviews.star
-            //         name: reviews[i].name,
-            //         // star: reviewStarContents.star,
-            //         // contents: reviewStarContents.contents,
-            //         createdAt: reviews[i].createdAt
-            //     };
-            //     review.push(data);
-            // }
-
-            const reviewStarContents = []
+            // 이름이 안 찍힘
+            const reviewStarContents = [];
             for (let i = 0; i < reviews.length; i++) {
-
                 // const name = []
                 // for (let j = 0; j < reviews.users; i++) {
                 //     const data = {
@@ -616,7 +588,7 @@ class HospitalService {
                     star: reviews[i].star,
                     contents: reviews[i].contents,
                     name: reviews[i].users,
-                    createdAt: reviews[i].createdAt
+                    createdAt: reviews[i].createdAt,
                 };
                 reviewStarContents.push(data);
             }
@@ -649,16 +621,12 @@ class HospitalService {
                 };
             });
 
-            console.log("doctors", doctors)
             return {
                 hospitalId: oneHospital.hospitalId,
                 hospitalName: oneHospital.name,
                 hospitalAddress: oneHospital.address,
                 hospitalphone: oneHospital.phone,
-                hospitalImage: !url
-                    ? '이미지 준비중'
-                    : url,
-                // reviews: review,
+                hospitalImage: !url ? '이미지 준비중' : url,
                 reviews: reviewStarContents,
                 doctors,
             };

@@ -3,7 +3,6 @@ const { JWT_SECRET_KEY } = process.env;
 const { User, RefreshToken } = require('../models');
 
 const authMiddleware = async (req, res, next) => {
-    
     //auth의 역할: 로그인 검증이랑 user확인(현재 로그인이 되어 있는 유저 확인 가능하게끔)
     //유저가 존재하는지, 발행한 토큰이맞는지, 유효한지 확인
     //토큰이 없다면 컨트롤러로 가는게 아니라 다시 로그인 버튼을 누르게끔

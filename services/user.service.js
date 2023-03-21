@@ -5,9 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
-require('dotenv').config();
 const env = process.env;
-const crpyto = require('crypto-js')
 
 class UserService {
     userRepository = new UserRepository(
@@ -77,15 +75,21 @@ class UserService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        
+        const encryptIdNumber = cryptor.encrypt(idNumber, TWO_WAY_ENCRYPTION);
+        const decrytIdNumber = crypter.decrypt(encryptIdNumber, TWO_WAY_ENCRYPTION);
+
+        // 추가 고민
+        // const hashedIdNumber = await bcrypt.hash(password, 12);
+
         const sign = await this.userRepository.signup(
             name,
             loginId,
             hashedPassword,
             phone,
-            idNumber,
+            encryptIdNumber,
             role
         );
+
         return sign;
     };
 
@@ -95,8 +99,10 @@ class UserService {
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
+        console.log('user[0].password', user[0].password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
+        console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
             const err = await this.createError.wrongEmailOrPassword();
@@ -133,10 +139,18 @@ class UserService {
         return { allUser: allUser, lastPage: lastPage };
     };
 
-    findUserRole = async (role, pageNum, type) => {
+    // findUserRole = async (role, pageNum, type) => {
+    //     const limit = 10;
+    //     const offset = (pageNum - 1) * limit;
+    //     const allUser = await this.userRepository.PaginationByRole(limit, offset, role, type);
+    //     const lastPage = Math.ceil(allUser.count / limit);
+    //     return { allUser: allUser, lastPage: lastPage };
+    // };
+
+    getSearchList = async (search, pageNum, type) => {
         const limit = 10;
         const offset = (pageNum - 1) * limit;
-        const allUser = await this.userRepository.PaginationByRole(limit, offset, role, type);
+        const allUser = await this.userRepository.getSearchList(search, limit, offset, type);
         const lastPage = Math.ceil(allUser.count / limit);
         return { allUser: allUser, lastPage: lastPage };
     };
