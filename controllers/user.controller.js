@@ -179,7 +179,7 @@ class UserController {
                 process.env.JWT_SECRET_KEY
             );
             const reservation = await this.reservationService.findReservationById(reservationId);
-            console.log(reservation.userId != accessToken.userId)
+            console.log(reservation.userId != accessToken.userId);
             if (reservation.userId != accessToken.userId) {
                 throw this.createError.notAuthorized();
             }
@@ -220,6 +220,7 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
+        console.log(req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -232,7 +233,7 @@ class UserController {
                 idNumber,
                 role
             );
-            return res.json(user);
+            return res.json({ user });
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -247,7 +248,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10s',
+                expiresIn: '1h',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
@@ -325,7 +326,8 @@ class UserController {
     };
     editUserPassword = async (req, res, next) => {
         try {
-            const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY).userId;
+            const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY)
+                .userId;
             const { password, confirm } = await this.validation.editUserPassword.validateAsync(
                 req.body
             );
