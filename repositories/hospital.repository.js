@@ -343,12 +343,16 @@ class HospitalRepository {
     };
 
     // 화면 위치 기준 병원 찾기
-    findNearHospitals = async (longitude, latitude) => {
+    findNearHospitals = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const hospitals = await this.hospitalModel.findAll({
                 where: {
-                    longitude: { [Op.between]: longitude },
-                    latitude: { [Op.between]: latitude },
+                    longitude: {
+                        [Op.and]: [{ [Op.gte]: leftLongitude }, { [Op.lte]: rightLongitude }],
+                    },
+                    latitude: {
+                        [Op.and]: [{ [Op.gte]: leftLatitude }, { [Op.lte]: rightLatitude }],
+                    },
                 },
                 attributes: ['hospitalId', 'address'],
             });
@@ -359,12 +363,16 @@ class HospitalRepository {
     };
 
     // 화면 위치 기준 병원 정보
-    findNearHospitalsInfo = async (longitude, latitude) => {
+    findNearHospitalsInfo = async (rightLongitude, rightLatitude, leftLongitude, leftLatitude) => {
         try {
             const hospitals = await this.hospitalModel.findAll({
                 where: {
-                    longitude: { [Op.between]: longitude },
-                    latitude: { [Op.between]: latitude },
+                    longitude: {
+                        [Op.and]: [{ [Op.gte]: leftLongitude }, { [Op.lte]: rightLongitude }],
+                    },
+                    latitude: {
+                        [Op.and]: [{ [Op.gte]: leftLatitude }, { [Op.lte]: rightLatitude }],
+                    },
                 },
                 attributes: ['hospitalId', 'name', 'address', 'phone'],
                 include: [{ model: this.hospitalImageFileModel, as: 'hospitalImageFiles' }],
@@ -450,10 +458,13 @@ class HospitalRepository {
                     },
                 ],
             });
+            
         } catch (err) {
             throw err;
         }
     };
+    
+    
 
     //병원별 리뷰조회
     findReview = async(hospitalId) => {

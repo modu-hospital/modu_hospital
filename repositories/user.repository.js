@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 class UserRepository {
     constructor(
         UserModel,
@@ -92,6 +94,7 @@ class UserRepository {
     };
 
     PaginationByAll = async (limit, offset, type) => {
+        console.log('레파에서: ', offset, limit, type);
         let users;
         const tabType = { offset, limit };
         if (type === 'customer') {
@@ -124,15 +127,62 @@ class UserRepository {
         return users;
     };
 
-    PaginationByRole = async (limit, offset, role, type) => {
+    getSearchList = async (search, limit, offset, type) => {
+        console.log('레파에서: ', search);
+        console.log('레파에서: ', offset, limit);
         let users;
         const tabType = { offset, limit };
-        users = await this.userModel.findAndCountAll({
-            ...tabType,
-            where: { role },
-        });
+        if (type === 'customer') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        { role: 'customer' },
+                    ],
+                },
+            });
+        } else if (type === 'partner') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        { role: 'partner' },
+                    ],
+                },
+            });
+        } else if (type === 'waiting') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        { [Op.or]: [{ address: { [Op.substring]: search } }] },
+                        { role: 'waiting' },
+                    ],
+                },
+            });
+        } else {
+            users = await this.userModel.findAndCountAll({
+                offset,
+                limit,
+                where: {
+                    [Op.or]: [{ address: { [Op.substring]: search } }],
+                },
+            });
+        }
         return users;
     };
+
+    // PaginationByRole = async (limit, offset, role, type) => {
+    //     let users;
+    //     const tabType = { offset, limit };
+    //     users = await this.userModel.findAndCountAll({
+    //         ...tabType,
+    //         where: { role },
+    //     });
+    //     return users;
+    // };
 
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });

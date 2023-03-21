@@ -1,52 +1,18 @@
 
 <style>
+    /* .doctor_profile{
+        
 
-* {
-  margin:0; 
-  padding:0;
-}
-li {
-  list-style: none;
-}
-.kind_wrap {
-  border:2px solid black; 
-  width:100%; 
-  max-width:800px; 
-  margin:0 auto; 
-  position: relative;
-}
-.kind_wrap > .kind_slider {
-  overflow: hidden;
-}
-.kind_wrap > .kind_slider .slider { 
-  position: relative; 
-  transition: 0.5s;
-}
-.kind_wrap > .kind_slider .slider li {
-  float:left;
-}
-.kind_wrap > .kind_slider img {
-  vertical-align: top;
-}
-.kind_wrap .arrow > a.prev {
-  position: absolute; 
-  left:-50px; 
-  top:100px;
-}
-.kind_wrap .arrow > a.next {
-  position: absolute; 
-  right:-50px; 
-  top:100px;
-}
+    } */
+
+
 
 </style>
 <div>
 
     <div style="overflow-x: auto;" class="kind_wrap">
         <div class="kind_slider" id="hospital-image">
-      
             <img src ="" alt="병원사진">
-           
         </div>
     </div>
     <div class="arrow">
@@ -65,15 +31,13 @@ li {
         병원 오픈 시간대
     </div>
     <div>
-        <table id="doctorsList">
-            <tr>
-                <th>의사이름</th>
-                <th>의사사진</th>
-                <th>의사소개</th>
-                <th>진료과</th>
-                <th>근무날</th>
-            </tr>
-        </table>
+        <div>
+            <img src="" class="doctor_profile" alt="의사사진">
+        </div>
+        <div>의사 이름</div>
+        <div>의사소개글</div>
+        <div>각의사진료과</div>
+        <div>근무날</div>
     </div>
     <div class="review">
         <table id="reviewList">
@@ -87,14 +51,11 @@ li {
         </table>
     </div>
     <div>
-        <button>실시간 챗</button>
         <button> 예약하기 </button>
     </div>
 </div>
 
 <script>
-
-
 
     $(document).ready(function(){
         getReview()
@@ -105,7 +66,6 @@ li {
     })
 
     const id = window.location.pathname.split('/')[1]
-
     function getworktime() {
         $.ajax({
             type: 'GET',
