@@ -136,10 +136,10 @@
 </body>
 </html>
 <script type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c&libraries=services"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c"></script>
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc"></script>
 <script type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8c&libraries=services,clusterer,drawing"></script>
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services,clusterer,drawing"></script>
 <script>
   window.onload = function () {
     load()
@@ -177,10 +177,6 @@
     listEvent = listBtnClickEvent(map)
 
     a = fetchData(map, geocoder)
-
-
-
-
 
     de(map, geocoder)
 
@@ -274,10 +270,7 @@
 
     var geocoder = new kakao.maps.services.Geocoder();
 
-    // 영역의 좌표를 얻어옵니다.
-    const data = getData(map)
-
-    listBtnClickEvent(map)
+    let data = getData(map)
 
     listEvent = listBtnClickEvent(map)
 
@@ -350,39 +343,10 @@
           }
         })
 
-      fetch(`/api/hospitals/around/info`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById('list').innerHTML = ``
-          for (let i = 0; i < data.hospitals.length; i++) {
-            const a =
-              `
-              <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
-                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                <div class="info">
-                <span style="position:static">${data.hospitals[i].name}</span>
-                <span style="position:static">${data.hospitals[i].address}</span>
-                <span style="position:static">${data.hospitals[i].phone}</span>
-                </div>
-                <div>
-              `
-
-            const li = document.createElement('li');
-            li.innerHTML = a;
-            document.getElementById('list').appendChild(li);
-          }
-        })
-
-
       kakao.maps.event.addListener(map, "zoom_changed", ae1);
 
       kakao.maps.event.addListener(map, 'dragend', cc);
+      listBtnClickEvent(map)
     })
   }
 
@@ -458,7 +422,7 @@
               `
               <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
                 <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                <div class="info">
+                <div class="hospitalInfo">
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
@@ -512,7 +476,7 @@
                   `
                   <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
                 <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                <div class="info">
+                <div class="hospitalInfo">
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
@@ -574,7 +538,7 @@
                   `
                     <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
                     <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                    <div class="info">
+                    <div class="hospitalInfo">
                     <span style="position:static">${data.hospitals[i].name}</span>
                     <span style="position:static">${data.hospitals[i].address}</span>
                     <span style="position:static">${data.hospitals[i].phone}</span>
@@ -618,7 +582,6 @@
 
         if (!data.hospitals[0]) {
 
-
           kakao.maps.event.addListener(map, 'zoom_changed', ae1)
 
           kakao.maps.event.addListener(map, 'dragend', cc)
@@ -641,7 +604,7 @@
                   `
                   <div onclick="window.open('/hospitals/${data.hospitals[i].hospitalId}')" class="listBox">
                 <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
-                <div class="info">
+                <div class="hospitalInfo">
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
@@ -760,7 +723,7 @@
               `
               <div onclick="window.open('/hospitals/${data[i].hospitalId}')" class="listBox">
                 <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                <div class="info">
+                <div class="hospitalInfo">
                 <span style="position:static">${data[i].hospitalName}</span>
                 <span style="position:static">${data[i].address}</span>
                 <span style="position:static">${data[i].phone}</span>
@@ -841,7 +804,7 @@
                     `
                     <div onclick="window.open('/hospitals/${data[i].hospitalId}')" class="listBox">
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                        <div class="info">
+                        <div class="hospitalInfo">
                         <span style="position:static">${data[i].hospitalName}</span>
                         <span style="position:static">${data[i].address}</span>
                         <span style="position:static">${data[i].phone}</span>
@@ -901,7 +864,7 @@
                     `
                     <div onclick="window.open('/hospitals/${data[i].hospitalId}')" class="listBox">
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                        <div class="info">
+                        <div class="hospitalInfo">
                           <span style="position:static">${data[i].hospitalName}</span>
                           <span style="position:static">${data[i].address}</span>
                           <span style="position:static">${data[i].phone}</span>
@@ -946,7 +909,7 @@
                 `
                 <div onclick="window.open('/hospitals/${data[i].hospitalId}')" class="listBox">
                 <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
-                <div class="info">
+                <div class="hospitalInfo">
                 <span style="position:static">${data[i].hospitalName}</span>
                 <span style="position:static">${data[i].address}</span>
                 <span style="position:static">${data[i].phone}</span>
