@@ -174,29 +174,15 @@ class ReservationRepository {
         proxyName,
         address
     ) => {
-        console.log(
-            '레파지토리에서 : ',
-            doctorId,
-            userId,
-            relationship,
-            name,
-            phone,
-            reservationdate,
-            contents,
-            idnumber,
-            status,
-            proxyName,
-            address
-        );
         const registerData = await this.models.Reservation.create({
             doctorId: doctorId,
             userId: userId,
             relationship: relationship,
             name: name,
             phone: phone,
-            reservationdate: reservationdate,
+            date: reservationdate,
             contents: contents,
-            idnumber: idnumber,
+            idNumber: idnumber,
             status: status,
             proxyName: proxyName,
             address: address,

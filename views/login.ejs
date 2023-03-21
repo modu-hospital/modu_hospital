@@ -34,28 +34,33 @@
                     password: document.getElementById('password').value,
                 };
 
-                fetch('/api/users/login', {
-                    credentials: 'include',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data), //
-                })
-                    //원래 적혀 있었던 코드
-                    .then((response) => {
-                        //요청한 api 응답이 들어왔을 때 실행됨
-                        if (response.status === 412) {
-                            //에러처리 해준 status 기입
-                            alert('이메일 또는 비밀번호가 틀렸습니다');
-                            window.location.reload();
-                        }
-                        if (response.status === 422) {
-                            alert('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
-                            window.location.reload();
-                        }
-                        location.href = '/';
-                    })
+    fetch("/api/users/login", {
+        credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(data), //
+        })
+
+        //원래 적혀 있었던 코드
+        .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
+            if (response.status === 412) {//에러처리 해준 status 기입
+                alert('이메일 또는 비밀번호가 틀렸습니다');
+                window.location.reload();
+            }
+            if (response.status === 422) {
+                alert('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
+                window.location.reload();
+            }
+            // if (!data) {
+            //     alert('정보를 입력해주세요')
+            //     window.location.reload();
+            // }
+            location.href = '/';
+        })
+
 
                     .catch((err) => {
                         alert(err.message);
