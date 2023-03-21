@@ -8,7 +8,7 @@ router.get('/', auth, (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    console.log(userRole);
+    console.log("#####userRole",userRole);
     res.render('index.ejs', { components: 'main', user: userRole });
 });
 
@@ -142,6 +142,15 @@ router.get('/signup', (req, res) => {
         userRole = res.locals.user.role;
     }
     res.render('index.ejs', { components: 'signup', user: userRole });
+});
+
+//파트너 회원가입
+router.get('/partner/signup', (req, res) => {
+    let userRole = null;
+    if (res.locals.user) {
+        userRole = res.locals.user.role;
+    }
+    res.render('index.ejs', { components: 'partner', user: userRole });
 });
 
 module.exports = router;
