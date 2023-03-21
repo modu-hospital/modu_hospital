@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
-const cryptor = require('cryptor-js')
+const cryptor = require('crypto-js')
 const env = process.env;
 
 class UserService {
