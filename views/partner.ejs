@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>파트너 맺기</title>
 </head>
 <body>
 
@@ -35,7 +35,7 @@
     
     </table>
     <div>
-        <button class="button signup__submit" id="signup">회원가입</button>
+        <button class="button signup__submit" id="signup">파트너 맺기</button>
     </div>
 </form>
 <script>
@@ -82,10 +82,8 @@ function check_pw(){
             phone: document.getElementById('phone').value,
             idNumber: document.getElementById('idNumber').value,
         };
-        console.log(data);
-
-
-        fetch('/api/users/signup/customer', {
+        
+        fetch('/api/users/signup/partner', {
             credentials: 'include',
             method: 'POST',
             headers: {

@@ -33,11 +33,14 @@
         <% } else { %>
           <li><a href="/login">로그인</a></li>
           <li><a href="/signup">회원가입</a></li>
+          <li><a href="/signup">파트너 맺기</a></li>
         <% } %>
         <% user = user || 'guest'; %>
         <li><h4><%= user %>로 접속 중 입니다.</h4> </li>
       </ul>
 </nav>
+
+<script src="/js/logout.js"></script>
 
 <!--
     <ul>
