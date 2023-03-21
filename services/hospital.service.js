@@ -558,7 +558,6 @@ class HospitalService {
         try {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
             const reviews = await this.hospitalRepository.findReview(id);
-            // console.log("reviews", reviews)
 
             //getAllReviews
             // console.log("reviews", reviews[0].reviews[0].content)
@@ -574,14 +573,6 @@ class HospitalService {
             // 이름이 안 찍힘
             const reviewStarContents = [];
             for (let i = 0; i < reviews.length; i++) {
-                // const name = []
-                // for (let j = 0; j < reviews.users; i++) {
-                //     const data = {
-                //         name: reviews[i].users[j].name,
-                //     };
-                //     url.push(data);
-                // }
-
                 const data = {
                     userId: reviews[i].userId,
                     star: reviews[i].star,

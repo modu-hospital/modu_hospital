@@ -43,7 +43,6 @@
             body: JSON.stringify(data), //
         })
 
-        //원래 적혀 있었던 코드
         .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
             if (response.status === 412) {//에러처리 해준 status 기입
                 alert('이메일 또는 비밀번호가 틀렸습니다');
