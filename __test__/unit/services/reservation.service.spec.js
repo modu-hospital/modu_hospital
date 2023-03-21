@@ -1,4 +1,3 @@
-const { describe } = require('node:test');
 const ReservationService = require('../../../services/reservation.service');
 const CreateError = require('../../../lib/errors');
 const createError = new CreateError();

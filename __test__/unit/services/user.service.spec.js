@@ -1,4 +1,3 @@
-const { describe } = require('node:test');
 const UserService = require('../../../services/user.service');
 const CreateError = require('../../../lib/errors');
 const createError = new CreateError();
