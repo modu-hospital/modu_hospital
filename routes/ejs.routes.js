@@ -8,7 +8,7 @@ router.get('/', auth, (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    console.log("#####userRole",userRole);
+    console.log('#####userRole', userRole);
     res.render('index.ejs', { components: 'main', user: userRole });
 });
 
