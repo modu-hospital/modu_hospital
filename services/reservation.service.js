@@ -1,4 +1,6 @@
 const ReservationRepository = require('../repositories/reservation.repository');
+const crypter = require('../lib/encrypt');
+const { TWO_WAY_ENCRYPTION } = process.env;
 const CreateError = require('../lib/errors');
 const { sequelize } = require('../models');
 
@@ -60,15 +62,20 @@ class ReservationService {
         doctorId,
         userId,
         relationship,
-        selfwrite,
         name,
         idnumber,
         phone,
         address,
         reservationdate,
-        reservationtime
+        reservationtime,
+        contents,
+        proxyName
     ) => {
-        console.log('if 이전:', relationship);
+        let encryt = crypter.encrypt(idnumber, TWO_WAY_ENCRYPTION);
+
+        console.log(encryt);
+
+        // relationship 숫자형 변환
         if (relationship === '본인') {
             relationship = 1;
         } else if (relationship === '직계') {
@@ -84,31 +91,48 @@ class ReservationService {
             console.log(err);
             throw err;
         }
-        console.log('if 이후:', relationship);
+        // 날짜 + 시간
+        const date = reservationdate;
+        const time = reservationtime;
+
+        if (time.length < 13) {
+            time = '0' + time.split(' ~ ')[0] + ':00';
+        } else {
+            time = time.split(' ~ ')[0] + ':00';
+        }
+
+        reservationdate = date + ' ' + time;
+        const status = 'waiting';
 
         const registerData = await this.reservationRepository.reservaionInputData(
             doctorId,
             userId,
             relationship,
-            selfwrite,
             name,
-            idnumber,
             phone,
-            address,
             reservationdate,
-            reservationtime
+            contents,
+            encryt,
+            status,
+            proxyName,
+            address
         );
 
+        let decryt = crypter.decrypt(encryt, TWO_WAY_ENCRYPTION);
+        console.log(decryt);
+
         return {
+            doctorId: registerData.doctorId,
+            userId: registerData.userId,
             relationship: registerData.relationship,
-            selfwrite: registerData.selfwrite,
             name: registerData.name,
-            proxyname: registerData.proxyname,
-            idnumber: registerData.idnumber,
             phone: registerData.phone,
-            address: registerData.address,
             reservationdate: registerData.reservationdate,
-            reservationtim: registerData.reservationtim,
+            contents: registerData.contents,
+            encryt: registerData.encryt,
+            status: registerData.status,
+            proxyName: registerData.proxyName,
+            address: registerData.address,
         };
     };
 }

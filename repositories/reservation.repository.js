@@ -109,25 +109,41 @@ class ReservationRepository {
         doctorId,
         userId,
         relationship,
-        selfwrite,
         name,
-        idnumber,
         phone,
-        address,
         reservationdate,
-        reservationtime
+        contents,
+        idnumber,
+        status,
+        proxyName,
+        address
     ) => {
+        console.log(
+            '레파지토리에서 : ',
+            doctorId,
+            userId,
+            relationship,
+            name,
+            phone,
+            reservationdate,
+            contents,
+            idnumber,
+            status,
+            proxyName,
+            address
+        );
         const registerData = await this.models.Reservation.create({
             doctorId: doctorId,
             userId: userId,
             relationship: relationship,
-            selfwrite: selfwrite,
             name: name,
-            idnumber: idnumber,
             phone: phone,
-            address: address,
             reservationdate: reservationdate,
-            reservationtime: reservationtime,
+            contents: contents,
+            idnumber: idnumber,
+            status: status,
+            proxyName: proxyName,
+            address: address,
         });
         return registerData;
     };

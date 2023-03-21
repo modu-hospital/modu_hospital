@@ -15,6 +15,7 @@ class UserController {
         try {
             const pageNum = req.query.page || 1;
             const type = req.query.type;
+            console.log('컨트롤러의: pageNum: ', pageNum, 'type: ', type);
             const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
             return res.status(200).json(PaginationByRole);
         } catch (err) {
@@ -23,17 +24,26 @@ class UserController {
     };
 
     // (admin) role별 조회
-    getRoleUser = async (req, res, next) => {
-        try {
-            const { role } = req.params;
-            const pageNum = req.query.page || 1;
-            const type = req.query.type;
+    // getRoleUser = async (req, res, next) => {
+    //     try {
+    //         const { role } = req.params;
+    //         const pageNum = req.query.page || 1;
+    //         const type = req.query.type;
 
-            const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
-            return res.status(200).send(roleUserInfo);
-        } catch (err) {
-            next(err);
-        }
+    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
+    //         return res.status(200).send(roleUserInfo);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // };
+
+    getAllSearch = async (req, res) => {
+        const search = req.query.search;
+        const pageNum = req.query.page || 1;
+        const type = req.query.type;
+        console.log('컨트롤러의 search: : ', search, 'pageNum: ', pageNum, 'type: ', type);
+        const getSearchList = await this.userService.getSearchList(search, pageNum, type);
+        return res.status(200).json(getSearchList);
     };
 
     // (admin) defalutDelete
@@ -236,7 +246,7 @@ class UserController {
             if (!user) {
                 res.status(412).json({ message: err.message });
             } else {
-                const accessToken = jwt.sign({ loginId: user.userId }, process.env.JWT_SECRET_KEY, {
+                const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
                     expiresIn: '1h',
                 });
 
@@ -323,38 +333,29 @@ class UserController {
             const { userId } = res.locals.user;
             const {
                 relationship,
-                selfwrite,
+                name,
+                idnumber,
+                phone,
+                reservationdate,
+                reservationtime,
+                contents,
+                proxyName,
+                address,
+            } = req.body;
+
+            const reservaionInputData = await this.reservationService.reservaionInputData(
+                doctorId,
+                userId,
+                relationship,
                 name,
                 idnumber,
                 phone,
                 address,
                 reservationdate,
                 reservationtime,
-            } = req.body;
-            console.log(
-                doctorId,
-                userId,
-                relationship,
-                selfwrite,
-                name,
-                idnumber,
-                phone,
-                address,
-                reservationdate,
-                reservationtime
-            );
-
-            const reservaionInputData = await this.reservationService.reservaionInputData(
-                doctorId,
-                userId,
-                relationship,
-                selfwrite,
-                name,
-                idnumber,
-                phone,
-                address,
-                reservationdate,
-                reservationtime
+                contents,
+                proxyName,
+                address
             );
 
             res.status(201).json({ result: 'success', data: reservaionInputData });

@@ -987,7 +987,6 @@ function inputData() {
 function reservaionCheck() {
     const pickupdoctor = $('#pickUpDoctor').val();
     const relationship = $('#relationCategory').val();
-    const selfwrite = $('#selfWrite').val();
     const name = $('#patientName').val();
     const proxyname = $('#proxyName').val();
     const idnumber = $('#idNumber').val();
@@ -995,31 +994,32 @@ function reservaionCheck() {
     const address = $('#address').val();
     const reservationdate = $('#reservationSelectedDate').val();
     const reservationtime = $('#reservationSelectedTime').val();
+    const contents = $('#contents').val();
 
-    console.log(
-        pickupdoctor,
-        relationship,
-        selfwrite,
-        name,
-        proxyname,
-        idnumber,
-        phone,
-        address,
-        reservationdate,
-        reservationtime
-    );
+    // console.log(
+    //     pickupdoctor,
+    //     relationship,
+    //     name,
+    //     idnumber,
+    //     phone,
+    //     address,
+    //     reservationdate,
+    //     reservationtime,
+    //     proxyname
+    // );
     $.ajax({
         type: 'POST',
         url: `/api/users/reservation/${pickupdoctor}`,
         data: {
             relationship: relationship,
-            selfwrite: selfwrite,
             name: name,
-            idnumber: idnumber,
             phone: phone,
-            address: address,
             reservationdate: reservationdate,
             reservationtime: reservationtime,
+            contents: contents,
+            idnumber: idnumber,
+            proxyName: proxyname,
+            address: address,
         },
         success: function (response) {
             location.href = '/users/reservation';
