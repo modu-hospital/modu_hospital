@@ -57,8 +57,13 @@
                 alert('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
                 window.location.reload();
             }
+            // if (!data) {
+            //     alert('정보를 입력해주세요')
+            //     window.location.reload();
+            // }
             location.href = '/';
         })
+
 
         .catch((err) => {
             alert(err.message);

@@ -7,6 +7,7 @@ const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
 require('dotenv').config();
 const env = process.env;
+const crpyto = require('crypto-js')
 
 class UserService {
     userRepository = new UserRepository(
@@ -76,10 +77,7 @@ class UserService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-
-        // 추가 고민
-        // const hashedIdNumber = await bcrypt.hash(password, 12);
-
+        
         const sign = await this.userRepository.signup(
             name,
             loginId,
@@ -88,7 +86,6 @@ class UserService {
             idNumber,
             role
         );
-
         return sign;
     };
 
@@ -98,10 +95,8 @@ class UserService {
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
-        console.log('user[0].password', user[0].password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
-        console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
             const err = await this.createError.wrongEmailOrPassword();

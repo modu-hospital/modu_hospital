@@ -558,9 +558,10 @@ class HospitalService {
     getOneHospital = async (id) => {
         try {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);   
+            // const reviews = await this.hospitalRepository.getAllreviews(id)
             const reviews = await this.hospitalRepository.findReview(id)
-            // console.log("reviews", reviews)
-            console.log("oneHospital", oneHospital.doctors)
+            // console.log("oneHospital", oneHospital)
+            console.log("reviews.user", reviews) //users 자제가 없음
             
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
@@ -570,7 +571,35 @@ class HospitalService {
                 url.push(data);
             }
 
-            // 이름이 안 찍힘
+            // console.log("reviews@@@@@@@@", reviews[0].reviews[0].star)
+
+            // userId랑 name만 찍힘 /getAllreviews
+            // const review = []
+            // for (let i = 0; i < reviews.length; i++) {
+
+            //     const reviewStarContents = []
+            //     for (let j = 0; j < reviewStarContents.length; i++) {
+            //         const data = {
+            //             star: reviewStarContents[j].star,
+            //             contents: reviewStarContents[j].contents,
+            //         };
+            //         reviewStarContents.push(data);
+            //     }
+
+            //     console.log("reviewStarContents", reviewStarContents)
+
+            //     const data = {
+            //         userId: reviews[i].userId,
+            //         // contents: reviews[i].contents,
+            //         // reviews: reviews[0].reviews.star
+            //         name: reviews[i].name,
+            //         // star: reviewStarContents.star,
+            //         // contents: reviewStarContents.contents,
+            //         createdAt: reviews[i].createdAt
+            //     };
+            //     review.push(data);
+            // }
+
             const reviewStarContents = []
             for (let i = 0; i < reviews.length; i++) {
 
@@ -629,6 +658,7 @@ class HospitalService {
                 hospitalImage: !url
                     ? '이미지 준비중'
                     : url,
+                // reviews: review,
                 reviews: reviewStarContents,
                 doctors,
             };

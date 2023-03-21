@@ -474,6 +474,7 @@ class HospitalRepository {
                 // attributes:['star', 'contents', 'createdAt'],
                 include: [
                     {
+                        // where:{userId},
                         model: this.userModel,
                         as: 'users',
                     }
