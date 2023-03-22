@@ -50,6 +50,9 @@ const authMiddleware = async (req, res, next) => {
         // const err = await createError.TokenNotFound();
         // throw err;
 
+        res.clearCookie('accessToken');
+
+        return 
         //원래 코드 한줄만 있었음
         return res.status(401).json({ message: 'accessToken 만료' });
 

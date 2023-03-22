@@ -247,8 +247,6 @@ class UserController {
             const { loginId, password } = req.body;
             const user = await this.userService.login(loginId, password);
 
-            
-
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '10s',
             });
