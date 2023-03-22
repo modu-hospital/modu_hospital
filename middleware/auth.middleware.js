@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = process.env;
 const { User, RefreshToken } = require('../models');
+const createError = require('../lib/errors');
+// const TokenController = require('../controllers/token.controller')
 
+// tokenController = new TokenController()
 const authMiddleware = async (req, res, next) => {
     //auth의 역할: 로그인 검증이랑 user확인(현재 로그인이 되어 있는 유저 확인 가능하게끔)
     //유저가 존재하는지, 발행한 토큰이맞는지, 유효한지 확인
@@ -78,8 +81,7 @@ const authMiddleware = async (req, res, next) => {
         // console.log("token :", token)
         // console.log("#####token", token[0].token)
 
-        //refreshToken 유효 여부 검증 한 후  (db에서 찾은)
-        //payload가 잘 들어갔는지 확인하고 싶음 userId.loginId값 확인하고 싶음
+        return res.status(401).json({ message: 'accessToken 만료' });
 
         // const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY)
         // if(refreshTokenV) {

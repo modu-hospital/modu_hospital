@@ -1,17 +1,21 @@
 <style>
-    .container {
-        width: 300px;
+    .hospital_all {
+        margin: 0;
     }
 
-    .inner {
-        width: 100px;
-        float: left;
+    .container_hos {
+        width: 900px;
+    }
+
+    .inner_hos {
+        width: 100%;
     }
 </style>
-<div style="margin: 0">
-    <div class="container">
-        <div class="inner" id="hospital-image">
-            <img src="" alt="병원사진" />
+
+<div class="hospital_all">
+    <div>
+        <div class="container_hos">
+            <div class="inner_hos" id="hospital-image"></div>
         </div>
     </div>
 
@@ -103,9 +107,9 @@
 
                     let temp_html = `
                     
-                        <ul>
-                            <img width="200px" src ="${hospitalimage}" alt="병원사진">
-                        </ul>
+                        <div>
+                            <img src ="${hospitalimage}" alt="병원사진">
+                        </div>
                    `;
 
                     $('#hospital-image').append(temp_html);
@@ -181,13 +185,37 @@
                         let day = workTime[j].day;
                         let start = workTime[j].start;
                         let end = workTime[j].end;
+
+                        switch (day) {
+                            case 1:
+                                day = '월';
+                                break;
+                            case 2:
+                                day = '화';
+                                break;
+                            case 3:
+                                day = '수';
+                                break;
+                            case 4:
+                                day = '목';
+                                break;
+                            case 5:
+                                day = '금';
+                                break;
+                            case 6:
+                                day = '토';
+                                break;
+                            default:
+                                day = '일';
+                                break;
+                        }
                         workTimeSum += `${day}요일 ${start}~${end}`;
                     }
 
                     let temp_html = `<tbody>
                         <tr>
                         <td>${doctors}</td>
-                        <th><img width="60px" src="${doctorImage}" alt="의사사진">의사사진</th>
+                        <th><img src="${doctorImage}" alt="의사사진">의사사진</th>
                         <td>${doctorContent}</td>
                         <td>${department}</td>
                         <td>${workTimeSum}</td>
