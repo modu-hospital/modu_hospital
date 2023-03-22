@@ -50,21 +50,20 @@ const authMiddleware = async (req, res, next) => {
         // const err = await createError.TokenNotFound();
         // throw err;
 
-        res.clearCookie('accessToken');
+        // res.clearCookie('accessToken');
 
-        return 
-        //원래 코드 한줄만 있었음
         return res.status(401).json({ message: 'accessToken 만료' });
+        
 
-        //이 메세지값을 error.message, error.status===400
+        //이 메세지값을 error.message, error.status===401
     }
 
   
-    const { userId } = accessTokenValidate;
+    const { user } = accessTokenValidate;
 
-    const user = await User.findByPk(userId);
+    const userOne = await User.findByPk(user[0].userId);
 
-    res.locals.user = user;
+    res.locals.user = userOne;
 
     next();
 };
