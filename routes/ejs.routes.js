@@ -61,6 +61,7 @@ router.get('/map/pharmacies', (req, res) => {
 
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
+    // console.log("######################################################",res)
     if (res.locals.user.role === 'partner') {
         return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
     }
