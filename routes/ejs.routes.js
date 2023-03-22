@@ -105,12 +105,20 @@ router.get('/doctorEdit', auth, (req, res) => {
 //병원상세페이지
 router.get('/hospitals/:hospitalId', auth, (req, res) => {
     const id = req.query.id;
-    if (res.locals.user.role === 'customer') {
+    let userRole = null;
+    if (res.locals.user) {
+        userRole = res.locals.user.role;
+    }
+    if (userRole === 'customer') {
         return res.render('index.ejs', {
             components: 'hospitaldetail',
-            user: res.locals.user.role,
+            user: userRole,
         });
     }
+    return res.render('index.ejs', {
+        components: 'hospitaldetail',
+        user: userRole,
+    });
 });
 
 //의사 시간 추가
