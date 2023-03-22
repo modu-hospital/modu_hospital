@@ -341,6 +341,7 @@ let selectedFinalTime = 0 * 1;
 
 //예약시간표를 만들 table객체 획득(시간표 구성)
 function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
+    const hospitalId = window.location.pathname.split('/')[3];
     console.log(
         '클릭한 selectedYear: ',
         selectedYear,
@@ -353,7 +354,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
     );
     $.ajax({
         type: 'GET',
-        url: `/api/workingtime/reservationdate?year=${selectedYear}&month=${selectedMonth}&date=${selectedDate}&week=${dayWeek}`,
+        url: `/api/workingtime/reservationdate/${hospitalId}?year=${selectedYear}&month=${selectedMonth}&date=${selectedDate}&week=${dayWeek}`,
         async: false,
         success: function (response) {
             // 고려해야 할 점
@@ -701,33 +702,6 @@ function selectedTimeInit() {
     selectedFinalTime = 0 * 1;
 }
 
-// function submitRes() {
-//     arr = new Array();
-
-//     nameForm = document.getElementById('userName');
-//     phoneForm = document.getElementById('userPhone');
-//     emailForm = document.getElementById('userEmail');
-//     capacityForm = document.getElementById('capacity');
-//     resTimeForm = document.getElementById('selectedTime');
-//     selectedDateFrom = document.getElementById('selectedDate');
-//     selectedTimeForm = document.getElementById('selectedTime');
-
-//     arr.push(nameForm);
-//     arr.push(phoneForm);
-//     arr.push(emailForm);
-//     arr.push(resTimeForm);
-//     arr.push(selectedDateFrom);
-//     arr.push(selectedTimeForm);
-
-//     for (i = 0; i < arr.length; i++) {
-//         item = arr[i];
-//         if (item.value == '') {
-//             alert('미기입된 정보가 있습니다.');
-//             item.focus();
-//             return false;
-//         }
-//     }
-
 buildCalendar();
 
 function submitRes() {
@@ -992,6 +966,7 @@ function inputData() {
 }
 
 function reservaionCheck() {
+    const id = window.location.pathname.split('/')[3];
     const pickupdoctor = $('#pickUpDoctor').val();
     const relationship = $('#relationCategory').val();
     const name = $('#patientName').val();
@@ -1003,26 +978,61 @@ function reservaionCheck() {
     const reservationtime = $('#reservationSelectedTime').val();
     const contents = $('#contents').val();
 
-    $.ajax({
-        type: 'POST',
-        url: `/api/users/reservation/${pickupdoctor}`,
-        data: {
-            relationship: relationship,
-            name: name,
-            phone: phone,
-            reservationdate: reservationdate,
-            reservationtime: reservationtime,
-            contents: contents,
-            idnumber: idnumber,
-            proxyName: proxyname,
-            address: address,
-        },
-        success: function (response) {
-            location.href = '/users/reservation';
-            alert('예약신청이 완료되었습니다.');
-        },
-        error: function (error) {
-            console.log(error);
-        },
-    });
+    if (
+        pickupdoctor === '0' ||
+        name === '' ||
+        idnumber === '' ||
+        phone === '' ||
+        address === '' ||
+        reservationdate === '' ||
+        reservationtime === '' ||
+        contents === ''
+    ) {
+        alert('미기입된 정보가 있습니다.');
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: `/api/users/reservation/${id}/${pickupdoctor}`,
+            data: {
+                relationship: relationship,
+                name: name,
+                phone: phone,
+                reservationdate: reservationdate,
+                reservationtime: reservationtime,
+                contents: contents,
+                idnumber: idnumber,
+                proxyName: proxyname,
+                address: address,
+            },
+            success: function (response) {
+                location.href = `/users/reservation/${id}`;
+                alert('예약신청이 완료되었습니다.');
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+}
+
+function priorityHighOn() {
+    const priorityHigh = document.getElementById('demo-priority-high');
+    const reservaionComplete = document.getElementById('reservaionComplete');
+
+    if ($('#relationCategory option:selected').val() === '미선택') {
+        alert('환자와의 관계부터 선택해주세요.');
+        $("input:radio[name='group']").prop('checked', false);
+    }
+
+    if (priorityHigh.checked && $('#relationCategory option:selected').val() !== '미선택') {
+        reservaionComplete.removeAttribute('disabled');
+    }
+}
+
+function priorityLowOn() {
+    const priorityLow = document.getElementById('demo-priority-low');
+    const reservaionComplete = document.getElementById('reservaionComplete');
+    if (priorityLow.checked) {
+        reservaionComplete.setAttribute('disabled', 'disabled');
+    }
 }

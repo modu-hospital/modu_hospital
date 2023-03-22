@@ -27,7 +27,7 @@ router.get('/admin', auth, (req, res) => {
 });
 
 // 예약페이지
-router.get('/users/reservation', auth, (req, res) => {
+router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
     }

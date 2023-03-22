@@ -100,7 +100,7 @@ class UserService {
         if (!user || !isPasswordCorrect) {
             const err = await this.createError.wrongEmailOrPassword();
             throw err;
-        } 
+        }
 
         // if (!isPasswordCorrect) {
         //     const err = await this.createError.wrongEmailOrPassword();
