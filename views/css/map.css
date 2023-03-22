@@ -195,8 +195,21 @@ li:last-child {
   margin-bottom: 20px;
 }
 
-.info {
+.hospitalInfo{
   width: 260px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.doctorImg {
+  margin-left: 10px;
+}
+
+.info {
+  width: 380px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -215,7 +228,7 @@ li:last-child {
 }
 
 .division {
-  margin-top: 50px;
+  margin-top: 5vh;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
