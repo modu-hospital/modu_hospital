@@ -199,7 +199,7 @@ color: #505050;
                     </div>
                     <div class="col-7">
                         <select name="relationCategory" id="relationCategory">
-                            <option value="미선택">- 환자와의 관계 -</option>
+                            <option value="미선택" selected>- 환자와의 관계 -</option>
                             <option value="본인">본인</option>
                             <option value="직계">직계</option>
                             <option value="배우자 및 배우자의 직계">배우자 및 배우자의 직계</option>
@@ -287,7 +287,7 @@ color: #505050;
                             type="hidden"
                             name="pickUpDoctor"
                             id="pickUpDoctor"
-                            value=""
+                            value="0"
                             placeholder="담당의사"
                         />
                     </div>
@@ -299,40 +299,36 @@ color: #505050;
                             rows="6"
                         ></textarea>
                     </div>
-                    <p><h2>개인정보는 어디다 쓸거냐면요~</h2>
-
-                        <span class="image left"><img src="images/pic14.jpg" alt="" /></span
-                        >Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis
-                        eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum.
-                        Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu
-                        faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget.
-                        tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
-                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
-                        Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis
-                        tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis
-                        in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
-                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt
-                        felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in
-                        faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac
-                        adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Blandit
-                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
-                        Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus
-                        euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit
-                        adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus.
-                        Integer ac pellentesque praesent.
-                    </p>
+                    <p><h2>개인정보 수집•이용 동의서</h2></p>
+    <pre>
+    - 이용자가 제공한 모든 정보는 다음의 목적을 위해 활용하며, 하기 목적 이외의 용도로는 사용되지 않습니다.
+    ① 개인정보 수집 항목 및 수집•이용 목적
+    가) 수집 항목(필수항목)
+    - 환자와의 관계, 환자의 성명(국문), 대리신청인일 경우 대리신청인의 성명(국문), 환자의 주민등록번호,
+      전화번호(집전화 또는 휴대전화), 주소, 예약날짜 및 시간, 환자의 증상 등 예약 페이지에 기재된 정보 또는 예약자가 제공한 정보
+    나) 수집 및 이용 목적
+    - 해당 병원의 진료 및 입원, 검진예약, 조회 및 진료 서비스 이용에 따른 본인 확인과 안내 절차에 사용
+    - 진료예약 및 검사예약 및 검사예약 일정알림 및 진료상담서비스
+    - 진료비 청구, 수납, 환급 등의 원무 서비스 등
+    - 약품택배, 진료비계산서, 진료비내역서, 제 증명 및 건강검진 관련 서비스
+    ② 개인정보 보유 및 이용기간
+    - 회원 탈퇴시 혹은 서비스 종료시까지
+    ③ 동의거부관리
+    - 상기 개인정보 수집•이용에 대하여 동의를 거부할 수 있으며, 선택정보 미동의 시 비대면 예약 관련 서비스를 받을 수 없습니다.
+    - 또한 진료서비스 외의 다른 목적으로 활용하지 않으며, 수집•이용된 개인정보를 열람, 정정, 삭제, 처리정지 하고자 할 때에는
+      개인정보 보호책임자를 통해 요구할 수 있습니다.</pre>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-high" value=1 name="demo2priority" />
+                        <input type="radio" id="demo-priority-high" value=1 name="group" onclick="priorityHighOn()"/>
                         <label for="demo-priority-high">개인정보 동의</label>
                     </div>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-low" value=2 name="demo2priority" checked/>
+                        <input type="radio" id="demo-priority-low" value=2 name="group" onclick="priorityLowOn()" checked/>
                         <label for="demo-priority-low">개인정보 미동의</label>
                     </div>
                     <div class="col-12">
                         <ul class="actions">
                             <li>
-                                <input type="button" value="예약하기" class="primary" onclick="reservaionCheck()"/>
+                                <input type="button" id="reservaionComplete" value="예약하기" class="primary" onclick="reservaionCheck()" disabled/>
                             </li>
                             <li><input type="reset" value="다지우기" /></li>
                         </ul>
