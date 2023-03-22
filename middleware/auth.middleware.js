@@ -52,8 +52,8 @@ const authMiddleware = async (req, res, next) => {
 
         res.clearCookie('accessToken');
 
-        return 
-        //원래 코드 한줄만 있었음
+        
+
         return res.status(401).json({ message: 'accessToken 만료' });
 
         //이 메세지값을 error.message, error.status===400

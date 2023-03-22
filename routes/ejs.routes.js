@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
     let userRole = null;
     if (res.locals.user) {
         userRole = res.locals.user.role;
