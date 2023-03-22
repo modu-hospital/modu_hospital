@@ -40,10 +40,18 @@ class CategoryService {
             return [];
         }
 
+        const emptyCategoryMapping = hospitals.filter(
+            (hospital) => hospital.categoriesMapping.length < 1
+        );
+
+        if (emptyCategoryMapping.length > 0) {
+            return [];
+        }
+
         let arr = [];
         hospitals.map((department) => {
             for (let i = 0; i < department.categoriesMapping.length; i++) {
-                if (!department.categoriesMapping[i].doctors.hospitals) {
+                if (!department.categoriesMapping[i].doctors) {
                     return;
                 }
 

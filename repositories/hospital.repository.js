@@ -392,11 +392,7 @@ class HospitalRepository {
                     {
                         model: this.doctorModel,
                         as: 'doctors',
-                        paranoid: false,
                         required: false,
-                        where: {
-                            deletedAt: { [Op.lt]: 1 },
-                        },
                         attributes: ['name', 'image'],
                         include: [
                             {
@@ -465,11 +461,10 @@ class HospitalRepository {
         try {
             return await this.reviewsModel.findAll({
                 where: { hospitalId },
-                // attributes:['star', 'contents', 'createdAt'],
                 include: [
                     {
-                        // where:{userId},
                         model: this.userModel,
+                        attributes: ['name'],
                         as: 'users',
                     },
                 ],

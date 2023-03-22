@@ -40,7 +40,7 @@ class TokenController {
 
         console.log('컨트롤러', refreshToken);
         const user = await this.tokenService.findUserId(userId);
-        console.log(user)
+        console.log(user);
 
         console.log(user.loginId);
 

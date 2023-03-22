@@ -380,13 +380,15 @@ describe('User Controller Unit Test', () => {
                 mockReq.body.password,
                 mockReq.body.confirm,
                 mockReq.body.token
-                );
+            );
         });
         it('should return proper response', async () => {
             await controller.resetPassword(mockReq, mockRes, mockNext);
 
             expect(mockRes.status).toHaveBeenCalledWith(201);
-            expect(mockRes.json).toHaveBeenCalledWith({ message: '비밀번호 재설정이 완료되었습니다.' });
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: '비밀번호 재설정이 완료되었습니다.',
+            });
             expect(mockNext).not.toHaveBeenCalled();
         });
         it('should call next() when service throws an error', async () => {
@@ -409,16 +411,14 @@ describe('User Controller Unit Test', () => {
         it('should call userService.findResetCase once with proper argument', async () => {
             await controller.findResetCase(mockReq, mockRes, mockNext);
             expect(mockUserService.findResetCase).toHaveBeenCalledTimes(1);
-            expect(mockUserService.findResetCase).toHaveBeenCalledWith(
-                mockReq.params.token
-                );
+            expect(mockUserService.findResetCase).toHaveBeenCalledWith(mockReq.params.token);
         });
         it('should return proper response', async () => {
-            mockUserService.findResetCase.mockResolvedValue(true)
+            mockUserService.findResetCase.mockResolvedValue(true);
             await controller.findResetCase(mockReq, mockRes, mockNext);
 
             expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({isCaseExist: true});
+            expect(mockRes.json).toHaveBeenCalledWith({ isCaseExist: true });
             expect(mockNext).not.toHaveBeenCalled();
         });
         it('should call next() when service throws an error', async () => {
@@ -435,8 +435,8 @@ describe('User Controller Unit Test', () => {
     describe('editUserPassword', () => {
         beforeEach(() => {
             mockReq.body = {
-                password:'password',
-                confirm:'password'
+                password: 'password',
+                confirm: 'password',
             };
         });
         it('should call userService.editPassword once with proper argument', async () => {
@@ -445,14 +445,16 @@ describe('User Controller Unit Test', () => {
             expect(mockUserService.editPassword).toHaveBeenCalledWith(
                 userId,
                 mockReq.body.password,
-                mockReq.body.confirm,
-                );
+                mockReq.body.confirm
+            );
         });
         it('should return proper response', async () => {
             await controller.editUserPassword(mockReq, mockRes, mockNext);
 
             expect(mockRes.status).toHaveBeenCalledWith(201);
-            expect(mockRes.json).toHaveBeenCalledWith({ message: '비밀번호 변경이 완료되었습니다' });
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: '비밀번호 변경이 완료되었습니다',
+            });
             expect(mockNext).not.toHaveBeenCalled();
         });
         it('should call next() when service throws an error', async () => {
@@ -465,8 +467,5 @@ describe('User Controller Unit Test', () => {
             expect(mockRes.json).not.toHaveBeenCalled();
             expect(mockNext).toHaveBeenCalledWith(error);
         });
-   
-       
     });
-
 });

@@ -25,26 +25,24 @@
                 <p><a href="/signup">계정이 없으신가요?</a></p>
             </div>
         </form>
-        <script>
-            document.getElementById('login').addEventListener('click', (event) => {
-                event.preventDefault();
+<script>
+    document.getElementById('login').addEventListener('click', (event) => {
+        event.preventDefault();
 
-                const data = {
-                    loginId: document.getElementById('loginId').value,
-                    password: document.getElementById('password').value,
-                };
+        const data = {
+            loginId: document.getElementById('loginId').value,
+            password: document.getElementById('password').value,
+        };
 
-    fetch("/api/users/login", {
+        fetch("/api/users/login", {
         credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-
             },
             body: JSON.stringify(data), //
         })
 
-        //원래 적혀 있었던 코드
         .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
             if (response.status === 412) {//에러처리 해준 status 기입
                 alert('이메일 또는 비밀번호가 틀렸습니다');
@@ -60,13 +58,11 @@
             // }
             location.href = '/';
         })
-
-
-                    .catch((err) => {
-                        alert(err.message);
-                        window.location.reload();
-                    });
-            });
-        </script>
+        .catch((err) => {
+            alert(err.message);
+            window.location.reload();
+        });
+    });
+</script>
     </body>
 </html>

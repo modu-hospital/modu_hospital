@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transPort = require('../lib/nodemailer');
 const CreateError = require('../lib/errors');
+const cryptor = require('../lib/encrypt');
+const { TWO_WAY_ENCRYPTION } = process.env;
 const env = process.env;
 
 class UserService {
@@ -93,13 +95,10 @@ class UserService {
         return sign;
     };
 
-
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
-        console.log('user[0].password', user[0].password);
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
-        console.log('isPasswordCorrect', isPasswordCorrect);
 
         if (!user || !isPasswordCorrect) {
             const err = await this.createError.wrongEmailOrPassword();
