@@ -561,6 +561,10 @@ class HospitalService {
             // console.log("reviews", reviews)
             // console.log("oneHospital", oneHospital.doctors)
 
+            if (!oneHospital.hospitalImageFiles) {
+                return {};
+            }
+
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
                 const data = {
