@@ -199,7 +199,7 @@ color: #505050;
                     </div>
                     <div class="col-7">
                         <select name="relationCategory" id="relationCategory">
-                            <option value="미선택">- 환자와의 관계 -</option>
+                            <option value="미선택" selected>- 환자와의 관계 -</option>
                             <option value="본인">본인</option>
                             <option value="직계">직계</option>
                             <option value="배우자 및 배우자의 직계">배우자 및 배우자의 직계</option>
@@ -287,7 +287,7 @@ color: #505050;
                             type="hidden"
                             name="pickUpDoctor"
                             id="pickUpDoctor"
-                            value=""
+                            value="0"
                             placeholder="담당의사"
                         />
                     </div>
@@ -318,17 +318,17 @@ color: #505050;
     - 또한 진료서비스 외의 다른 목적으로 활용하지 않으며, 수집•이용된 개인정보를 열람, 정정, 삭제, 처리정지 하고자 할 때에는
       개인정보 보호책임자를 통해 요구할 수 있습니다.</pre>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-high" value=1 name="group" />
+                        <input type="radio" id="demo-priority-high" value=1 name="group" onclick="priorityHighOn()"/>
                         <label for="demo-priority-high">개인정보 동의</label>
                     </div>
                     <div class="col-4 col-12-small">
-                        <input type="radio" id="demo-priority-low" value=2 name="group" checked/>
+                        <input type="radio" id="demo-priority-low" value=2 name="group" onclick="priorityLowOn()" checked/>
                         <label for="demo-priority-low">개인정보 미동의</label>
                     </div>
                     <div class="col-12">
                         <ul class="actions">
                             <li>
-                                <input type="button" value="예약하기" class="primary" onclick="reservaionCheck()"/>
+                                <input type="button" id="reservaionComplete" value="예약하기" class="primary" onclick="reservaionCheck()" disabled/>
                             </li>
                             <li><input type="reset" value="다지우기" /></li>
                         </ul>

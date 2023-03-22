@@ -101,14 +101,13 @@ class UserService {
             const err = await this.createError.wrongEmailOrPassword();
             throw err;
         }
-       
 
         // if (!isPasswordCorrect) {
         //     const err = await this.createError.wrongEmailOrPassword();
         //     throw err;
         // }
 
-        return user;
+        return user[0];
     };
 
     findUsers = async () => {

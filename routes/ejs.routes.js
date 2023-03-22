@@ -27,7 +27,7 @@ router.get('/admin', auth, (req, res) => {
 });
 
 // 예약페이지
-router.get('/users/reservation', auth, (req, res) => {
+router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
     }
@@ -35,13 +35,8 @@ router.get('/users/reservation', auth, (req, res) => {
 
 // 마이페이지
 router.get('/users/mypage', auth, (req, res) => {
-    let userRole = null;
-    if (res.locals.user) {
-        userRole = res.locals.user.role;
-    }
     if (res.locals.user.role === 'customer') {
-        console.log(res.locals);
-        return res.render('index.ejs', { components: 'mypage', user: userRole });
+        return res.render('index.ejs', { components: 'mypage', user: res.locals.user.role });
     }
 });
 
@@ -109,7 +104,6 @@ router.get('/doctorEdit', auth, (req, res) => {
 
 //병원상세페이지
 router.get('/hospitals/:hospitalId', auth, (req, res) => {
-    console.log(res.locals.user);
     const id = req.query.id;
     let userRole = null;
     if (res.locals.user) {
