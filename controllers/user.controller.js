@@ -220,7 +220,7 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
-        console.log(req.body);
+        
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -248,7 +248,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10h',
+                expiresIn: '10s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
@@ -270,6 +270,13 @@ class UserController {
         } catch (err) {
             next(err);
         }
+
+        // catch (err) {
+        //     if (err.isJoi) {
+        //         return res.status(422).json({ message: err.details[0].message });
+        //     }
+        //     res.status(500).json({ message: err.message });
+        // }
     };
 
     logout = async (req, res) => {
