@@ -239,7 +239,7 @@ class HospitalController {
 
             return res.json({ data: registerdata });
         } catch (error) {
-            throw error;
+            next(error);
         }
     };
 
