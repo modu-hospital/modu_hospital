@@ -2,7 +2,10 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = process.env;
 const { User, RefreshToken } = require('../models');
 const createError = require('../lib/errors');
+// const TokenController = require('../controllers/token.controller')
 
+
+// tokenController = new TokenController()
 const authMiddleware = async (req, res, next) => {
 
     //쿠키를 가져온다
@@ -50,22 +53,24 @@ const authMiddleware = async (req, res, next) => {
         // const err = await createError.TokenNotFound();
         // throw err;
 
-        res.clearCookie('accessToken');
+        // res.clearCookie('accessToken');
 
-        return 
-        //원래 코드 한줄만 있었음
         return res.status(401).json({ message: 'accessToken 만료' });
 
-        //이 메세지값을 error.message, error.status===400
+        // return await this.tokenController.newAccessToken()
+        
+
+        //이 메세지값을 error.message, error.status===401
     }
 
   
+    //수정한것(수정안할지도)
     const { userId } = accessTokenValidate;
 
     const user = await User.findByPk(userId);
 
     res.locals.user = user;
-
+    
     next();
 };
 module.exports = authMiddleware;

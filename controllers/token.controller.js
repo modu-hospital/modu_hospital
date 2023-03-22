@@ -35,18 +35,27 @@ class TokenController {
 
         const user = await this.tokenService.findUserId(userId);
 
-        const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
+        const token = await this.tokenService.findToken(refreshToken)
 
-        if (refreshTokenVerify) {
-            const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10s',
-            });
+        if(token) {
+            const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
 
-            res.cookie('accessToken', newAccessToken, {
-                secure: false,
-                httpOnly: true,
-            });
-            return res.json({ newAccessToken });
+            if (refreshTokenVerify) {
+                const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
+                    expiresIn: '10m',
+                });
+
+                res.cookie('accessToken', newAccessToken, {
+                    secure: false,
+                    httpOnly: true,
+                });
+
+                return res.json({ newAccessToken });
+            } else {
+                res.clearCookie('accessToken');
+                res.clearCookie('refreshToken');
+                res.send('로그인 다시 하세요');
+            }
         } else {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
