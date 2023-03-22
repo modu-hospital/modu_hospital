@@ -8,7 +8,6 @@ router.get('/', auth, (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    console.log('#####userRole', userRole);
     res.render('index.ejs', { components: 'main', user: userRole });
 });
 
@@ -62,6 +61,7 @@ router.get('/map/pharmacies', (req, res) => {
 
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
+    // console.log("######################################################",res)
     if (res.locals.user.role === 'partner') {
         return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
     }

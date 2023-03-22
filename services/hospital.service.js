@@ -190,7 +190,7 @@ class HospitalService {
             const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
-            throw new Error(error);
+            throw new Error(err);
         }
     };
 

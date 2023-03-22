@@ -25,7 +25,7 @@ class TokenController {
         //userId를 파람스로 받아서 (로그인 시도한 userId 값으로)
         //유저 테이블에서 userId로 loginId 받아 오기
 
-        const { userId } = req.params;
+        // const { userId } = req.params;
 
         if (!refreshToken) {
             res.clearCookie('accessToken');
@@ -33,24 +33,28 @@ class TokenController {
             res.send('로그인 다시 하세요');
         }
 
+        const token = await this.tokenService.findToken(refreshToken);
+        const userId = token.userId;
+
         const user = await this.tokenService.findUserId(userId);
-
-        const token = await this.tokenService.findToken(refreshToken)
-
-        if(token) {
+        if (token) {
             const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
 
             if (refreshTokenVerify) {
-                const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
-                    expiresIn: '10m',
-                });
+                const newAccessToken = jwt.sign(
+                    { loginId: user.loginId },
+                    process.env.JWT_SECRET_KEY,
+                    {
+                        expiresIn: '15m',
+                    }
+                );
 
                 res.cookie('accessToken', newAccessToken, {
                     secure: false,
                     httpOnly: true,
                 });
 
-                return res.json({ newAccessToken });
+                return res.json(newAccessToken);
             } else {
                 res.clearCookie('accessToken');
                 res.clearCookie('refreshToken');
@@ -61,8 +65,6 @@ class TokenController {
             res.clearCookie('refreshToken');
             res.send('로그인 다시 하세요');
         }
-
-        res.status(200).json({ message: 'newAccessToken 발급 성공' });
     };
 }
 
