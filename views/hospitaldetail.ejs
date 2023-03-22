@@ -103,7 +103,7 @@
         </table>
     </div>
     <div>
-        <button > 예약하기 </button>
+        <button onclick="goToReservation()">예약하기</button>
     </div>
 </div>
 
@@ -130,39 +130,34 @@
     })
 
     function getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
+        let matches = document.cookie.match(
+            new RegExp(
+                '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
+            )
+        );
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
-    const userId = window.location.pathname.split('/')[3]
+    const userId = window.location.pathname.split('/')[3];
 
-    const whenExpiredToken = function() {
+    const whenExpiredToken = function () {
         $.ajax({
             type: 'GET',
             url: `/api/token/${userId}`,
             // headers: { 'authorization': refreshtoken},
             // 이미서버에서 쿠키를 전송해서 필요없을 듯
             dataType: 'json',
-            success: function(response) {
-                console.log(getCookie(newAccessToken), "accessToken이 새로 발급되었습니다")
-
+            success: function (response) {
+                console.log(getCookie(newAccessToken), 'accessToken이 새로 발급되었습니다');
             },
-            error: function(error) {
-                console.log(error)
-            }
-        })
-    }
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    };
 
-    // const req = $.ajax({
-    //     beforeSend: whenExpiredToken,
-    //     success: funtion(msg) {
-    //         console.log(msg)
-    //     } })
+    const id = window.location.pathname.split('/')[2];
 
-    const id = window.location.pathname.split('/')[2]
-    
     function gethospitalimage() {
         $.ajax({
             type: 'GET',
@@ -178,7 +173,7 @@
                 //         </li>
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
-                    
+
                     let temp_html = `
 
                     <li><img src="${hospitalimage}" alt=""></li>
@@ -192,13 +187,13 @@
             //     console.log(error.responseJSON)
             // }
             // 토큰 재발급 api 함수
-            error: function(error) {
-                if (error.message === "accessToken 만료") {
-                    whenExpiredToken()
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
                 } else {
-                    console.log(error)
+                    console.log(error);
                 }
-            }
+            },
         });
     }
 
@@ -213,7 +208,7 @@
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let department = hospitalData.oneHospital.doctors[i].department;
-                    
+
                     let temp_html = `
                         <tr>
                             <td>${department}</td>
@@ -227,13 +222,13 @@
             //     console.log(error.responseJSON)
             // }
             // 토큰 재발급 api 함수
-            error: function(error) {
-                if (error.message === "accessToken 만료") {
-                    whenExpiredToken()
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
                 } else {
-                    console.log(error)
+                    console.log(error);
                 }
-            }
+            },
         });
     }
 
@@ -253,34 +248,34 @@
                     let department = hospitalData.oneHospital.doctors[i].department;
 
                     let workTime = hospitalData.oneHospital.doctors[i].workTime;
-                    let workTimeSum = "";
-                    for (let j = 0; j < workTime.length; j++){
-                        let day = workTime[j].day
-                        let start = workTime[j].start
-                        let end = workTime[j].end
+                    let workTimeSum = '';
+                    for (let j = 0; j < workTime.length; j++) {
+                        let day = workTime[j].day;
+                        let start = workTime[j].start;
+                        let end = workTime[j].end;
 
                         switch (day) {
-                            case 1: 
-                                day = "월";
+                            case 1:
+                                day = '월';
                                 break;
                             case 2:
-                                day = "화";
+                                day = '화';
                                 break;
                             case 3:
-                                day = "수";
-                            break;
+                                day = '수';
+                                break;
                             case 4:
-                                day = "목";
+                                day = '목';
                                 break;
                             case 5:
-                                day = "금";
+                                day = '금';
                                 break;
                             case 6:
-                                day = "토";
+                                day = '토';
                                 break;
                             default:
-                                day = "일";
-                                break;                   
+                                day = '일';
+                                break;
                         }
 
                         workTimeSum += `${day}요일 ${start}~${end}`
@@ -303,25 +298,25 @@
             //     console.log(error.responseJSON)
             // }
             // 토큰 재발급 api 함수
-            error: function(error) {
-                if (error.message === "accessToken 만료") {
-                    whenExpiredToken()
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
                 } else {
-                    console.log(error)
+                    console.log(error);
                 }
-            }
+            },
         });
     }
 
     //리뷰조회
-    function getReview() {        
+    function getReview() {
         $.ajax({
             type: 'GET',
             url: `/api/hospitals/detail/${id}`,
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                console.log("리뷰에서", hospitalData.oneHospital.reviews[0].name.name)
+                console.log('리뷰에서', hospitalData.oneHospital.reviews[0].name.name);
 
                 for (let i = 0; i < hospitalData.oneHospital.reviews.length; i++) {
                     // let userId = hospitalData.oneHospital.reviews[i].userId;
@@ -354,13 +349,13 @@
             //     console.log(error.responseJSON)
             // }
             // 토큰 재발급 api 함수
-            error: function(error) {
-                if (error.message === "accessToken 만료") {
-                    whenExpiredToken()
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
                 } else {
-                    console.log(error)
+                    console.log(error);
                 }
-            }
+            },
         });
     }
 
@@ -373,7 +368,7 @@
     //     },
     //     success: function(response) {
     //         const newAccessToken = response.access_token;
-            
+
     //     },
     //     error: function(error) {
     //         $.ajax({
@@ -388,6 +383,9 @@
     //         console.log(error);
     //     }
     // });
-    
 
+    function goToReservation() {
+        const id = window.location.pathname.split('/')[2];
+        location.href = `/users/reservation/${id}`;
+    }
 </script>

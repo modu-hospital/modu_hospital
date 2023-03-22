@@ -559,7 +559,7 @@ class HospitalService {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
             const reviews = await this.hospitalRepository.findReview(id);
 
-            if(!oneHospital.hospitalImageFiles) {
+            if (!oneHospital.hospitalImageFiles) {
                 return {};
             }
 
