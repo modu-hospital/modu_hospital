@@ -6,6 +6,10 @@ class TokenService {
 
         return await this.tokenRepository.findUserId(userId);
     };
+
+    findToken = async (refreshToken) => {
+        return await this.tokenRepository.findToken(refreshToken)
+    }
 }
 
 module.exports = TokenService;
