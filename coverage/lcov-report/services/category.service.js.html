@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.66% </span>
+                <span class="strong">95.45% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>29/30</span>
+                <span class='fraction'>21/22</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.42% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/28</span>
+                <span class='fraction'>19/20</span>
             </div>
         
             
@@ -136,21 +136,7 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,20 +162,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,8 +183,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -262,30 +234,18 @@ class CategoryService {
         leftLongitude,
         leftLatitude
     ) =&gt; {
-        const longitude = [];
-        const latitude = [];
-        longitude.push(leftLongitude, rightLongitude);
-        latitude.push(rightLatitude, leftLatitude);
-        longitude.sort((a, b) =&gt; {
-            return a - b;
-        });
-        latitude.sort((a, b) =&gt; {
-            return a - b;
-        });
-&nbsp;
         const hospitals = await Promise.all(
             departments.split(',').map(async (department) =&gt; {
                 return await this.categoryRepository.findHospitalsThatFitsDepartment(
                     department,
-                    longitude,
-                    latitude
+                    rightLongitude,
+                    rightLatitude,
+                    leftLongitude,
+                    leftLatitude
                 );
             })
         );
 &nbsp;
-        // return hospitals;
-&nbsp;
-        // 아직 등록되지 않은 진료과목 선택 시
         const empty = hospitals.filter((hospital) =&gt; !hospital);
         if (empty.length &gt; 0) {
             return [];
@@ -297,8 +257,6 @@ class CategoryService {
                 <span class="missing-if-branch" title="if path not taken" >I</span>if (!department.categoriesMapping[i].doctors.hospitals) {
 <span class="cstat-no" title="statement not covered" >                    return;</span>
                 }
-&nbsp;
-                // console.log(department.categoriesMapping[i].doctors.hospitals.hospitalImageFiles[0].url)
 &nbsp;
                 <span class="missing-if-branch" title="else path not taken" >E</span>if (department.categoriesMapping[i].doctors.hospitals) {
                     let data = {
@@ -331,7 +289,7 @@ module.exports = CategoryService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-03-11T08:22:14.989Z
+                at 2023-03-21T10:06:12.862Z
             </div>
         <script src="../prettify.js"></script>
         <script>
