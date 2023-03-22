@@ -8,14 +8,3 @@ document.getElementById('logout').addEventListener('click', (event) => {
         location.href = '/';
     });
 });
-// function logout() {
-//     $.ajax({
-//         type: "get",
-//         url: 'api/users/logout',
-//         data: {},
-//         dataType:'text',
-//         success: function(res) {
-//             location.reload();
-//         }
-//     });
-// }
