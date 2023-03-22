@@ -20,17 +20,12 @@ class TokenController {
         //그러면 프론트에서 헤더에 저장? 하고
         //이 토큰 api를 실행시켜서 refreshToken값을 가져오게 만들어야하는지
 
-        //refreshToken verify 하려면 refreshToken이 필요한데
-        // res.cookies 로 저장 안해줬는데 어떻게 refreshToken을 가져올지
-        //가 아니라 일단 프론트 연결 해보기
-        //프론트에서 로그인하는 api 연결하면 refreshToken이 넘어오는건가?...
-
         const refreshToken = req.cookies.refreshToken;
         //res.cookie 저장했음
         //userId를 파람스로 받아서 (로그인 시도한 userId 값으로)
         //유저 테이블에서 userId로 loginId 받아 오기
 
-        const { userId } = req.params;
+        // const { userId } = req.params;
 
         if (!refreshToken) {
             res.clearCookie('accessToken');
@@ -38,31 +33,38 @@ class TokenController {
             res.send('로그인 다시 하세요');
         }
 
-        console.log('컨트롤러', refreshToken);
+        const token = await this.tokenService.findToken(refreshToken);
+        const userId = token.userId;
+
         const user = await this.tokenService.findUserId(userId);
-        console.log(user);
+        if (token) {
+            const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
 
-        console.log(user.loginId);
+            if (refreshTokenVerify) {
+                const newAccessToken = jwt.sign(
+                    { loginId: user.loginId },
+                    process.env.JWT_SECRET_KEY,
+                    {
+                        expiresIn: '15m',
+                    }
+                );
 
-        const refreshTokenVerify = jwt.verify(refreshToken, JWT_SECRET_KEY);
-        console.log(refreshTokenVerify);
-        if (refreshTokenVerify) {
-            const newAccessToken = jwt.sign({ loginId: user.loginId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10s',
-            });
+                res.cookie('accessToken', newAccessToken, {
+                    secure: false,
+                    httpOnly: true,
+                });
 
-            res.cookie('accessToken', newAccessToken, {
-                secure: false,
-                httpOnly: true,
-            });
-            return res.json({ newAccessToken });
+                return res.json(newAccessToken);
+            } else {
+                res.clearCookie('accessToken');
+                res.clearCookie('refreshToken');
+                res.send('로그인 다시 하세요');
+            }
         } else {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
             res.send('로그인 다시 하세요');
         }
-
-        res.status(200).json({ message: 'newAccessToken 발급 성공' });
     };
 }
 

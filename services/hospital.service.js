@@ -190,7 +190,7 @@ class HospitalService {
             const waitingdata = this.hospitalRepository.getWaitedReservation(hospitalId);
             return waitingdata;
         } catch (err) {
-            throw new Error(error);
+            throw new Error(err);
         }
     };
 
@@ -559,8 +559,9 @@ class HospitalService {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
             const reviews = await this.hospitalRepository.findReview(id);
 
-            //getAllReviews
-            // console.log("reviews", reviews[0].reviews[0].content)
+            if (!oneHospital.hospitalImageFiles) {
+                return {};
+            }
 
             const url = [];
             for (let i = 0; i < oneHospital.hospitalImageFiles.length; i++) {
@@ -570,7 +571,6 @@ class HospitalService {
                 url.push(data);
             }
 
-            // 이름이 안 찍힘
             const reviewStarContents = [];
             for (let i = 0; i < reviews.length; i++) {
                 const data = {

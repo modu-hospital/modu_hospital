@@ -1,22 +1,24 @@
-
 <style>
-    .container {
-        width: 300px;
+    .hospital_all {
+        margin: 0;
     }
 
-    .inner {
-        width: 100px;
-        float: left;
+    .container_hos {
+        width: 900px;
+    }
+
+    .inner_hos {
+        width: 100%;
     }
 </style>
-<div style="margin: 0">
 
-    <div class="container">
-        <div class="inner" id="hospital-image">
-            <img src ="" alt="병원사진">
+<div class="hospital_all">
+    <div>
+        <div class="container_hos">
+            <div class="inner_hos" id="hospital-image"></div>
         </div>
     </div>
-     
+
     <div>
         <table id="departmentList">
             <tr>
@@ -24,9 +26,7 @@
             </tr>
         </table>
     </div>
-    <div>
-        병원 오픈 시간대
-    </div>
+
     <div>
         <table id="doctorsList">
             <tr>
@@ -50,52 +50,48 @@
         </table>
     </div>
     <div>
-        <button> 예약하기 </button>
+        <button onclick="goToReservation()">예약하기</button>
     </div>
 </div>
 
 <script>
+    $(document).ready(function () {
+        getReview();
+        getdoctor();
+        getdepartment();
+        gethospitalimage();
+        getworktime();
+    });
 
-    $(document).ready(function(){
-        getReview()
-        getdoctor()
-        getdepartment()
-        gethospitalimage()
-        getworktime()
-    })
+    function getCookie(name) {
+        let matches = document.cookie.match(
+            new RegExp(
+                '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
+            )
+        );
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
 
-    const id = window.location.pathname.split('/')[2]
-    // function getworktime() {
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: `/api/hospitals/detail/${id}`,
-    //         dataType: 'json',
-    //         success: function (response) {
-    //             const hospitalData = response;
+    const userId = window.location.pathname.split('/')[3];
 
-    //             console.log("hospitalData.oneHospital", hospitalData.oneHospital)
+    const whenExpiredToken = function () {
+        $.ajax({
+            type: 'GET',
+            url: `/api/token/${userId}`,
+            // headers: { 'authorization': refreshtoken},
+            // 이미서버에서 쿠키를 전송해서 필요없을 듯
+            dataType: 'json',
+            success: function (response) {
+                console.log(getCookie(newAccessToken), 'accessToken이 새로 발급되었습니다');
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    };
 
-    //             for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
-    //                 // for(let j = 0; j < hospitalData.oneHospital.doctors[i].workTime.length; j++)
-    //                 // let workday = hospitalData.oneHospital.doctors[i].workTime[j].day;
-                    
-    //                 let temp_html = `
-                    
-    //                     <ul>
-    //                         <img width="200px" src ="${hospitalimage}" alt="병원사진">
-    //                     </ul>
-    //                `;
+    const id = window.location.pathname.split('/')[2];
 
-    //                 $('#hospital-image').append(temp_html);
-    //             }
-    //         },
-    //         error: function(error){
-    //             console.log(error.responseJSON)
-    //         }
-    //     });
-    // }
-
-    //첫번째 이미지 안 찍힘
     function gethospitalimage() {
         $.ajax({
             type: 'GET',
@@ -108,20 +104,28 @@
 
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
-                    
+
                     let temp_html = `
                     
-                        <ul>
-                            <img width="200px" src ="${hospitalimage}" alt="병원사진">
-                        </ul>
+                        <div>
+                            <img src ="${hospitalimage}" alt="병원사진">
+                        </div>
                    `;
 
                     $('#hospital-image').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            // error: function(error){
+            //     console.log(error.responseJSON)
+            // }
+            // 토큰 재발급 api 함수
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
+                } else {
+                    console.log(error);
+                }
+            },
         });
     }
 
@@ -136,7 +140,7 @@
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let department = hospitalData.oneHospital.doctors[i].department;
-                    
+
                     let temp_html = `
                         <tr>
                             <td>${department}</td>
@@ -146,9 +150,17 @@
                     $('#departmentList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            // error: function(error){
+            //     console.log(error.responseJSON)
+            // }
+            // 토큰 재발급 api 함수
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
+                } else {
+                    console.log(error);
+                }
+            },
         });
     }
 
@@ -160,7 +172,6 @@
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                console.log("의사에서 ", hospitalData.oneHospital.doctors)
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let doctors = hospitalData.oneHospital.doctors[i].doctors;
@@ -169,48 +180,74 @@
                     let department = hospitalData.oneHospital.doctors[i].department;
 
                     let workTime = hospitalData.oneHospital.doctors[i].workTime;
-                    let workTimeSum = "";
-                    console.log("workTime", workTime[0])
-                    for (let j = 0; j < workTime.length; j++){
-                        let day = workTime[j].day
-                        let start = workTime[j].start
-                        let end = workTime[j].end
-                        workTimeSum += `${day}요일 ${start}~${end}`
-                    }
+                    let workTimeSum = '';
+                    for (let j = 0; j < workTime.length; j++) {
+                        let day = workTime[j].day;
+                        let start = workTime[j].start;
+                        let end = workTime[j].end;
 
+                        switch (day) {
+                            case 1:
+                                day = '월';
+                                break;
+                            case 2:
+                                day = '화';
+                                break;
+                            case 3:
+                                day = '수';
+                                break;
+                            case 4:
+                                day = '목';
+                                break;
+                            case 5:
+                                day = '금';
+                                break;
+                            case 6:
+                                day = '토';
+                                break;
+                            default:
+                                day = '일';
+                                break;
+                        }
+                        workTimeSum += `${day}요일 ${start}~${end}`;
+                    }
 
                     let temp_html = `<tbody>
                         <tr>
                         <td>${doctors}</td>
-                        <th><img width="60px" src="${doctorImage}" alt="의사사진">의사사진</th>
+                        <th><img src="${doctorImage}" alt="의사사진">의사사진</th>
                         <td>${doctorContent}</td>
                         <td>${department}</td>
                         <td>${workTimeSum}</td>
                         </tr>
                     </tbody>`;
 
-                    console.log("temp_html", temp_html)
-
-            
-
                     $('#doctorsList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            // error: function(error){
+            //     console.log(error.responseJSON)
+            // }
+            // 토큰 재발급 api 함수
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
+                } else {
+                    console.log(error);
+                }
+            },
         });
     }
 
     //리뷰조회
-    function getReview() {        
+    function getReview() {
         $.ajax({
             type: 'GET',
             url: `/api/hospitals/detail/${id}`,
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                console.log("리뷰에서", hospitalData.oneHospital.reviews[0].name.name)
+                console.log('리뷰에서', hospitalData.oneHospital.reviews[0].name.name);
 
                 for (let i = 0; i < hospitalData.oneHospital.reviews.length; i++) {
                     // let userId = hospitalData.oneHospital.reviews[i].userId;
@@ -229,34 +266,35 @@
                         </tr>
                     </tbody>`;
 
-                   
-            
-
-
                     $('#reviewList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            // error: function(error){
+            //     console.log(error.responseJSON)
+            // }
+            // 토큰 재발급 api 함수
+            error: function (error) {
+                if (error.message === 'accessToken 만료') {
+                    whenExpiredToken();
+                } else {
+                    console.log(error);
+                }
+            },
         });
     }
 
-
-// 병원 상세 페이지를 클릭했을 때
-// 그 병원의 의사의 근무시간의 요일 스타트 타임 엔드 타임만 가져와서
-// 프론트에 넣으면 됨?
-// 의사의 근무시간으로
-// findworkingDateBy(오늘 날짜, 요일)
-// 요일을 보내는 함수(reservaion.ejs get	DataStr => 숫자로 넣으면 요일로 바꿔줌
-// 워킹타임 서비스에서 
-// 변수 워킹타임 데이트 
-// 의사의 데이오브더위크 값 가져오는 
-// 워킹타입 레파에 
-// findworkingDateBy(오늘 날짜, 요일)
-// 타임값을 배여로 만들어서 순서 비교해서 asc 오름차순
-
-
+    // 병원 상세 페이지를 클릭했을 때
+    // 그 병원의 의사의 근무시간의 요일 스타트 타임 엔드 타임만 가져와서
+    // 프론트에 넣으면 됨?
+    // 의사의 근무시간으로
+    // findworkingDateBy(오늘 날짜, 요일)
+    // 요일을 보내는 함수(reservaion.ejs get	DataStr => 숫자로 넣으면 요일로 바꿔줌
+    // 워킹타임 서비스에서
+    // 변수 워킹타임 데이트
+    // 의사의 데이오브더위크 값 가져오는
+    // 워킹타입 레파에
+    // findworkingDateBy(오늘 날짜, 요일)
+    // 타임값을 배여로 만들어서 순서 비교해서 asc 오름차순
 
     // $.ajax({
     //     url: ``,
@@ -267,7 +305,7 @@
     //     },
     //     success: function(response) {
     //         const newAccessToken = response.access_token;
-            
+
     //     },
     //     error: function(error) {
     //         $.ajax({
@@ -282,6 +320,9 @@
     //         console.log(error);
     //     }
     // });
-    
 
+    function goToReservation() {
+        const id = window.location.pathname.split('/')[2];
+        location.href = `/users/reservation/${id}`;
+    }
 </script>

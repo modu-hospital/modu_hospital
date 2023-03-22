@@ -8,7 +8,6 @@ router.get('/', auth, (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    console.log('#####userRole', userRole);
     res.render('index.ejs', { components: 'main', user: userRole });
 });
 
@@ -27,7 +26,7 @@ router.get('/admin', auth, (req, res) => {
 });
 
 // 예약페이지
-router.get('/users/reservation', auth, (req, res) => {
+router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
     }
@@ -62,6 +61,7 @@ router.get('/map/pharmacies', (req, res) => {
 
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
+    // console.log("######################################################",res)
     if (res.locals.user.role === 'partner') {
         return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
     }
