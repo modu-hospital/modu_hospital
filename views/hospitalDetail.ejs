@@ -1,25 +1,20 @@
-
 <style>
     /* .doctor_profile{
         
 
     } */
-
-
-
 </style>
 <div>
-
-    <div style="overflow-x: auto;" class="kind_wrap">
+    <div style="overflow-x: auto" class="kind_wrap">
         <div class="kind_slider" id="hospital-image">
-            <img src ="" alt="병원사진">
+            <img src="" alt="병원사진" />
         </div>
     </div>
     <div class="arrow">
         <a href="" class="prev">이전</a>
         <a href="" class="next">다음</a>
     </div>
-     
+
     <div>
         <table id="departmentList">
             <tr>
@@ -27,12 +22,10 @@
             </tr>
         </table>
     </div>
-    <div>
-        병원 오픈 시간대
-    </div>
+    <div>병원 오픈 시간대</div>
     <div>
         <div>
-            <img src="" class="doctor_profile" alt="의사사진">
+            <img src="" class="doctor_profile" alt="의사사진" />
         </div>
         <div>의사 이름</div>
         <div>의사소개글</div>
@@ -51,21 +44,20 @@
         </table>
     </div>
     <div>
-        <button> 예약하기 </button>
+        <button onclick="location.href='/users/reservation'">예약하기</button>
     </div>
 </div>
 
 <script>
+    $(document).ready(function () {
+        getReview();
+        getdoctor();
+        getdepartment();
+        gethospitalimage();
+        getworktime();
+    });
 
-    $(document).ready(function(){
-        getReview()
-        getdoctor()
-        getdepartment()
-        gethospitalimage()
-        getworktime()
-    })
-
-    const id = window.location.pathname.split('/')[1]
+    const id = window.location.pathname.split('/')[1];
     function getworktime() {
         $.ajax({
             type: 'GET',
@@ -74,25 +66,28 @@
             success: function (response) {
                 const hospitalData = response;
 
-                console.log("hospitalData.oneHospital", hospitalData.oneHospital.doctors[9].workTime[0].day)
+                console.log(
+                    'hospitalData.oneHospital',
+                    hospitalData.oneHospital.doctors[9].workTime[0].day
+                );
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
-                    for(let j = 0; j < hospitalData.oneHospital.doctors[i].workTime.length; j++)
-                    // let workday = hospitalData.oneHospital.doctors[i].workTime[j].day;
-                    
-                //     let temp_html = `
-                    
-                //         <ul>
-                //             <img width="200px" src ="${hospitalimage}" alt="병원사진">
-                //         </ul>
-                //    `;
+                    for (let j = 0; j < hospitalData.oneHospital.doctors[i].workTime.length; j++)
+                        // let workday = hospitalData.oneHospital.doctors[i].workTime[j].day;
 
-                    $('#hospital-image').append(temp_html);
+                        //     let temp_html = `
+
+                        //         <ul>
+                        //             <img width="200px" src ="${hospitalimage}" alt="병원사진">
+                        //         </ul>
+                        //    `;
+
+                        $('#hospital-image').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -109,7 +104,7 @@
 
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
-                    
+
                     let temp_html = `
                     
                         <ul>
@@ -120,9 +115,9 @@
                     $('#hospital-image').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -137,7 +132,7 @@
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let department = hospitalData.oneHospital.doctors[i].department;
-                    
+
                     let temp_html = `<tbody>
                         <tr>
                         <td>${department}</td>
@@ -147,9 +142,9 @@
                     $('#departmentList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -182,14 +177,14 @@
                     $('#doctorsList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
         });
     }
 
     //리뷰조회
-    function getReview() {        
+    function getReview() {
         $.ajax({
             type: 'GET',
             url: `/api/hospitals/detail/${id}`,
@@ -218,35 +213,29 @@
                     $('#reviewList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
         });
     }
 
-    
+    // 병원 상세 페이지를 클릭했을 때
 
-// 병원 상세 페이지를 클릭했을 때
+    // 그 병원의 의사의 근무시간의 요일 스타트 타임 엔드 타임만 가져와서
+    // 프론트에 넣으면 됨?
 
-// 그 병원의 의사의 근무시간의 요일 스타트 타임 엔드 타임만 가져와서
-// 프론트에 넣으면 됨?
+    // 의사의 근무시간으로
 
-// 의사의 근무시간으로
+    // findworkingDateBy(오늘 날짜, 요일)
 
+    // 요일을 보내는 함수(reservaion.ejs get	DataStr => 숫자로 넣으면 요일로 바꿔줌
 
+    // 워킹타임 서비스에서
+    // 변수 워킹타임 데이트
 
-// findworkingDateBy(오늘 날짜, 요일)
+    // 의사의 데이오브더위크 값 가져오는
+    // 워킹타입 레파에
+    // findworkingDateBy(오늘 날짜, 요일)
 
-// 요일을 보내는 함수(reservaion.ejs get	DataStr => 숫자로 넣으면 요일로 바꿔줌
-
-
-// 워킹타임 서비스에서 
-// 변수 워킹타임 데이트 
-
-// 의사의 데이오브더위크 값 가져오는 
-// 워킹타입 레파에 
-// findworkingDateBy(오늘 날짜, 요일)
-
-// 타임값을 배여로 만들어서 순서 비교해서 asc 오름차순
-
+    // 타임값을 배여로 만들어서 순서 비교해서 asc 오름차순
 </script>
