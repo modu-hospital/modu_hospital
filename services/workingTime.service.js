@@ -11,16 +11,18 @@ class WorkingtimeService {
         WorkingTime
     );
 
-    findWorkingDate = async (year, month, date, week) => {
+    findWorkingDate = async (hospitalId, year, month, date, week) => {
         month = month >= 10 ? month : '0' + month;
         let selectedYMD = year + month + date;
         // 병원 A에서 의사 A의 예약이 완료된 환자의 이름과 예약날짜 및 시간
         const reservationDate = await this.workingtimeRepository.findReservationDateByWeek(
+            hospitalId,
             selectedYMD,
             week
         );
         // 클릭한 날짜가 병원 A에서 의사 A의 예약 가능한 날짜 및 시간 안에 있는지 확인하기
         const workingTimeDate = await this.workingtimeRepository.findWorkingDateByYMDW(
+            hospitalId,
             selectedYMD,
             week
         );

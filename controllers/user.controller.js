@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
+const TokenService = require('../services/token.service');
 const Validation = require('../lib/validation');
 const jwt = require('jsonwebtoken');
 const CreateError = require('../lib/errors');
@@ -9,6 +10,7 @@ class UserController {
     reservationService = new ReservationService();
     validation = new Validation();
     createError = new CreateError();
+    tokenService = new TokenService();
 
     // (admin) all role 조회 + pagination
     getAllPagination = async (req, res, next) => {
@@ -220,7 +222,7 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
-        
+        console.log(req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -270,13 +272,6 @@ class UserController {
         } catch (err) {
             next(err);
         }
-
-        // catch (err) {
-        //     if (err.isJoi) {
-        //         return res.status(422).json({ message: err.details[0].message });
-        //     }
-        //     res.status(500).json({ message: err.message });
-        // }
     };
 
     logout = async (req, res) => {

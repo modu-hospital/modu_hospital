@@ -127,11 +127,11 @@
                 <th scope="col">#</th>
                 <th scope="col">당담의사</th>
                 <th scope="col">환자</th>
-                <th scope="col">주민번호</th>
                 <th scope="col">전화</th>
                 <th scope="col">증상</th>
                 <th scope="col">예약날짜</th>
                 <th scope="col">승인</th>
+                <th scope="col">버튼</th>
               </tr>
               </thead>
               </table>
@@ -149,11 +149,11 @@
                     <th scope="col">#</th>
                     <th scope="col">당담의사</th>
                     <th scope="col">환자</th>
-                    <th scope="col">주민번호</th>
                     <th scope="col">전화</th>
                     <th scope="col">증상</th>
                     <th scope="col">예약날짜</th>
                     <th scope="col">승인</th>
+                    <th scope="col">버튼</th>
                   </tr>
                 </thead>
               </table>
@@ -171,11 +171,11 @@
                     <th scope="col">#</th>
                     <th scope="col">당담의사</th>
                     <th scope="col">환자</th>
-                    <th scope="col">주민번호</th>
                     <th scope="col">전화</th>
                     <th scope="col">증상</th>
                     <th scope="col">예약날짜</th>
                     <th scope="col">승인</th>
+                    <th scope="col">버튼</th>
                   </tr>
                 </thead>
               </table>
@@ -268,7 +268,7 @@
               doctorName: doctorName,
               id: reservation['id'],
               name: reservation['name'],
-              idNumber: reservation['idNumber'],
+              // idNumber: reservation['idNumber'],
               phone: reservation['phone'],
               contents: reservation['contents'],
               date: reservation['date'],
@@ -296,7 +296,6 @@
             <th scope="row">${i + 1}</th>
             <td>${reservation.doctorName}</td>
             <td>${reservation.name}</td>
-            <td>${reservation.idNumber}</td> 
             <td>${reservation.phone}</td>                              
             <td>${reservation.contents}</td>
             <td>${reservation.date}</td>
@@ -305,7 +304,7 @@
                 <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
                 <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
                 <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
-                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>완료</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
                 </select>
             </td>                  
             <td><button class="btn btn-primary" id="approveButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                               
@@ -331,7 +330,7 @@
             },
             error: function (xhr, status, error) {
               // 에러가 발생했을 때 실행할 코드를 작성합니다.
-              alert(xhr.responseJSON.message);
+             // alert(xhr.responseJSON.message);
             }
           });
         });
@@ -339,7 +338,7 @@
       },
       error: function (xhr, status, error) {
         // 에러가 발생했을 때 실행할 코드를 작성합니다.
-        alert(xhr.responseJSON.message);
+        // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -369,7 +368,7 @@
               doctorName: doctorName,
               id: reservation['id'],
               name: reservation['name'],
-              idNumber: reservation['idNumber'],
+              // idNumber: reservation['idNumber'],
               phone: reservation['phone'],
               contents: reservation['contents'],
               date: reservation['date'],
@@ -398,7 +397,6 @@
             <th scope="row">${i + 1}</th>
             <td>${reservation.doctorName}</td>
             <td>${reservation.name}</td>
-            <td>${reservation.idNumber}</td> 
             <td>${reservation.phone}</td>                              
             <td>${reservation.contents}</td>
             <td>${reservation.date}</td>
@@ -407,7 +405,7 @@
                 <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
                 <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
                 <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
-                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>완료</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
                 </select>
             </td>                  
             <td><button class="btn btn-primary" id="waitingButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                                                                                        
@@ -436,7 +434,7 @@
             },
             error: function (xhr, status, error) {
               // 에러가 발생했을 때 실행할 코드를 작성합니다.
-              alert(xhr.responseJSON.message);
+              // alert(xhr.responseJSON.message);
             }
           });
         });
@@ -468,7 +466,7 @@
               doctorName: doctorName,
               id: reservation['id'],
               name: reservation['name'],
-              idNumber: reservation['idNumber'],
+              // idNumber: reservation['idNumber'],
               phone: reservation['phone'],
               contents: reservation['contents'],
               date: reservation['date'],
@@ -496,8 +494,7 @@
           <tr>
             <th scope="row">${i + 1}</th>
             <td>${reservation.doctorName}</td>
-            <td>${reservation.name}</td>
-            <td>${reservation.idNumber}</td> 
+            <td>${reservation.name}</td> 
             <td>${reservation.phone}</td>                              
             <td>${reservation.contents}</td>
             <td>${reservation.date}</td>
@@ -506,7 +503,7 @@
                 <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
                 <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
                 <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
-                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>완료</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
                 </select>
             </td>                  
             <td><button class="btn btn-primary" id="clearButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                                                                                        
@@ -534,14 +531,14 @@
             },
             error: function (xhr, status, error) {
               // 실패 시 알림 메시지 출력
-              alert(xhr.responseJSON.message);
+              // alert(xhr.responseJSON.message);
             }
           });
         });
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-        alert(xhr.responseJSON.message);
+       // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -577,7 +574,7 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-        alert(xhr.responseJSON.message);
+        // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -605,7 +602,7 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-        alert(xhr.responseJSON.message);
+       // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -635,7 +632,7 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-        alert(xhr.responseJSON.message);
+       // alert(xhr.responseJSON.message);
       }
     });
   }

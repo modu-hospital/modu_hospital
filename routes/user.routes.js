@@ -42,6 +42,6 @@ router.patch('/resetpassword', userController.resetPassword);
 
 router.patch('/mypage/editpassword', userController.editUserPassword);
 
-router.post('/reservation/:doctorId', auth, userController.reservaionInput);
+router.post('/reservation/:hospitalId/:doctorId', auth, userController.reservaionInput);
 
 module.exports = router;

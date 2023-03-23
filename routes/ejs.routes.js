@@ -3,12 +3,11 @@ const router = express.Router();
 const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
     let userRole = null;
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    console.log('#####userRole', userRole);
     res.render('index.ejs', { components: 'main', user: userRole });
 });
 
@@ -27,7 +26,7 @@ router.get('/admin', auth, (req, res) => {
 });
 
 // 예약페이지
-router.get('/users/reservation', auth, (req, res) => {
+router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
     }
@@ -62,6 +61,7 @@ router.get('/map/pharmacies', (req, res) => {
 
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
+    // console.log("######################################################",res)
     if (res.locals.user.role === 'partner') {
         return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
     }
@@ -103,22 +103,32 @@ router.get('/doctorEdit', auth, (req, res) => {
 });
 
 //병원상세페이지
-router.get('/hospitals/:hospitalId', auth, (req, res) => {
-    const id = req.query.id;
+router.get('/hospitals/:hospitalId', (req, res) => {
+    console.log('상세페이지 드감');
     let userRole = null;
-    if (res.locals.user) {
-        userRole = res.locals.user.role;
-    }
-    if (userRole === 'customer') {
+    if (userRole === null) {
+        console.log('상세페이지 게스트 드감');
         return res.render('index.ejs', {
             components: 'hospitaldetail',
             user: userRole,
         });
     }
-    return res.render('index.ejs', {
-        components: 'hospitaldetail',
-        user: userRole,
-    });
+
+    if (res.locals.user) {
+        console.log('상세페이지 로그인했음');
+        userRole = res.locals.user.role;
+
+        return res.render('index.ejs', {
+            components: 'hospitaldetail',
+            user: userRole,
+        });
+    }
+    // if (userRole === 'customer') {
+    //     return res.render('index.ejs', {
+    //         components: 'hospitaldetail',
+    //         user: userRole,
+    //     });
+    // }
 });
 
 //의사 시간 추가

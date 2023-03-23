@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = process.env;
 const { User, RefreshToken } = require('../models');
 const createError = require('../lib/errors');
+const TokenController = require('../controllers/token.controller');
 
+tokenController = new TokenController();
 const authMiddleware = async (req, res, next) => {
-
     //쿠키를 가져온다
     let { accessToken, refreshToken } = req.cookies;
 
@@ -14,7 +15,6 @@ const authMiddleware = async (req, res, next) => {
         return next();
         // return {message:"로그인 다시 해주세요"}
     }
-
     //accessToken 검증
     const accessTokenValidate = validateAccess(accessToken);
     function validateAccess(accessToken) {
@@ -45,22 +45,36 @@ const authMiddleware = async (req, res, next) => {
         return res.status(400).json({ message: 'refreshToken 만료' });
     }
 
-    //accessToken만료시
+    // access 검증 후, expired 만료시
+    // 만료가 되면 재발급
     if (!accessTokenValidate) {
-        // const err = await createError.TokenNotFound();
-        // throw err;
+        //accessToken만료시
 
-        res.clearCookie('accessToken');
+        // return res.status(400).json({ message: 'accessToken 만료' });
+        //만료시 에러를 받고
+        //프론트에서 accessToken토큰만료에러시 토큰 API로 newAccessToken 발급
+        //리프래시 토큰이 있다면...위에서 이미 없다면 재로그인 하게끔해둠
 
-        return 
+        // const token = await RefreshToken.findAll({ where: { userId: user.userId } })
+        // //refreshToken에서 해당userId 찾기=> 로 token.token
+        // //userId를 어디서 가져올껀지
+        // //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
+
+        // console.log("token :", token)
+        // console.log("#####token", token[0].token)
+
         //원래 코드 한줄만 있었음
         return res.status(401).json({ message: 'accessToken 만료' });
+        // return await this.tokenController.newAccessToken()
 
-        //이 메세지값을 error.message, error.status===400
+        //이 메세지값을 error.message, error.status===401
+        // const newAccessToken = await tokenController.newAccessToken(req, res);
+        // return newAccessToken;
     }
 
-  
+    //수정한것(수정안할지도)
     const { userId } = accessTokenValidate;
+    // console.log("########유저아이디",userId);
 
     const user = await User.findByPk(userId);
 
