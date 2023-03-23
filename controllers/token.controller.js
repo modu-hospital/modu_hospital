@@ -54,7 +54,7 @@ class TokenController {
                     httpOnly: false,
                 });
 
-                return res.json(newAccessToken);
+                return res.json({ newAccessToken: newAccessToken, token: token });
             } else {
                 res.clearCookie('accessToken');
                 res.clearCookie('refreshToken');

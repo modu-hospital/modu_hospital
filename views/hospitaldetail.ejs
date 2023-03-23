@@ -121,7 +121,37 @@
         // getworktime()
     });
 
+    function get_cookie(name) {
+        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return value ? value[2] : null;
+    }
+
+    function getCookie(name) {
+        var nameOfCookie = name + '=';
+
+        var x = 0;
+
+        while (x <= document.cookie.length) {
+            var y = x + nameOfCookie.length;
+
+            if (document.cookie.substring(x, y) == nameOfCookie) {
+                if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
+                    endOfCookie = document.cookie.length;
+
+                return unescape(document.cookie.substring(y, endOfCookie));
+            }
+
+            x = document.cookie.indexOf(' ', x) + 1;
+
+            if (x == 0) break;
+        }
+
+        return '';
+    }
+    // 만ㄹ되면 실패값으로 리프 값을 요청하는 api ㅁㄴ들고 해당유저의 리프값을 주면 된다
     const whenExpiredToken = function () {
+        const refreshToken = getCookie('refreshToken');
+
         $.ajax({
             type: 'GET',
             url: `/api/token`,
@@ -129,14 +159,14 @@
             // 이미서버에서 쿠키를 전송해서 필요없을 듯
             dataType: 'json',
             success: function (response) {
-                const newAccessToken = response;
-                console.log(response);
+                const newAccessToken = response.newAccessToken;
+                const baseRefreshToken = response.token.token;
+                console.log(newAccessToken);
+                console.log(baseRefreshToken);
                 $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
             },
             error: function (error) {
-                if (error.responseJSON.message === 'refreshToken is not defined') {
-                    return;
-                }
+                console.log(error.responseJSON.message);
             },
         });
     };
@@ -163,19 +193,21 @@
 
                     let temp_html = `
 
-                    <li><img src="${hospitalimage}" alt=""></li>
-                    
-                   `;
+                        <li><img src="${hospitalimage}" alt=""></li>
+
+                       `;
 
                     $('#hospital-image').append(temp_html);
                 }
             },
             // 토큰 재발급 api 함수
             error: function (error) {
+                console.log('테스트');
                 if (error.responseJSON.message === 'accessToken 만료') {
                     console.log('의사 사진 에러-1');
+                    console.log(error.responseJSON.message);
                     whenExpiredToken();
-
+                    console.log('whenExpiredToken 밖으로 나옴');
                     gethospitalimage();
                 } else {
                     console.log('의사 사진 에러-2');
@@ -198,10 +230,10 @@
                     let department = hospitalData.oneHospital.doctors[i].department;
 
                     let temp_html = `
-                        <tr>
-                            <td>${department}</td>
-                        </tr>
-                   `;
+                            <tr>
+                                <td>${department}</td>
+                            </tr>
+                       `;
 
                     $('#departmentList').append(temp_html);
                 }
@@ -270,14 +302,14 @@
                     }
 
                     let temp_html = `<tbody>
-                        <tr>
-                        <td>${doctors}</td>
-                        <th><img src="${doctorImage}" style="width: 100px" alt="의사사진">의사사진</th>
-                        <td>${doctorContent}</td>
-                        <td>${department}</td>
-                        <td>${workTimeSum}</td>
-                        </tr>
-                    </tbody>`;
+                            <tr>
+                            <td>${doctors}</td>
+                            <th><img src="${doctorImage}" style="width: 100px" alt="의사사진">의사사진</th>
+                            <td>${doctorContent}</td>
+                            <td>${department}</td>
+                            <td>${workTimeSum}</td>
+                            </tr>
+                        </tbody>`;
 
                     $('#doctorsList').append(temp_html);
                 }
@@ -321,14 +353,14 @@
                     const date = dateData.getDate();
 
                     let temp_html = `<tbody>
-                        <tr>
-                            <th scope="row">${i + 1}</th>
-                            <th>${name}</th>
-                            <th>${contents}</th>
-                            <th>${star}</th>
-                            <th>${year}년 ${month}월 ${date}일</th>
-                        </tr>
-                    </tbody>`;
+                            <tr>
+                                <th scope="row">${i + 1}</th>
+                                <th>${name}</th>
+                                <th>${contents}</th>
+                                <th>${star}</th>
+                                <th>${year}년 ${month}월 ${date}일</th>
+                            </tr>
+                        </tbody>`;
 
                     $('#reviewList').append(temp_html);
                 }
