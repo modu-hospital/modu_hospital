@@ -118,40 +118,32 @@
         getdoctor();
         getdepartment();
         gethospitalimage();
-        // getworktime()
     });
 
-    function get_cookie(name) {
-        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return value ? value[2] : null;
-    }
+    // function get_cookie(name) {
+    //     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    //     return value ? value[2] : null;
+    // }
 
     function getCookie(name) {
         var nameOfCookie = name + '=';
-
         var x = 0;
-
         while (x <= document.cookie.length) {
             var y = x + nameOfCookie.length;
-
             if (document.cookie.substring(x, y) == nameOfCookie) {
                 if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
                     endOfCookie = document.cookie.length;
-
                 return unescape(document.cookie.substring(y, endOfCookie));
             }
-
             x = document.cookie.indexOf(' ', x) + 1;
-
             if (x == 0) break;
         }
-
         return '';
     }
-    // 만ㄹ되면 실패값으로 리프 값을 요청하는 api ㅁㄴ들고 해당유저의 리프값을 주면 된다
+
+    // 만료되면 실패값으로 리프 값을 요청하는 api 만들고 해당유저의 리프값을 주면 된다
     const whenExpiredToken = function () {
         const refreshToken = getCookie('refreshToken');
-
         $.ajax({
             type: 'GET',
             url: `/api/token`,
@@ -178,7 +170,7 @@
         console.log('의사 사진 내나');
         $.ajax({
             type: 'GET',
-            url: `/api/hospitals/detail/${id}`,
+            url: `/api/hospitals/detail/${id}?time=${Date.now()}`,
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
@@ -187,11 +179,7 @@
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
 
-                    let temp_html = `
-
-                        <li><img src="${hospitalimage}" alt=""></li>
-
-                       `;
+                    let temp_html = `<li><img src="${hospitalimage}" alt=""></li>`;
 
                     $('#hospital-image').append(temp_html);
                 }
