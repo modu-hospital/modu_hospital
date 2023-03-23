@@ -259,11 +259,11 @@ class UserController {
 
             res.cookie('accessToken', accessToken, {
                 secure: false,
-                httpOnly: true,
+                httpOnly: false,
             }); //쿠키 저장은 프론트에서 저장
             res.cookie('refreshToken', refreshToken, {
                 secure: false,
-                httpOnly: true,
+                httpOnly: false,
             });
 
             const save = await this.userService.saveToken(user.userId, refreshToken);
