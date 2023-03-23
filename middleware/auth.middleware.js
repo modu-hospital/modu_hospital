@@ -64,14 +64,12 @@ const authMiddleware = async (req, res, next) => {
         // console.log("#####token", token[0].token)
 
         //원래 코드 한줄만 있었음
-        // return res.status(401).json({ message: 'accessToken 만료' });
-
+        return res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
 
         //이 메세지값을 error.message, error.status===401
-        const newAccessToken = await tokenController.newAccessToken(req, res);
-
-        return newAccessToken;
+        // const newAccessToken = await tokenController.newAccessToken(req, res);
+        // return newAccessToken;
     }
 
     //수정한것(수정안할지도)
