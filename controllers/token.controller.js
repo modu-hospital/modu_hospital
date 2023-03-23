@@ -42,10 +42,10 @@ class TokenController {
 
             if (refreshTokenVerify) {
                 const newAccessToken = jwt.sign(
-                    { loginId: user.loginId },
+                    { userId: user.userId },
                     process.env.JWT_SECRET_KEY,
                     {
-                        expiresIn: '15m',
+                        expiresIn: '10s',
                     }
                 );
 
@@ -56,13 +56,9 @@ class TokenController {
 
                 return res.json({ newAccessToken: newAccessToken, token: token });
             } else {
-                res.clearCookie('accessToken');
-                res.clearCookie('refreshToken');
                 res.send('로그인 다시 하세요');
             }
         } else {
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
             res.send('로그인 다시 하세요');
         }
     };

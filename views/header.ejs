@@ -19,14 +19,17 @@
 <nav id="menu">
     <h2>Menu</h2>
     <ul>
-        <% if (user) { %> <% if (user === 'partner') { %>
-        <li><a href="/hospital">원장님의 공간</a></li>
-        <% } %> <% if (user === 'admin') { %>
-        <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-        <% } %> <% if (user === 'customer') { %>
-        <li><a href="/users/mypage">내 정보</a></li>
-        <% } %>
-        <li><a href="#" style="cursor: pointer" id="logout">로그아웃 </a></li>
+        <% if (user) { %>
+          <% if (user === 'partner') { %>
+            <li><a href="/hospital">원장님의 공간</a></li>
+          <% } %>
+          <% if (user === 'admin') { %>
+            <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
+          <% } %>
+          <% if (user === 'customer') { %>
+            <li><a href="/users/mypage">내 정보</a></li>
+          <% } %>
+          <li><a href="#" style="cursor: pointer" id="logout" onclick="logout()">로그아웃 </a></li>
         <% } else { %>
         <li><a href="/login">로그인</a></li>
         <li><a href="/signup">회원가입</a></li>
@@ -37,23 +40,21 @@
 </nav>
 
 <script src="/js/logout.js"></script>
+<script src="/js/token.js"></script>
 
-<!-- <nav>
-    <ul>
-        <li><a href="" onclick="location.href='/'">Home</a></li>
-        <li><a href="/users/mypage">내 정보</a></li>
-        <li><a href="/login">로그인</a></li>
-        <li><a href="#" id="logout">로그아웃</a></li>
-        <li><a href="/signup">회원가입</a></li>
-        <li><a href="/hospital">원장님의 공간</a></li>
-        <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-    </ul>
-</nav> -->
 
-<script>
-    // 만ㄹ되면 실패값으로 리프 값을 요청하는 api ㅁㄴ들고 해당유저의 리프값을 주면 된다
-    const whenExpiredToken = function () {
-        const refreshToken = getCookie('refreshToken');
+
+
+<!-- <ul>
+      <li><a href="" onclick="location.href='/'">Home</a></li>
+      <li><a href="/users/mypage">내 정보</a></li>
+      <li><a href="/login">로그인</a></li>
+      <li><a href="#" id="logout">로그아웃</a></li>
+      <li><a href="/signup">회원가입</a></li>
+      <li><a href="/hospital">원장님의 공간</a></li>
+      <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
+</ul> -->
+
 
         $.ajax({
             type: 'GET',
