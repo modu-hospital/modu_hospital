@@ -81,7 +81,7 @@ const authMiddleware = async (req, res, next) => {
         // console.log("token :", token)
         // console.log("#####token", token[0].token)
 
-        return res.status(401).json({ message: 'accessToken 만료' });
+        //return res.status(401).json({ message: 'accessToken 만료' });
 
         // const refreshTokenV = jwt.verify(token[0].token, process.env.JWT_SECRET_KEY)
         // if(refreshTokenV) {

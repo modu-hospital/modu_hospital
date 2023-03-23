@@ -109,8 +109,6 @@
 
 <script>
 
-    
-
     setInterval(function(){
         $('#slide1>ul').delay(2500);
         $('#slide1>ul').animate({marginLeft: "-1200px"})
@@ -126,17 +124,9 @@
         getdoctor()
         getdepartment()
         gethospitalimage()
-        getworktime()
     })
 
-    function getCookie(name) {
-        let matches = document.cookie.match(
-            new RegExp(
-                '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
-            )
-        );
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
+
 
     const userId = window.location.pathname.split('/')[3];
 
@@ -176,7 +166,7 @@
 
                     let temp_html = `
 
-                    <li><img src="${hospitalimage}" alt=""></li>
+                    <li><img style="width:100%; height:100%;" src="${hospitalimage}" alt=""></li>
                     
                    `;
 
