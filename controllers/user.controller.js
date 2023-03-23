@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service.js');
 const ReservationService = require('../services/reservation.service');
+const TokenService = require('../services/token.service');
 const Validation = require('../lib/validation');
 const jwt = require('jsonwebtoken');
 const CreateError = require('../lib/errors');
@@ -9,6 +10,7 @@ class UserController {
     reservationService = new ReservationService();
     validation = new Validation();
     createError = new CreateError();
+    tokenService = new TokenService();
 
     // (admin) all role 조회 + pagination
     getAllPagination = async (req, res, next) => {
@@ -248,7 +250,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10h',
+                expiresIn: '10s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
