@@ -51,7 +51,7 @@ class TokenController {
 
                 res.cookie('accessToken', newAccessToken, {
                     secure: false,
-                    httpOnly: true,
+                    httpOnly: false,
                 });
 
                 return res.json(newAccessToken);
