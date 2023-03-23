@@ -36,9 +36,15 @@ router.get('/admin', auth, (req, res) => {
 
 // 예약페이지
 router.get('/users/reservation/:hospitalId', auth, (req, res) => {
-
-    if (res.locals.user.role === 'customer') {
+    console.log("안녕널",res.locals.user)
+    if (res.locals.user === undefined) {
+        return res.send('<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/";</script>');
+    } else if (res.locals.user.role === 'customer'){
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
+    } else if (res.locals.user.role === 'partner') {
+        return res.send('<script>alert("customer 계정으로만 예약하실 수 있습니다. "); window.location.href="/";</script>');
+    } else {
+        return res.render('index.ejs', { components: 'main', user: res.locals.user.role });
     }
 });
 
