@@ -4,8 +4,8 @@ const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
-    if(!req.cookies.accessToken) {
-        let userRole = null
+    if (!req.cookies.accessToken) {
+        let userRole = null;
         return res.render('index.ejs', {
             components: 'main',
             user: userRole,
@@ -50,8 +50,8 @@ router.get('/users/mypage', auth, (req, res) => {
 
 //비밀번호 찾기 (이메일 발송) 페이지
 router.get('/findmypassword', auth, (req, res) => {
-    if(!req.cookies.accessToken) {
-        let userRole = null
+    if (!req.cookies.accessToken) {
+        let userRole = null;
         return res.render('index.ejs', {
             components: 'findmypassword',
             user: userRole,
@@ -119,8 +119,8 @@ router.get('/doctorEdit', auth, (req, res) => {
 
 //병원상세페이지
 router.get('/hospitals/:hospitalId', auth, (req, res) => {
-    if(!req.cookies.accessToken) {
-        let userRole = null
+    if (!req.cookies.accessToken) {
+        let userRole = null;
         return res.render('index.ejs', {
             components: 'hospitaldetail',
             user: userRole,

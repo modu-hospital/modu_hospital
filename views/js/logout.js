@@ -1,4 +1,4 @@
-function logout (){
+function logout() {
     fetch('/api/users/logout', {
         method: 'post',
         credentials: 'include',
