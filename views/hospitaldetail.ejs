@@ -153,11 +153,7 @@
             success: function (response) {
                 const hospitalData = response;
                 console.log('의사 사진 성공');
-                // console.log("hospitalData.oneHospital", hospitalData.oneHospital.hospitalImage[1].url)
-                // <img src ="${hospitalimage}" class="hospitald_img" alt="병원사진">
-                // <li>
-                //             <a href="#"><img style="height: 300px;" src="${hospitalimage}" alt="슬라이드1"></a>
-                //         </li>
+                
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
 
