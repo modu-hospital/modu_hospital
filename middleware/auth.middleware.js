@@ -12,6 +12,7 @@ const authMiddleware = async (req, res, next) => {
     //토큰 존재 확인
     //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
     if (!accessToken || !refreshToken) {
+        console.log("토큰 존재 확인했냐?")
         return next();
         // return {message:"로그인 다시 해주세요"}
     }
@@ -74,12 +75,13 @@ const authMiddleware = async (req, res, next) => {
 
     //수정한것(수정안할지도)
     const { userId } = accessTokenValidate;
-    // console.log("########유저아이디",userId);
+
+    console.log("########유저아이디",userId);
 
     const user = await User.findByPk(userId);
 
     res.locals.user = user;
-
+    
     next();
 };
 module.exports = authMiddleware;

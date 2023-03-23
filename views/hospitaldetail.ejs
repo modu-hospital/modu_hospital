@@ -125,43 +125,43 @@
     //     return value ? value[2] : null;
     // }
 
-    function getCookie(name) {
-        var nameOfCookie = name + '=';
-        var x = 0;
-        while (x <= document.cookie.length) {
-            var y = x + nameOfCookie.length;
-            if (document.cookie.substring(x, y) == nameOfCookie) {
-                if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
-                    endOfCookie = document.cookie.length;
-                return unescape(document.cookie.substring(y, endOfCookie));
-            }
-            x = document.cookie.indexOf(' ', x) + 1;
-            if (x == 0) break;
-        }
-        return '';
-    }
+    // function getCookie(name) {
+    //     var nameOfCookie = name + '=';
+    //     var x = 0;
+    //     while (x <= document.cookie.length) {
+    //         var y = x + nameOfCookie.length;
+    //         if (document.cookie.substring(x, y) == nameOfCookie) {
+    //             if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
+    //                 endOfCookie = document.cookie.length;
+    //             return unescape(document.cookie.substring(y, endOfCookie));
+    //         }
+    //         x = document.cookie.indexOf(' ', x) + 1;
+    //         if (x == 0) break;
+    //     }
+    //     return '';
+    // }
 
     // 만료되면 실패값으로 리프 값을 요청하는 api 만들고 해당유저의 리프값을 주면 된다
-    const whenExpiredToken = function () {
-        const refreshToken = getCookie('refreshToken');
-        $.ajax({
-            type: 'GET',
-            url: `/api/token`,
-            headers: { 'X-Refresh-Token': refreshToken },
-            // 이미서버에서 쿠키를 전송해서 필요없을 듯
-            dataType: 'json',
-            success: function (response) {
-                const newAccessToken = response.newAccessToken;
-                const baseRefreshToken = response.token.token;
-                console.log(newAccessToken);
-                console.log(baseRefreshToken);
-                $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
-            },
-            error: function (error) {
-                console.log(error.responseJSON.message);
-            },
-        });
-    };
+    // const whenExpiredToken = function () {
+    //     const refreshToken = getCookie('refreshToken');
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: `/api/token`,
+    //         headers: { 'X-Refresh-Token': refreshToken },
+    //         // 이미서버에서 쿠키를 전송해서 필요없을 듯
+    //         dataType: 'json',
+    //         success: function (response) {
+    //             const newAccessToken = response.newAccessToken;
+    //             const baseRefreshToken = response.token.token;
+    //             console.log(newAccessToken);
+    //             console.log(baseRefreshToken);
+    //             $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
+    //         },
+    //         error: function (error) {
+    //             console.log(error.responseJSON.message);
+    //         },
+    //     });
+    // };
 
     // 새로운 헤더 토큰 === 새로운 쿠키의 토큰
     const id = window.location.pathname.split('/')[2];
@@ -184,20 +184,23 @@
                     $('#hospital-image').append(temp_html);
                 }
             },
+            error: function(error){
+                console.log(error.responseJSON)
+            }
             // 토큰 재발급 api 함수
-            error: function (error) {
-                console.log('테스트');
-                if (error.responseJSON.message === 'accessToken 만료') {
-                    console.log('의사 사진 에러-1');
-                    console.log(error.responseJSON.message);
-                    whenExpiredToken();
-                    console.log('whenExpiredToken 밖으로 나옴');
-                    gethospitalimage();
-                } else {
-                    console.log('의사 사진 에러-2');
-                    console.log('에러', error);
-                }
-            },
+            // error: function (error) {
+            //     console.log('테스트');
+            //     if (error.responseJSON.message === 'accessToken 만료') {
+            //         console.log('의사 사진 에러-1');
+            //         console.log(error.responseJSON.message);
+            //         whenExpiredToken();
+            //         console.log('whenExpiredToken 밖으로 나옴');
+            //         gethospitalimage();
+            //     } else {
+            //         console.log('의사 사진 에러-2');
+            //         console.log('에러', error);
+            //     }
+            // },
         });
     }
 
@@ -222,17 +225,17 @@
                     $('#departmentList').append(temp_html);
                 }
             },
-            // error: function(error){
-            //     console.log(error.responseJSON)
-            // }
+            error: function(error){
+                console.log(error.responseJSON)
+            }
             // 토큰 재발급 api 함수
-            error: function (error) {
-                if (error.message === 'accessToken 만료') {
-                    whenExpiredToken();
-                } else {
-                    console.log(error);
-                }
-            },
+            // error: function (error) {
+            //     if (error.message === 'accessToken 만료') {
+            //         whenExpiredToken();
+            //     } else {
+            //         console.log(error);
+            //     }
+            // },
         });
     }
 
@@ -298,17 +301,17 @@
                     $('#doctorsList').append(temp_html);
                 }
             },
-            // error: function(error){
-            //     console.log(error.responseJSON)
-            // }
+            error: function(error){
+                console.log(error.responseJSON)
+            }
             // 토큰 재발급 api 함수
-            error: function (error) {
-                if (error.message === 'accessToken 만료') {
-                    whenExpiredToken();
-                } else {
-                    console.log(error);
-                }
-            },
+            // error: function (error) {
+            //     if (error.message === 'accessToken 만료') {
+            //         whenExpiredToken();
+            //     } else {
+            //         console.log(error);
+            //     }
+            // },
         });
     }
 
@@ -349,17 +352,17 @@
                     $('#reviewList').append(temp_html);
                 }
             },
-            // error: function(error){
-            //     console.log(error.responseJSON)
-            // }
+            error: function(error){
+                console.log(error.responseJSON)
+            }
             // 토큰 재발급 api 함수
-            error: function (error) {
-                if (error.message === 'accessToken 만료') {
-                    whenExpiredToken();
-                } else {
-                    console.log(error);
-                }
-            },
+            // error: function (error) {
+            //     if (error.message === 'accessToken 만료') {
+            //         whenExpiredToken();
+            //     } else {
+            //         console.log(error);
+            //     }
+            // },
         });
     }
 
