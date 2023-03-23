@@ -9,8 +9,8 @@ class TokenRepository {
     };
 
     findToken = async (token) => {
-        return await this.refreshTokenModel.findOne({ where: {token}})
-    }
+        return await this.refreshTokenModel.findOne({ where: { token } });
+    };
 }
 
 module.exports = TokenRepository;
