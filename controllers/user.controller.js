@@ -259,11 +259,11 @@ class UserController {
 
             res.cookie('accessToken', accessToken, {
                 secure: false,
-                httpOnly: true,
+                httpOnly: false,
             }); //쿠키 저장은 프론트에서 저장
             res.cookie('refreshToken', refreshToken, {
                 secure: false,
-                httpOnly: true,
+                httpOnly: false,
             });
 
             const save = await this.userService.saveToken(user.userId, refreshToken);
@@ -277,6 +277,7 @@ class UserController {
     logout = async (req, res) => {
         try {
             res.cookie('accessToken', '');
+            res.cookie('refreshToken', '');
             res.status(200).json({ message: '로그아웃 되었습니다.' });
         } catch (error) {
             res.status(500).json(error);
