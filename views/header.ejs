@@ -19,17 +19,14 @@
 <nav id="menu">
     <h2>Menu</h2>
     <ul>
-        <% if (user) { %>
-          <% if (user === 'partner') { %>
-            <li><a href="/hospital">원장님의 공간</a></li>
-          <% } %>
-          <% if (user === 'admin') { %>
-            <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-          <% } %>
-          <% if (user === 'customer') { %>
-            <li><a href="/users/mypage">내 정보</a></li>
-          <% } %>
-          <li><a href="#" style="cursor: pointer" id="logout" onclick="logout()">로그아웃 </a></li>
+        <% if (user) { %> <% if (user === 'partner') { %>
+        <li><a href="/hospital">원장님의 공간</a></li>
+        <% } %> <% if (user === 'admin') { %>
+        <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
+        <% } %> <% if (user === 'customer') { %>
+        <li><a href="/users/mypage">내 정보</a></li>
+        <% } %>
+        <li><a href="#" style="cursor: pointer" id="logout" onclick="logout()">로그아웃 </a></li>
         <% } else { %>
         <li><a href="/login">로그인</a></li>
         <li><a href="/signup">회원가입</a></li>
@@ -42,9 +39,6 @@
 <script src="/js/logout.js"></script>
 <script src="/js/token.js"></script>
 
-
-
-
 <!-- <ul>
       <li><a href="" onclick="location.href='/'">Home</a></li>
       <li><a href="/users/mypage">내 정보</a></li>
@@ -54,29 +48,3 @@
       <li><a href="/hospital">원장님의 공간</a></li>
       <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
 </ul> -->
-
-
-        $.ajax({
-            type: 'GET',
-            url: `/api/token`,
-            headers: { 'X-Refresh-Token': refreshToken },
-            // 이미서버에서 쿠키를 전송해서 필요없을 듯
-            dataType: 'json',
-            success: function (response) {
-                const newAccessToken = response.newAccessToken;
-                const baseRefreshToken = response.token.token;
-                console.log(newAccessToken);
-                console.log(baseRefreshToken);
-                $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
-            },
-            error: function (error) {
-                console.log(error.responseJSON.message);
-            },
-        });
-    };
-
-    whenExpiredToken();
-    // 응답이 null 이면 그다음 코드가 실행이 안되게 하면 될거같다~
-    // 만약 있으면 (로그인 됬다는거)셋타임 시작 그 셋타임 안에 whenExpiredToken()
-    // setTimeout() 7초를 걸었으면 7초 뒤에 이 안에 있는 콜백함수가 실행 whenExpiredToken()
-</script>
