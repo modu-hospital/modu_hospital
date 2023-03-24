@@ -226,7 +226,6 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
-        console.log('customer', req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
