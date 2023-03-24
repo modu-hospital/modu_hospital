@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../models');
 
 class WorkingtimeRepository {
     constructor(
@@ -42,6 +43,7 @@ class WorkingtimeRepository {
         return result;
     };
 }
+
 // 유저가 병원Id 1번에 입장, 예약버튼 클릭 -> 예약날짜 클릭 (23.03.20)  => hospitalModel hospitalId where  닥터들 인클루드 id, name
 // -> 병원ID 1번에 근무하는 doctorId 들의 근무일자(03.14~03.20, week 2번, startTime, endTime)  15일 가져온다    닥터에다가 워킹타임즈를 인클루드
 // startTime,  30분 단위 출력 endTime

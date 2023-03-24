@@ -234,8 +234,6 @@ function buildCalendar() {
             // 다음달이고 오늘보다 일수가 높은 수일 때
             noCount += 1;
         } else if (possibleDay[etp] === 1) {
-            console.log('예약불가 요일:', possibleDay[etp] === 1);
-            // 해당 일이 예약불가 요일인 경우,   Q. 이건 왜 0이 아니고 1이지?
             noCount += 1;
         }
 
@@ -271,7 +269,6 @@ function buildCalendar() {
 
                 // 선택된 셀을 전역변수에 저장한 후 색 변경 및 기존 선택된 셀의 색 복구
                 if (selectedCell != null) {
-                    console.log(selectedCell);
                     selectedCell.bgColor = '#FFFFFF';
                 }
                 selectedCell = this;
@@ -319,12 +316,9 @@ function exchangeToPosibleDay(num) {
 // 이번 달력은 비교가 굉장히 빈번하게 사용되므로 선언하고 시작
 function thisMonth(todayMonth, dateMonth) {
     // 이번달이면 0 리턴, 다음달이면 1 리턴
-    console.log('todayMonth : ' + todayMonth + ', dateMonth : ' + dateMonth);
     if (todayMonth * 1 === dateMonth * 1) {
-        console.log('이번달 이구요');
         return 0;
     }
-    console.log('다음달 이구요');
     return 1;
 }
 
@@ -342,16 +336,7 @@ let selectedFinalTime = 0 * 1;
 //예약시간표를 만들 table객체 획득(시간표 구성)
 function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
     const hospitalId = window.location.pathname.split('/')[3];
-    console.log(
-        '클릭한 selectedYear: ',
-        selectedYear,
-        '클릭한 selectedMonth: ',
-        selectedMonth,
-        '클릭한 selectedDate: ',
-        selectedDate,
-        '클릭한 dayWeek: ',
-        dayWeek
-    );
+
     $.ajax({
         type: 'GET',
         url: `/api/workingtime/reservationdate/${hospitalId}?year=${selectedYear}&month=${selectedMonth}&date=${selectedDate}&week=${dayWeek}`,
@@ -361,12 +346,10 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
             // 1. 의사가 2명 이상일 경우
             // 2. 퐁당퐁당 예약가능할 경우
             // 3. 예약이 하나도 없을 경우
-            console.log('GET success 후 받아진 response: ', response);
 
             row = null;
             month = selectedMonth; // 달력에서 선택한 셀의 달
             date = selectedDate; // 일자를 받아오고
-            console.log('내가 클릭한 month: ', month, '내가 클릭한 date: ', date);
             let timeTable = document.getElementById('timeTable'); // 시간표를 출력할 테이블을 가져옴
             let doctorTable = document.getElementById('doctorTable'); // 시간표를 출력할 테이블을 가져옴
             // 테이블 초기화
@@ -381,7 +364,6 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                 let doctorId = response[i].doctorId;
                 let doctorName = response[i].doctorName;
                 let time = response[i].times;
-                console.log(`첫번째 for문 ${i}번째의 ${hospitalName}`);
                 if (i < 1) {
                     row = doctorTable.insertRow();
                     cell = row.insertCell();
@@ -419,10 +401,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 cellTime = this.getAttribute('id');
                                 reserveTime = cellTime.split('-')[0];
                                 doctorId = cellTime.split('-')[1];
-                                console.log(reserveTime);
-                                console.log(doctorId);
                                 reserveTime = reserveTime * 1;
-                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -468,7 +447,6 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             cellStartTimeText = cellTime + ':30';
                             cellEndTimeText = cellTime + 1 + ':00';
                             inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
                             // 셀 입력을 위해 테이블 개행
                             row = timeTable.insertRow();
                             //해당 row의 셀 생성
@@ -482,10 +460,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 cellTime = this.getAttribute('id');
                                 reserveTime = cellTime.split('-')[0];
                                 doctorId = cellTime.split('-')[1];
-                                console.log(reserveTime);
-                                console.log(doctorId);
                                 reserveTime = reserveTime * 1;
-                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -545,14 +520,13 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             cellStartTimeText = cellTime + ':00';
                             cellEndTimeText = cellTime + ':30';
                             inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
+
                             // 셀 입력을 위해 테이블 개행
                             row = timeTable.insertRow();
-                            console.log('row: ', row);
                             //해당 row의 셀 생성
                             // cell = row.insertCell();
                             cell = timeTable.rows[j].insertCell(-1);
-                            console.log('cell: ', cell);
+
                             // cell에 id 부여
                             cell.setAttribute('id', `${cellTime}-${doctorId}`); // id는 행의 시작시간
                             // 셀에 입력
@@ -563,10 +537,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 cellTime = this.getAttribute('id');
                                 reserveTime = cellTime.split('-')[0];
                                 doctorId = cellTime.split('-')[1];
-                                console.log(reserveTime);
-                                console.log(doctorId);
                                 reserveTime = reserveTime * 1;
-                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -577,9 +548,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                                 //하단의 예약일시에 시간 표시
                                 if (reserveTime - Math.floor(reserveTime) === 0) {
-                                    console.log('안녕하세요');
                                     resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
-                                    console.log(resTime);
                                     resDoctor = doctorId;
 
                                     resTimeForm = document.getElementById('selectedTime');
@@ -587,7 +556,6 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
                                 } else {
-                                    console.log('안녕하세요2');
                                     resTime =
                                         Math.floor(reserveTime) +
                                         ':30 ~ ' +
@@ -613,14 +581,10 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                             cellStartTimeText = cellTime + ':30';
                             cellEndTimeText = cellTime + 1 + ':00';
                             inputCellText = cellStartTimeText + ' ~ ' + cellEndTimeText;
-                            console.log(`테이블에 ${inputCellText} 이 생성될 예정이다.`);
                             // 셀 입력을 위해 테이블 개행
                             row = timeTable.insertRow();
-                            console.log('row: ', row);
                             //해당 row의 셀 생성
-                            // cell = row.insertCell();
                             cell = timeTable.rows[j].insertCell(-1);
-                            // console.log('cell: ', cell);
                             // cell에 id 부여
                             cell.setAttribute('id', `${cellTime + 0.5}-${doctorId}`); // id는 행의 시작시간
                             // 셀에 입력
@@ -630,10 +594,7 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                 cellTime = this.getAttribute('id');
                                 reserveTime = cellTime.split('-')[0];
                                 doctorId = cellTime.split('-')[1];
-                                console.log(reserveTime);
-                                console.log('doctorId: ', doctorId);
                                 reserveTime = reserveTime * 1;
-                                console.log('selected : ' + reserveTime);
 
                                 // 선택된 시간표테이블 셀의 색상 변경, 중복선택 불가하도록 처리
                                 if (selectedCellTime != null) {
@@ -644,7 +605,6 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
                                 //하단의 예약일시에 시간 표시
                                 if (reserveTime - Math.floor(reserveTime) === 0) {
-                                    console.log('안녕하세요3');
                                     resTime = reserveTime + ':00 ~ ' + reserveTime + ':30';
 
                                     resDoctor = doctorId;
@@ -654,21 +614,15 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
                                 } else {
-                                    console.log('안녕하세요4');
                                     resTime =
                                         Math.floor(reserveTime) +
                                         ':30 ~ ' +
                                         Math.floor(reserveTime + 1) +
                                         ':00';
 
-                                    console.log(resTime);
-
                                     resDoctor = doctorId;
-                                    console.log(resDoctor);
-
                                     resTimeForm = document.getElementById('selectedTime');
                                     resDoctorForm = document.getElementById('selectedDoctor');
-                                    console.log(resDoctorForm);
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
                                 }
@@ -746,7 +700,7 @@ function getAddr() {
     }
 
     jQuery.ajax({
-        url: 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
+        url: 'https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
         type: 'POST',
         data: {
             confmKey: 'devU01TX0FVVEgyMDIzMDExOTEwMTM0ODExMzQ0MzE=',
@@ -1009,7 +963,7 @@ function reservaionCheck() {
                 alert('예약신청이 완료되었습니다.');
             },
             error: function (error) {
-                console.log(error);
+                alert('예약신청이 실패했습니다.');
             },
         });
     }

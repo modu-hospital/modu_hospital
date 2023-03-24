@@ -184,8 +184,6 @@ class UserService {
     //     };
 
     //     transPort.sendMail(mailOptions, (err, info) => {
-    //         console.log(info.envelope);
-    //         console.log(info.messageId);
     //     });
     // };
     sendEmailForResetPassword = async (email) => {
