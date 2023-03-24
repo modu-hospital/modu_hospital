@@ -559,6 +559,8 @@ class HospitalService {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
             const reviews = await this.hospitalRepository.findReview(id);
 
+            
+
             if (!oneHospital.hospitalImageFiles) {
                 return {};
             }
@@ -591,6 +593,10 @@ class HospitalService {
                 const department = doctor.doctorCategoryMappings.map((category) => {
                     return category.categories.department;
                 });
+
+                doctor.workingTimes.sort((a,b) => {
+                    return a.dayOfTheWeek - b.dayOfTheWeek
+                })
 
                 //workingTime은 함수가 아니라서?..
                 //categories는..
