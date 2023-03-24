@@ -435,6 +435,7 @@ class HospitalRepository {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes',
                                 attributes: ['dayOfTheWeek', 'startTime', 'endTime'],
+    
                             },
                             {
                                 model: this.doctorCategoryMappingModel,
