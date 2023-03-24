@@ -54,6 +54,35 @@ describe('Reservation Service Unit Test', () => {
         // })
     });
     describe('createReview()', () => {
+        it('should call reservationRepository.findReservationById once with proper argument', async () =>{
+            const reservationId = 1
+            mockReservationRepository.findReservationById.mockResolvedValue({status:'done'})
+            mockReservationRepository.findHospitalByReservationId.mockResolvedValue({hospitalId:2})
+
+
+            await reservationService.createReview(reservationId)      
+
+            expect(mockReservationRepository.findReservationById).toHaveBeenCalledTimes(1)
+            expect(mockReservationRepository.findReservationById).toHaveBeenCalledWith(reservationId)
+        })
+        it('should call reservationRepository.findHospitalByReservationId once with proper argument', async () =>{
+            const reservationId = 1
+            mockReservationRepository.findReservationById.mockResolvedValue({status:'done'})
+            mockReservationRepository.findHospitalByReservationId.mockResolvedValue({hospitalId:2})
+
+            await reservationService.createReview(reservationId)
+            
+            expect(mockReservationRepository.findHospitalByReservationId).toHaveBeenCalledTimes(1)
+            expect(mockReservationRepository.findHospitalByReservationId).toHaveBeenCalledWith(reservationId)
+        })
+        it('should call reservationRepository.createReview once with proper argument', async () =>{
+            mockReservationRepository.findReservationById.mockResolvedValue({status:'done',userId:'1'})
+            mockReservationRepository.findHospitalByReservationId.mockResolvedValue({hospitalId:2})
+            const {reservationId,star,contents} = {reservationId:1,star:5,contents:'aa'}
+            await reservationService.createReview(reservationId,star,contents)
+            
+            expect(mockReservationRepository.createReview).toHaveBeenCalledTimes(1)
+        })
         it('should throw ReviewAlreadyCreated error', async () => {
             const statusReviewed = {
                 status: 'reviewed',

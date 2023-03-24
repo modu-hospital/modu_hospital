@@ -67,8 +67,7 @@ router.get('/findmypassword', auth, (req, res) => {
 });
 
 // 비밀번호 재설정 페이지
-router.get('/users/resetpassword/:params', auth, (req, res) => {
-    if (res.locals.user.role === 'customer' || res.locals.user.role === 'partner') {
+router.get('/users/resetpassword/:params', (req, res) => {{
         return res.render('index.ejs', { components: 'resetpassword', user: res.locals.user.role });
     }
 });

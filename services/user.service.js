@@ -20,7 +20,7 @@ class UserService {
     );
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
-
+ㅎ
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
@@ -206,7 +206,7 @@ class UserService {
             from: 'spartamoduhospital@gmail.com',
             to: email,
             subject: '모두의 병원 비밀번호 재설정',
-            text: 'token ' + token,
+            text: 'modu-hospital.click/users/resetpassword/' + token,
         };
         //메일 전송
         await transPort.sendMail(mailOptions, (err, info) => {
@@ -242,15 +242,13 @@ class UserService {
         const hashedPassword = await bcrypt.hash(password, 12);
         const updated = await this.userRepository.updatePassword(user.userId, hashedPassword);
 
+        //case close
         await this.userRepository.updatePasswordResetCase(user.userId, null);
         return updated;
     };
     findResetCase = async (token) => {
         const resetCase = await this.userRepository.findResetCaseByToken(token);
-        if (!resetCase) {
-            return false;
-        }
-        return true;
+        return resetCase;
     };
     editPassword = async (userId, password, confirm) => {
         if (password != confirm) {

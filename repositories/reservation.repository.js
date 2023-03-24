@@ -151,15 +151,46 @@ class ReservationRepository {
     };
 
     findHospitalByReservationId = async (reservationId) => {
-        const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId 
-        inner join hospitals as h on d.hospitalId  = h.hospitalId 
-        WHERE r.id = ${reservationId}`;
-        const hospitalIdAndUserId = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
+        // const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r
+        // inner join doctors as d on r.doctorId = d.doctorId
+        // inner join hospitals as h on d.hospitalId  = h.hospitalId
+        // WHERE r.id = ${reservationId}`;
+        const hospital = await this.models.Reservation.findByPk(reservationId, {
+            attributes: [
+            [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
+            [this.sequelize.col('doctors->hospitals.userId'), 'userId'],
+            [this.sequelize.col('doctors->hospitals.name'), 'name'],
+            [this.sequelize.col('doctors->hospitals.address'), 'address'],
+            [this.sequelize.col('doctors->hospitals.phone'), 'phone'],
+            [this.sequelize.col('doctors->hospitals.createdAt'), 'createdAt'],
+            [this.sequelize.col('doctors->hospitals.updatedAt'), 'updatedAt'],
+        ],
+            include: [
+                {
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    paranoid: false,
+                    attributes: [],
+                    include: [
+                        {
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            paranoid: false,
+                            attributes: [
+                                'hospitalId',
+                                'userId',
+                                'name',
+                                'address',
+                                'phone',
+                                'createdAt',
+                                'updatedAt',
+                            ],
+                        },
+                    ],
+                },
+            ],
         });
-
-        return hospitalIdAndUserId[0];
+        return hospital;
     };
 
     editReservationStatusById = async (id, status) => {
