@@ -200,6 +200,8 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
+        console.log('partner', req.body);
+
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -211,6 +213,8 @@ class UserController {
                 idNumber,
                 role
             );
+
+            console.log('useruseruseruseruser', user);
             return res.json(user);
         } catch (err) {
             if (err.isJoi) {
@@ -222,7 +226,7 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
-        console.log(req.body);
+        console.log('customer', req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);

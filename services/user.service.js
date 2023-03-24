@@ -71,6 +71,8 @@ class UserService {
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
 
+        console.log('#####', name, loginId, password, phone, idNumber, role);
+
         if (existUser) {
             const err = await this.createError.UserAlreadyExist();
             throw err;
@@ -184,8 +186,6 @@ class UserService {
     //     };
 
     //     transPort.sendMail(mailOptions, (err, info) => {
-    //         console.log(info.envelope);
-    //         console.log(info.messageId);
     //     });
     // };
     sendEmailForResetPassword = async (email) => {

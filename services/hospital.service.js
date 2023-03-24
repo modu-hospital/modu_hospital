@@ -521,7 +521,6 @@ class HospitalService {
                         console.error(err);
                         reject(new Error(`Failed to upload image ${index + 1} to S3`));
                     } else {
-                        console.log(`File ${index + 1} uploaded successfully. ${data.Location}`);
                         fs.unlinkSync(file.path);
                         resolve(data.Location);
                     }
@@ -590,6 +589,10 @@ class HospitalService {
             const doctors = oneHospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
                     return category.categories.department;
+                });
+
+                doctor.workingTimes.sort((a, b) => {
+                    return a.dayOfTheWeek - b.dayOfTheWeek;
                 });
 
                 //workingTime은 함수가 아니라서?..

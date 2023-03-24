@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../models');
 
 class WorkingtimeRepository {
     constructor(
@@ -22,7 +23,13 @@ class WorkingtimeRepository {
         INNER JOIN doctors AS d on h.hospitalId = d.hospitalId
         INNER JOIN reservations AS r on d.doctorId = r.doctorId
         INNER JOIN workingTimes AS wt on r.doctorId = wt.doctorId
-        WHERE h.hospitalId = ${hospitalId} AND wt.dayOfTheWeek = ${week} AND r.status = "approved" AND DATE_FORMAT(r.date  , '%Y%m%d') = ${selectedYMD}
+        WHERE h.hospitalId = ${this.sequelize.escape(
+            hospitalId
+        )} AND wt.dayOfTheWeek = ${this.sequelize.escape(
+            week
+        )} AND r.status = "approved" AND DATE_FORMAT(r.date  , '%Y%m%d') = ${this.sequelize.escape(
+            selectedYMD
+        )}
         ORDER BY d.doctorId ASC`;
         const result = await this.sequelize.query(query, {
             type: this.sequelize.QueryTypes.SELECT,
@@ -34,7 +41,13 @@ class WorkingtimeRepository {
         const query = `SELECT h.name AS HospitalName, d.doctorId AS doctorId, d.name AS doctorName, DATE_FORMAT(wt.startTime, '%H:%i') AS startTime, DATE_FORMAT(wt.endTime, '%H:%i') AS endTime, DATE_FORMAT(wt.startDate  , '%Y-%m-%d') AS startDate, DATE_FORMAT(wt.endDate  , '%Y-%m-%d') AS endDate FROM hospitals AS h
         INNER JOIN doctors AS d on h.hospitalId = d.hospitalId
         INNER JOIN workingTimes AS wt on d.doctorId = wt.doctorId
-        WHERE h.hospitalId = ${hospitalId} AND wt.dayOfTheWeek = ${week} AND DATE_FORMAT(wt.endDate  , '%Y%m%d') > ${selectedYMD} AND ${selectedYMD} > DATE_FORMAT(wt.startDate  , '%Y%m%d')
+        WHERE h.hospitalId = ${this.sequelize.escape(
+            hospitalId
+        )} AND wt.dayOfTheWeek = ${this.sequelize.escape(
+            week
+        )} AND DATE_FORMAT(wt.endDate  , '%Y%m%d') > ${this.sequelize.escape(
+            selectedYMD
+        )} AND ${this.sequelize.escape(selectedYMD)} > DATE_FORMAT(wt.startDate  , '%Y%m%d')
         ORDER BY d.doctorId ASC`;
         const result = await this.sequelize.query(query, {
             type: this.sequelize.QueryTypes.SELECT,

@@ -12,7 +12,6 @@ const authMiddleware = async (req, res, next) => {
     //토큰 존재 확인
     //토큰이 없으면 로그인 되면 안됨 다시 로그인 버튼 누르게끔
     if (!accessToken || !refreshToken) {
-        console.log('토큰 존재 확인했냐?');
         return next();
         // return {message:"로그인 다시 해주세요"}
     }
@@ -61,9 +60,6 @@ const authMiddleware = async (req, res, next) => {
         // //userId를 어디서 가져올껀지
         // //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
-        // console.log("token :", token)
-        // console.log("#####token", token[0].token)
-
         //원래 코드 한줄만 있었음
         return res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
@@ -75,8 +71,6 @@ const authMiddleware = async (req, res, next) => {
 
     //수정한것(수정안할지도)
     const { userId } = accessTokenValidate;
-
-    console.log('########유저아이디', userId);
 
     const user = await User.findByPk(userId);
 

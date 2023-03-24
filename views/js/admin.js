@@ -5,10 +5,6 @@ $(document).ready(function () {
     const type = urlSearch.get('type');
     const search = urlSearch.get('search');
 
-    console.log('새로고침 urlSearch', urlSearch);
-    console.log('새로고침 page', page);
-    console.log('새로고침 type', type);
-
     if (type === 'customer') {
         $('.active').removeClass('active');
         $('#customerTab').addClass('active');
@@ -26,11 +22,9 @@ $(document).ready(function () {
     let ajaxURL = '';
 
     if (search) {
-        console.log('서치 존재');
         ajaxURL = `/api/admin/search?page=${page || 1}&type=${type}&search=${search}`;
         searchURL = `&search=${search}`;
     } else {
-        console.log('조회');
         ajaxURL = `/api/admin/all?page=${page || 1}&type=${type}`;
         searchURL = ``;
     }
@@ -40,7 +34,6 @@ $(document).ready(function () {
         url: `${ajaxURL}`,
         async: false,
         success: function (response) {
-            console.log(response);
             const lastPage = response.lastPage;
             const allUser = response.allUser;
             for (let i = 1; i <= lastPage; i++) {
@@ -91,154 +84,11 @@ $(document).ready(function () {
             }
         },
         error: function (err) {
-            console.log(err);
+            alert('목록을 불러오는 데 실패하였습니다.');
         },
     });
 });
 
-// 일반회원목록 조회
-
-// function getCustomUserInfo() {
-//     const urlSearch = new URLSearchParams(location.search);
-//     const page = Number(urlSearch.get('page'));
-//     const type = urlSearch.get('type');
-//     $.ajax({
-//         type: 'GET',
-//         url: `/api/admin/customer?page=${page || 1}&type=${type}`,
-//         async: false,
-//         success: function (response) {
-//             const lastPage = response.lastPage;
-//             const allUser = response.allUser;
-//             for (let i = 1; i <= lastPage; i++) {
-//                 let temp_html = `<li class="page-item">
-//                     <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-//                 </li>`;
-//                 $('#paginationCustomer').append(temp_html);
-//             }
-//             for (let i = 0; i < allUser.rows.length; i++) {
-//                 let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-//                     allUser.rows[i];
-
-//                 let temp_html = `<tr id="userId${userId}">
-//                                     <th scope="row" class="list-MS">${userId}</th>
-//                                     <td class="list-name">${name}</td>
-//                                     <td class="list-name">${getGender(idNumber)}</td>
-//                                     <td class="list-MS">${loginId}</td>
-//                                     <td class="list-MS">${phone}</td>
-//                                     <td class="list-name">${editaddress(address)}</td>
-//                                     <td class="list-MS"">${editDate(createdAt)}</td>
-//                                     <td>
-//                                         <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
-//                                             >회원삭제</a
-//                                         >
-//                                     </td>
-//                                 </tr>`;
-//                 $('#customUserList').append(temp_html);
-//             }
-//         },
-//     });
-// }
-
-// // 파트너회원목록 조회
-// function getPartnerUserInfo() {
-//     const urlSearch = new URLSearchParams(location.search);
-//     const page = Number(urlSearch.get('page'));
-//     const type = urlSearch.get('type');
-
-//     $.ajax({
-//         type: 'GET',
-//         url: `/api/admin/partner?page=${page || 1}&type=partner`,
-//         async: false,
-//         success: function (response) {
-//             const lastPage = response.lastPage;
-//             const allUser = response.allUser;
-//             for (let i = 1; i <= lastPage; i++) {
-//                 let temp_html = `<li class="page-item">
-//                     <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-//                 </li>`;
-//                 $('#paginationPartner').append(temp_html);
-//             }
-//             for (let i = 0; i < allUser.rows.length; i++) {
-//                 let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-//                     allUser.rows[i];
-
-//                 let temp_html = `<tr id="userId${userId}">
-//                                     <th scope="row" class="list-MS">${userId}</th>
-//                                     <td class="list-name">${name}</td>
-//                                     <td class="list-name">${getGender(idNumber)}</td>
-//                                     <td class="list-MS">${loginId}</td>
-//                                     <td class="list-MS">${phone}</td>
-//                                     <td class="list-name">${editaddress(address)}</td>
-//                                     <td class="list-MS"">${editDate(createdAt)}</td>
-//                                     <td>
-//                                         <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
-//                                             >회원삭제</a
-//                                         >
-//                                     </td>
-//                                 </tr>`;
-//                 $('#partnerUserList').append(temp_html);
-//             }
-//         },
-//     });
-// }
-
-// // 승인대기회원목록 조회
-// function getWaitingUserInfo() {
-//     const urlSearch = new URLSearchParams(location.search);
-//     const page = Number(urlSearch.get('page'));
-//     const type = urlSearch.get('type');
-
-//     $.ajax({
-//         type: 'GET',
-//         url: `/api/admin/waiting?page=${page || 1}&type=waiting`,
-//         async: false,
-//         success: function (response) {
-//             const lastPage = response.lastPage;
-//             const allUser = response.allUser;
-//             for (let i = 1; i <= lastPage; i++) {
-//                 let temp_html = `<li class="page-item">
-//                     <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-//                 </li>`;
-//                 $('#paginationWaiting').append(temp_html);
-//             }
-//             for (let i = 0; i < allUser.rows.length; i++) {
-//                 let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-//                     allUser.rows[i];
-
-//                 let temp_html = `<tr id="userId${userId}">
-//                                     <th scope="row" class="list-MS">${userId}</th>
-//                                     <td class="list-name">${name}</td>
-//                                     <td class="list-name">${getGender(idNumber)}</td>
-//                                     <td class="list-MS">${loginId}</td>
-//                                     <td class="list-MS">${phone}</td>
-//                                     <td class="list-name">${editaddress(address)}</td>
-//                                     <td class="list-MS"">${editDate(createdAt)}</td>
-//                                     <td>
-//                                         <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
-//                                             >승인</a
-//                                         >
-//                                         <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
-//                                             >미승인</a
-//                                         >
-//                                     </td>
-//                                 </tr>`;
-//                 $('#waitingUserList').append(temp_html);
-//             }
-//         },
-//     });
-// }
-
-// 검색
-
-// $('#filter-value').on('keyup', function searchInput(e) {
-//     if (debouncingTime) clearTimeout(debouncingTime);
-//     debouncingTime = setTimeout(() => {
-//         const value = $(this).val().toLowerCase();
-//         $('.userList tr').filter(function () {
-//             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//         });
-//     }, 500);
-// });
 let debouncingTime = null;
 $('#filter-value').on('keyup', function searchInput() {
     if (debouncingTime) clearTimeout(debouncingTime);
