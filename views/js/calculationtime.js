@@ -1,12 +1,4 @@
 function calculationTime(workingTimeDate, reservationDate) {
-    // 의사가 2명일 경우를 대비해서 workingTimeDate를 for in 함
-    console.log('calculationTime.js 계산들어감');
-
-    // for (let index = 0; index < workingTimeDate.length; index++) {
-    //     const element = workingTimeDate[index];
-    //     console.log(element);
-    // }
-
     let doctorsList = [];
     let count = 0;
 
@@ -141,6 +133,8 @@ function calculationTime(workingTimeDate, reservationDate) {
             }
         }
     }
+
+    console.log(doctorsList);
 
     let result = doctorsList.sort(function (a, b) {
         return b.count - a.count;

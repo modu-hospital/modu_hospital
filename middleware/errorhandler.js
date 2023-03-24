@@ -83,12 +83,11 @@ const errorHandler = (err, req, res, next) => {
 
     for (let i = 0; i < Object.keys(errorList).length; i++) {
         if (req.path.substr(0, Object.keys(errorList)[i].length) === Object.keys(errorList)[i]) {
-            console.log(err);
             return res.status(500).json({ message: Object.values(errorList)[i] });
         }
     }
 
-    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' }), console.log(err);
+    return res.status(500).json({ message: '알 수 없는 오류가 발생했습니다.' });
 };
 
 module.exports = errorHandler;
