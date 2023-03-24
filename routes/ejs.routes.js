@@ -23,54 +23,74 @@ router.get('/', auth, (req, res) => {
 //유저 메인페이지
 router.get('/users', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
-        return res.render('index.ejs', { components: 'user', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'user',
+            user: res.locals.user.role,
+        });
     }
 });
 
 // 서비스관리자 페이지
 router.get('/admin', auth, (req, res) => {
     if (res.locals.user.role === 'manager') {
-        return res.render('index.ejs', { components: 'admin', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'admin',
+            user: res.locals.user.role,
+        });
     }
 });
 
 // 예약페이지
 router.get('/users/reservation/:hospitalId', auth, (req, res) => {
-    console.log("안녕널",res.locals.user)
-    if (res.locals.user === undefined) {
-        return res.send('<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/";</script>');
-    } else if (res.locals.user.role === 'customer'){
-        return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
+    console.log('안녕널', res.locals.user);
+    if (res.locals.user === 'null') {
+        return res.send(
+            '<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/";</script>'
+        );
+    } else if (res.locals.user.role === 'customer') {
+        return res.render('index.ejs', {
+            components: 'reservation',
+            user: res.locals.user.role,
+        });
     } else if (res.locals.user.role === 'partner') {
-        return res.send('<script>alert("customer 계정으로만 예약하실 수 있습니다. "); window.location.href="/";</script>');
+        return res.send(
+            '<script>alert("customer 계정으로만 예약하실 수 있습니다. "); window.location.href="/";</script>'
+        );
     } else {
-        return res.render('index.ejs', { components: 'main', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'main',
+            user: res.locals.user.role,
+        });
     }
 });
 
 // 마이페이지
 router.get('/users/mypage', auth, (req, res) => {
     if (res.locals.user.role === 'customer') {
-        return res.render('index.ejs', { components: 'mypage', user: res.locals.user.role });
-    }
-});
-
-//비밀번호 찾기 (이메일 발송) 페이지
-router.get('/findmypassword', auth, (req, res) => {
-    if (!req.cookies.accessToken) {
-        let userRole = null;
         return res.render('index.ejs', {
-            components: 'findmypassword',
-            user: userRole,
+            components: 'mypage',
+            user: res.locals.user.role,
         });
     }
 });
 
+//비밀번호 찾기 (이메일 발송) 페이지
+router.get('/findmypassword', (req, res) => {
+    let userRole = null;
+    return res.render('index.ejs', {
+        components: 'findmypassword',
+        user: userRole,
+    });
+});
+
 // 비밀번호 재설정 페이지
-router.get('/users/resetpassword/:params', auth, (req, res) => {
-    if (res.locals.user.role === 'customer' || res.locals.user.role === 'partner') {
-        return res.render('index.ejs', { components: 'resetpassword', user: res.locals.user.role });
-    }
+router.get('/users/resetpassword/:params', (req, res) => {
+    let userRole = null;
+
+    return res.render('index.ejs', {
+        components: 'resetpassword',
+        user: userRole,
+    });
 });
 
 router.get('/map/hospitals', (req, res) => {
@@ -84,7 +104,10 @@ router.get('/map/pharmacies', (req, res) => {
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
     if (res.locals.user.role === 'partner') {
-        return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'hospital',
+            user: res.locals.user.role,
+        });
     }
 });
 
@@ -101,7 +124,10 @@ router.get('/register', auth, (req, res) => {
 //병원정보 수정 페이지
 router.get('/edit', auth, (req, res) => {
     if (res.locals.user.role === 'partner') {
-        return res.render('index.ejs', { components: 'hospitalEdit', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'hospitalEdit',
+            user: res.locals.user.role,
+        });
     }
 });
 
@@ -119,7 +145,10 @@ router.get('/doctorRegister', auth, (req, res) => {
 router.get('/doctorEdit', auth, (req, res) => {
     const doctorId = req.query.doctorId;
     if (res.locals.user.role === 'partner') {
-        return res.render('index.ejs', { components: 'doctorEdit', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'doctorEdit',
+            user: res.locals.user.role,
+        });
     }
 });
 
@@ -147,7 +176,10 @@ router.get('/hospitals/:hospitalId', auth, (req, res) => {
 router.get('/doctorTime', auth, (req, res) => {
     const doctorId = req.query.doctorId;
     if (res.locals.user.role === 'partner') {
-        return res.render('index.ejs', { components: 'doctorTime', user: res.locals.user.role });
+        return res.render('index.ejs', {
+            components: 'doctorTime',
+            user: res.locals.user.role,
+        });
     }
 });
 
@@ -162,7 +194,10 @@ router.get('/login', (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    res.render('index.ejs', { components: 'login', user: userRole });
+    res.render('index.ejs', {
+        components: 'login',
+        user: userRole,
+    });
 });
 
 //회원가입
@@ -171,7 +206,10 @@ router.get('/signup', (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    res.render('index.ejs', { components: 'signup', user: userRole });
+    res.render('index.ejs', {
+        components: 'signup',
+        user: userRole,
+    });
 });
 
 //파트너 회원가입
@@ -180,7 +218,10 @@ router.get('/partner/signup', (req, res) => {
     if (res.locals.user) {
         userRole = res.locals.user.role;
     }
-    res.render('index.ejs', { components: 'partner', user: userRole });
+    res.render('index.ejs', {
+        components: 'partner',
+        user: userRole,
+    });
 });
 
 module.exports = router;
