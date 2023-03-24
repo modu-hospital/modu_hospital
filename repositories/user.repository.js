@@ -94,7 +94,6 @@ class UserRepository {
     };
 
     PaginationByAll = async (limit, offset, type) => {
-        console.log('레파에서: ', offset, limit, type);
         let users;
         const tabType = { offset, limit };
         if (type === 'customer') {

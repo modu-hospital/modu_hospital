@@ -45,8 +45,6 @@
     }
 </style>
 
-
-
 <section class="profile" style="background-color: #f4f5f7">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
@@ -418,52 +416,67 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
-                <div style="height:5px;"></div>
-                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
-                <hr /><br />
+                현재 페이지 :
+                <input type="number" id="currentPage" value="1" style="text-align: center" />
+                <div style="height: 5px"></div>
+                페이지당 출력 개수 :
+                <input type="number" id="countPerPage" value="5" style="text-align: center" />
+                <hr />
+                <br />
 
-                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+                <input
+                    type="text"
+                    id="zipCode"
+                    value=""
+                    onClick="addressWindowOpen();"
+                    placeholder="00000"
+                    readonly
+                />
 
                 <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
 
                 <div id="wrap">
-                     <div id="closeBtn" onClick="addressWindowClose();">
-                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    <div id="closeBtn" onClick="addressWindowClose();">
+                        <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            id="searchAddr"
+                            value=""
+                            onkeydown="enterSearch();"
+                            placeholder="도로명주소, 건물명 또는 지번 입력"
+                        />
+                        <input type="button" onClick="getAddr();" value="주소검색" />
+                    </div>
+
+                    <div>
+                        <div id="totoalOutcome">검색결과 : <span id="totalCnt">0</span></div>
+                        <table id="list"></table>
+                    </div>
+
+                    <div id="pagingList" style="text-align: center"></div>
                 </div>
-            <div>
-                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
-                    placeholder="도로명주소, 건물명 또는 지번 입력" />
-                <input type="button" onClick="getAddr();" value="주소검색" />
-            </div>
 
-            <div>
-                <div id="totoalOutcome">
+                <div style="height: 5px"></div>
 
-                    검색결과 : <span id="totalCnt">0</span>
+                <input
+                    type="text"
+                    id="roadaddress"
+                    value=""
+                    placeholder="도로명 주소, 지번 주소"
+                    readonly
+                />
 
-                </div>
-                <table id="list"></table>
+                <div style="height: 5px"></div>
 
-            </div>
-
-            <div id="pagingList" style='text-align:center;'></div>
-
-        </div>
-
-        <div style="height:5px;"></div>
-
-        <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
-
-        <div style="height:5px;"></div>
-
-        <input type="button" value="입력" onclick="inputData()" />
+                <input type="button" value="입력" onclick="inputData()" />
             </div>
         </div>
     </div>
@@ -507,12 +520,12 @@
             `;
                 $('#user-data').append(temp_html);
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function getApproved(page) {
@@ -541,12 +554,12 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
@@ -574,16 +587,16 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
-    function getDoneOrReviewed( page) {
+    function getDoneOrReviewed(page) {
         $.ajax({
             type: 'GET',
             url: `/api/users/mypage/doneorreviewed?&page=${page}`,
@@ -625,15 +638,15 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
-    function getCanceled( page) {
+    function getCanceled(page) {
         $.ajax({
             type: 'GET',
             url: `/api/users/mypage/canceled?&page=${page}`,
@@ -656,16 +669,16 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function showInput() {
-        $('#editButton').attr('onclick', 'hideInput()')
+        $('#editButton').attr('onclick', 'hideInput()');
         $('#user-data').attr('class', 'row pt-1 d-none');
         $('#input-user-data').attr('class', 'row pt-1');
         $('#edit-buttons').attr('class', 'row pt-1');
@@ -676,7 +689,7 @@
         return false;
     }
     function hideInput() {
-        $('#editButton').attr('onclick', 'showInput()')
+        $('#editButton').attr('onclick', 'showInput()');
         $('#user-data').attr('class', 'row pt-1');
         $('#input-user-data').attr('class', 'row pt-1 d-none');
         $('#edit-buttons').attr('class', 'row pt-1 d-none');
@@ -703,16 +716,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#modal-confirm').attr('onclick', "$('#alertModal').modal('hide')");
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function showAddressModal() {
@@ -752,12 +765,11 @@
 
 <div style="height:5px;"></div>
 
-      `
+      `;
         $('#alertText').html(modalText);
         $('#modal-confirm').html('확인');
         $('#alertModal').modal('show');
     }
-    
 
     function showCancelModal() {
         const reservationId = event.target.dataset.reservationid;
@@ -780,16 +792,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#modal-confirm').attr('onclick', "$('#alertModal').modal('hide')");
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
@@ -832,16 +844,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',`$('#alertModal').modal('show');`)
+                $('#modal-confirm').attr('onclick', `$('#alertModal').modal('show');`);
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function nextPage(status) {
@@ -869,7 +881,6 @@
     }
     function inputAddress() {
         const text = $('#roadaddress').val();
-        console.log(text)
         $('#input-user-address').attr('value', text);
         const modal = document.getElementById('modal');
         modal.style.display = 'none';

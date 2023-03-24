@@ -9,6 +9,7 @@ class WorkingtimeController {
     diagnosisReservation = async (req, res) => {
         const { hospitalId } = req.params;
         const { year, month, date, week } = req.query;
+
         const findWorkingDate = await this.workingtimeService.findWorkingDate(
             hospitalId,
             year,

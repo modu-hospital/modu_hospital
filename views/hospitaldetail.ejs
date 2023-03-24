@@ -175,7 +175,7 @@
             success: function (response) {
                 const hospitalData = response;
                 console.log('의사 사진 성공');
-                
+
                 for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
                     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
 
@@ -184,9 +184,9 @@
                     $('#hospital-image').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
             // 토큰 재발급 api 함수
             // error: function (error) {
             //     console.log('테스트');
@@ -221,13 +221,12 @@
                                 <td>${department}</td>
                             </tr>
                        `;
-
                     $('#departmentList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
             // 토큰 재발급 api 함수
             // error: function (error) {
             //     if (error.message === 'accessToken 만료') {
@@ -301,9 +300,9 @@
                     $('#doctorsList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
             // 토큰 재발급 api 함수
             // error: function (error) {
             //     if (error.message === 'accessToken 만료') {
@@ -352,9 +351,9 @@
                     $('#reviewList').append(temp_html);
                 }
             },
-            error: function(error){
-                console.log(error.responseJSON)
-            }
+            error: function (error) {
+                console.log(error.responseJSON);
+            },
             // 토큰 재발급 api 함수
             // error: function (error) {
             //     if (error.message === 'accessToken 만료') {
