@@ -4,11 +4,20 @@ const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
-    let userRole = null;
-    if (res.locals.user) {
+    if (!req.cookies.accessToken) {
+        let userRole = null;
+        return res.render('index.ejs', {
+            components: 'main',
+            user: userRole,
+        });
+    } else if (res.locals.user) {
         userRole = res.locals.user.role;
+
+        return res.render('index.ejs', {
+            components: 'main',
+            user: userRole,
+        });
     }
-    res.render('index.ejs', { components: 'main', user: userRole });
 });
 
 //유저 메인페이지
@@ -27,8 +36,15 @@ router.get('/admin', auth, (req, res) => {
 
 // 예약페이지
 router.get('/users/reservation/:hospitalId', auth, (req, res) => {
-    if (res.locals.user.role === 'customer') {
+    console.log("안녕널",res.locals.user)
+    if (res.locals.user === undefined) {
+        return res.send('<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/";</script>');
+    } else if (res.locals.user.role === 'customer'){
         return res.render('index.ejs', { components: 'reservation', user: res.locals.user.role });
+    } else if (res.locals.user.role === 'partner') {
+        return res.send('<script>alert("customer 계정으로만 예약하실 수 있습니다. "); window.location.href="/";</script>');
+    } else {
+        return res.render('index.ejs', { components: 'main', user: res.locals.user.role });
     }
 });
 
@@ -40,8 +56,14 @@ router.get('/users/mypage', auth, (req, res) => {
 });
 
 //비밀번호 찾기 (이메일 발송) 페이지
-router.get('/findmypassword', (req, res) => {
-    res.render('index.ejs', { components: 'findmypassword', user: res.locals.user.role });
+router.get('/findmypassword', auth, (req, res) => {
+    if (!req.cookies.accessToken) {
+        let userRole = null;
+        return res.render('index.ejs', {
+            components: 'findmypassword',
+            user: userRole,
+        });
+    }
 });
 
 // 비밀번호 재설정 페이지
@@ -61,7 +83,6 @@ router.get('/map/pharmacies', (req, res) => {
 
 //원장님의 공간
 router.get('/hospital', auth, (req, res) => {
-    // console.log("######################################################",res)
     if (res.locals.user.role === 'partner') {
         return res.render('index.ejs', { components: 'hospital', user: res.locals.user.role });
     }
@@ -103,11 +124,9 @@ router.get('/doctorEdit', auth, (req, res) => {
 });
 
 //병원상세페이지
-router.get('/hospitals/:hospitalId', (req, res) => {
-    console.log('상세페이지 드감');
-    let userRole = null;
-    if (userRole === null) {
-        console.log('상세페이지 게스트 드감');
+router.get('/hospitals/:hospitalId', auth, (req, res) => {
+    if (!req.cookies.accessToken) {
+        let userRole = null;
         return res.render('index.ejs', {
             components: 'hospitaldetail',
             user: userRole,
@@ -115,7 +134,6 @@ router.get('/hospitals/:hospitalId', (req, res) => {
     }
 
     if (res.locals.user) {
-        console.log('상세페이지 로그인했음');
         userRole = res.locals.user.role;
 
         return res.render('index.ejs', {
@@ -123,12 +141,6 @@ router.get('/hospitals/:hospitalId', (req, res) => {
             user: userRole,
         });
     }
-    // if (userRole === 'customer') {
-    //     return res.render('index.ejs', {
-    //         components: 'hospitaldetail',
-    //         user: userRole,
-    //     });
-    // }
 });
 
 //의사 시간 추가
