@@ -73,4 +73,7 @@ router.get('/info/:id', hospitalController.searchHospitalInfo);
 //병원 상세 조회
 router.get('/detail/:id', auth, hospitalController.getOneHospital);
 
+//병원 이미지 가져오기
+router.get('/information/hospitalImage', auth, hospitalController.getHospitalImage);
+
 module.exports = router;

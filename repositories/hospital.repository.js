@@ -473,6 +473,18 @@ class HospitalRepository {
             throw err;
         }
     };
+
+    getHospitalImage = async (hospitalId) => {
+        try {
+            const getHospitalImage = await this.hospitalImageFileModel.findAll({
+                where: { hospitalId },
+                attributes: ['url'],
+            });
+            return getHospitalImage;
+        } catch (err) {
+            throw err;
+        }
+    };
 }
 
 module.exports = HospitalRepository;

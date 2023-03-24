@@ -333,6 +333,19 @@ class HospitalController {
 
         res.json({ oneHospital });
     };
+
+    //병원페이지 내에서 등록된 이미지 보기
+    getHospitalImage = async (req, res, next) => {
+        const currentUser = res.locals.user;
+        const userId = currentUser.userId;
+        const role = currentUser.role;
+        try {
+            const getHospitalImage = await this.hospitalService.getHospitalImage(userId, role);
+            return res.json(getHospitalImage);
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = HospitalController;
