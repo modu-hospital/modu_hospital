@@ -17,6 +17,7 @@ class UserController {
         try {
             const pageNum = req.query.page || 1;
             const type = req.query.type;
+            console.log('컨트롤러의: pageNum: ', pageNum, 'type: ', type);
             const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
             return res.status(200).json(PaginationByRole);
         } catch (err) {
@@ -42,7 +43,7 @@ class UserController {
         const search = req.query.search;
         const pageNum = req.query.page || 1;
         const type = req.query.type;
-
+        console.log('컨트롤러의 search: : ', search, 'pageNum: ', pageNum, 'type: ', type);
         const getSearchList = await this.userService.getSearchList(search, pageNum, type);
         return res.status(200).json(getSearchList);
     };
@@ -180,6 +181,7 @@ class UserController {
                 process.env.JWT_SECRET_KEY
             );
             const reservation = await this.reservationService.findReservationById(reservationId);
+            console.log(reservation.userId != accessToken.userId);
             if (reservation.userId != accessToken.userId) {
                 throw this.createError.notAuthorized();
             }
@@ -198,6 +200,8 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
+        console.log('partner', req.body);
+
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -209,6 +213,8 @@ class UserController {
                 idNumber,
                 role
             );
+
+            console.log('useruseruseruseruser', user);
             return res.json(user);
         } catch (err) {
             if (err.isJoi) {
@@ -220,6 +226,7 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
+        console.log('customer', req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -247,7 +254,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10h',
+                expiresIn: '15m',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
@@ -342,9 +349,8 @@ class UserController {
         try {
             const { doctorId } = req.params;
             const { userId } = res.locals.user;
-            const relationship = '본인';
             const {
-                // relationship,
+                relationship,
                 name,
                 idnumber,
                 phone,
