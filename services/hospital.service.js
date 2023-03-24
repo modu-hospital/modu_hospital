@@ -628,6 +628,33 @@ class HospitalService {
             throw err;
         }
     };
+
+    getHospitalImage = async (userId, role) => {
+        try {
+            if (!userId) {
+                const err = this.createError.UserNotLogined();
+                throw err;
+            }
+            if (role === 'waiting') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            if (role === 'customer') {
+                const err = this.createError.roleNotAllow();
+                throw err;
+            }
+            const hospitaldata = await this.hospitalRepository.findOneHospital(userId);
+            if (!hospitaldata) {
+                const err = this.createError.hospitalNotFound();
+                throw err;
+            }
+            let hospitalId = hospitaldata.hospitalId;
+            const getHospitalImage = await this.hospitalRepository.getHospitalImage(hospitalId);
+            return getHospitalImage;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = HospitalService;

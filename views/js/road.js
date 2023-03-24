@@ -42,7 +42,7 @@ function getAddr() {
     }
 
     jQuery.ajax({
-        url: 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
+        url: 'https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
 
         type: 'POST',
 
