@@ -28,7 +28,7 @@ const whenExpiredToken = function () {
             if (response) {
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 7000);
+                }, 72000000);
             }
 
             // while (document.cookie.length !== 0) {
