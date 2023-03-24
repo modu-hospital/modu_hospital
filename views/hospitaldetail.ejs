@@ -1,16 +1,10 @@
 <head>
     <!-- 병원상세페이지 슬라이드를 위한 추가 -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"
-    ></script>
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous"
-    />
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 </head>
 
 <style>
@@ -31,141 +25,152 @@
         margin: 30px 0;
     } */
 
-    #index_01 {
-        width: 1200px;
+    /* #index_01 {
+        width: 1000px;
         height: 400px;
         border: 1px solid dimgrey;
         margin: 0 auto;
     }
 
     #slide1 {
-        height: 300px;
+        height: 100%;
         overflow: hidden;
         border-bottom: 1px solid dimgrey;
     }
-    #slide1 > ul {
+
+    #slide1>ul {
         width: 3600px;
         font-size: 0;
     }
-    #slide1 > ul > li {
-        display: inline-block;
+
+    #slide1>ul>li {
+        display: block;
         font-size: 0;
+        width: 100%;
+        height: auto;
+
+    } */
+
+
+    #content-image{
+        padding: 30px;
+        text-align: center;
     }
+
+    #bigimages{
+        margin-bottom: 10px;
+        
+    }
+
+    #bigimage{
+        width: 500px;
+        height: 500px;
+    }
+
+    .small{
+        width: 100px;
+        height: 100px;
+    }
+        
+
+
+
 </style>
 
-<div class="hospital_all">
-    <div id="index_01">
-        <div id="slide1">
-            <ul id="hospital-image"></ul>
+<div id="content-image">
+    
+</div>
+
+
+<div id="main">
+    <div class="inner" style="padding: 0">
+        <div class="hospital_all">
+
+            <!--상위 div 3개는 공통 <div id="index_01">
+                <div id="slide1">
+                    <ul id="hospital-image"></ul>
+                </div>
+            </div> -->
+
+            <!-- <div class="container_hos">
+                <div class="inner_hos" id="hospital-image">
+                    이미지
+                </div>
+            </div>
+            <button class="prev_bt" type="button">prev</button>
+            <button class="next_bt" type="button">next</button> -->
+
+            <div>
+                <table id="hospitalName">
+                    <tr>
+                        <th>병원이름</th>
+                        <th>전화번호</th>
+                        <th>주소</th>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <table id="departmentList">
+                    <tr>
+                        <th>진료과</th>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <table id="doctorsList">
+                    <tr>
+                        <th>의사이름</th>
+                        <th>의사사진</th>
+                        <th>의사소개</th>
+                        <th>진료과</th>
+                        <th>근무날</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="review">
+                <table id="reviewList">
+                    <tr>
+                        <th>#</th>
+                        <th>작성자</th>
+                        <th>내용</th>
+                        <th>평점</th>
+                        <th>작성날짜</th>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <button onclick="goToReservation()">예약하기</button>
+            </div>
         </div>
-    </div>
-
-    <!-- <div class="container_hos">
-        <div class="inner_hos" id="hospital-image">
-            이미지
-        </div>
-    </div>
-    <button class="prev_bt" type="button">prev</button>
-    <button class="next_bt" type="button">next</button> -->
-
-    <div>
-        <table id="departmentList">
-            <tr>
-                <th>진료과</th>
-            </tr>
-        </table>
-    </div>
-
-    <div>
-        <table id="doctorsList">
-            <tr>
-                <th>의사이름</th>
-                <th>의사사진</th>
-                <th>의사소개</th>
-                <th>진료과</th>
-                <th>근무날</th>
-            </tr>
-        </table>
-    </div>
-    <div class="review">
-        <table id="reviewList">
-            <tr>
-                <th>#</th>
-                <th>작성자</th>
-                <th>내용</th>
-                <th>평점</th>
-                <th>작성날짜</th>
-            </tr>
-        </table>
-    </div>
-    <div>
-        <button onclick="goToReservation()">예약하기</button>
     </div>
 </div>
 
+
 <script>
-    setInterval(function () {
-        $('#slide1>ul').delay(2500);
-        $('#slide1>ul').animate({ marginLeft: '-1200px' });
-        $('#slide1>ul').delay(2500);
-        $('#slide1>ul').animate({ marginLeft: '-2400px' });
-        $('#slide1>ul').delay(2500);
-        $('#slide1>ul').animate({ marginLeft: '0px' });
-    });
+
+    
+    // setInterval(function () {
+    //     $('#slide1>ul').delay(2500);
+    //     $('#slide1>ul').animate({ marginLeft: '-1200px' });
+    //     $('#slide1>ul').delay(2500);
+    //     $('#slide1>ul').animate({ marginLeft: '-2400px' });
+    //     $('#slide1>ul').delay(2500);
+    //     $('#slide1>ul').animate({ marginLeft: '0px' });
+    // });
 
     $(document).ready(function () {
         getReview();
         getdoctor();
         getdepartment();
         gethospitalimage();
+        hospitalName()
     });
 
-    // function get_cookie(name) {
-    //     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    //     return value ? value[2] : null;
-    // }
-
-    // function getCookie(name) {
-    //     var nameOfCookie = name + '=';
-    //     var x = 0;
-    //     while (x <= document.cookie.length) {
-    //         var y = x + nameOfCookie.length;
-    //         if (document.cookie.substring(x, y) == nameOfCookie) {
-    //             if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
-    //                 endOfCookie = document.cookie.length;
-    //             return unescape(document.cookie.substring(y, endOfCookie));
-    //         }
-    //         x = document.cookie.indexOf(' ', x) + 1;
-    //         if (x == 0) break;
-    //     }
-    //     return '';
-    // }
-
-    // 만료되면 실패값으로 리프 값을 요청하는 api 만들고 해당유저의 리프값을 주면 된다
-    // const whenExpiredToken = function () {
-    //     const refreshToken = getCookie('refreshToken');
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: `/api/token`,
-    //         headers: { 'X-Refresh-Token': refreshToken },
-    //         // 이미서버에서 쿠키를 전송해서 필요없을 듯
-    //         dataType: 'json',
-    //         success: function (response) {
-    //             const newAccessToken = response.newAccessToken;
-    //             const baseRefreshToken = response.token.token;
-    //             console.log(newAccessToken);
-    //             console.log(baseRefreshToken);
-    //             $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
-    //         },
-    //         error: function (error) {
-    //             console.log(error.responseJSON.message);
-    //         },
-    //     });
-    // };
-
-    // 새로운 헤더 토큰 === 새로운 쿠키의 토큰
     const id = window.location.pathname.split('/')[2];
 
+    //병원 이미지
     function gethospitalimage() {
         console.log('의사 사진 내나');
         $.ajax({
@@ -175,33 +180,79 @@
             success: function (response) {
                 const hospitalData = response;
                 console.log('의사 사진 성공');
+
+                console.log(hospitalData.oneHospital.hospitalImage)
                 
-                for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
-                    let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
+                let temp_html = `
+                <div id="bigimages">
+                    <img id="bigimage"
+                    src="${hospitalData.oneHospital.hospitalImage[0].url}">
+                </div>
+                <div id="smallimages">
+                    ${hospitalData.oneHospital.hospitalImage.map(image => `<img class='small' src="${image.url}">`).join('')}
+                </div>
+                `;
 
-                    let temp_html = `<li><img src="${hospitalimage}" alt=""></li>`;
+                $('#content-image').append(temp_html);
 
-                    $('#hospital-image').append(temp_html);
+                var bigPic = document.querySelector('#bigimage');
+                var smallPics = document.querySelectorAll(".small")
+
+                for (var i = 0; i < smallPics.length; i++){
+                    smallPics[i].addEventListener("click", changepic)
                 }
+
+                function changepic(){
+                    var smallPicAttribute = this.getAttribute("src")
+                    bigPic.setAttribute("src", smallPicAttribute)
+                }
+
+                // for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
+                //     let hospitalimage = hospitalData.oneHospital.hospitalImage[i].url;
+                //     console.log(hospitalimage)
+
+                //     let temp_html = `<img class="s-img" src="${hospitalimage}">`;
+
+                //     $('#hospital-image').append(temp_html);
+                // }
             },
-            error: function(error){
+            error: function (error) {
                 console.log(error.responseJSON)
             }
-            // 토큰 재발급 api 함수
-            // error: function (error) {
-            //     console.log('테스트');
-            //     if (error.responseJSON.message === 'accessToken 만료') {
-            //         console.log('의사 사진 에러-1');
-            //         console.log(error.responseJSON.message);
-            //         whenExpiredToken();
-            //         console.log('whenExpiredToken 밖으로 나옴');
-            //         gethospitalimage();
-            //     } else {
-            //         console.log('의사 사진 에러-2');
-            //         console.log('에러', error);
-            //     }
-            // },
+            
         });
+    }
+
+    //병원 정보
+    function hospitalName() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/hospitals/detail/${id}`,
+            dataType: 'json',
+            success: function (response) {
+                const hospitalData = response;
+
+                console.log("hospitalData", hospitalData.oneHospital)
+                
+                let hospitalName = hospitalData.oneHospital.hospitalName;
+                let hospitalAddress = hospitalData.oneHospital.hospitalAddress;
+                let hospitalphone = hospitalData.oneHospital.hospitalphone;
+
+                let temp_html = `
+                        <tr>
+                            <td>${hospitalName}</td>
+                            <td>${hospitalAddress}</td>
+                            <td>${hospitalphone}</td>
+                        </tr>
+                    `;
+
+                $('#hospitalName').append(temp_html);
+                
+            },
+            error: function (error) {
+                console.log(error.responseJSON)
+            }
+        })
     }
 
     //의사들 진료과목
@@ -213,29 +264,30 @@
             success: function (response) {
                 const hospitalData = response;
 
+                let hospitalDepartmentList = []
+
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
-                    let department = hospitalData.oneHospital.doctors[i].department;
+                    let department = hospitalData.oneHospital.doctors[i].department.split(',') ;
 
-                    let temp_html = `
-                            <tr>
-                                <td>${department}</td>
-                            </tr>
-                       `;
+                    for(let j = 0; j <department.length; j++) {
 
-                    $('#departmentList').append(temp_html);
+                        hospitalDepartmentList.push(department[j])    
+                    }
                 }
+
+                hospitalDepartmentList = Array.from(new Set(hospitalDepartmentList))
+
+                let temp_html = `
+                    <tr>
+                        <td>${hospitalDepartmentList}</td>
+                    </tr>
+                `;
+
+                $('#departmentList').append(temp_html);
             },
-            error: function(error){
+            error: function (error) {
                 console.log(error.responseJSON)
             }
-            // 토큰 재발급 api 함수
-            // error: function (error) {
-            //     if (error.message === 'accessToken 만료') {
-            //         whenExpiredToken();
-            //     } else {
-            //         console.log(error);
-            //     }
-            // },
         });
     }
 
@@ -248,6 +300,8 @@
             success: function (response) {
                 const hospitalData = response;
 
+                
+
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let doctors = hospitalData.oneHospital.doctors[i].doctors;
                     let doctorImage = hospitalData.oneHospital.doctors[i].doctorImage;
@@ -256,6 +310,20 @@
 
                     let workTime = hospitalData.oneHospital.doctors[i].workTime;
                     let workTimeSum = '';
+
+                    let temp_html = `<tbody>
+                            <tr>
+                            <td>${doctors}</td>
+                            <th><img src="${doctorImage}" style="width: 100px" alt="의사사진"></th>
+                            <td>${doctorContent}</td>
+                            <td>${department}</td>
+                            <td id="${doctors}" style="vertical-align: top;"></td>
+                            </tr>
+                        </tbody>`;
+
+                    $('#doctorsList').append(temp_html);
+
+
                     for (let j = 0; j < workTime.length; j++) {
                         let day = workTime[j].day;
                         let start = workTime[j].start;
@@ -285,23 +353,15 @@
                                 break;
                         }
 
-                        workTimeSum += `${day}요일 ${start}~${end}`;
+                        workTimeSum = `${day} ${start}~${end}`;
+                      
+
+                        document.getElementById(`${doctors}`).innerHTML += `<div>${workTimeSum}<div>`
                     }
 
-                    let temp_html = `<tbody>
-                            <tr>
-                            <td>${doctors}</td>
-                            <th><img src="${doctorImage}" style="width: 100px" alt="의사사진">의사사진</th>
-                            <td>${doctorContent}</td>
-                            <td>${department}</td>
-                            <td>${workTimeSum}</td>
-                            </tr>
-                        </tbody>`;
-
-                    $('#doctorsList').append(temp_html);
                 }
             },
-            error: function(error){
+            error: function (error) {
                 console.log(error.responseJSON)
             }
             // 토큰 재발급 api 함수
@@ -342,17 +402,17 @@
                     let temp_html = `<tbody>
                             <tr>
                                 <th scope="row">${i + 1}</th>
-                                <th>${name}</th>
-                                <th>${contents}</th>
-                                <th>${star}</th>
-                                <th>${year}년 ${month}월 ${date}일</th>
+                                <td>${name}</td>
+                                <td>${contents}</td>
+                                <td>${star}</td>
+                                <td>${year}년 ${month}월 ${date}일</td>
                             </tr>
                         </tbody>`;
 
                     $('#reviewList').append(temp_html);
                 }
             },
-            error: function(error){
+            error: function (error) {
                 console.log(error.responseJSON)
             }
             // 토큰 재발급 api 함수
