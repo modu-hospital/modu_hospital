@@ -646,15 +646,11 @@ class HospitalService {
             }
             let hospitalId = hospitaldata.hospitalId;
             const getHospitalImage = await this.hospitalRepository.getHospitalImage(hospitalId);
-            console.log(getHospitalImage)
-            return getHospitalImage; 
+            return getHospitalImage;
         } catch (error) {
             throw error;
         }
-       
-        
-
-    }
+    };
 }
 
 module.exports = HospitalService;
