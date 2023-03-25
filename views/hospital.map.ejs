@@ -151,15 +151,15 @@
 </html>
 <script
     type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services"
 ></script>
 <script
     type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8"
 ></script>
 <script
     type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services,clusterer,drawing"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services,clusterer,drawing"
 ></script>
 <script src="/js/token.js"></script>
 <script>
@@ -482,7 +482,7 @@
                             document.getElementById('list').innerHTML = ``;
                             for (let i = 0; i < data.hospitals.length; i++) {
                                 const a = `
-                  <div onclick="location.href=''/hospitals/${data.hospitals[i].hospitalId}'" class="listBox">
+                  <div onclick="location.href='/hospitals/${data.hospitals[i].hospitalId}'" class="listBox">
                 <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
                 <div class="hospitalInfo">
                 <span style="position:static">${data.hospitals[i].name}</span>
@@ -800,7 +800,7 @@
                                 a.innerText = `근처 ${data.length}개의 병원`;
                                 for (let i = 0; i < data.length; i++) {
                                     const a = `
-                    <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
+                                    <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                         <div class="hospitalInfo">
                         <span style="position:static">${data[i].hospitalName}</span>
