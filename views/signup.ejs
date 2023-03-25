@@ -116,8 +116,7 @@
                     if (response.status === 422) {
                         throw new Error('잘못된 형식입니다.');
                     }
-                })
-                .then(data => {
+                    
                     alert("모두의 병원에 오신 것을 환영합니다.");
                     location.href = '/';
                 })
