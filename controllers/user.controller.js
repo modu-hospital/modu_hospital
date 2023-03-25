@@ -226,7 +226,6 @@ class UserController {
 
     customerSignup = async (req, res) => {
         const role = 'customer';
-        console.log('customer', req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -254,7 +253,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '15m',
+                expiresIn: '24h',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {

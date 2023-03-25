@@ -521,7 +521,6 @@ class HospitalService {
                         console.error(err);
                         reject(new Error(`Failed to upload image ${index + 1} to S3`));
                     } else {
-                        console.log(`File ${index + 1} uploaded successfully. ${data.Location}`);
                         fs.unlinkSync(file.path);
                         resolve(data.Location);
                     }

@@ -154,7 +154,7 @@ class ReservationRepository {
         const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r 
         inner join doctors as d on r.doctorId = d.doctorId 
         inner join hospitals as h on d.hospitalId  = h.hospitalId 
-        WHERE r.id = ${reservationId}`;
+        WHERE r.id = ${this.sequelize.escape(reservationId)}`;
         const hospitalIdAndUserId = await this.sequelize.query(query, {
             type: this.sequelize.QueryTypes.SELECT,
         });

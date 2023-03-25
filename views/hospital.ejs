@@ -100,6 +100,9 @@
     color: #777;
   }
 
+
+
+  
   #content-image {
     padding: 30px;
     text-align: center;
@@ -440,10 +443,8 @@
         // 승인 버튼 클릭 이벤트
         $(document).on('click', 'button[id^="waitingButton-"]', function () {
           let id = $(this).data('reservation-id');
-          console.log(id)
           let statusSelect = $(this).closest('tr').find('select').val();
           // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          console.log(statusSelect)
           $.ajax({
             type: 'PATCH',
             url: `/api/hospitals/reservation/status/${id}`,
@@ -540,7 +541,6 @@
           let id = $(this).data('reservation-id');
           let statusSelect = $(this).closest('tr').find('select').val();
           // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          console.log(statusSelect)
           $.ajax({
             type: 'PATCH',
             url: `/api/hospitals/reservation/status/${id}`,

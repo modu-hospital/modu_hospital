@@ -15,7 +15,6 @@ function getCookie(name) {
 }
 
 const whenExpiredToken = function () {
-    console.log('whenExpiredToken 함수 실행');
     const refreshToken = getCookie('refreshToken');
     if (refreshToken === '' || refreshToken === undefined) {
         return;
@@ -26,20 +25,16 @@ const whenExpiredToken = function () {
         headers: { 'X-Refresh-Token': refreshToken },
         dataType: 'json',
         success: function (response) {
-            console.log(response);
             if (response) {
                 setTimeout(() => {
-                    console.log('7초 타이머 시작');
                     whenExpiredToken();
-                    console.log('7초 후 setTimeout 함수 내에 whenExpiredToken 함수 실행');
-                }, 7000);
+                }, 72000000);
             }
 
             // while (document.cookie.length !== 0) {
 
             // }
             const newAccessToken = response.newAccessToken;
-            console.log('newAccessToken: ', newAccessToken);
             $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
             // 로그인 안했을 때
             // 로그인 했을 때
