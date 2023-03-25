@@ -134,7 +134,7 @@ function calculationTime(workingTimeDate, reservationDate) {
         }
     }
 
-    console.log(doctorsList);
+    // console.log(doctorsList);
 
     let result = doctorsList.sort(function (a, b) {
         return b.count - a.count;

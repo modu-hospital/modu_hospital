@@ -194,7 +194,6 @@ class UserController {
                 idNumber,
                 role
             );
-
             return res.json(user);
         } catch (err) {
             if (err.isJoi) {
@@ -233,7 +232,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '15m',
+                expiresIn: '24h',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
