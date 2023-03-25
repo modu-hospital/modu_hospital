@@ -1,4 +1,4 @@
-# 프로젝트명: 모두의 병원
+# 프로젝트명: 모두의 병원[![Node.js CI](https://github.com/modu-hospital/modu_hospital/actions/workflows/node.js.yml/badge.svg)](https://github.com/modu-hospital/modu_hospital/actions/workflows/node.js.yml)
 
 #### 팀원: 최준혁, 주민석, 김기민, 이희찬, 김범석
 
