@@ -200,8 +200,6 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
-        console.log('partner', req.body);
-
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -213,8 +211,6 @@ class UserController {
                 idNumber,
                 role
             );
-
-            console.log('useruseruseruseruser', user);
             return res.json(user);
         } catch (err) {
             if (err.isJoi) {
@@ -279,8 +275,8 @@ class UserController {
 
     logout = async (req, res) => {
         try {
-            res.cookie('accessToken', '');
-            res.cookie('refreshToken', '');
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
             res.status(200).json({ message: '로그아웃 되었습니다.' });
         } catch (error) {
             res.status(500).json(error);

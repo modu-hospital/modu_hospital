@@ -172,16 +172,16 @@
 
     //병원 이미지
     function gethospitalimage() {
-        console.log('의사 사진 내나');
+        // console.log('의사 사진 내나');
         $.ajax({
             type: 'GET',
             url: `/api/hospitals/detail/${id}?time=${Date.now()}`,
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                console.log('의사 사진 성공');
+                // console.log('의사 사진 성공');
 
-                console.log(hospitalData.oneHospital.hospitalImage)
+                // console.log(hospitalData.oneHospital.hospitalImage)
                 
                 let temp_html = `
                 <div id="bigimages">
@@ -232,7 +232,7 @@
             success: function (response) {
                 const hospitalData = response;
 
-                console.log("hospitalData", hospitalData.oneHospital)
+                // console.log("hospitalData", hospitalData.oneHospital)
                 
                 let hospitalName = hospitalData.oneHospital.hospitalName;
                 let hospitalAddress = hospitalData.oneHospital.hospitalAddress;
