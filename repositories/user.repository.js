@@ -201,16 +201,6 @@ class UserRepository {
         return users;
     };
 
-    // PaginationByRole = async (limit, offset, role, type) => {
-    //     let users;
-    //     const tabType = { offset, limit };
-    //     users = await this.userModel.findAndCountAll({
-    //         ...tabType,
-    //         where: { role },
-    //     });
-    //     return users;
-    // };
-
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };

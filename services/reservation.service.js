@@ -128,8 +128,6 @@ class ReservationService {
             address
         );
 
-        let decryt = crypter.decrypt(encryt, TWO_WAY_ENCRYPTION);
-
         return {
             doctorId: registerData.doctorId,
             userId: registerData.userId,
