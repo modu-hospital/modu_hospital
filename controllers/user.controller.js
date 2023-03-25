@@ -220,7 +220,7 @@ class UserController {
         }
     };
 
-    customerSignup = async (req, res) => {
+    customerSignup = async (req, res, next) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
