@@ -198,7 +198,7 @@
         const imageFile = imageInput.files[0];
 
         if (!imageFile) {
-            alert('파일을 선택해주세요.');
+            swal('✍ 입력정보 추가요망!', '파일을 선택해주세요.', 'info');
             return;
         }
         
@@ -221,11 +221,11 @@
                 body: formData,
             });
             if (response.ok) {
-                alert('의사 정보 등록 성공');
+                swal('😊 의사 등록 성공!', '의사 정보 등록 성공', 'success');
                 const data = await response.json();
                 window.location.href = '/hospital';
             } else {
-                alert('의사 정보 등록 실패');
+                swal('😭 의사 등록 실패', '의사 정보 등록 실패', 'error');
             }
         } catch (error) {
             console.error(error);

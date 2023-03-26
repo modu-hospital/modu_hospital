@@ -252,8 +252,8 @@ color: #505050;
                             name="address"
                             id="address"
                             value=""
-                            disabled
                             placeholder="주소"
+                            onclick="reservationAddress()"
                         />
                     </div>
                     <div class="btn_modal">
@@ -268,8 +268,8 @@ color: #505050;
                             name="reservationSelectedDate"
                             id="reservationSelectedDate"
                             value=""
-                            disabled
                             placeholder="예약날짜"
+                            onclick="reservationTime()"
                         />
                     </div>
                     <div class="col-6 col-12-xsmall">
@@ -278,8 +278,8 @@ color: #505050;
                             name="reservationSelectedTime"
                             id="reservationSelectedTime"
                             value=""
-                            disabled
                             placeholder="예약시간"
+                            onclick="reservationTime()"
                         />
                     </div>
                     <div class="col-6 col-12-xsmall">
@@ -347,7 +347,7 @@ color: #505050;
         </div>
             <table id="reservation_time">
                 <tr>
-                    <td class="top" align="left">시간선택</td>
+                    <td class="top" align="left">아래 달력에서 원하는 날짜를 클릭해주세요!</td>
                     <td class="top" align="right"><button class="btnTime" type="button" onclick="tableinit()">초기화</button></td>
                 </tr>
                 <tr>
@@ -424,9 +424,9 @@ color: #505050;
             <div id="pagingList" style='text-align:center;'></div>
         </div>
         <div style="height:5px;"></div>
-        <input type="text" id="reservationAddress" value="" style="width:500px;" placeholder="도로명 주소, 지번 주소" readonly/>
+        <input type="text" id="reservationAddress" value="" style="width:500px;" onClick="addressWindowOpen()" placeholder="도로명 주소, 지번 주소" readonly/>
         <div style="height:5px;"></div>
-        <input type="text" id="detailAddress" style="width:500px;" onkeypress="javascript:if(event.keyCode===13) {inputData()}" value="" placeholder="상세 주소지 입력"/>
+        <input type="text" id="detailAddress" style="width:500px;" onkeypress="javascript:if(event.keyCode===13) {inputData()}" value="" placeholder="상세 주소지 입력(필수)"/>
         <input type="button" value="입력" onclick="inputData()" />
         </div>
     </div>
