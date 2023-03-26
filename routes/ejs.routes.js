@@ -5,14 +5,12 @@ const auth = require('../middleware/auth.middleware');
 // 메인페이지
 router.get('/', auth, (req, res) => {
     if (!req.cookies.accessToken) {
-        console.log('메인 비로그인');
         let userRole = null;
         return res.render('index.ejs', {
             components: 'main',
             user: userRole,
         });
     } else if (res.locals.user) {
-        console.log('메인 로그인');
         userRole = res.locals.user.role;
 
         return res.render('index.ejs', {
@@ -45,10 +43,7 @@ router.get('/admin', auth, (req, res) => {
 // 예약페이지
 router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     if (!req.cookies.accessToken) {
-        userRole = null;
-        return res.send(
-            '<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/login";</script>'
-        );
+        return;
     } else if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', {
             components: 'reservation',
