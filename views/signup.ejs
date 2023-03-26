@@ -94,12 +94,13 @@
                 var check_SC = 0;
 
                 if (pw.length < 6 || pw.length > 16) {
-                    swal(
-                        '😓 죄송합니다.',
-                        '비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.',
-                        'warning'
-                    );
-                    document.getElementById('password').value = '';
+                    swal({
+                        title: '😓 죄송합니다.',
+                        text: '비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.',
+                        icon: 'warning',
+                    }).then(() => {
+                        document.getElementById('password').value = '';
+                    });
                 }
                 for (var i = 0; i < SC.length; i++) {
                     if (pw.indexOf(SC[i]) != -1) {
@@ -107,12 +108,13 @@
                     }
                 }
                 if (check_SC == 0) {
-                    swal(
-                        '😓 죄송합니다.',
-                        '!,@,#,$,%,*,^,&,(,),: 의 특수문자가 들어가 있지 않습니다.',
-                        'warning'
-                    );
-                    document.getElementById('password').value = '';
+                    swal({
+                        title: '😓 죄송합니다.',
+                        text: '!,@,#,$,%,*,^,&,(,),: 의 특수문자가 들어가 있지 않습니다.',
+                        icon: 'warning',
+                    }).then(() => {
+                        document.getElementById('password').value = '';
+                    });
                 }
                 if (
                     document.getElementById('password').value != '' &&
@@ -163,13 +165,22 @@
                         if (response.status === 422) {
                             throw new Error('잘못된 형식입니다.');
                         }
-
-                        swal('😊 회원가입 성공!', '모두의 병원에 오신 것을 환영합니다.', 'success');
-                        location.href = '/';
+                        swal({
+                            title: '😊 회원가입 성공!',
+                            text: '모두의 병원에 오신 것을 환영합니다.',
+                            icon: 'success',
+                        }).then(() => {
+                            location.href = '/';
+                        });
                     })
                     .catch((err) => {
-                        swal('😭 회원가입 실패', err.message, 'error');
-                        window.location.reload();
+                        swal({
+                            title: '😭 회원가입 실패',
+                            text: err.message,
+                            icon: 'error',
+                        }).then(() => {
+                            window.location.reload();
+                        });
                     });
             });
         </script>

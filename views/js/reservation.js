@@ -146,8 +146,13 @@ const possibleDay = [0, 0, 0, 0, 0, 0, 0];
 // 전달 달력
 function prevCalendar() {
     if (clickcount === 0) {
-        swal('😓 죄송합니다.', '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.', 'warning');
-        return false;
+        swal({
+            title: '😓 죄송합니다.',
+            text: '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.',
+            icon: 'warning',
+        }).then(() => {
+            return false;
+        });
     } else {
         clickcount -= 1;
     }
@@ -158,8 +163,13 @@ function prevCalendar() {
 // 다음달 달력
 function nextCalendar() {
     if (clickcount === 1) {
-        swal('😓 죄송합니다.', '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.', 'warning');
-        return false;
+        swal({
+            title: '😓 죄송합니다.',
+            text: '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.',
+            icon: 'warning',
+        }).then(() => {
+            return false;
+        });
     } else {
         clickcount += 1;
     }
@@ -699,7 +709,13 @@ function submitRes() {
         background.remove();
         mymodal.style.display = 'none';
     } else {
-        swal('✍ 입력정보 추가요망!', '예약일시를 선택해주세요.', 'info');
+        swal({
+            title: '✍ 입력정보 추가요망!',
+            text: '예약일시를 선택해주세요.',
+            icon: 'info',
+        }).then(() => {
+            return;
+        });
     }
     tableinit();
 }
@@ -833,9 +849,14 @@ function checkSearchedWord(obj) {
         // 특수문자 제거
         const expText = /[%=><]/;
         if (expText.test(obj.value) == true) {
-            swal('😓 죄송합니다.', '특수문자를 입력 할수 없습니다.', 'warning');
-            obj.value = obj.value.split(expText).join('');
-            return false;
+            swal({
+                title: '😓 죄송합니다.',
+                text: '특수문자를 입력 할수 없습니다.',
+                icon: 'warning',
+            }).then(() => {
+                obj.value = obj.value.split(expText).join('');
+                return false;
+            });
         }
         // 특정문자열(sql예약어의 앞뒤공백포함) 제거
         let sqlArray = new Array(
@@ -857,13 +878,14 @@ function checkSearchedWord(obj) {
         for (let num = 0; num < sqlArray.length; num++) {
             regex = new RegExp(sqlArray[num], 'gi');
             if (regex.test(obj.value)) {
-                swal(
-                    '😓 죄송합니다.',
-                    '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
-                    'warning'
-                );
-                obj.value = obj.value.replace(regex, '');
-                return false;
+                swal({
+                    title: '😓 죄송합니다.',
+                    text: '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
+                    icon: 'warning',
+                }).then(() => {
+                    obj.value = obj.value.replace(regex, '');
+                    return false;
+                });
             }
         }
     }
@@ -990,8 +1012,13 @@ function reservaionCheck() {
                 address: address,
             },
             success: function (response) {
-                location.href = `/users/reservation/${id}`;
-                swal('😊 예약하기 성공!', '예약신청이 완료되었습니다.', 'success');
+                swal({
+                    title: '😊 예약하기 성공!',
+                    text: '예약신청이 완료되었습니다.',
+                    icon: 'success',
+                }).then(() => {
+                    location.href = `/users/reservation/${id}`;
+                });
             },
             error: function (error) {
                 swal(
@@ -1009,8 +1036,13 @@ function priorityHighOn() {
     const reservaionComplete = document.getElementById('reservaionComplete');
 
     if ($('#relationCategory option:selected').val() === '미선택') {
-        swal('✍ 입력정보 추가요망!', '환자와의 관계부터 선택해주세요.', 'info');
-        $("input:radio[name='group']").prop('checked', false);
+        swal({
+            title: '✍ 입력정보 추가요망!',
+            text: '환자와의 관계부터 선택해주세요.',
+            icon: 'info',
+        }).then(() => {
+            $("input:radio[name='group']").prop('checked', false);
+        });
     }
 
     if (priorityHigh.checked && $('#relationCategory option:selected').val() !== '미선택') {

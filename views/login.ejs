@@ -66,7 +66,13 @@
                 };
 
                 if (data.loginId === '' || data.password === '') {
-                    swal('✍ 입력정보 추가요망!', '정보를 입력해주세요', 'info');
+                    swal({
+                        title: '✍ 입력정보 추가요망!',
+                        text: '정보를 입력해주세요',
+                        icon: 'info',
+                    }).then(() => {
+                        return;
+                    });
                 } else {
                     fetch('/api/users/login', {
                         credentials: 'include',
@@ -80,23 +86,39 @@
                             //요청한 api 응답이 들어왔을 때 실행됨
                             if (response.status === 500) {
                                 //에러처리 해준 status 기입
-                                swal(
-                                    '😓 죄송합니다.',
-                                    '이메일 또는 이메일의 양식이 다릅니다.',
-                                    'warning'
-                                );
-                                window.location.reload();
+                                swal({
+                                    title: '😓 죄송합니다.',
+                                    text: '이메일 또는 이메일의 양식이 다릅니다.',
+                                    icon: 'warning',
+                                }).then(() => {
+                                    window.location.reload();
+                                });
                             } else if (response.status === 412) {
-                                swal('😓 죄송합니다.', '비밀번호가 틀렸습니다.', 'warning');
-                                window.location.reload();
+                                swal({
+                                    title: '😓 죄송합니다.',
+                                    text: '비밀번호가 틀렸습니다.',
+                                    icon: 'warning',
+                                }).then(() => {
+                                    window.location.reload();
+                                });
                             } else if (response.status === 200) {
-                                swal('😊 로그인 성공!', '로그인에 성공하였습니다.', 'success');
-                                location.href = '/';
+                                swal({
+                                    title: '😊 로그인 성공!',
+                                    text: '로그인에 성공하였습니다.',
+                                    icon: 'success',
+                                }).then(() => {
+                                    location.href = '/';
+                                });
                             }
                         })
                         .catch((err) => {
-                            swal('😭 로그인 실패', err.message, 'error');
-                            window.location.reload();
+                            swal({
+                                title: '😭 로그인 실패',
+                                text: err.message,
+                                icon: 'error',
+                            }).then(() => {
+                                window.location.reload();
+                            });
                         });
                 }
             }
