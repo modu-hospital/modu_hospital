@@ -91,6 +91,12 @@ function viewModal(id) {
         mymodal.style.display = 'none';
     });
 
+    mymodal.querySelector('#address_modal_close').addEventListener('click', function () {
+        addressWindowClose();
+        background.remove();
+        mymodal.style.display = 'none';
+    });
+
     mymodal.setStyle({
         position: 'fixed',
         display: 'block',
@@ -784,6 +790,7 @@ function makeListJson(jsonStr) {
 function inputTextAddress(zipcode, reservationAddress) {
     document.getElementById('zipCode').value = zipcode;
     document.getElementById('reservationAddress').value = reservationAddress;
+    addressWindowClose();
 }
 /// @brief 주소검색창 - 열기
 function addressWindowOpen() {
