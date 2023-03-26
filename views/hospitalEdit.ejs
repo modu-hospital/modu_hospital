@@ -121,11 +121,15 @@
             url: '/api/hospitals/register/edit',
             data: formData, // form 데이터 전송
             success: function (response) {
-                swal('😊 정보수정 성공!', '병원 정보가 수정되었습니다.', 'success');
-                // 성공적으로 수정된 경우 처리할 내용을 작성
-
-                window.location.href = '/hospital';
-                // alert 이후 병원 관리페이지로 이동
+                swal({
+                    // 성공적으로 수정된 경우 처리할 내용을 작성
+                    title: '😊 정보수정 성공!',
+                    text: '병원 정보가 수정되었습니다.',
+                    icon: 'success',
+                }).then(() => {
+                    window.location.href = '/hospital';
+                    // alert 이후 병원 관리페이지로 이동
+                });
             },
             error: function (xhr) {
                 swal('😭 정보수정 실패', '병원 정보 수정에 실패했습니다.', 'error');
