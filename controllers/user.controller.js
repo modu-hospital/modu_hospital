@@ -17,7 +17,6 @@ class UserController {
         try {
             const pageNum = req.query.page || 1;
             const type = req.query.type;
-            console.log('컨트롤러의: pageNum: ', pageNum, 'type: ', type);
             const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
             return res.status(200).json(PaginationByRole);
         } catch (err) {
@@ -25,25 +24,10 @@ class UserController {
         }
     };
 
-    // (admin) role별 조회
-    // getRoleUser = async (req, res, next) => {
-    //     try {
-    //         const { role } = req.params;
-    //         const pageNum = req.query.page || 1;
-    //         const type = req.query.type;
-
-    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
-    //         return res.status(200).send(roleUserInfo);
-    //     } catch (err) {
-    //         next(err);
-    //     }
-    // };
-
     getAllSearch = async (req, res) => {
         const search = req.query.search;
         const pageNum = req.query.page || 1;
         const type = req.query.type;
-        console.log('컨트롤러의 search: : ', search, 'pageNum: ', pageNum, 'type: ', type);
         const getSearchList = await this.userService.getSearchList(search, pageNum, type);
         return res.status(200).json(getSearchList);
     };
@@ -181,7 +165,6 @@ class UserController {
                 process.env.JWT_SECRET_KEY
             );
             const reservation = await this.reservationService.findReservationById(reservationId);
-            console.log(reservation.userId != accessToken.userId);
             if (reservation.userId != accessToken.userId) {
                 throw this.createError.notAuthorized();
             }
@@ -200,8 +183,6 @@ class UserController {
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
-        console.log('partner', req.body);
-
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -213,8 +194,6 @@ class UserController {
                 idNumber,
                 role
             );
-
-            console.log('useruseruseruseruser', user);
             return res.json(user);
         } catch (err) {
             if (err.isJoi) {
@@ -279,8 +258,8 @@ class UserController {
 
     logout = async (req, res) => {
         try {
-            res.cookie('accessToken', '');
-            res.cookie('refreshToken', '');
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
             res.status(200).json({ message: '로그아웃 되었습니다.' });
         } catch (error) {
             res.status(500).json(error);

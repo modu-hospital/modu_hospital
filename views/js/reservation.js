@@ -360,7 +360,6 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
 
             for (let i = 0; i < response.length; i++) {
                 // 객체의 길이만큼 반복
-                let hospitalName = response[i].hospitalName;
                 let doctorId = response[i].doctorId;
                 let doctorName = response[i].doctorName;
                 let time = response[i].times;
