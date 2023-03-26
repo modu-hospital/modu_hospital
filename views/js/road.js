@@ -202,11 +202,14 @@ function checkSearchedWord(obj) {
         const expText = /[%=><]/;
 
         if (expText.test(obj.value) == true) {
-            swal('😓 죄송합니다.', '특수문자를 입력 할수 없습니다.', 'warning');
-
-            obj.value = obj.value.split(expText).join('');
-
-            return false;
+            swal({
+                title: '😓 죄송합니다.',
+                text: '특수문자를 입력 할수 없습니다.',
+                icon: 'warning',
+            }).then(() => {
+                obj.value = obj.value.split(expText).join('');
+                return false;
+            });
         }
 
         // 특정문자열(sql예약어의 앞뒤공백포함) 제거
@@ -235,15 +238,14 @@ function checkSearchedWord(obj) {
             regex = new RegExp(sqlArray[num], 'gi');
 
             if (regex.test(obj.value)) {
-                swal(
-                    '😓 죄송합니다.',
-                    '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
-                    'warning'
-                );
-
-                obj.value = obj.value.replace(regex, '');
-
-                return false;
+                swal({
+                    title: '😓 죄송합니다.',
+                    text: '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
+                    icon: 'warning',
+                }).then(() => {
+                    obj.value = obj.value.replace(regex, '');
+                    return false;
+                });
             }
         }
     }

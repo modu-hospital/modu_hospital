@@ -85,10 +85,15 @@
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {
-                    swal('😊 진료시간등록 성공!', '성공적으로 제출 되었습니다.', 'success');
-                    // 성공적으로 제출된 경우, 입력된 데이터 초기화
-                    $('form')[0].reset();
-                    window.location.href = '/hospital';
+                    swal({
+                        title: '😊 진료시간등록 성공!',
+                        text: '성공적으로 제출 되었습니다.',
+                        icon: 'success',
+                    }).then(() => {
+                        // 성공적으로 제출된 경우, 입력된 데이터 초기화
+                        $('form')[0].reset();
+                        window.location.href = '/hospital';
+                    });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal(

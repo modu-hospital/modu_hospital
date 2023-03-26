@@ -109,15 +109,21 @@
         try {
             const response = await axios.post('/api/hospitals/location', data);
             const result = response.data;
-            swal('😊 병원등록 성공!', '병원 등록이 완료되었습니다', 'success');
-            window.location.href = '/hospital';
+            swal({
+                title: '😊 병원등록 성공!',
+                text: '병원 등록이 완료되었습니다',
+                icon: 'success',
+            }).then(() => {
+                window.location.href = '/hospital';
+            });
         } catch (error) {
-            swal(
-                '😭 병원등록 실패',
-                '이미 병원이 등록되어 있습니다. 병원 관리자 페이지로 돌아가겠습니다.',
-                'error'
-            );
-            window.location.href = '/hospital';
+            swal({
+                title: '😭 병원등록 실패',
+                text: '이미 병원이 등록되어 있습니다. 병원 관리자 페이지로 돌아가겠습니다.',
+                icon: 'error',
+            }).then(() => {
+                window.location.href = '/hospital';
+            });
         }
     });
 </script>
