@@ -74,12 +74,12 @@ function getAddr() {
                     makeListJson(jsonStr);
                 }
             } else {
-                alert(errDesc);
+                swal('😭 에러발생', errDesc, 'error');
             }
         },
 
         error: function (xhr, status, error) {
-            alert('에러발생');
+            swal('😭 에러발생', '주소 조회 실패', 'error');
         },
     });
 }
@@ -202,7 +202,7 @@ function checkSearchedWord(obj) {
         const expText = /[%=><]/;
 
         if (expText.test(obj.value) == true) {
-            alert('특수문자를 입력 할수 없습니다.');
+            swal('😓 죄송합니다.', '특수문자를 입력 할수 없습니다.', 'warning');
 
             obj.value = obj.value.split(expText).join('');
 
@@ -235,7 +235,11 @@ function checkSearchedWord(obj) {
             regex = new RegExp(sqlArray[num], 'gi');
 
             if (regex.test(obj.value)) {
-                alert('"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.');
+                swal(
+                    '😓 죄송합니다.',
+                    '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
+                    'warning'
+                );
 
                 obj.value = obj.value.replace(regex, '');
 

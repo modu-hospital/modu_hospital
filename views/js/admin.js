@@ -84,7 +84,7 @@ $(document).ready(function () {
             }
         },
         error: function (err) {
-            alert('목록을 불러오는 데 실패하였습니다.');
+            swal('😭 조회 실패', '목록을 불러오는 데 실패하였습니다.', 'error');
         },
     });
 });
@@ -106,41 +106,57 @@ $('#filter-value').on('keyup', function searchInput() {
 
 // 일반회원삭제 버튼을 누를 시
 function userDelete(userId) {
-    let result = confirm('정말로 삭제하시겠습니까?');
-    if (result) {
-        $.ajax({
-            type: 'DELETE',
-            url: `/api/admin/${userId}`,
-            async: false,
-            success: function (success) {
-                alert('정상적으로 삭제되었습니다.');
-                $(`#userId${userId}`).remove();
-                location.reload();
-            },
-        });
-    } else {
-        alert('취소합니다.');
-    }
+    swal({
+        title: '회원삭제',
+        text: '정말로 삭제하시겠습니까?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+    }).then((result) => {
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/admin/${userId}`,
+                async: false,
+                success: function (success) {
+                    swal('😊 삭제 성공!', '정상적으로 삭제되었습니다.', 'success').then(() => {
+                        $(`#userId${userId}`).remove();
+                        location.reload();
+                    });
+                },
+            });
+        } else {
+            swal('😁 삭제 취소', '취소되었습니다.', 'info');
+        }
+    });
 }
 
 // 승인대기 파트너회원 승인 버튼 누를시
 function approveUpdate(userId) {
-    let result = confirm('해당 회원을 파트너회원으로 승인하시겠습니까?');
-    if (result) {
-        $.ajax({
-            type: 'PATCH',
-            url: `/api/admin/${userId}`,
-            async: false,
-            data: { role: 'partner' },
-            success: function (success) {
-                alert('정상적으로 승인되었습니다.');
-                $(`#userId${userId}`).remove();
-                location.reload();
-            },
-        });
-    } else {
-        alert('취소합니다.');
-    }
+    swal({
+        title: '파트너회원 승인',
+        text: '해당 회원을 파트너회원으로 승인하시겠습니까?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+    }).then((result) => {
+        if (result) {
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/admin/${userId}`,
+                async: false,
+                data: { role: 'partner' },
+                success: function (success) {
+                    swal('😊 승인 성공!', '정상적으로 승인되었습니다.', 'success').then(() => {
+                        $(`#userId${userId}`).remove();
+                        location.reload();
+                    });
+                },
+            });
+        } else {
+            swal('😁 승인 취소', '취소되었습니다.', 'info');
+        }
+    });
 }
 
 // 주소가 없으면 null 이 아닌 공백으로
