@@ -203,7 +203,7 @@ class UserController {
         }
     };
 
-    customerSignup = async (req, res) => {
+    customerSignup = async (req, res, next) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
@@ -324,7 +324,7 @@ class UserController {
     };
 
     reservaionInput = async (req, res, next) => {
-        try {
+        try{
             const { doctorId } = req.params;
             const { userId } = res.locals.user;
             const {
@@ -356,7 +356,7 @@ class UserController {
 
             res.status(201).json({ result: 'success', data: reservaionInputData });
         } catch (err) {
-            next(err);
+            next(err)
         }
     };
 }
