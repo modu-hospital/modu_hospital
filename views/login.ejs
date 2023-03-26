@@ -1,82 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>로그인</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8" />
-    <title>로그인</title>
-</head>
-
-<body>
-    <div id="main">
-        <div class="inner">
-            <div style="margin-top: 100px;">
-                <section>
-                    <!-- <h2 style="margin-left: 100px;">로그인</h2> -->
-                    <form method="post" action="">
-                        <div class="row gtr-uniform" style="display: block;">
-                            <div class="col-5 col-12-xsmall" id="Id" style="margin: 0 auto;">
-                                <input type="email" name="loginId" id="loginId" value="" placeholder="Email" />
+    <body>
+        <div id="main">
+            <div class="inner">
+                <div style="margin-top: 100px">
+                    <section>
+                        <!-- <h2 style="margin-left: 100px;">로그인</h2> -->
+                        <form method="post" action="">
+                            <div class="row gtr-uniform" style="display: block">
+                                <div class="col-5 col-12-xsmall" id="Id" style="margin: 0 auto">
+                                    <input
+                                        type="email"
+                                        name="loginId"
+                                        id="loginId"
+                                        value=""
+                                        placeholder="Email"
+                                    />
+                                </div>
+                                <div class="col-5 col-12-xsmall" id="pw" style="margin: 0 auto">
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        onkeypress="javascript:if(event.keyCode===13) {loginData()}"
+                                        value=""
+                                        placeholder="password"
+                                    />
+                                </div>
                             </div>
-                            <div class="col-5 col-12-xsmall" id="pw" style="margin: 0 auto;">
-                                <input type="password" name="password" id="password" value="" placeholder="password" />
-                            </div>
-                        </div>
-                    </form>
-                </section>
-                <div style="text-align: center;">
-                    <button style="width: 150px; display: inline-block;" class="button login__submit"
-                        id="login">로그인</button>
-                </div>
-                <div style="margin-top: 40px;">
-                    <p style="text-align: center; margin-bottom:0px; font-size: 14px;"><a href="/findmypassword">비밀번호를 잊으셨나요?</a></p>
-                    <p style="text-align: center; font-size: 14px;"><a href="/signup">계정이 없으신가요?</a></p>
+                        </form>
+                    </section>
+                    <div style="text-align: center">
+                        <input
+                            type="button"
+                            class="button login__submit"
+                            id="login"
+                            value="로그인"
+                            style="width: 150px; display: inline-block"
+                            onclick="loginData()"
+                        />
+                    </div>
+                    <div style="margin-top: 40px">
+                        <p style="text-align: center; margin-bottom: 0px; font-size: 14px">
+                            <a href="/findmypassword">비밀번호를 잊으셨나요?</a>
+                        </p>
+                        <p style="text-align: center; font-size: 14px">
+                            <a href="/signup">계정이 없으신가요?</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        <script>
+            function loginData() {
+                const login = document.getElementById('login').value;
+                const data = {
+                    loginId: document.getElementById('loginId').value,
+                    password: document.getElementById('password').value,
+                };
 
-
-
-    <script>
-        document.getElementById('login').addEventListener('click', (event) => {
-            event.preventDefault();
-
-            const data = {
-                loginId: document.getElementById('loginId').value,
-                password: document.getElementById('password').value,
-            };
-
-            fetch("/api/users/login", {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data), //
-            })
-
-                .then((response) => { //요청한 api 응답이 들어왔을 때 실행됨
-                    if (response.status === 412) {//에러처리 해준 status 기입
-                        alert('이메일 또는 비밀번호가 틀렸습니다');
-                        window.location.reload();
-                    }
-                    if (response.status === 422) {
-                        alert('잘못된 형식입니다.'); //잘못 입력하면 자꾸 이쪽으로 감
-                        window.location.reload();
-                    }
-                    // if (!data) {
-                    //     alert('정보를 입력해주세요')
-                    //     window.location.reload();
-                    // }
-                    location.href = '/';
-                })
-                .catch((err) => {
-                    alert(err.message);
-                    window.location.reload();
-                });
-        });
-    </script>
-</body>
-
+                if (data.loginId === '' || data.password === '') {
+                    alert('정보를 입력해주세요');
+                } else {
+                    fetch('/api/users/login', {
+                        credentials: 'include',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data), //
+                    })
+                        .then((response) => {
+                            //요청한 api 응답이 들어왔을 때 실행됨
+                            if (response.status === 500) {
+                                //에러처리 해준 status 기입
+                                alert('이메일 또는 이메일의 양식이 다릅니다.');
+                                window.location.reload();
+                            } else if (response.status === 412) {
+                                alert('비밀번호가 틀렸습니다.');
+                                window.location.reload();
+                            } else if (response.status === 200) {
+                                alert('로그인에 성공하였습니다.');
+                                location.href = '/';
+                            }
+                        })
+                        .catch((err) => {
+                            alert(err.message);
+                            window.location.reload();
+                        });
+                }
+            }
+        </script>
+    </body>
 </html>

@@ -8,7 +8,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-        
         <link
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -21,7 +20,6 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
 
-        
         <!-- css -->
         <link rel="stylesheet" href="/css/hospitalRegister.css" />
         <link rel="stylesheet" href="/css/main.css" />
@@ -30,31 +28,30 @@
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
+        <% if (user === null && components === "main" ) { %> <%- include('wrapper.ejs') %> <% } %>
         <!-- Wrapper -->
         <div id="wrapper">
             <!-- Header -->
             <%- include('header.ejs') %>
 
             <!-- page -->
-            <% 
-            if (components === "main") { %> <%- include('main.ejs') %> <% }
-            else if (components === "mypage") { %> <%- include('mypage.ejs') %> <% }
-            else if (components === "map") { %> <%- include('map.ejs') %> <% }
-            else if (components === "hospital") { %> <%- include('hospital.ejs') %> <% }
-            else if (components === "hospitalRegister") { %> <%- include('hospitalRegister.ejs') %> <% }
-            else if (components === "hospitalEdit") { %> <%- include('hospitalEdit.ejs') %> <% }
-            else if (components === "doctorRegister") { %> <%- include('doctorRegister.ejs') %> <% }
-            else if (components === "doctorEdit") { %> <%- include('doctorEdit.ejs') %> <% }
-            else if (components === "reservation") { %> <%- include('reservation.ejs') %> <% }
-            else if (components === "admin") { %> <%- include('admin.ejs') %> <% }
-            else if (components === "hospitaldetail") { %> <%- include('hospitaldetail.ejs') %> <% }
-            else if (components === "login") { %> <%- include('login.ejs') %> <% }
-            else if (components === "signup") { %> <%- include('signup.ejs') %> <% }
-            else if (components === "doctorTime") { %> <%- include('doctorTime.ejs') %> <% } 
-            else if (components === "findmypassword") { %> <%- include('findmypassword.ejs') %> <% }
-            else if (components === "resetpassword") { %> <%- include('resetpassword') %> <% }
-            else if (components === "partner") { %> <%- include('partner.ejs') %> <% }  
-            %>
+            <% if (components === "main") { %> <%- include('main.ejs') %> <% } else if (components
+            === "mypage") { %> <%- include('mypage.ejs') %> <% } else if (components === "map") { %>
+            <%- include('map.ejs') %> <% } else if (components === "hospital") { %> <%-
+            include('hospital.ejs') %> <% } else if (components === "hospitalRegister") { %> <%-
+            include('hospitalRegister.ejs') %> <% } else if (components === "hospitalEdit") { %> <%-
+            include('hospitalEdit.ejs') %> <% } else if (components === "doctorRegister") { %> <%-
+            include('doctorRegister.ejs') %> <% } else if (components === "doctorEdit") { %> <%-
+            include('doctorEdit.ejs') %> <% } else if (components === "reservation") { %> <%-
+            include('reservation.ejs') %> <% } else if (components === "admin") { %> <%-
+            include('admin.ejs') %> <% } else if (components === "hospitaldetail") { %> <%-
+            include('hospitaldetail.ejs') %> <% } else if (components === "login") { %> <%-
+            include('login.ejs') %> <% } else if (components === "signup") { %> <%-
+            include('signup.ejs') %> <% } else if (components === "doctorTime") { %> <%-
+            include('doctorTime.ejs') %> <% } else if (components === "findmypassword") { %> <%-
+            include('findmypassword.ejs') %> <% } else if (components === "resetpassword") { %> <%-
+            include('resetpassword') %> <% } else if (components === "partner") { %> <%-
+            include('partner.ejs') %> <% } %>
             <!-- Footer -->
             <%- include('footer.ejs') %>
         </div>
@@ -65,7 +62,5 @@
         <script src="/js/util.js"></script>
         <script src="/js/main.js"></script>
         <script src="/js/tabmenu.js"></script>
-        <script src="/js/admin.js"></script>
-
     </body>
 </html>
