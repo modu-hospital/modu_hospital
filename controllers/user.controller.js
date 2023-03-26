@@ -199,7 +199,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err)
+            next(err);
         }
     };
 
@@ -222,7 +222,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err)
+            next(err);
         }
     };
 
@@ -324,7 +324,7 @@ class UserController {
     };
 
     reservaionInput = async (req, res, next) => {
-        try{
+        try {
             const { doctorId } = req.params;
             const { userId } = res.locals.user;
             const {
@@ -356,7 +356,7 @@ class UserController {
 
             res.status(201).json({ result: 'success', data: reservaionInputData });
         } catch (err) {
-            next(err)
+            next(err);
         }
     };
 }
