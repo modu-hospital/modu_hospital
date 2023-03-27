@@ -25,17 +25,23 @@ const whenExpiredToken = function () {
         headers: { 'X-Refresh-Token': refreshToken },
         dataType: 'json',
         success: function (response) {
+            //console.log("if response 전")
             if (response) {
+                //console.log("if response")
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 72000000);
+                }, 840000);//72000000
             }
+
+            // console.log("if response 후")
 
             // while (document.cookie.length !== 0) {
 
             // }
             const newAccessToken = response.newAccessToken;
             $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
+
+            // console.log("ajaxSetup 후")
             // 로그인 안했을 때
             // 로그인 했을 때
             // 로그인 중에 재발급 받았을 때
