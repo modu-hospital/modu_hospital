@@ -30,7 +30,7 @@ router.patch('/mypage/cancel/:id', auth, userController.cancelReservation);
 router.post('/mypage/review/:id', auth, userController.createReview);
 
 //마이페이지 리뷰 불러오기
-router.get('/mypage/review/:id', userController.getMyReview)
+router.get('/mypage/review/:id', userController.getMyReview);
 
 router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);

@@ -21,6 +21,9 @@ a {
     background-color: #eee;
 }
 
+.listBox:hover {
+    background-color: #eee;
+}
 .header {
     height: 5vh;
     display: flex;
