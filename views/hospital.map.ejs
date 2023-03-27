@@ -1,167 +1,146 @@
 <html>
-    <head>
-        <title>모두의 병원</title>
-    </head>
-    <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <link rel="stylesheet" href="/css/map.css" />
-        <div class="header">
-            <input type="checkbox" name="departmentCheckbox" id="departmentCheckbox" />
-            <label for="departmentCheckbox">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <div class="boxwrap">
-                <div id="departmentwrap">
-                    <div class="division">
-                        <div>
-                            감염내과<input type="checkbox" name="department" value="감염내과" />
-                        </div>
-                        <div>
-                            내분비내과<input type="checkbox" name="department" value="내분비내과" />
-                        </div>
-                        <div>
-                            류마티스내과<input
-                                type="checkbox"
-                                name="department"
-                                value="내분비내과"
-                            />
-                        </div>
-                        <div>
-                            순환기내과<input type="checkbox" name="department" value="순환기내과" />
-                        </div>
-                        <div>
-                            신장내과<input type="checkbox" name="department" value="신장내과" />
-                        </div>
-                        <div>
-                            알레르기내과<input
-                                type="checkbox"
-                                name="department"
-                                value="알레르기내과"
-                            />
-                        </div>
-                        <div>
-                            혈액종양내과<input
-                                type="checkbox"
-                                name="department"
-                                value="혈액종양내과"
-                            />
-                        </div>
-                        <div>
-                            호흡기내과<input type="checkbox" name="department" value="호흡기내과" />
-                        </div>
+
+<head>
+    <title>모두의 병원</title>
+</head>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="/css/map.css" />
+    <div class="header">
+        <input type="checkbox" name="departmentCheckbox" id="departmentCheckbox" />
+        <label for="departmentCheckbox" title="카테고리로 검색하기">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <div class="boxwrap">
+            <div id="departmentwrap">
+                <div class="division">
+                    <div>
+                        감염내과<input type="checkbox" name="department" value="감염내과" />
                     </div>
-                    <div class="division">
-                        <div>
-                            대장항문<input type="checkbox" name="department" value="대장항문" />
-                        </div>
-                        <div>
-                            성형외과<input type="checkbox" name="department" value="성형외과" />
-                        </div>
-                        <div>
-                            신경외과<input type="checkbox" name="department" value="신경외과" />
-                        </div>
-                        <div>외과<input type="checkbox" name="department" value="외과" /></div>
-                        <div>
-                            정형외과<input type="checkbox" name="department" value="정형외과" />
-                        </div>
-                        <div>
-                            흉부외과<input type="checkbox" name="department" value="흉부외과" />
-                        </div>
+                    <div>
+                        내분비내과<input type="checkbox" name="department" value="내분비내과" />
                     </div>
-                    <div class="division">
-                        <div>
-                            산부인과<input type="checkbox" name="department" value="산부인과" />
-                        </div>
-                        <div>피부과<input type="checkbox" name="department" value="피부과" /></div>
-                        <div>
-                            비뇨기과<input type="checkbox" name="department" value="비뇨기과" />
-                        </div>
-                        <div>안과<input type="checkbox" name="department" value="안과" /></div>
-                        <div>
-                            이비인후과<input type="checkbox" name="department" value="이비인후과" />
-                        </div>
-                        <div>정신과<input type="checkbox" name="department" value="정신과" /></div>
-                        <div>
-                            마취통증의학과<input
-                                type="checkbox"
-                                name="department"
-                                value="마취통증의학과"
-                            />
-                        </div>
-                        <div>
-                            가정의학과<input type="checkbox" name="department" value="가정의학과" />
-                        </div>
-                        <div>
-                            응급의학과<input type="checkbox" name="department" value="응급의학과" />
-                        </div>
-                        <div>
-                            재활의학과<input type="checkbox" name="department" value="재활의학과" />
-                        </div>
-                        <div>
-                            영상의학과<input type="checkbox" name="department" value="영상의학과" />
-                        </div>
-                        <div>
-                            방사선종양학과<input
-                                type="checkbox"
-                                name="department"
-                                value="방사선종양학과"
-                            />
-                        </div>
-                        <div>
-                            핵의학과<input type="checkbox" name="department" value="핵의학과" />
-                        </div>
-                        <div>
-                            진단검사의학과<input
-                                type="checkbox"
-                                name="department"
-                                value="진단검사의학과"
-                            />
-                        </div>
-                        <div>병리과<input type="checkbox" name="department" value="병리과" /></div>
-                        <div>
-                            의공학과<input type="checkbox" name="department" value="의공학과" />
-                        </div>
-                        <div>한방과<input type="checkbox" name="department" value="한방과" /></div>
+                    <div>
+                        류마티스내과<input type="checkbox" name="department" value="내분비내과" />
+                    </div>
+                    <div>
+                        순환기내과<input type="checkbox" name="department" value="순환기내과" />
+                    </div>
+                    <div>
+                        신장내과<input type="checkbox" name="department" value="신장내과" />
+                    </div>
+                    <div>
+                        알레르기내과<input type="checkbox" name="department" value="알레르기내과" />
+                    </div>
+                    <div>
+                        혈액종양내과<input type="checkbox" name="department" value="혈액종양내과" />
+                    </div>
+                    <div>
+                        호흡기내과<input type="checkbox" name="department" value="호흡기내과" />
                     </div>
                 </div>
-                <button id="departmentBtn" style="display: block">적용하기</button>
-                <button id="resetBtn" style="display: block">초기화</button>
+                <div class="division">
+                    <div>
+                        대장항문<input type="checkbox" name="department" value="대장항문" />
+                    </div>
+                    <div>
+                        성형외과<input type="checkbox" name="department" value="성형외과" />
+                    </div>
+                    <div>
+                        신경외과<input type="checkbox" name="department" value="신경외과" />
+                    </div>
+                    <div>외과<input type="checkbox" name="department" value="외과" /></div>
+                    <div>
+                        정형외과<input type="checkbox" name="department" value="정형외과" />
+                    </div>
+                    <div>
+                        흉부외과<input type="checkbox" name="department" value="흉부외과" />
+                    </div>
+                </div>
+                <div class="division">
+                    <div>
+                        산부인과<input type="checkbox" name="department" value="산부인과" />
+                    </div>
+                    <div>피부과<input type="checkbox" name="department" value="피부과" /></div>
+                    <div>
+                        비뇨기과<input type="checkbox" name="department" value="비뇨기과" />
+                    </div>
+                    <div>안과<input type="checkbox" name="department" value="안과" /></div>
+                    <div>
+                        이비인후과<input type="checkbox" name="department" value="이비인후과" />
+                    </div>
+                    <div>정신과<input type="checkbox" name="department" value="정신과" /></div>
+                    <div>
+                        마취통증의학과<input type="checkbox" name="department" value="마취통증의학과" />
+                    </div>
+                    <div>
+                        가정의학과<input type="checkbox" name="department" value="가정의학과" />
+                    </div>
+                    <div>
+                        응급의학과<input type="checkbox" name="department" value="응급의학과" />
+                    </div>
+                    <div>
+                        재활의학과<input type="checkbox" name="department" value="재활의학과" />
+                    </div>
+                    <div>
+                        영상의학과<input type="checkbox" name="department" value="영상의학과" />
+                    </div>
+                    <div>
+                        방사선종양학과<input type="checkbox" name="department" value="방사선종양학과" />
+                    </div>
+                    <div>
+                        핵의학과<input type="checkbox" name="department" value="핵의학과" />
+                    </div>
+                    <div>
+                        진단검사의학과<input type="checkbox" name="department" value="진단검사의학과" />
+                    </div>
+                    <div>병리과<input type="checkbox" name="department" value="병리과" /></div>
+                    <div>
+                        의공학과<input type="checkbox" name="department" value="의공학과" />
+                    </div>
+                    <div>한방과<input type="checkbox" name="department" value="한방과" /></div>
+                </div>
             </div>
-            <a href="/" id="homeIcon">모두의 병원</a>
-            <input type="checkbox" name="" id="menuIcon" />
-            <label for="menuIcon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <div class="sidebar">
-                <div style="margin-top: 5vh"></div>
-                <nav id="list">
-                    <ul></ul>
-                </nav>
+            <button id="departmentBtn" style="display: block">적용하기</button>
+            <button id="resetBtn" style="display: block">초기화</button>
+            <div style="width:380px;margin-left: 10px;margin-top: 30px;">
+                !사용방법!
+                찾고 싶은 진료과를 선택한다! 적용하기를 누르면 화면에 있는 지도 기준으로 진료과를 가진 병원이 나와요! 복수 선택도 가능합니다!<br><br>
+                ex) "비뇨기과와 피부과를 같이 하는 곳을 찾아서 가고 싶어!!"<br>
+                비뇨기과 클릭 + 피부과 클릭 하신 뒤 적용하기 버튼을 누르면 비뇨기과와 피부과를 같이 진료보는 병원을 알려줍니다!
             </div>
         </div>
-        <div id="map" style="width: 100%; height: 95vh"></div>
-        <div>
-            <button id="listBtn" type="menu"></button>
+        <a href="/" id="homeIcon" title="홈">모두의 병원(홈으로 가고 싶으면 글씨를 누르세요 ^^)</a>
+        <input type="checkbox" name="" id="menuIcon" />
+        <label for="menuIcon" title="병원 리스트">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <div class="sidebar">
+            <div style="margin-top: 5vh"></div>
+            <nav id="list">
+                근처에 병원이 없습니다!
+                <ul></ul>
+            </nav>
         </div>
-    </body>
+    </div>
+    <div id="map" style="width: 100%; height: 95vh"></div>
+    <div>
+        <button id="listBtn" type="menu"></button>
+    </div>
+</body>
+
 </html>
-<script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services"
-></script>
-<script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc"
-></script>
-<script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services,clusterer,drawing"
-></script>
+<script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8"></script>
+<script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services,clusterer,drawing"></script>
 <script src="/js/token.js"></script>
 <script>
     window.onload = function () {
@@ -238,7 +217,7 @@
             kakao.maps.event.removeListener(map, 'dragend', gg);
 
             let data = getData(map);
-            fetch(`/api/hospitals/around`, {
+            fetch(`/api/hospitals/around/info`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -247,6 +226,29 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
+
+                    if (!data.hospitals[0]) {
+                        return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                    }
+                    document.getElementById('list').innerHTML = ``;
+                    for (let i = 0; i < data.hospitals.length; i++) {
+                        const a = `
+                  <div onclick="location.href='/hospitals/${data.hospitals[i].hospitalId}'" class="listBox">
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="hospitalInfo">
+                <span style="position:static">${data.hospitals[i].name}</span>
+                <span style="position:static">${data.hospitals[i].address}</span>
+                <span style="position:static">${data.hospitals[i].phone}</span>
+                <span style="position:static">${data.hospitals[i].departments}</span>
+                </div>
+                </div>
+                `;
+
+                        const li = document.createElement('li');
+                        li.innerHTML = a;
+                        document.getElementById('list').appendChild(li);
+                    }
+
                     const a = document.getElementById('listBtn');
                     a.innerText = `근처 ${data.hospitals.length}개의 병원`;
                     for (let i = 0; i < data.hospitals.length; i++) {
@@ -255,7 +257,10 @@
                             function (result, status) {
                                 // 정상적으로 검색이 완료됐으면
                                 if (status === kakao.maps.services.Status.OK) {
-                                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                    var coords = new kakao.maps.LatLng(
+                                        result[0].y,
+                                        result[0].x
+                                    );
 
                                     // 결과값으로 받은 위치를 마커로 표시합니다
                                     var marker = new kakao.maps.Marker({
@@ -266,7 +271,6 @@
                                     marker.id = data.hospitals[i].hospitalId;
                                     // 마커에 클릭이벤트를 등록합니다
                                     markerClick(marker);
-
                                     globalMarker.push(marker);
                                 }
                             }
@@ -277,7 +281,6 @@
             kakao.maps.event.addListener(map, 'zoom_changed', ae1);
 
             kakao.maps.event.addListener(map, 'dragend', cc);
-            listBtnClickEvent(map);
         });
     }
 
@@ -333,7 +336,7 @@
             kakao.maps.event.removeListener(map, 'dragend', gg);
 
             let data = getData(map);
-            fetch(`/api/hospitals/around`, {
+            fetch(`/api/hospitals/around/info`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -342,6 +345,29 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
+
+                    if (!data.hospitals[0]) {
+                        return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                    }
+                    document.getElementById('list').innerHTML = ``;
+                    for (let i = 0; i < data.hospitals.length; i++) {
+                        const a = `
+                  <div onclick="location.href='/hospitals/${data.hospitals[i].hospitalId}'" class="listBox">
+                <img src="${data.hospitals[i].hospitalImage}" alt="${data.hospitals[i].hospitalImage}">
+                <div class="hospitalInfo">
+                <span style="position:static">${data.hospitals[i].name}</span>
+                <span style="position:static">${data.hospitals[i].address}</span>
+                <span style="position:static">${data.hospitals[i].phone}</span>
+                <span style="position:static">${data.hospitals[i].departments}</span>
+                </div>
+                </div>
+                `;
+
+                        const li = document.createElement('li');
+                        li.innerHTML = a;
+                        document.getElementById('list').appendChild(li);
+                    }
+
                     const a = document.getElementById('listBtn');
                     a.innerText = `근처 ${data.hospitals.length}개의 병원`;
                     for (let i = 0; i < data.hospitals.length; i++) {
@@ -350,7 +376,10 @@
                             function (result, status) {
                                 // 정상적으로 검색이 완료됐으면
                                 if (status === kakao.maps.services.Status.OK) {
-                                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                    var coords = new kakao.maps.LatLng(
+                                        result[0].y,
+                                        result[0].x
+                                    );
 
                                     // 결과값으로 받은 위치를 마커로 표시합니다
                                     var marker = new kakao.maps.Marker({
@@ -361,7 +390,6 @@
                                     marker.id = data.hospitals[i].hospitalId;
                                     // 마커에 클릭이벤트를 등록합니다
                                     markerClick(marker);
-
                                     globalMarker.push(marker);
                                 }
                             }
@@ -372,7 +400,6 @@
             kakao.maps.event.addListener(map, 'zoom_changed', ae1);
 
             kakao.maps.event.addListener(map, 'dragend', cc);
-            listBtnClickEvent(map);
         });
     }
 
@@ -435,6 +462,9 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    if (!data.hospitals[0]) {
+                        return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                    }
                     document.getElementById('list').innerHTML = ``;
                     for (let i = 0; i < data.hospitals.length; i++) {
                         const a = `
@@ -444,6 +474,7 @@
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
+                <span style="position:static">${data.hospitals[i].departments}</span>
                 </div>
                 <div>
               `;
@@ -485,6 +516,12 @@
                     })
                         .then((response) => response.json())
                         .then((data) => {
+
+                            if (!data.hospitals[0]) {
+                                const a = document.getElementById('listBtn');
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`;
+                                return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                            }
                             document.getElementById('list').innerHTML = ``;
                             for (let i = 0; i < data.hospitals.length; i++) {
                                 const a = `
@@ -494,6 +531,7 @@
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
+                <span style="position:static">${data.hospitals[i].departments}</span>
                 </div>
                 </div>
                 `;
@@ -547,6 +585,11 @@
                     })
                         .then((response) => response.json())
                         .then((data) => {
+                            if (!data.hospitals[0]) {
+                                const a = document.getElementById('listBtn');
+                        a.innerText = `근처 ${data.hospitals.length}개의 병원`;
+                                return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                            }
                             document.getElementById('list').innerHTML = ``;
                             for (let i = 0; i < data.hospitals.length; i++) {
                                 const a = `
@@ -556,6 +599,7 @@
                     <span style="position:static">${data.hospitals[i].name}</span>
                     <span style="position:static">${data.hospitals[i].address}</span>
                     <span style="position:static">${data.hospitals[i].phone}</span>
+                    <span style="position:static">${data.hospitals[i].departments}</span>
                     </div>
                     </div>
                   `;
@@ -620,6 +664,7 @@
                 <span style="position:static">${data.hospitals[i].name}</span>
                 <span style="position:static">${data.hospitals[i].address}</span>
                 <span style="position:static">${data.hospitals[i].phone}</span>
+                <span style="position:static">${data.hospitals[i].departments}</span>
                 </div>
                 </div>
                 `;
@@ -711,7 +756,6 @@
     function listBtnClickEventDepartment(map) {
         document.getElementById('listBtn').addEventListener('click', (event) => {
             event.preventDefault();
-            document.getElementById('menuIcon').checked = true;
 
             const data = getData(map);
             const department = clickBtn();
@@ -726,6 +770,9 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    if (!data[0]) {
+                        return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                    }
                     document.getElementById('list').innerHTML = ``;
                     for (let i = 0; i < data.length; i++) {
                         const a = `
@@ -781,6 +828,11 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    if (!data[0]) {
+                        const a = document.getElementById('listBtn');
+                        a.innerText = `근처 ${data.length}개의 병원`;
+                        return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                    }
                     document.getElementById('list').innerHTML = ``;
                     const a = document.getElementById('listBtn');
                     a.innerText = `근처 ${data.length}개의 병원`;
@@ -801,6 +853,11 @@
                         })
                             .then((response) => response.json())
                             .then((data) => {
+                                if (!data[0]) {
+                                    const a = document.getElementById('listBtn');
+                                    a.innerText = `근처 ${data.length}개의 병원`;
+                                    return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                                }
                                 document.getElementById('list').innerHTML = ``;
                                 const a = document.getElementById('listBtn');
                                 a.innerText = `근처 ${data.length}개의 병원`;
@@ -863,6 +920,11 @@
                         })
                             .then((response) => response.json())
                             .then((data) => {
+                                if (!data[0]) {
+                                    const a = document.getElementById('listBtn');
+                        a.innerText = `근처 ${data.length}개의 병원`;
+                                    return document.getElementById('list').innerHTML = `근처에 병원이 없습니다!`;
+                                }
                                 document.getElementById('list').innerHTML = ``;
                                 const a = document.getElementById('listBtn');
                                 a.innerText = `근처 ${data.length}개의 병원`;

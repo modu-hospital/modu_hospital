@@ -9,8 +9,16 @@ button {
     border: none;
 }
 
+button:hover {
+    background-color: #94b8d6;
+}
+
 a {
     text-decoration: none;
+}
+
+#homeIcon:hover {
+    color: #0d3e66;
 }
 
 .header {
@@ -18,12 +26,14 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #22222222;
 }
 
 #homeIcon {
     color: #216cad;
-    font-size: 3vh;
+    font-size: 3.5vh;
     font-weight: bold;
+    border: 1px solid #22222222;
 }
 
 #listBtn {
@@ -106,6 +116,7 @@ img {
     /* 인터넷 익스플로러 */
     scrollbar-width: none;
     /* 파이어폭스 */
+    border: 1px solid #22222222;
 }
 
 input[id='departmentCheckbox'] {
@@ -155,6 +166,7 @@ div[class='boxwrap'] {
     z-index: 2;
     transition: all 0.35s;
     overflow: scroll;
+    border: 1px solid #22222222;
 }
 
 input[id='departmentCheckbox']:checked + label + div {
