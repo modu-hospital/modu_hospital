@@ -71,6 +71,14 @@ class CategoryService {
                 }
             }
         });
+        // return arr
+        const a = arr.filter((item,index) => {
+            console.log(arr.lastIndexOf(item))
+            console.log(index)
+
+            return arr.lastIndexOf(item) != index
+        })
+        return a
 
         const uniqueArr = [...new Set(arr.map(JSON.stringify))].map(JSON.parse);
 
