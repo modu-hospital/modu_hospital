@@ -48,12 +48,12 @@
 <section class="profile" style="background-color: #f4f5f7">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
-            <div class="col col-lg-6 mb-4 mb-lg-0">
+            <div class="col-8">
                 <div class="card mb-3" style="border-radius: 0.5rem">
                     <div class="row g-0">
                         <div class="col-md-12">
                             <div class="card-body p-4">
-                                <h6 style="float: left; margin-right: 6px">내 정보</h6>
+                                <h style="float: left; margin-right: 6px">내 정보</h>
                                 <a onclick="showInput()" id="editButton" class="table-link">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@
                                 <div id="user-data" class="row pt-1"></div>
                                 <div id="input-user-data" class="row pt-1 d-none">
                                     <div class="col-6 mb-3">
-                                        <h6>ID</h6>
+                                        <h>ID<br /></h>
                                         <input
                                             id="input-user-loginId"
                                             class="text-muted"
@@ -80,15 +80,15 @@
                                         />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>이름</h6>
+                                        <h>이름<br /></h>
                                         <input id="input-user-name" value="" class="text-muted" />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>연락처</h6>
+                                        <h>연락처<br /></h>
                                         <input id="input-user-phone" class="text-muted" />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>주소</h6>
+                                        <h>주소<br /></h>
                                         <input
                                             id="input-user-address"
                                             class="text-muted mb-1"
@@ -127,7 +127,7 @@
                                     </button>
                                 </div>
                                 <div id="approved-list" class="">
-                                    <h6>현재 예약된 진료</h6>
+                                    <h>현재 예약된 진료</h>
                                     <hr class="mt-0 mb-4" />
                                     <div id="approved" class="row pt-1"></div>
 
@@ -144,37 +144,14 @@
                                                     <span class="sr-only">Previous</span>
                                                 </a>
                                             </li>
-                                            <div id="pages">
+                                            <div id="page">
                                                 <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('approved')"
-                                                        class="page-link"
-                                                        id="approved-page1"
-                                                        data-page="1"
-                                                        >1</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('approved')"
-                                                        class="page-link"
-                                                        id="approved-page2"
-                                                        data-page="2"
-                                                        >2</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('approved')"
-                                                        class="page-link"
-                                                        id="approved-page3"
-                                                        data-page="3"
-                                                        >3</a
-                                                    >
+                                                    <h id="approved-page">1</h>
                                                 </li>
                                             </div>
                                             <li class="page-item">
                                                 <a
+                                                    id="approved-nextPage"
                                                     class="page-link"
                                                     data-status="approved"
                                                     onclick="nextPage('approved')"
@@ -188,7 +165,7 @@
                                     </nav>
                                 </div>
                                 <div id="waiting-list" class="">
-                                    <h6>예약 확정 대기중</h6>
+                                    <h>예약 확정 대기중</h>
                                     <hr class="mt-0 mb-4" />
                                     <div id="waiting" class="row pt-1"></div>
 
@@ -205,37 +182,14 @@
                                                     <span class="sr-only">Previous</span>
                                                 </a>
                                             </li>
-                                            <div id="pages">
+                                            <div id="page">
                                                 <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('waiting')"
-                                                        class="page-link"
-                                                        id="waiting-page1"
-                                                        data-page="1"
-                                                        >1</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('waiting')"
-                                                        class="page-link"
-                                                        id="waiting-page2"
-                                                        data-page="2"
-                                                        >2</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('waiting')"
-                                                        class="page-link"
-                                                        id="waiting-page3"
-                                                        data-page="3"
-                                                        >3</a
-                                                    >
+                                                    <h id="waiting-page">1</h>
                                                 </li>
                                             </div>
                                             <li class="page-item">
                                                 <a
+                                                    id="waiting-nextPage"
                                                     class="page-link"
                                                     data-status="waiting"
                                                     onclick="nextPage('waiting')"
@@ -249,7 +203,7 @@
                                     </nav>
                                 </div>
                                 <div id="doneOrReviewed-list" class="">
-                                    <h6>진료 내역</h6>
+                                    <h>진료 내역</h>
                                     <hr class="mt-0 mb-4" />
                                     <div id="doneOrReviewed" class="row pt-1"></div>
 
@@ -266,37 +220,14 @@
                                                     <span class="sr-only">Previous</span>
                                                 </a>
                                             </li>
-                                            <div id="pages">
+                                            <div id="page">
                                                 <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('doneOrReviewed')"
-                                                        class="page-link"
-                                                        id="doneOrReviewed-page1"
-                                                        data-page="1"
-                                                        >1</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('doneOrReviewed')"
-                                                        class="page-link"
-                                                        id="doneOrReviewed-page2"
-                                                        data-page="2"
-                                                        >2</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('doneOrReviewed')"
-                                                        class="page-link"
-                                                        id="doneOrReviewed-page3"
-                                                        data-page="3"
-                                                        >3</a
-                                                    >
+                                                    <h id="doneOrReviewed-page">1</h>
                                                 </li>
                                             </div>
                                             <li class="page-item">
                                                 <a
+                                                    id="doneOrReviewed-nextPage"
                                                     class="page-link"
                                                     data-status="doneOrReviewed"
                                                     onclick="nextPage('doneOrReviewed')"
@@ -310,7 +241,7 @@
                                     </nav>
                                 </div>
                                 <div id="canceled-list" class="">
-                                    <h6>취소된 예약</h6>
+                                    <h>취소된 예약</h>
                                     <hr class="mt-0 mb-4" />
                                     <div id="canceled" class="row pt-1"></div>
                                     <nav aria-label="Page navigation example">
@@ -326,37 +257,14 @@
                                                     <span class="sr-only">Previous</span>
                                                 </a>
                                             </li>
-                                            <div id="pages">
+                                            <div id="page">
                                                 <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('canceled')"
-                                                        class="page-link"
-                                                        id="canceled-page1"
-                                                        data-page="1"
-                                                        >1</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('canceled')"
-                                                        class="page-link"
-                                                        id="canceled-page2"
-                                                        data-page="2"
-                                                        >2</a
-                                                    >
-                                                </li>
-                                                <li class="page-item float-left">
-                                                    <a
-                                                        onclick="showPage('canceled')"
-                                                        class="page-link"
-                                                        id="canceled-page3"
-                                                        data-page="3"
-                                                        >3</a
-                                                    >
+                                                    <h id="canceled-page">1</h>
                                                 </li>
                                             </div>
                                             <li class="page-item">
                                                 <a
+                                                    id="canceled-nextPage"
                                                     class="page-link"
                                                     data-status="canceled"
                                                     onclick="nextPage('canceled')"
@@ -492,6 +400,8 @@
         getCanceled(1);
     });
 
+    const contentsPerPage = 3;
+
     function getUserData() {
         $.ajax({
             type: 'GET',
@@ -501,20 +411,22 @@
 
                 let temp_html = `
             <div class="col-6 mb-3">
-                <h6>ID</h6>
+                <h>ID</h>
                 <p id="user-loginId" class="text-muted">${userData.loginId}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>이름</h6>
+                <h>이름</h>
                 <p id="user-name" class="text-muted">${userData.name}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>연락처</h6>
+                <h>연락처</h>
                 <p id="user-phone" class="text-muted">${userData.phone}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>주소</h6>
-                <p id="user-address" class="text-muted">${userData.address}</p>
+                <h>주소</h>
+                <p id="user-address" class="text-muted">${
+                    userData.address || '표시할 정보가 없습니다'
+                }</p>
             </div>
 
             `;
@@ -537,22 +449,39 @@
 
                 if (page == 1 && !response.length) {
                     $('#pages-approved').attr('class', 'pagination d-none');
-                } else {
-                    for (let i = 0; i < approved.length; i++) {
-                        let temp_html = ` 
-                <div class="col-2 mb-3" float="left" width="60px">
+                    return
+                }
+                if(!approved.length){
+                    $('#approved-nextPage').attr('onclick', '');
+                    return
+                }
+                if(approved.length < contentsPerPage){
+                    $('#approved-nextPage').attr('onclick', '');
+                }
+
+                $(`#approved`).empty();
+                for (let i = 0; i < approved.length; i++) {
+                    let temp_html = `
+                    <div class="row align-items-start"> 
+                <div class="col mb-3" float="left" width="60px">
                 <img width="60px" src='${approved[i].doctorImage}'>
                 </div>
-                <div class="col-7 float="left" mb-3">
-                    <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
-                    <p class="text-muted">${approved[i].date}</p>
+                <div class="col float="left" mb-3">
+                    <a href="/hospitals/${approved[i].hospitalId}">${approved[i].hospitalName} ${
+                        approved[i].doctorName
+                    }</a>
+                    <p class="text-muted">${approved[i].date.replaceAll('T', ' ').split('.')[0]}</p>
                 </div>
-                <div class="col-2">
-                <button data-reservationId="${approved[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
-                </div>`;
-                        $('#approved').append(temp_html);
-                    }
-                }
+                <div class="col">
+                <button data-reservationId="${
+                    approved[i].id
+                }" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
+                </div>
+            </div>`;
+                    $('#approved').append(temp_html);
+                }                
+                $(`#approved-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -571,21 +500,39 @@
                 const waiting = response;
                 if (page == 1 && !response.length) {
                     $('#pages-waiting').attr('class', 'pagination d-none');
-                } else {
-                    for (let i = 0; i < waiting.length; i++) {
-                        let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-            <img width="60px" src='${waiting[i].doctorImage}'>
-        </div>
-        <div class="col-7 mb-3">
-            <h6>${waiting[i].hospitalName} ${waiting[i].doctorName}</h6>
-            <p class="text-muted">${waiting[i].date}</p>
-        </div>
-        <div class="col-2">
-        <button data-reservationId="${waiting[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
-        </div>`;
-                        $('#waiting').append(temp_html);
-                    }
                 }
+                if(!waiting.length){
+                    $('#waiting-nextPage').attr('onclick', '');
+                    return
+                }
+                if(waiting.length < contentsPerPage){
+                    $('#waiting-nextPage').attr('onclick', '');
+                }
+                $(`#waiting`).empty();
+                for (let i = 0; i < waiting.length; i++) {
+                    let temp_html = `
+                    <div class="row">
+                    <div class=" mb-3" float="'left" width="60px">
+                    <img width="60px" src='${waiting[i].doctorImage}'>
+                    </div>
+                    <div class=" mb-3">
+                        <a href="/hospitals/${waiting[i].hospitalId}">${waiting[i].hospitalName} ${
+                        waiting[i].doctorName
+                    }</a>
+                        <p class="text-muted">${
+                            waiting[i].date.replaceAll('T', ' ').split('.')[0]
+                        }</p>
+                    </div>
+                    <div class="">
+                    <button data-reservationId="${
+                        waiting[i].id
+                    }" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
+                    </div>
+                </div>`;
+                    $('#waiting').append(temp_html);
+                }
+                $(`#waiting-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -602,41 +549,68 @@
             url: `/api/users/mypage/doneorreviewed?&page=${page}`,
             success: function (response) {
                 const doneOrReviewed = response;
+
                 if (page == 1 && !response.length) {
                     $('#pages-doneOrReviewed').attr('class', 'd-none');
-                } else {
-                    for (let i = 0; i < doneOrReviewed.length; i++) {
-                        if (doneOrReviewed[i].status == 'done') {
-                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-            <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
-        </div>
-        <div class="col-7 mb-3">
-            <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-            <p class="text-muted">${doneOrReviewed[i].date}</p>
-        </div>
-        <div class="col-2">
+                }
+                if(!doneOrReviewed.length){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                    return
+                }
+                if(doneOrReviewed.length < contentsPerPage){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                }
+                $(`#doneOrReviewed`).empty();
+                for (let i = 0; i < doneOrReviewed.length; i++) {
+                    if (doneOrReviewed[i].status == 'done') {
+                        let temp_html = `
+                        <div class="row"> 
+                        <div class=" mb-3" float="'left" width="60px">
+                        <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
+                        </div>
+                        <div class=" mb-3">
+                            <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${
+                            doneOrReviewed[i].hospitalName
+                        } ${doneOrReviewed[i].doctorName}</a>
+                            <p class="text-muted">${
+                                doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]
+                            }</p>
+                        </div>
+                        <div class="">
+                        <button data-reservationId="${
+                            doneOrReviewed[i].id
+                        }" onclick="showReviewModal()" type="button" class="btn btn-info">리뷰 남기기</button>
+                        </div>
+                    </div>`;
 
-        <button data-reservationId="${doneOrReviewed[i].id}" onclick="showReviewModal()" type="button" class="btn btn-info">리뷰 남기기</button>
-        </div>`;
+                        $('#doneOrReviewed').append(temp_html);
+                    } else {
+                        let temp_html = `
+                        <div class="row">
+                        <div class=" mb-3" float="'left" width="60px">
+                        <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
+                        </div>
+                        <div class=" mb-3">
+                            <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${
+                            doneOrReviewed[i].hospitalName
+                        } ${doneOrReviewed[i].doctorName}</a>
+                            <p class="text-muted">${
+                                doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]
+                            }</p>
+                        </div>
+                        <div class="">
 
-                            $('#doneOrReviewed').append(temp_html);
-                        } else {
-                            let temp_html = ` <div class="col-2 mb-3" float="'left" width="60px">
-                <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
-            </div>
-            <div class="col-7 mb-3">
-                <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-                <p class="text-muted">${doneOrReviewed[i].date}</p>
-            </div>
-            <div class="col-2">
+                        <button data-reservationId="${
+                            doneOrReviewed[i].id
+                        }" type="button" class="btn btn-dark" disabled>리뷰 작성됨</button>
+                        </div>
+                    </div>`;
 
-            <button data-reservationId="${doneOrReviewed[i].id}" type="button" class="btn btn-dark" disabled>리뷰 작성됨</button>
-            </div>`;
-
-                            $('#doneOrReviewed').append(temp_html);
-                        }
+                        $('#doneOrReviewed').append(temp_html);
                     }
                 }
+                $(`#doneOrReviewed-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -654,20 +628,35 @@
                 const canceled = response;
                 if (page == 1 && !response.length) {
                     $('#pages-canceled').attr('class', 'd-none');
-                } else {
-                    for (let i = 0; i < canceled.length; i++) {
-                        let temp_html = ` 
-            <div class="col-2 mb-3" float="'left" width="60px">
-            <img width="60px" src='${canceled[i].doctorImage}'>
-            </div>
-            <div class="col-10 mb-3">
-            <h6>${canceled[i].hospitalName} ${canceled[i].doctorName}</h6>
-            <p class="text-muted">${canceled[i].date}</p>
-            </div>
-        `;
-                        $('#canceled').append(temp_html);
-                    }
                 }
+                if(!canceled.length){
+                    $('#canceled-nextPage').attr('onclick', '');
+                    return
+                }
+                if(canceled.length < contentsPerPage){
+                    $('#canceled-nextPage').attr('onclick', '');
+                }
+                $(`#canceled`).empty();
+                for (let i = 0; i < canceled.length; i++) {
+                    let temp_html = ` 
+                    <div class="row"> 
+                        <div class="col mb-3" float="'left" width="60px">
+                            <img width="60px" src='${canceled[i].doctorImage}'>
+                        </div>
+                        <div class="col mb-3">
+                            <a href="/hospitals/${canceled[i].hospitalId}">${
+                        canceled[i].hospitalName
+                    } ${canceled[i].doctorName}</a>
+                            <p class="text-muted">${
+                                canceled[i].date.replaceAll('T', ' ').split('.')[0]
+                            }</p>
+                        </div>
+                    </div>
+                    `;
+                    $('#canceled').append(temp_html);
+                }
+                $(`#canceled-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -757,13 +746,13 @@
 
     <div id="pagingList" style='text-align:center;'></div>
 
-</div>
+    </div>
 
-<div style="height:5px;"></div>
+    <div style="height:5px;"></div>
 
-<input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
+    <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
 
-<div style="height:5px;"></div>
+    <div style="height:5px;"></div>
 
       `;
         $('#alertText').html(modalText);
@@ -810,20 +799,20 @@
         $('#alertModalLabel').html('리뷰 작성');
         const modalText = `
 
-<div class="rating">
+        <div class="rating">
 
-<input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-<input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-<input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-<input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-<input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-</div>
+        <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+        <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+        <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+        <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+        <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+        </div>
 
-<div class="form-outline">
-<textarea class="form-control" id="reviewContents" rows="4"></textarea>
-</div>
+        <div class="form-outline">
+        <textarea class="form-control" id="reviewContents" rows="4"></textarea>
+        </div>
 
-`;
+        `;
         $('#alertText').html(modalText);
         $('#modal-confirm').attr('onclick', `reviewReservation(${reservationId})`);
         $('#modal-confirm').html('리뷰 남기기');
@@ -857,21 +846,27 @@
         });
     }
     function nextPage(status) {
-        const pages = 3;
-        for (let i = 0; i < pages; i++) {
-            $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) + 3);
-        }
+        const changedPage = Number($(`#${status}-page`).html()) +1;
+
+        const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
+        window[`get${upperCase}`](changedPage);
     }
     function previousPage(status) {
-        const pages = 3;
-        for (let i = 0; i < pages; i++) {
-            if ($(`#${status}-page${i + 1}`).html() < 3) {
-                return;
-            } else {
-                $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) - 3);
-            }
+        $(`#${status}-nextPage`).attr('onclick', `nextPage('${status}')`);
+        const presentPage = Number($(`#${status}-page`).html());
+        if (presentPage <= 1) {
+            $(`#${status}-page`).html('1');
+            return;
         }
+        $(`#${status}-page`).html(presentPage - 1);
+
+        const changedPage = Number($(`#${status}-page`).html());
+
+        const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
+        $(`#${status}`).empty();
+        window[`get${upperCase}`](changedPage);
     }
+    /*
     function showPage(status) {
         const page = $(`#${status}-page${event.target.dataset.page}`).html();
         const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
@@ -879,6 +874,7 @@
 
         window[`get${upperCase}`](page);
     }
+    */
     function inputAddress() {
         const text = $('#roadaddress').val();
         $('#input-user-address').attr('value', text);
