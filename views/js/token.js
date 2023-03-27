@@ -30,7 +30,7 @@ const whenExpiredToken = function () {
                 //console.log("if response")
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 17000);//72000000
+                }, 840000);//72000000
             }
 
             // console.log("if response 후")

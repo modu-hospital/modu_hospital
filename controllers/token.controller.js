@@ -16,10 +16,6 @@ class TokenController {
         //새로운 엑세스 토큰을 만드는 api(api/token)를
         //프론트에서 연결
 
-        //res.cookie를 그니까 쿠키 저장하는걸 프론트에서 하자고해서 저장 안했음
-        //그러면 프론트에서 헤더에 저장? 하고
-        //이 토큰 api를 실행시켜서 refreshToken값을 가져오게 만들어야하는지
-
         const refreshToken = req.cookies.refreshToken;
         //res.cookie 저장했음
         //userId를 파람스로 받아서 (로그인 시도한 userId 값으로)
@@ -45,7 +41,7 @@ class TokenController {
                     { userId: user.userId },
                     process.env.JWT_SECRET_KEY,
                     {
-                        expiresIn: '20s',
+                        expiresIn: '15m',
                     }
                 );
 
@@ -65,5 +61,3 @@ class TokenController {
 }
 
 module.exports = TokenController;
-
-//auth에서 토큰 존재 유무, 검증, 재발급,
