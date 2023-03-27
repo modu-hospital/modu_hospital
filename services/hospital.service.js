@@ -64,6 +64,13 @@ class HospitalService {
 
             // return hospitals
             const infos = hospitals.map((hospital) => {
+                let department = hospital.doctors.map((doctor) => {
+                    return doctor.doctorCategoryMappings.map((department) => {
+                        return department.categories.department;
+                    });
+                });
+                department = department.join(",").split(",")
+                const Uniquedepartment = [...new Set(department.map(JSON.stringify))].map(JSON.parse);
                 return {
                     hospitalId: hospital.hospitalId,
                     name: hospital.name,
@@ -72,6 +79,7 @@ class HospitalService {
                     hospitalImage: !hospital.hospitalImageFiles[0]
                         ? '이미지 준비중'
                         : hospital.hospitalImageFiles[0].url,
+                    departments : Uniquedepartment.sort(),
                 };
             });
             return infos;

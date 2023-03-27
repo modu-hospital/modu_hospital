@@ -375,7 +375,20 @@ class HospitalRepository {
                     },
                 },
                 attributes: ['hospitalId', 'name', 'address', 'phone'],
-                include: [{ model: this.hospitalImageFileModel, as: 'hospitalImageFiles' }],
+                include: [
+                    { model: this.hospitalImageFileModel, as: 'hospitalImageFiles' },
+                    {
+                        model: this.doctorModel,
+                        as: 'doctors',
+                        include: [
+                            {
+                                model: this.doctorCategoryMappingModel,
+                                as: 'doctorCategoryMappings',
+                                include: [{ model: this.categoryModel, as: 'categories' }],
+                            },
+                        ],
+                    },
+                ],
             });
             return hospitals;
         } catch (err) {
