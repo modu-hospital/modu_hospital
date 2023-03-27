@@ -154,23 +154,20 @@ class ReservationRepository {
         return doneOrReviewed;
     };
 
-    findReviewByReservationId = async (reservationId) =>{
+    findReviewByReservationId = async (reservationId) => {
         const review = await this.models.Reservation.findOne({
-            attributes:[],
-            include:[{
-                paranoid:false,
-                model:this.models.Review,
-                as:'reviews',
-                attributes:[
-                    'star',
-                    'content',
-                    'createdAt',
-                    'updatedAt'
-                ]
-            }],
-            where:{id:reservationId},
-        })
-    }
+            attributes: [],
+            include: [
+                {
+                    paranoid: false,
+                    model: this.models.Review,
+                    as: 'reviews',
+                    attributes: ['star', 'content', 'createdAt', 'updatedAt'],
+                },
+            ],
+            where: { id: reservationId },
+        });
+    };
 
     findHospitalByReservationId = async (reservationId) => {
         // const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r
@@ -179,14 +176,14 @@ class ReservationRepository {
         // WHERE r.id = ${reservationId}`;
         const hospital = await this.models.Reservation.findByPk(reservationId, {
             attributes: [
-            [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
-            [this.sequelize.col('doctors->hospitals.userId'), 'userId'],
-            [this.sequelize.col('doctors->hospitals.name'), 'name'],
-            [this.sequelize.col('doctors->hospitals.address'), 'address'],
-            [this.sequelize.col('doctors->hospitals.phone'), 'phone'],
-            [this.sequelize.col('doctors->hospitals.createdAt'), 'createdAt'],
-            [this.sequelize.col('doctors->hospitals.updatedAt'), 'updatedAt'],
-        ],
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
+                [this.sequelize.col('doctors->hospitals.userId'), 'userId'],
+                [this.sequelize.col('doctors->hospitals.name'), 'name'],
+                [this.sequelize.col('doctors->hospitals.address'), 'address'],
+                [this.sequelize.col('doctors->hospitals.phone'), 'phone'],
+                [this.sequelize.col('doctors->hospitals.createdAt'), 'createdAt'],
+                [this.sequelize.col('doctors->hospitals.updatedAt'), 'updatedAt'],
+            ],
             include: [
                 {
                     model: this.models.Doctor,

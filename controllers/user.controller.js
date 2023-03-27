@@ -197,19 +197,16 @@ class UserController {
         }
     };
 
-    getMyReview = async (req, res, next) =>{
-        try{
-            const reservationId = req.params.id
-            
-            const review = await this.UserController.getMyReview(reservationId)
+    getMyReview = async (req, res, next) => {
+        try {
+            const reservationId = req.params.id;
 
-            console.log(review)
-            return res.status(200).json(review)
+            const review = await this.UserController.getMyReview(reservationId);
 
-        }catch(err){
-
-        }
-    }
+            console.log(review);
+            return res.status(200).json(review);
+        } catch (err) {}
+    };
 
     partnerSignup = async (req, res) => {
         const role = 'waiting';
@@ -394,4 +391,3 @@ class UserController {
 }
 
 module.exports = UserController;
-
