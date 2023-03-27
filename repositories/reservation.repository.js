@@ -14,6 +14,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const approved = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -48,6 +49,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const waiting = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -82,6 +84,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const doneOrReviewed = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -119,6 +122,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const doneOrReviewed = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -150,16 +154,65 @@ class ReservationRepository {
         return doneOrReviewed;
     };
 
-    findHospitalByReservationId = async (reservationId) => {
-        const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r 
-        inner join doctors as d on r.doctorId = d.doctorId 
-        inner join hospitals as h on d.hospitalId  = h.hospitalId 
-        WHERE r.id = ${this.sequelize.escape(reservationId)}`;
-        const hospitalIdAndUserId = await this.sequelize.query(query, {
-            type: this.sequelize.QueryTypes.SELECT,
-        });
+    findReviewByReservationId = async (reservationId) =>{
+        const review = await this.models.Reservation.findOne({
+            attributes:[],
+            include:[{
+                paranoid:false,
+                model:this.models.Review,
+                as:'reviews',
+                attributes:[
+                    'star',
+                    'content',
+                    'createdAt',
+                    'updatedAt'
+                ]
+            }],
+            where:{id:reservationId},
+        })
+    }
 
-        return hospitalIdAndUserId[0];
+    findHospitalByReservationId = async (reservationId) => {
+        // const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r
+        // inner join doctors as d on r.doctorId = d.doctorId
+        // inner join hospitals as h on d.hospitalId  = h.hospitalId
+        // WHERE r.id = ${reservationId}`;
+        const hospital = await this.models.Reservation.findByPk(reservationId, {
+            attributes: [
+            [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
+            [this.sequelize.col('doctors->hospitals.userId'), 'userId'],
+            [this.sequelize.col('doctors->hospitals.name'), 'name'],
+            [this.sequelize.col('doctors->hospitals.address'), 'address'],
+            [this.sequelize.col('doctors->hospitals.phone'), 'phone'],
+            [this.sequelize.col('doctors->hospitals.createdAt'), 'createdAt'],
+            [this.sequelize.col('doctors->hospitals.updatedAt'), 'updatedAt'],
+        ],
+            include: [
+                {
+                    model: this.models.Doctor,
+                    as: 'doctors',
+                    paranoid: false,
+                    attributes: [],
+                    include: [
+                        {
+                            model: this.models.Hospital,
+                            as: 'hospitals',
+                            paranoid: false,
+                            attributes: [
+                                'hospitalId',
+                                'userId',
+                                'name',
+                                'address',
+                                'phone',
+                                'createdAt',
+                                'updatedAt',
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+        return hospital;
     };
 
     editReservationStatusById = async (id, status) => {
