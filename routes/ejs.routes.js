@@ -42,11 +42,8 @@ router.get('/admin', auth, (req, res) => {
 
 // 예약페이지
 router.get('/users/reservation/:hospitalId', auth, (req, res) => {
-    console.log('안녕널', res.locals.user);
-    if (res.locals.user === 'null') {
-        return res.send(
-            '<script>alert("모두의 병원 회원만 이용 가능합니다. "); window.location.href="/";</script>'
-        );
+    if (!req.cookies.accessToken) {
+        return;
     } else if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', {
             components: 'reservation',

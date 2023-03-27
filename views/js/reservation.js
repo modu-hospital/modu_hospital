@@ -146,8 +146,13 @@ const possibleDay = [0, 0, 0, 0, 0, 0, 0];
 // 전달 달력
 function prevCalendar() {
     if (clickcount === 0) {
-        alert('예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.');
-        return false;
+        swal({
+            title: '😓 죄송합니다.',
+            text: '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.',
+            icon: 'warning',
+        }).then(() => {
+            return false;
+        });
     } else {
         clickcount -= 1;
     }
@@ -158,8 +163,13 @@ function prevCalendar() {
 // 다음달 달력
 function nextCalendar() {
     if (clickcount === 1) {
-        alert('예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.');
-        return false;
+        swal({
+            title: '😓 죄송합니다.',
+            text: '예약은 금일기준 다음날부터 30일 이후까지만 가능합니다.',
+            icon: 'warning',
+        }).then(() => {
+            return false;
+        });
     } else {
         clickcount += 1;
     }
@@ -358,6 +368,13 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                 doctorTable.deleteRow(doctorTable.rows.length - 1);
             }
 
+            if (response.length === 0) {
+                swal(
+                    '😓 죄송합니다.',
+                    '예약가능한 시간이 없습니다. 다른 날짜를 선택해주세요!',
+                    'warning'
+                );
+            }
             for (let i = 0; i < response.length; i++) {
                 // 객체의 길이만큼 반복
                 let doctorId = response[i].doctorId;
@@ -431,6 +448,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 }
                             };
                         } else {
@@ -491,6 +513,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 }
                             };
                         }
@@ -567,6 +594,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 }
                             };
                         } else {
@@ -624,6 +656,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 }
                             };
                         }
@@ -672,7 +709,13 @@ function submitRes() {
         background.remove();
         mymodal.style.display = 'none';
     } else {
-        alert('예약일시를 선택해주세요.');
+        swal({
+            title: '✍ 입력정보 추가요망!',
+            text: '예약일시를 선택해주세요.',
+            icon: 'info',
+        }).then(() => {
+            return;
+        });
     }
     tableinit();
 }
@@ -720,11 +763,11 @@ function getAddr() {
                     totalCnt.style.display = '';
                 }
             } else {
-                alert(errDesc);
+                swal('😭 에러발생', errDesc, 'error');
             }
         },
         error: function (xhr, status, error) {
-            alert('에러발생');
+            swal('😭 에러발생', '주소 조회 실패', 'error');
         },
     });
 }
@@ -775,7 +818,7 @@ function makeListJson(jsonStr) {
         pageMake(jsonStr);
     } else {
         htmlStr +=
-            "<tr><td colspan='2'>조회된 데이터가 않습니다.<br/>다시 검색하여 주시기 바랍니다.</td></tr>";
+            "<tr><td colspan='2'>조회된 데이터가 없습니다.<br/>다시 검색하여 주시기 바랍니다.</td></tr>";
     }
     htmlStr += '</tbody>';
     jQuery('#list').html(htmlStr);
@@ -784,6 +827,7 @@ function makeListJson(jsonStr) {
 function inputTextAddress(zipcode, reservationAddress) {
     document.getElementById('zipCode').value = zipcode;
     document.getElementById('reservationAddress').value = reservationAddress;
+    addressWindowClose();
 }
 /// @brief 주소검색창 - 열기
 function addressWindowOpen() {
@@ -805,9 +849,14 @@ function checkSearchedWord(obj) {
         // 특수문자 제거
         const expText = /[%=><]/;
         if (expText.test(obj.value) == true) {
-            alert('특수문자를 입력 할수 없습니다.');
-            obj.value = obj.value.split(expText).join('');
-            return false;
+            swal({
+                title: '😓 죄송합니다.',
+                text: '특수문자를 입력 할수 없습니다.',
+                icon: 'warning',
+            }).then(() => {
+                obj.value = obj.value.split(expText).join('');
+                return false;
+            });
         }
         // 특정문자열(sql예약어의 앞뒤공백포함) 제거
         let sqlArray = new Array(
@@ -829,9 +878,14 @@ function checkSearchedWord(obj) {
         for (let num = 0; num < sqlArray.length; num++) {
             regex = new RegExp(sqlArray[num], 'gi');
             if (regex.test(obj.value)) {
-                alert('"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.');
-                obj.value = obj.value.replace(regex, '');
-                return false;
+                swal({
+                    title: '😓 죄송합니다.',
+                    text: '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
+                    icon: 'warning',
+                }).then(() => {
+                    obj.value = obj.value.replace(regex, '');
+                    return false;
+                });
             }
         }
     }
@@ -902,20 +956,20 @@ function inputData() {
 
         background.remove();
         addressModal.style.display = 'none';
+
+        resTimeForm.value = '';
+        resDateForm.value = '';
+        zipCode.value = '';
+        searchAddr.value = '';
+        totalCnt.style.display = 'none';
+
+        while (addressTable.rows.length > 0) {
+            addressTable.deleteRow(addressTable.rows.length - 1);
+        }
+        jQuery('#pagingList').empty();
     } else {
-        alert('주소를 입력해주세요.');
+        swal('✍ 입력정보 추가요망!', '주소 또는 상세 주소지 입력을 해주세요.', 'info');
     }
-
-    resTimeForm.value = '';
-    resDateForm.value = '';
-    zipCode.value = '';
-    searchAddr.value = '';
-    totalCnt.style.display = 'none';
-
-    while (addressTable.rows.length > 0) {
-        addressTable.deleteRow(addressTable.rows.length - 1);
-    }
-    jQuery('#pagingList').empty();
 }
 
 function reservaionCheck() {
@@ -941,7 +995,7 @@ function reservaionCheck() {
         reservationtime === '' ||
         contents === ''
     ) {
-        alert('미기입된 정보가 있습니다.');
+        swal('✍ 입력정보 추가요망!', '미기입된 정보가 있습니다.', 'info');
     } else {
         $.ajax({
             type: 'POST',
@@ -958,11 +1012,20 @@ function reservaionCheck() {
                 address: address,
             },
             success: function (response) {
-                location.href = `/users/reservation/${id}`;
-                alert('예약신청이 완료되었습니다.');
+                swal({
+                    title: '😊 예약하기 성공!',
+                    text: '예약신청이 완료되었습니다.',
+                    icon: 'success',
+                }).then(() => {
+                    location.href = `/users/reservation/${id}`;
+                });
             },
             error: function (error) {
-                alert('예약신청이 실패했습니다.');
+                swal(
+                    '😭 예약하기 실패',
+                    '예약신청이 실패했습니다. 관리자에게 문의해주세요.',
+                    'error'
+                );
             },
         });
     }
@@ -973,8 +1036,13 @@ function priorityHighOn() {
     const reservaionComplete = document.getElementById('reservaionComplete');
 
     if ($('#relationCategory option:selected').val() === '미선택') {
-        alert('환자와의 관계부터 선택해주세요.');
-        $("input:radio[name='group']").prop('checked', false);
+        swal({
+            title: '✍ 입력정보 추가요망!',
+            text: '환자와의 관계부터 선택해주세요.',
+            icon: 'info',
+        }).then(() => {
+            $("input:radio[name='group']").prop('checked', false);
+        });
     }
 
     if (priorityHigh.checked && $('#relationCategory option:selected').val() !== '미선택') {

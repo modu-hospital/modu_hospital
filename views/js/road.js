@@ -74,12 +74,12 @@ function getAddr() {
                     makeListJson(jsonStr);
                 }
             } else {
-                alert(errDesc);
+                swal('😭 에러발생', errDesc, 'error');
             }
         },
 
         error: function (xhr, status, error) {
-            alert('에러발생');
+            swal('😭 에러발생', '주소 조회 실패', 'error');
         },
     });
 }
@@ -202,11 +202,14 @@ function checkSearchedWord(obj) {
         const expText = /[%=><]/;
 
         if (expText.test(obj.value) == true) {
-            alert('특수문자를 입력 할수 없습니다.');
-
-            obj.value = obj.value.split(expText).join('');
-
-            return false;
+            swal({
+                title: '😓 죄송합니다.',
+                text: '특수문자를 입력 할수 없습니다.',
+                icon: 'warning',
+            }).then(() => {
+                obj.value = obj.value.split(expText).join('');
+                return false;
+            });
         }
 
         // 특정문자열(sql예약어의 앞뒤공백포함) 제거
@@ -235,11 +238,14 @@ function checkSearchedWord(obj) {
             regex = new RegExp(sqlArray[num], 'gi');
 
             if (regex.test(obj.value)) {
-                alert('"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.');
-
-                obj.value = obj.value.replace(regex, '');
-
-                return false;
+                swal({
+                    title: '😓 죄송합니다.',
+                    text: '"' + sqlArray[num] + '"와(과) 같은 특정문자로 검색할 수 없습니다.',
+                    icon: 'warning',
+                }).then(() => {
+                    obj.value = obj.value.replace(regex, '');
+                    return false;
+                });
             }
         }
     }

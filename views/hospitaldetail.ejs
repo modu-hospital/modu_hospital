@@ -422,7 +422,25 @@
     // });
 
     function goToReservation() {
-        const id = window.location.pathname.split('/')[2];
-        location.href = `/users/reservation/${id}`;
+        if (document.cookie !== '') {
+            const id = window.location.pathname.split('/')[2];
+            location.href = `/users/reservation/${id}`;
+        } else if (document.cookie === '') {
+            swal({
+                title: '😓 죄송합니다.',
+                text: '모두의 병원 회원만 이용 가능합니다. 로그인 페이지로 이동할까요??',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal('로그인 페이지로 이동합니다.', '', 'success').then((value) => {
+                        window.location.href = '/login';
+                    });
+                } else {
+                    swal('취소되었습니다.');
+                }
+            });
+        }
     }
 </script>
