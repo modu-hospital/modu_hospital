@@ -21,7 +21,10 @@ a {
     background-color: #eee;
 }
 
-.header {
+.listBox:hover {
+    background-color: #eee;
+}
+.header { 
     height: 5vh;
     display: flex;
     justify-content: space-between;

@@ -43,7 +43,7 @@ class ReservationService {
         }
         const hospital = await this.reservationRepository.findHospitalByReservationId(
             reservationId
-        )
+        );
         const hospitalId = hospital.dataValues.hospitalId;
         const userId = reservation.userId;
 

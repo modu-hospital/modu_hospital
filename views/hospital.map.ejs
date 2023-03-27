@@ -111,7 +111,7 @@
                 !사용방법!
                 찾고 싶은 진료과를 선택한다! 적용하기를 누르면 화면에 있는 지도 기준으로 진료과를 가진 병원이 나와요! 복수 선택도 가능합니다!<br><br>
                 ex) "비뇨기과와 피부과를 같이 하는 곳을 찾아서 가고 싶어!!"<br>
-                비뇨기과 클릭 + 피부과 클릭 하신 뒤 적용하기 버튼을 누르면 비뇨기과와 피부과를 같이 진료보는 병원을 알려줍니다!
+                비뇨기과 클릭 + 피부과 클릭 하신 뒤 적용하기 버튼을 누르면 비뇨기과 혹은 피부과를 진료하는 병원이 나옵니다.
             </div>
         </div>
         <a href="/" id="homeIcon" title="홈">모두의 병원</a>
@@ -137,10 +137,10 @@
 
 </html>
 <script type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8"></script>
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc"></script>
 <script type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f3a0afbca6919dad8d2a8d2223761a8&libraries=services,clusterer,drawing"></script>
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfe684de49325af43a940eb82545abfc&libraries=services,clusterer,drawing"></script>
 <script src="/js/token.js"></script>
 <script>
     window.onload = function () {
@@ -779,9 +779,10 @@
               <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
                 <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                 <div class="hospitalInfo">
-                <span style="position:static">${data[i].hospitalName}</span>
+                <span style="position:static">${data[i].name}</span>
                 <span style="position:static">${data[i].address}</span>
                 <span style="position:static">${data[i].phone}</span>
+                <span style="position:static">${data[i].departments}</span>
                 </div>
                 </div>
               `;
@@ -866,9 +867,10 @@
                                     <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                         <div class="hospitalInfo">
-                        <span style="position:static">${data[i].hospitalName}</span>
+                        <span style="position:static">${data[i].name}</span>
                         <span style="position:static">${data[i].address}</span>
                         <span style="position:static">${data[i].phone}</span>
+                        <span style="position:static">${data[i].departments}</span>
                         </div>
                         </div>
                      `;
@@ -933,9 +935,10 @@
                     <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
                         <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                         <div class="hospitalInfo">
-                          <span style="position:static">${data[i].hospitalName}</span>
-                          <span style="position:static">${data[i].address}</span>
-                          <span style="position:static">${data[i].phone}</span>
+                            <span style="position:static">${data[i].name}</span>
+                        <span style="position:static">${data[i].address}</span>
+                        <span style="position:static">${data[i].phone}</span>
+                        <span style="position:static">${data[i].departments}</span>
                         </div>
                         </div>
                       `;
@@ -980,9 +983,10 @@
                 <div onclick="location.href='/hospitals/${data[i].hospitalId}'" class="listBox">
                 <img src="${data[i].hospitalImage}" alt="${data[i].hospitalImage}">
                 <div class="hospitalInfo">
-                <span style="position:static">${data[i].hospitalName}</span>
-                <span style="position:static">${data[i].address}</span>
-                <span style="position:static">${data[i].phone}</span>
+                    <span style="position:static">${data[i].name}</span>
+                        <span style="position:static">${data[i].address}</span>
+                        <span style="position:static">${data[i].phone}</span>
+                        <span style="position:static">${data[i].departments}</span>
                 </div>
                 </div>
               `;

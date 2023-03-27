@@ -20,7 +20,7 @@ class UserService {
     );
     reservationRepository = new ReservationRepository(sequelize);
     createError = new CreateError();
-ㅎ
+    ㅎ;
     findAUserByUserId = async (userId) => {
         const user = await this.userRepository.findUserById(userId);
         return user;
@@ -61,7 +61,7 @@ class UserService {
             userId,
             page
         );
-        console.log(doneOrReviewed)
+        console.log(doneOrReviewed);
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
@@ -70,10 +70,10 @@ class UserService {
     };
 
     getMyReview = async (reservationId) => {
-        const review = await this.reservationRepository.findReviewByReservationId(reservationId)
+        const review = await this.reservationRepository.findReviewByReservationId(reservationId);
 
-        return review
-    }
+        return review;
+    };
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
