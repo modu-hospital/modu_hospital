@@ -230,7 +230,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err);
+            next(err)
         }
     };
 
@@ -254,7 +254,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err);
+            next(err)
         }
     };
 
