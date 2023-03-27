@@ -50,7 +50,6 @@ class CategoryService {
             }
 
             // return hospitals
-
             let arr = [];
             hospitals.map((department) => {
                 for (let i = 0; i < department.categoriesMapping.length; i++) {

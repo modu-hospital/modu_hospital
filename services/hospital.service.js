@@ -62,7 +62,6 @@ class HospitalService {
                 leftLatitude
             );
 
-            // return hospitals
             const infos = hospitals.map((hospital) => {
                 let department = hospital.doctors.map((doctor) => {
                     return doctor.doctorCategoryMappings.map((department) => {
