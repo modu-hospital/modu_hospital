@@ -24,7 +24,7 @@ a {
 .listBox:hover {
     background-color: #eee;
 }
-.header {
+.header { 
     height: 5vh;
     display: flex;
     justify-content: space-between;
