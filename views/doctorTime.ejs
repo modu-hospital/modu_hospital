@@ -85,13 +85,22 @@
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {
-                    alert('성공적으로 제출 되었습니다.');
-                    // 성공적으로 제출된 경우, 입력된 데이터 초기화
-                    $('form')[0].reset();
-                    window.location.href = '/hospital';
+                    swal({
+                        title: '😊 진료시간등록 성공!',
+                        text: '성공적으로 제출 되었습니다.',
+                        icon: 'success',
+                    }).then(() => {
+                        // 성공적으로 제출된 경우, 입력된 데이터 초기화
+                        $('form')[0].reset();
+                        window.location.href = '/hospital';
+                    });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert('제출에 실패했습니다.  오류 상태 코드: ' + jqXHR.status);
+                    swal(
+                        '😭 진료시간등록 실패',
+                        '제출에 실패했습니다. 오류 상태 코드: ' + jqXHR.status,
+                        'error'
+                    );
                 },
             });
         });

@@ -1,73 +1,88 @@
 <div id="sform">
-    <form action="/hospital" id = "hospitalForm">
+    <form action="/hospital" id="hospitalForm">
         <h2>병원정보 등록</h2>
         <label for="name">병원이름</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" required />
         <label for="address">주소</label>
-        <input type="text" id="address" name="address" required onclick="openModal()">
+        <input type="text" id="address" name="address" required onclick="openModal()" />
         <label for="phone">전화번호</label>
-        <input type="text" id="phone" name="phone" required>
+        <input type="text" id="phone" name="phone" required />
         <button type="submit">등록하기</button>
     </form>
 </div>
 
 <style>
     #modal {
-  max-height: 500px;
-  overflow-y: scroll;
-}
+        max-height: 500px;
+        overflow-y: scroll;
+    }
 </style>
 <!-- 모달창 -->
 <div id="modal" class="modal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">주소 검색 API</h5>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                <h5 class="modal-title" id="addressModalLabel">주소 검색 API</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
-                <div style="height:5px;"></div>
-                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
-                <hr /><br />
+                현재 페이지 :
+                <input type="number" id="currentPage" value="1" style="text-align: center" />
+                <div style="height: 5px"></div>
+                페이지당 출력 개수 :
+                <input type="number" id="countPerPage" value="5" style="text-align: center" />
+                <hr />
+                <br />
 
-                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+                <input
+                    type="text"
+                    id="zipCode"
+                    value=""
+                    onClick="addressWindowOpen();"
+                    placeholder="00000"
+                    readonly
+                />
 
                 <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
 
                 <div id="wrap">
-                     <div id="closeBtn" onClick="addressWindowClose();">
-                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    <div id="closeBtn" onClick="addressWindowClose();">
+                        <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            id="searchAddr"
+                            value=""
+                            onkeydown="enterSearch();"
+                            placeholder="도로명주소, 건물명 또는 지번 입력"
+                        />
+                        <input type="button" onClick="getAddr();" value="주소검색" />
+                    </div>
+
+                    <div>
+                        <div id="totoalOutcome">검색결과 : <span id="totalCnt">0</span></div>
+                        <table id="list"></table>
+                    </div>
+
+                    <div id="pagingList" style="text-align: center"></div>
                 </div>
-            <div>
-                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
-                    placeholder="도로명주소, 건물명 또는 지번 입력" />
-                <input type="button" onClick="getAddr();" value="주소검색" />
-            </div>
 
-            <div>
-                <div id="totoalOutcome">
+                <div style="height: 5px"></div>
 
-                    검색결과 : <span id="totalCnt">0</span>
+                <input
+                    type="text"
+                    id="roadaddress"
+                    value=""
+                    placeholder="도로명 주소, 지번 주소"
+                    readonly
+                />
 
-                </div>
-                <table id="list"></table>
+                <div style="height: 5px"></div>
 
-            </div>
-
-            <div id="pagingList" style='text-align:center;'></div>
-
-        </div>
-
-        <div style="height:5px;"></div>
-
-        <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
-
-        <div style="height:5px;"></div>
-
-        <input type="button" value="입력" onclick="inputData()" />
+                <input type="button" value="입력" onclick="inputData()" />
             </div>
         </div>
     </div>
@@ -76,32 +91,39 @@
 <script src="/js/road.js"></script>
 
 <script>
+    const form = document.querySelector('form');
 
-const form = document.querySelector('form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+        const name = document.getElementById('name').value;
+        const address = document.getElementById('address').value;
+        const phone = document.getElementById('phone').value;
 
-  const name = document.getElementById('name').value;
-  const address = document.getElementById('address').value;
-  const phone = document.getElementById('phone').value;
+        const data = {
+            name,
+            address,
+            phone,
+        };
 
-  const data = {
-    name,
-    address,
-    phone,
-  };
-
-  try {
-    const response = await axios.post('/api/hospitals/location', data);
-    const result = response.data;
-    alert('병원 등록이 완료되었습니다');
-    window.location.href = '/hospital';
-  } catch (error) {
-    alert('이미 병원이 등록되어 있습니다. 병원 관리자 페이지로 돌아가겠습니다.');
-    window.location.href = '/hospital';
-    console.error(error);
-  }
-});
+        try {
+            const response = await axios.post('/api/hospitals/location', data);
+            const result = response.data;
+            swal({
+                title: '😊 병원등록 성공!',
+                text: '병원 등록이 완료되었습니다',
+                icon: 'success',
+            }).then(() => {
+                window.location.href = '/hospital';
+            });
+        } catch (error) {
+            swal({
+                title: '😭 병원등록 실패',
+                text: '이미 병원이 등록되어 있습니다. 병원 관리자 페이지로 돌아가겠습니다.',
+                icon: 'error',
+            }).then(() => {
+                window.location.href = '/hospital';
+            });
+        }
+    });
 </script>
-

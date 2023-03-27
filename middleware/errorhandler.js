@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
         result = str[0].toLowerCase() + str.slice(1, str.length);
         return result;
     };
-
+    console.log(err);
     // /* token expired */
     // if (err.name === 'TokenExpiredError') {
     //     return res.render('index.ejs', { components: 'main', user: null });

@@ -199,11 +199,11 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err)
+            next(err);
         }
     };
 
-    customerSignup = async (req, res) => {
+    customerSignup = async (req, res, next) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
@@ -222,7 +222,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err)
+            next(err);
         }
     };
 
