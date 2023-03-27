@@ -227,7 +227,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            res.status(500).json({ message: err.message });
+            next(err)
         }
     };
 
@@ -251,7 +251,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            res.status(500).json({ message: err.message });
+            next(err)
         }
     };
 
@@ -261,7 +261,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10s',
+                expiresIn: '15m',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
