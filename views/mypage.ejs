@@ -449,7 +449,17 @@
 
                 if (page == 1 && !response.length) {
                     $('#pages-approved').attr('class', 'pagination d-none');
+                    return
                 }
+                if(!approved.length){
+                    $('#approved-nextPage').attr('onclick', '');
+                    return
+                }
+                if(approved.length < contentsPerPage){
+                    $('#approved-nextPage').attr('onclick', '');
+                }
+
+                $(`#approved`).empty();
                 for (let i = 0; i < approved.length; i++) {
                     let temp_html = `
                     <div class="row align-items-start"> 
@@ -469,10 +479,9 @@
                 </div>
             </div>`;
                     $('#approved').append(temp_html);
-                }
-                if (approved.length < contentsPerPage) {
-                    $('#approved-nextPage').attr('onclick', '');
-                }
+                }                
+                $(`#approved-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -492,6 +501,14 @@
                 if (page == 1 && !response.length) {
                     $('#pages-waiting').attr('class', 'pagination d-none');
                 }
+                if(!waiting.length){
+                    $('#waiting-nextPage').attr('onclick', '');
+                    return
+                }
+                if(waiting.length < contentsPerPage){
+                    $('#waiting-nextPage').attr('onclick', '');
+                }
+                $(`#waiting`).empty();
                 for (let i = 0; i < waiting.length; i++) {
                     let temp_html = `
                     <div class="row">
@@ -514,9 +531,8 @@
                 </div>`;
                     $('#waiting').append(temp_html);
                 }
-                if (waiting.length < contentsPerPage) {
-                    $('#waiting-nextPage').attr('onclick', '');
-                }
+                $(`#waiting-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -537,7 +553,14 @@
                 if (page == 1 && !response.length) {
                     $('#pages-doneOrReviewed').attr('class', 'd-none');
                 }
-
+                if(!doneOrReviewed.length){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                    return
+                }
+                if(doneOrReviewed.length < contentsPerPage){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                }
+                $(`#doneOrReviewed`).empty();
                 for (let i = 0; i < doneOrReviewed.length; i++) {
                     if (doneOrReviewed[i].status == 'done') {
                         let temp_html = `
@@ -586,9 +609,8 @@
                         $('#doneOrReviewed').append(temp_html);
                     }
                 }
-                if (doneOrReviewed.length < contentsPerPage) {
-                    $('#doneOrReviewed-nextPage').attr('onclick', '');
-                }
+                $(`#doneOrReviewed-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -607,6 +629,14 @@
                 if (page == 1 && !response.length) {
                     $('#pages-canceled').attr('class', 'd-none');
                 }
+                if(!canceled.length){
+                    $('#canceled-nextPage').attr('onclick', '');
+                    return
+                }
+                if(canceled.length < contentsPerPage){
+                    $('#canceled-nextPage').attr('onclick', '');
+                }
+                $(`#canceled`).empty();
                 for (let i = 0; i < canceled.length; i++) {
                     let temp_html = ` 
                     <div class="row"> 
@@ -625,9 +655,8 @@
                     `;
                     $('#canceled').append(temp_html);
                 }
-                if (canceled.length < contentsPerPage) {
-                    $('#canceled-nextPage').attr('onclick', '');
-                }
+                $(`#canceled-page`).html(Number(page));
+
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -817,12 +846,9 @@
         });
     }
     function nextPage(status) {
-        const presentPage = Number($(`#${status}-page`).html());
-        $(`#${status}-page`).html(presentPage + 1);
-        const changedPage = Number($(`#${status}-page`).html());
+        const changedPage = Number($(`#${status}-page`).html()) +1;
 
         const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
-        $(`#${status}`).empty();
         window[`get${upperCase}`](changedPage);
     }
     function previousPage(status) {
