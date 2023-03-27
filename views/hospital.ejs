@@ -751,12 +751,16 @@
         processData: false,
         contentType: false,
         success: function (response) {
-          alert('파일 업로드가 완료되었습니다!');
-          window.location.href = "/hospital"
+          swal({
+              title: '😊 업로드 성공!',
+              text: '파일 업로드가 완료되었습니다!',
+              icon: 'success',
+          }).then(() => {
+              window.location.href = "/hospital"
+          });
         },
         error: function (xhr, status, error) {
-          alert('파일 업로드 중 오류가 발생했습니다.');
-          console.error(xhr, status, error);
+          swal('😭 업로드 실패', '파일 업로드 중 오류가 발생했습니다.', error);
         }
       });
     });
@@ -769,17 +773,26 @@
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // 허용 가능한 파일 유형
 
     if (!allowedTypes.includes(file.type)) {
-      alert('이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.');
-      event.preventDefault();
-      return false;
+      swal({
+          title: '😓 죄송합니다.',
+          text: '이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.',
+          icon: 'warning',
+      }).then(() => {
+          event.preventDefault();
+          return false;
+      });
     }
 
     if (fileSize > maxSize) {
-      alert(`파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`);
-      event.preventDefault();
-      return false;
+      swal({
+          title: '😓 죄송합니다.',
+          text: `파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`,
+          icon: 'warning',
+      }).then(() => {
+          event.preventDefault();
+          return false;
+      });
     }
-
     return true;
   }
 </script>

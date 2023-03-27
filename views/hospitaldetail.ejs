@@ -1,10 +1,16 @@
 <head>
     <!-- 병원상세페이지 슬라이드를 위한 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+        crossorigin="anonymous"
+    ></script>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+    />
 </head>
 
 <style>
@@ -51,41 +57,31 @@
 
     } */
 
-
-    #content-image{
+    #content-image {
         padding: 30px;
         text-align: center;
     }
 
-    #bigimages{
+    #bigimages {
         margin-bottom: 10px;
-        
     }
 
-    #bigimage{
+    #bigimage {
         width: 500px;
         height: 500px;
     }
 
-    .small{
+    .small {
         width: 100px;
         height: 100px;
     }
-        
-
-
-
 </style>
 
-<div id="content-image">
-    
-</div>
-
+<div id="content-image"></div>
 
 <div id="main">
     <div class="inner" style="padding: 0">
         <div class="hospital_all">
-
             <!--상위 div 3개는 공통 <div id="index_01">
                 <div id="slide1">
                     <ul id="hospital-image"></ul>
@@ -147,10 +143,7 @@
     </div>
 </div>
 
-
 <script>
-
-    
     // setInterval(function () {
     //     $('#slide1>ul').delay(2500);
     //     $('#slide1>ul').animate({ marginLeft: '-1200px' });
@@ -165,46 +158,44 @@
         getdoctor();
         getdepartment();
         gethospitalimage();
-        hospitalName()
+        hospitalName();
     });
 
     const id = window.location.pathname.split('/')[2];
 
     //병원 이미지
     function gethospitalimage() {
-        console.log('의사 사진 내나');
         $.ajax({
             type: 'GET',
             url: `/api/hospitals/detail/${id}?time=${Date.now()}`,
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                console.log('의사 사진 성공');
 
-                console.log(hospitalData.oneHospital.hospitalImage)
-                
                 let temp_html = `
                 <div id="bigimages">
                     <img id="bigimage"
                     src="${hospitalData.oneHospital.hospitalImage[0].url}">
                 </div>
                 <div id="smallimages">
-                    ${hospitalData.oneHospital.hospitalImage.map(image => `<img class='small' src="${image.url}">`).join('')}
+                    ${hospitalData.oneHospital.hospitalImage
+                        .map((image) => `<img class='small' src="${image.url}">`)
+                        .join('')}
                 </div>
                 `;
 
                 $('#content-image').append(temp_html);
 
                 var bigPic = document.querySelector('#bigimage');
-                var smallPics = document.querySelectorAll(".small")
+                var smallPics = document.querySelectorAll('.small');
 
-                for (var i = 0; i < smallPics.length; i++){
-                    smallPics[i].addEventListener("click", changepic)
+                for (var i = 0; i < smallPics.length; i++) {
+                    smallPics[i].addEventListener('click', changepic);
                 }
 
-                function changepic(){
-                    var smallPicAttribute = this.getAttribute("src")
-                    bigPic.setAttribute("src", smallPicAttribute)
+                function changepic() {
+                    var smallPicAttribute = this.getAttribute('src');
+                    bigPic.setAttribute('src', smallPicAttribute);
                 }
 
                 // for (let i = 0; i < hospitalData.oneHospital.hospitalImage.length; i++) {
@@ -217,9 +208,8 @@
                 // }
             },
             error: function (error) {
-                console.log(error.responseJSON)
-            }
-            
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -232,8 +222,6 @@
             success: function (response) {
                 const hospitalData = response;
 
-                console.log("hospitalData", hospitalData.oneHospital)
-                
                 let hospitalName = hospitalData.oneHospital.hospitalName;
                 let hospitalAddress = hospitalData.oneHospital.hospitalAddress;
                 let hospitalphone = hospitalData.oneHospital.hospitalphone;
@@ -247,12 +235,11 @@
                     `;
 
                 $('#hospitalName').append(temp_html);
-                
             },
             error: function (error) {
-                console.log(error.responseJSON)
-            }
-        })
+                console.log(error.responseJSON);
+            },
+        });
     }
 
     //의사들 진료과목
@@ -264,18 +251,17 @@
             success: function (response) {
                 const hospitalData = response;
 
-                let hospitalDepartmentList = []
+                let hospitalDepartmentList = [];
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
-                    let department = hospitalData.oneHospital.doctors[i].department.split(',') ;
+                    let department = hospitalData.oneHospital.doctors[i].department.split(',');
 
-                    for(let j = 0; j <department.length; j++) {
-
-                        hospitalDepartmentList.push(department[j])    
+                    for (let j = 0; j < department.length; j++) {
+                        hospitalDepartmentList.push(department[j]);
                     }
                 }
 
-                hospitalDepartmentList = Array.from(new Set(hospitalDepartmentList))
+                hospitalDepartmentList = Array.from(new Set(hospitalDepartmentList));
 
                 let temp_html = `
                     <tr>
@@ -286,8 +272,8 @@
                 $('#departmentList').append(temp_html);
             },
             error: function (error) {
-                console.log(error.responseJSON)
-            }
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -299,8 +285,6 @@
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-
-                
 
                 for (let i = 0; i < hospitalData.oneHospital.doctors.length; i++) {
                     let doctors = hospitalData.oneHospital.doctors[i].doctors;
@@ -322,7 +306,6 @@
                         </tbody>`;
 
                     $('#doctorsList').append(temp_html);
-
 
                     for (let j = 0; j < workTime.length; j++) {
                         let day = workTime[j].day;
@@ -354,16 +337,16 @@
                         }
 
                         workTimeSum = `${day} ${start}~${end}`;
-                      
 
-                        document.getElementById(`${doctors}`).innerHTML += `<div>${workTimeSum}<div>`
+                        document.getElementById(
+                            `${doctors}`
+                        ).innerHTML += `<div>${workTimeSum}<div>`;
                     }
-
                 }
             },
             error: function (error) {
-                console.log(error.responseJSON)
-            }
+                console.log(error.responseJSON);
+            },
             // 토큰 재발급 api 함수
             // error: function (error) {
             //     if (error.message === 'accessToken 만료') {
@@ -383,16 +366,11 @@
             dataType: 'json',
             success: function (response) {
                 const hospitalData = response;
-                // console.log('리뷰에서', hospitalData.oneHospital.reviews[0].name.name);
 
                 for (let i = 0; i < hospitalData.oneHospital.reviews.length; i++) {
-                    // let userId = hospitalData.oneHospital.reviews[i].userId;
-                    // let name = hospitalData.oneHospital.reviews[i].name.name;
                     let contents = hospitalData.oneHospital.reviews[i].contents;
                     let star = hospitalData.oneHospital.reviews[i].star;
                     let createdAt = hospitalData.oneHospital.reviews[i].createdAt;
-
-                    // createdAt = createdAt.getDate()
 
                     const dateData = new Date(createdAt);
                     const year = dateData.getFullYear();
@@ -413,16 +391,8 @@
                 }
             },
             error: function (error) {
-                console.log(error.responseJSON)
-            }
-            // 토큰 재발급 api 함수
-            // error: function (error) {
-            //     if (error.message === 'accessToken 만료') {
-            //         whenExpiredToken();
-            //     } else {
-            //         console.log(error);
-            //     }
-            // },
+                console.log(error.responseJSON);
+            },
         });
     }
 
@@ -452,7 +422,25 @@
     // });
 
     function goToReservation() {
-        const id = window.location.pathname.split('/')[2];
-        location.href = `/users/reservation/${id}`;
+        if (document.cookie !== '') {
+            const id = window.location.pathname.split('/')[2];
+            location.href = `/users/reservation/${id}`;
+        } else if (document.cookie === '') {
+            swal({
+                title: '😓 죄송합니다.',
+                text: '모두의 병원 회원만 이용 가능합니다. 로그인 페이지로 이동할까요??',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    swal('로그인 페이지로 이동합니다.', '', 'success').then((value) => {
+                        window.location.href = '/login';
+                    });
+                } else {
+                    swal('취소되었습니다.');
+                }
+            });
+        }
     }
 </script>

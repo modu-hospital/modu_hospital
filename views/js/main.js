@@ -139,3 +139,26 @@
             if (event.keyCode == 27) $menu._hide();
         });
 })(jQuery);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const start = document.querySelector('#start');
+    const loginArrow = document.querySelector('#login_arrow');
+    const arrow = document.querySelector('#arrow');
+    const circleTest = document.querySelector('.circle-test');
+    const wrapper = document.querySelector('#wrapper');
+
+    if (window.location.pathname === '/' && !document.cookie) {
+        wrapper.style.pointerEvents = 'none';
+        wrapper.style.cursor = 'default';
+        wrapper.style.opacity = 0.25;
+
+        start.addEventListener('click', () => {
+            wrapper.style.removeProperty('pointer-events');
+            wrapper.style.removeProperty('cursor');
+            wrapper.style.opacity = 1;
+            loginArrow.remove();
+            arrow.remove();
+            circleTest.remove();
+        });
+    }
+});
