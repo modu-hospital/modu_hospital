@@ -14,6 +14,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const approved = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -48,6 +49,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const waiting = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -82,6 +84,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const doneOrReviewed = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],
@@ -119,6 +122,7 @@ class ReservationRepository {
         const reservationsPerPage = 3;
         const doneOrReviewed = await this.models.Reservation.findAll({
             attributes: [
+                [this.sequelize.col('doctors->hospitals.hospitalId'), 'hospitalId'],
                 [this.sequelize.col('doctors->hospitals.name'), 'hospitalName'],
                 [this.sequelize.col('doctors.name'), 'doctorName'],
                 [this.sequelize.col('doctors.image'), 'doctorImage'],

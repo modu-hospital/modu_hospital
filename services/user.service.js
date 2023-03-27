@@ -61,6 +61,7 @@ class UserService {
             userId,
             page
         );
+        console.log(doneOrReviewed)
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
@@ -70,6 +71,8 @@ class UserService {
 
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
+
+        console.log(existUser);
 
         if (existUser) {
             const err = await this.createError.UserAlreadyExist();
@@ -132,14 +135,33 @@ class UserService {
         const offset = (pageNum - 1) * limit;
         const allUser = await this.userRepository.PaginationByAll(limit, offset, type);
         const lastPage = Math.ceil(allUser.count / limit);
+
+        for (let i = 0; i < allUser.rows.length; i++) {
+            if (allUser.rows[i].idNumber.length > 14) {
+                let decryt = cryptor.decrypt(allUser.rows[i].idNumber, TWO_WAY_ENCRYPTION);
+                allUser.rows[i].idNumber = decryt;
+            } else {
+                allUser.rows[i].idNumber = allUser.rows[i].idNumber;
+            }
+        }
         return { allUser: allUser, lastPage: lastPage };
     };
 
-    findUserRole = async (role, pageNum, type) => {
+    getSearchList = async (search, pageNum, type) => {
         const limit = 10;
         const offset = (pageNum - 1) * limit;
         const allUser = await this.userRepository.getSearchList(search, limit, offset, type);
         const lastPage = Math.ceil(allUser.count / limit);
+
+        for (let i = 0; i < allUser.rows.length; i++) {
+            if (allUser.rows[i].idNumber.length > 14) {
+                let decryt = cryptor.decrypt(allUser.rows[i].idNumber, TWO_WAY_ENCRYPTION);
+                allUser.rows[i].idNumber = decryt;
+            } else {
+                allUser.rows[i].idNumber = allUser.rows[i].idNumber;
+            }
+        }
+
         return { allUser: allUser, lastPage: lastPage };
     };
 
@@ -184,8 +206,6 @@ class UserService {
     //     };
 
     //     transPort.sendMail(mailOptions, (err, info) => {
-    //         console.log(info.envelope);
-    //         console.log(info.messageId);
     //     });
     // };
     sendEmailForResetPassword = async (email) => {

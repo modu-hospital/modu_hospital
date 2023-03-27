@@ -45,17 +45,15 @@
     }
 </style>
 
-
-
 <section class="profile" style="background-color: #f4f5f7">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
-            <div class="col col-lg-6 mb-4 mb-lg-0">
+            <div class="col-8">
                 <div class="card mb-3" style="border-radius: 0.5rem">
                     <div class="row g-0">
                         <div class="col-md-12">
                             <div class="card-body p-4">
-                                <h6 style="float: left; margin-right: 6px">내 정보</h6>
+                                <a style="float: left; margin-right: 6px">내 정보</ㅁ>
                                 <a onclick="showInput()" id="editButton" class="table-link">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +72,7 @@
                                 <div id="user-data" class="row pt-1"></div>
                                 <div id="input-user-data" class="row pt-1 d-none">
                                     <div class="col-6 mb-3">
-                                        <h6>ID</h6>
+                                        <a>ID</a>
                                         <input
                                             id="input-user-loginId"
                                             class="text-muted"
@@ -82,15 +80,15 @@
                                         />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>이름</h6>
+                                        <a>이름</a>
                                         <input id="input-user-name" value="" class="text-muted" />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>연락처</h6>
+                                        <a>연락처</a>
                                         <input id="input-user-phone" class="text-muted" />
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <h6>주소</h6>
+                                        <a>주소</a>
                                         <input
                                             id="input-user-address"
                                             class="text-muted mb-1"
@@ -129,7 +127,7 @@
                                     </button>
                                 </div>
                                 <div id="approved-list" class="">
-                                    <h6>현재 예약된 진료</h6>
+                                    <a>현재 예약된 진료</a>
                                     <hr class="mt-0 mb-4" />
                                     <div id="approved" class="row pt-1"></div>
 
@@ -190,7 +188,7 @@
                                     </nav>
                                 </div>
                                 <div id="waiting-list" class="">
-                                    <h6>예약 확정 대기중</h6>
+                                    <a>예약 확정 대기중</a>
                                     <hr class="mt-0 mb-4" />
                                     <div id="waiting" class="row pt-1"></div>
 
@@ -251,7 +249,7 @@
                                     </nav>
                                 </div>
                                 <div id="doneOrReviewed-list" class="">
-                                    <h6>진료 내역</h6>
+                                    <a>진료 내역</a>
                                     <hr class="mt-0 mb-4" />
                                     <div id="doneOrReviewed" class="row pt-1"></div>
 
@@ -312,7 +310,7 @@
                                     </nav>
                                 </div>
                                 <div id="canceled-list" class="">
-                                    <h6>취소된 예약</h6>
+                                    <a>취소된 예약</a>
                                     <hr class="mt-0 mb-4" />
                                     <div id="canceled" class="row pt-1"></div>
                                     <nav aria-label="Page navigation example">
@@ -418,52 +416,67 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                <h5 class="modal-title" id="addressModalLabel">행정안정부 - 주소 검색 API</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                현재 페이지 : <input type="number" id="currentPage" value="1" style="text-align:center;" />
-                <div style="height:5px;"></div>
-                페이지당 출력 개수 : <input type="number" id="countPerPage" value="5" style="text-align:center;" />
-                <hr /><br />
+                현재 페이지 :
+                <input type="number" id="currentPage" value="1" style="text-align: center" />
+                <div style="height: 5px"></div>
+                페이지당 출력 개수 :
+                <input type="number" id="countPerPage" value="5" style="text-align: center" />
+                <hr />
+                <br />
 
-                <input type="text" id="zipCode" value="" onClick="addressWindowOpen();" placeholder="00000" readonly />
+                <input
+                    type="text"
+                    id="zipCode"
+                    value=""
+                    onClick="addressWindowOpen();"
+                    placeholder="00000"
+                    readonly
+                />
 
                 <input type="button" onClick="addressWindowOpen();" value="우편번호 찾기" />
 
                 <div id="wrap">
-                     <div id="closeBtn" onClick="addressWindowClose();">
-                     <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    <div id="closeBtn" onClick="addressWindowClose();">
+                        <i class="fa-sharp fa-solid fa-rectangle-xmark"></i>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            id="searchAddr"
+                            value=""
+                            onkeydown="enterSearch();"
+                            placeholder="도로명주소, 건물명 또는 지번 입력"
+                        />
+                        <input type="button" onClick="getAddr();" value="주소검색" />
+                    </div>
+
+                    <div>
+                        <div id="totoalOutcome">검색결과 : <span id="totalCnt">0</span></div>
+                        <table id="list"></table>
+                    </div>
+
+                    <div id="pagingList" style="text-align: center"></div>
                 </div>
-            <div>
-                <input type="text" id="searchAddr" value="" onkeydown="enterSearch();"
-                    placeholder="도로명주소, 건물명 또는 지번 입력" />
-                <input type="button" onClick="getAddr();" value="주소검색" />
-            </div>
 
-            <div>
-                <div id="totoalOutcome">
+                <div style="height: 5px"></div>
 
-                    검색결과 : <span id="totalCnt">0</span>
+                <input
+                    type="text"
+                    id="roadaddress"
+                    value=""
+                    placeholder="도로명 주소, 지번 주소"
+                    readonly
+                />
 
-                </div>
-                <table id="list"></table>
+                <div style="height: 5px"></div>
 
-            </div>
-
-            <div id="pagingList" style='text-align:center;'></div>
-
-        </div>
-
-        <div style="height:5px;"></div>
-
-        <input type="text" id="roadaddress" value="" placeholder="도로명 주소, 지번 주소" readonly />
-
-        <div style="height:5px;"></div>
-
-        <input type="button" value="입력" onclick="inputData()" />
+                <input type="button" value="입력" onclick="inputData()" />
             </div>
         </div>
     </div>
@@ -488,31 +501,31 @@
 
                 let temp_html = `
             <div class="col-6 mb-3">
-                <h6>ID</h6>
+                <a>ID</a>
                 <p id="user-loginId" class="text-muted">${userData.loginId}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>이름</h6>
+                <a>이름</a>
                 <p id="user-name" class="text-muted">${userData.name}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>연락처</h6>
+                <a>연락처</a>
                 <p id="user-phone" class="text-muted">${userData.phone}</p>
             </div>
             <div class="col-6 mb-3">
-                <h6>주소</h6>
-                <p id="user-address" class="text-muted">${userData.address}</p>
+                <a>주소</a>
+                <p id="user-address" class="text-muted">${userData.address || '표시할 정보가 없습니다'}</p>
             </div>
 
             `;
                 $('#user-data').append(temp_html);
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function getApproved(page) {
@@ -531,8 +544,8 @@
                 <img width="60px" src='${approved[i].doctorImage}'>
                 </div>
                 <div class="col-7 float="left" mb-3">
-                    <h6>${approved[i].hospitalName} ${approved[i].doctorName}</h6>
-                    <p class="text-muted">${approved[i].date}</p>
+                    <a href="/hospitals/${approved[i].hospitalId}">${approved[i].hospitalName} ${approved[i].doctorName}</a>
+                    <p class="text-muted">${approved[i].date.replaceAll('T', ' ').split('.')[0]}</p>
                 </div>
                 <div class="col-2">
                 <button data-reservationId="${approved[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
@@ -541,12 +554,12 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
@@ -564,8 +577,8 @@
             <img width="60px" src='${waiting[i].doctorImage}'>
         </div>
         <div class="col-7 mb-3">
-            <h6>${waiting[i].hospitalName} ${waiting[i].doctorName}</h6>
-            <p class="text-muted">${waiting[i].date}</p>
+            <a href="/hospitals/${waiting[i].hospitalId}">${waiting[i].hospitalName} ${waiting[i].doctorName}</a>
+            <p class="text-muted">${waiting[i].date.replaceAll('T', ' ').split('.')[0]}</p>
         </div>
         <div class="col-2">
         <button data-reservationId="${waiting[i].id}" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
@@ -574,21 +587,22 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
-    function getDoneOrReviewed( page) {
+    function getDoneOrReviewed(page) {
         $.ajax({
             type: 'GET',
             url: `/api/users/mypage/doneorreviewed?&page=${page}`,
             success: function (response) {
                 const doneOrReviewed = response;
+            
                 if (page == 1 && !response.length) {
                     $('#pages-doneOrReviewed').attr('class', 'd-none');
                 } else {
@@ -598,8 +612,8 @@
             <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
         </div>
         <div class="col-7 mb-3">
-            <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-            <p class="text-muted">${doneOrReviewed[i].date}</p>
+            <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</a>
+            <p class="text-muted">${doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]}</p>
         </div>
         <div class="col-2">
 
@@ -612,8 +626,8 @@
                 <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
             </div>
             <div class="col-7 mb-3">
-                <h6>${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</h6>
-                <p class="text-muted">${doneOrReviewed[i].date}</p>
+                <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${doneOrReviewed[i].hospitalName} ${doneOrReviewed[i].doctorName}</a>
+                <p class="text-muted">${doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]}</p>
             </div>
             <div class="col-2">
 
@@ -625,15 +639,15 @@
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
-    function getCanceled( page) {
+    function getCanceled(page) {
         $.ajax({
             type: 'GET',
             url: `/api/users/mypage/canceled?&page=${page}`,
@@ -648,24 +662,24 @@
             <img width="60px" src='${canceled[i].doctorImage}'>
             </div>
             <div class="col-10 mb-3">
-            <h6>${canceled[i].hospitalName} ${canceled[i].doctorName}</h6>
-            <p class="text-muted">${canceled[i].date}</p>
+            <a href="/hospitals/${canceled[i].hospitalId}">${canceled[i].hospitalName} ${canceled[i].doctorName}</a>
+            <p class="text-muted">${canceled[i].date.replaceAll('T', ' ').split('.')[0]}</p>
             </div>
         `;
                         $('#canceled').append(temp_html);
                     }
                 }
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function showInput() {
-        $('#editButton').attr('onclick', 'hideInput()')
+        $('#editButton').attr('onclick', 'hideInput()');
         $('#user-data').attr('class', 'row pt-1 d-none');
         $('#input-user-data').attr('class', 'row pt-1');
         $('#edit-buttons').attr('class', 'row pt-1');
@@ -676,7 +690,7 @@
         return false;
     }
     function hideInput() {
-        $('#editButton').attr('onclick', 'showInput()')
+        $('#editButton').attr('onclick', 'showInput()');
         $('#user-data').attr('class', 'row pt-1');
         $('#input-user-data').attr('class', 'row pt-1 d-none');
         $('#edit-buttons').attr('class', 'row pt-1 d-none');
@@ -703,16 +717,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#modal-confirm').attr('onclick', "$('#alertModal').modal('hide')");
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function showAddressModal() {
@@ -752,12 +766,11 @@
 
 <div style="height:5px;"></div>
 
-      `
+      `;
         $('#alertText').html(modalText);
         $('#modal-confirm').html('확인');
         $('#alertModal').modal('show');
     }
-    
 
     function showCancelModal() {
         const reservationId = event.target.dataset.reservationid;
@@ -780,16 +793,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"$('#alertModal').modal('hide')")
+                $('#modal-confirm').attr('onclick', "$('#alertModal').modal('hide')");
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
 
@@ -832,16 +845,16 @@
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',"location.reload()")
+                $('#modal-confirm').attr('onclick', 'location.reload()');
                 $('#alertModal').modal('show');
             },
-            error: function (response){
+            error: function (response) {
                 $('#alertModalLabel').html('알림');
                 $('#alertText').html(response.responseJSON.message);
                 $('#modal-confirm').html('확인');
-                $('#modal-confirm').attr('onclick',`$('#alertModal').modal('show');`)
+                $('#modal-confirm').attr('onclick', `$('#alertModal').modal('show');`);
                 $('#alertModal').modal('show');
-            }
+            },
         });
     }
     function nextPage(status) {
@@ -869,7 +882,6 @@
     }
     function inputAddress() {
         const text = $('#roadaddress').val();
-        console.log(text)
         $('#input-user-address').attr('value', text);
         const modal = document.getElementById('modal');
         modal.style.display = 'none';

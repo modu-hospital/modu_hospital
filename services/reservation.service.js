@@ -71,6 +71,19 @@ class ReservationService {
         proxyName
     ) => {
         let encryt = crypter.encrypt(idnumber, TWO_WAY_ENCRYPTION);
+        console.log(
+            doctorId,
+            userId,
+            relationship,
+            name,
+            idnumber,
+            phone,
+            address,
+            reservationdate,
+            reservationtime,
+            contents,
+            proxyName
+        );
 
         // relationship 숫자형 변환
         if (relationship === '본인') {
@@ -113,8 +126,6 @@ class ReservationService {
             proxyName,
             address
         );
-
-        let decryt = crypter.decrypt(encryt, TWO_WAY_ENCRYPTION);
 
         return {
             doctorId: registerData.doctorId,

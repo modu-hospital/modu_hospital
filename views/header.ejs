@@ -7,6 +7,7 @@
         </a>
 
         <!-- Nav -->
+
         <nav>
             <ul>
                 <li><a href="#menu">Menu</a></li>
@@ -19,32 +20,25 @@
 <nav id="menu">
     <h2>Menu</h2>
     <ul>
-        <% if (user) { %>
-          <% if (user === 'partner') { %>
-            <li><a href="/hospital">원장님의 공간</a></li>
-          <% } %>
-          <% if (user === 'admin') { %>
-            <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
-          <% } %>
-          <% if (user === 'customer') { %>
-            <li><a href="/users/mypage">내 정보</a></li>
-          <% } %>
-          <li><a href="#" style="cursor: pointer" id="logout" onclick="logout()">로그아웃 </a></li>
-        <% } else { %>
-          <li><a href="/login">로그인</a></li>
-          <li><a href="/signup">회원가입</a></li>
-          <li><a href="/signup">파트너 맺기</a></li>
+        <% if (user) { %> <% if (user === 'partner') { %>
+        <li><a href="/hospital">원장님의 공간</a></li>
+        <% } %> <% if (user === 'admin') { %>
+        <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
+        <% } %> <% if (user === 'customer') { %>
+        <li><a href="/users/mypage">내 정보</a></li>
         <% } %>
-        <% user = user || 'guest'; %>
-        <li><h4><%= user %>로 접속 중 입니다.</h4> </li>
-      </ul>
+        <li><a href="#" style="cursor: pointer" id="logout" onclick="logout()">로그아웃 </a></li>
+        <% } else { %>
+        <li><a href="/login">로그인</a></li>
+        <li><a href="/signup">회원가입</a></li>
+        <li><a href="/partner/signup">파트너 맺기</a></li>
+        <% } %> <% user = user || 'guest'; %>
+        <li><h4><%= user %>로 접속 중 입니다.</h4></li>
+    </ul>
 </nav>
 
 <script src="/js/logout.js"></script>
 <script src="/js/token.js"></script>
-
-
-
 
 <!-- <ul>
       <li><a href="" onclick="location.href='/'">Home</a></li>
@@ -55,6 +49,3 @@
       <li><a href="/hospital">원장님의 공간</a></li>
       <li><a href="" onclick="location.href='/admin'">서비스관리자</a></li>
 </ul> -->
-
-
-

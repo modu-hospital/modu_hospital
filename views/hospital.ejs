@@ -99,6 +99,28 @@
     font-size: 16px;
     color: #777;
   }
+
+
+
+  
+  #content-image {
+    padding: 30px;
+    text-align: center;
+  }
+
+  #bigimages {
+    margin-bottom: 10px;
+  }
+
+  #bigimage {
+    width: 310px;
+    height: 310;
+  }
+
+  .small {
+    width: 100px;
+    height: 100px;
+  }
 </style>
 <div id="main">
   <div class="inner">
@@ -202,7 +224,7 @@
           </div>
         </div>
       </div>
-      <div id="tab-5" class="tab-content" >
+      <div id="tab-5" class="tab-content">
         <div class="card">
           <div class="card-body">
             <h1 class="card-title">[name]</h1>
@@ -215,6 +237,10 @@
             <button onclick="location.href='/register'">우리 병원 등록하기</button>
             <button onclick="location.href='/edit'">우리 병원 수정하기</button>
           </div>
+          <div id="content-image">
+            <h3>병원 이미지 미리보기</h3>
+          </div>
+
           <form id="imageForm" action="/api/hospitals/register/image" method="POST" enctype="multipart/form-data">
             <input type="file" name="images" multiple>
             <input type="submit" value="Upload">
@@ -330,7 +356,7 @@
             },
             error: function (xhr, status, error) {
               // 에러가 발생했을 때 실행할 코드를 작성합니다.
-             // alert(xhr.responseJSON.message);
+              // alert(xhr.responseJSON.message);
             }
           });
         });
@@ -417,10 +443,8 @@
         // 승인 버튼 클릭 이벤트
         $(document).on('click', 'button[id^="waitingButton-"]', function () {
           let id = $(this).data('reservation-id');
-          console.log(id)
           let statusSelect = $(this).closest('tr').find('select').val();
           // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          console.log(statusSelect)
           $.ajax({
             type: 'PATCH',
             url: `/api/hospitals/reservation/status/${id}`,
@@ -517,7 +541,6 @@
           let id = $(this).data('reservation-id');
           let statusSelect = $(this).closest('tr').find('select').val();
           // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          console.log(statusSelect)
           $.ajax({
             type: 'PATCH',
             url: `/api/hospitals/reservation/status/${id}`,
@@ -538,7 +561,7 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-       // alert(xhr.responseJSON.message);
+        // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -582,6 +605,7 @@
   // html이 로드 되면 자동으로 informationHospital() -> (병원 정보)함수를 불러옴. 
   $(document).ready(function () {
     informationHospital();
+    getImageHospital();
   });
 
   function informationHospital() {
@@ -602,10 +626,43 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-       // alert(xhr.responseJSON.message);
+        // alert(xhr.responseJSON.message);
       }
     });
   }
+
+  // 병원 이미지 호출 
+  function getImageHospital() {
+  $.ajax({
+    type: 'GET',
+    url: '/api/hospitals/information/hospitalImage',
+    dataType: 'json',
+    success: function (response) {
+      const imagehospital = response;
+      let temp_html = `
+          <div id="bigimages">
+            <img id="bigimage"
+              src="${imagehospital[0].url}">
+          </div>
+          <div id="smallimages">
+            ${imagehospital.map(image => `<img class="small" src="${image.url}">`).join('')}
+          </div>`;
+      $('#content-image').append(temp_html);
+      var bigPic = document.querySelector("#bigimage");
+      var smallPics = document.querySelectorAll(".small");
+
+      for (let i = 0; i < smallPics.length; i++) {
+        smallPics[i].addEventListener("click", changepic);
+        smallPics[i].onclick = changepic;
+      }
+
+      function changepic() {
+        let smallPicAttribute = this.getAttribute("src");
+        bigPic.setAttribute("src", smallPicAttribute);
+      }
+    }
+  })
+}
 
   // AJAX를 통해 데이터를 불러오는 함수
   // function loadProfileCards() {
@@ -632,7 +689,7 @@
       },
       error: function (xhr, status, error) {
         // 실패 시 알림 메시지 출력
-       // alert(xhr.responseJSON.message);
+        // alert(xhr.responseJSON.message);
       }
     });
   }
@@ -672,9 +729,18 @@
   // 페이지 로드 시 카드를 로드하는 함수 호출
   loadProfileCards();
 
-  $(document).ready(function() {
-    $('#imageForm').submit(function(e) {
+  // 이미지 유효성 검사 및 업로드 
+  $(document).ready(function () {
+    $('#imageForm').submit(function (e) {
       e.preventDefault();
+      const files = document.querySelector('input[type="file"]').files;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!validateFile(file)) {
+          return;
+        }
+      }
 
       var formData = new FormData(this);
 
@@ -684,15 +750,49 @@
         data: formData,
         processData: false,
         contentType: false,
-        success: function(response) {
-          alert('파일 업로드가 완료되었습니다!');
-          window.location.href = "/hospital"
+        success: function (response) {
+          swal({
+              title: '😊 업로드 성공!',
+              text: '파일 업로드가 완료되었습니다!',
+              icon: 'success',
+          }).then(() => {
+              window.location.href = "/hospital"
+          });
         },
-        error: function(xhr, status, error) {
-          alert('파일 업로드 중 오류가 발생했습니다.');
-          console.error(xhr, status, error);
+        error: function (xhr, status, error) {
+          swal('😭 업로드 실패', '파일 업로드 중 오류가 발생했습니다.', error);
         }
       });
     });
   });
+
+  function validateFile(file) {
+    const fileSize = file.size;
+    const fileName = file.name;
+    const maxSize = 5242880; // 5MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // 허용 가능한 파일 유형
+
+    if (!allowedTypes.includes(file.type)) {
+      swal({
+          title: '😓 죄송합니다.',
+          text: '이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.',
+          icon: 'warning',
+      }).then(() => {
+          event.preventDefault();
+          return false;
+      });
+    }
+
+    if (fileSize > maxSize) {
+      swal({
+          title: '😓 죄송합니다.',
+          text: `파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`,
+          icon: 'warning',
+      }).then(() => {
+          event.preventDefault();
+          return false;
+      });
+    }
+    return true;
+  }
 </script>

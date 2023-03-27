@@ -94,7 +94,6 @@ class UserRepository {
     };
 
     PaginationByAll = async (limit, offset, type) => {
-        console.log('레파에서: ', offset, limit, type);
         let users;
         const tabType = { offset, limit };
         if (type === 'customer') {
@@ -201,16 +200,6 @@ class UserRepository {
         }
         return users;
     };
-
-    // PaginationByRole = async (limit, offset, role, type) => {
-    //     let users;
-    //     const tabType = { offset, limit };
-    //     users = await this.userModel.findAndCountAll({
-    //         ...tabType,
-    //         where: { role },
-    //     });
-    //     return users;
-    // };
 
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });

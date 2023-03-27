@@ -1,40 +1,39 @@
 <style>
-/* 의사 프로필 카드*/
-.profile-card {
-			background-color: white;
-			border-radius: 5px;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-			padding: 20px;
-			width: 300px;
-			margin: 50px auto;
-		}
-		
-		.profile-card img {
-			width: 100%;
-			border-radius: 5px 5px 0 0;
-		}
-		
-		.profile-card h1 {
-			font-size: 24px;
-			margin-top: 0;
-		}
-		
-		.profile-card p {
-			font-size: 16px;
-			color: #777;
-		}
+    /* 의사 프로필 카드*/
+    .profile-card {
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 300px;
+        margin: 50px auto;
+    }
 
+    .profile-card img {
+        width: 100%;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .profile-card h1 {
+        font-size: 24px;
+        margin-top: 0;
+    }
+
+    .profile-card p {
+        font-size: 16px;
+        color: #777;
+    }
 </style>
 <h1>의사 정보 수정</h1>
 <form id="form">
     <div class="profile-card" id="profile-card">
         <label for="profile-image-upload" class="custom-file-upload">프로필 사진 변경</label>
-        <input id="image" type="file" name="image" required/>
-        <img src="" alt="의사 사진">
+        <input id="image" type="file" name="image" required />
+        <img src="" alt="의사 사진" />
         <div class="info">
             <div class="input-container">
                 <label for="name">이름</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required />
             </div>
             <div class="input-container">
                 <label for="contents">소개글</label>
@@ -50,56 +49,57 @@
 </form>
 
 <script>
-
     $(document).ready(function () {
         informationDoctor();
-    })
+    });
 
     function informationDoctor() {
         const urlParams = new URLSearchParams(window.location.search); // url 주소 params를 가져옴
-        const doctorId = urlParams.get('doctorId');   
+        const doctorId = urlParams.get('doctorId');
 
-  $.ajax({
-    type:'GET',
-    url: `/api/hospitals/information/doctor/${doctorId}`,
-    dataType: 'json',
-    success: function (response) {
-        const doctor = response; 
-      // 의사 정보를 form에 삽입
-      $('.profile-card img').attr('src', doctor.image); // attr JQuery 메서드 
-      $('#name').val(doctor.name);
-      $('#contents').val(doctor.contents);
-      $('.profile-card .info .created-at').text(`Created At: ${doctor.createdAt}`);
-      $('.profile-card .info .updated-at').text(`Updated At: ${doctor.updatedAt}`);
+        $.ajax({
+            type: 'GET',
+            url: `/api/hospitals/information/doctor/${doctorId}`,
+            dataType: 'json',
+            success: function (response) {
+                const doctor = response;
+                // 의사 정보를 form에 삽입
+                $('.profile-card img').attr('src', doctor.image); // attr JQuery 메서드
+                $('#name').val(doctor.name);
+                $('#contents').val(doctor.contents);
+                $('.profile-card .info .created-at').text(`Created At: ${doctor.createdAt}`);
+                $('.profile-card .info .updated-at').text(`Updated At: ${doctor.updatedAt}`);
+            },
+        });
     }
-  })
-}
 
-$('#form').submit(function (e) {
-    e.preventDefault(); // 기본 이벤트 막기
+    $('#form').submit(function (e) {
+        e.preventDefault(); // 기본 이벤트 막기
 
-    const formData = new FormData(this); // form 데이터 가져오기
-    console.log(formData);
-    const urlParams = new URLSearchParams(window.location.search); // url 주소 params를 가져옴
-    const doctorId = urlParams.get('doctorId');  
-    $.ajax({
-        type: 'PUT', // 수정 요청
-        url: `/api/hospitals/edit/doctor/${doctorId}`,
-        data: formData, // form 데이터 전송
-        contentType: false, // 데이터 전송 형식 지정 안함
-        processData: false, // 데이터 처리 안함
-        success: function (response) {
-            alert('의사 정보가 수정되었습니다.');
-            // 성공적으로 수정된 경우 처리할 내용을 작성
-
-            window.location.href = 'http://localhost:3000/hospital';
-            // alert 이후 병원 관리페이지로 이동 
-        },
-        error: function (xhr) {
-            alert('의사 정보 수정에 실패했습니다.');
-            // 수정에 실패한 경우 처리할 내용을 작성
-        },
+        const formData = new FormData(this); // form 데이터 가져오기
+        const urlParams = new URLSearchParams(window.location.search); // url 주소 params를 가져옴
+        const doctorId = urlParams.get('doctorId');
+        $.ajax({
+            type: 'PUT', // 수정 요청
+            url: `/api/hospitals/edit/doctor/${doctorId}`,
+            data: formData, // form 데이터 전송
+            contentType: false, // 데이터 전송 형식 지정 안함
+            processData: false, // 데이터 처리 안함
+            success: function (response) {
+                swal({
+                    // 성공적으로 수정된 경우 처리할 내용을 작성
+                    title: '😊 의사 정보 수정 성공!',
+                    text: '의사 정보가 수정되었습니다.',
+                    icon: 'success',
+                }).then(() => {
+                    window.location.href = '/hospital';
+                    // alert 이후 병원 관리페이지로 이동
+                });
+            },
+            error: function (xhr) {
+                swal('😭 의사 정보 수정 실패', '의사 정보 수정에 실패했습니다.', 'error');
+                // 수정에 실패한 경우 처리할 내용을 작성
+            },
+        });
     });
-});
- 
 </script>

@@ -521,7 +521,6 @@ class HospitalService {
                         console.error(err);
                         reject(new Error(`Failed to upload image ${index + 1} to S3`));
                     } else {
-                        console.log(`File ${index + 1} uploaded successfully. ${data.Location}`);
                         fs.unlinkSync(file.path);
                         resolve(data.Location);
                     }
@@ -592,6 +591,10 @@ class HospitalService {
                     return category.categories.department;
                 });
 
+                doctor.workingTimes.sort((a, b) => {
+                    return a.dayOfTheWeek - b.dayOfTheWeek;
+                });
+
                 //workingTime은 함수가 아니라서?..
                 //categories는..
                 const workTime = doctor.workingTimes.map((work) => {
@@ -646,15 +649,11 @@ class HospitalService {
             }
             let hospitalId = hospitaldata.hospitalId;
             const getHospitalImage = await this.hospitalRepository.getHospitalImage(hospitalId);
-            console.log(getHospitalImage)
-            return getHospitalImage; 
+            return getHospitalImage;
         } catch (error) {
             throw error;
         }
-       
-        
-
-    }
+    };
 }
 
 module.exports = HospitalService;

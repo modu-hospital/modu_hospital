@@ -479,13 +479,12 @@ class HospitalRepository {
             const getHospitalImage = await this.hospitalImageFileModel.findAll({
                 where: { hospitalId },
                 attributes: ['url'],
-            })
-            return getHospitalImage ;
-
+            });
+            return getHospitalImage;
         } catch (err) {
             throw err;
         }
-    }
+    };
 }
 
 module.exports = HospitalRepository;
