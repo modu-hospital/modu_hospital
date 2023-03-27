@@ -26,11 +26,12 @@ const whenExpiredToken = function () {
         dataType: 'json',
         success: function (response) {
             //console.log("if response 전")
+            // console.log("재발급", new Date(Date.now()))
             if (response) {
                 //console.log("if response")
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 840000);//72000000
+                }, 7000);//72000000 //840000
             }
 
             // console.log("if response 후")
@@ -50,6 +51,8 @@ const whenExpiredToken = function () {
             // const refreshToken =  document.cookie.split(';')[1].split('=')[1]
         },
         error: function (error) {
+            console.log("재발급 실패", new Date(Date.now()))
+
             console.log('error.responseJSON.message', error.responseJSON);
         },
     });
