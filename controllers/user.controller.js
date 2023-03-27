@@ -264,7 +264,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '15m',
+                expiresIn: '10s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
@@ -290,8 +290,8 @@ class UserController {
 
     logout = async (req, res) => {
         try {
-            res.cookie('accessToken', '');
-            res.cookie('refreshToken', '');
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
             res.status(200).json({ message: '로그아웃 되었습니다.' });
         } catch (error) {
             res.status(500).json(error);

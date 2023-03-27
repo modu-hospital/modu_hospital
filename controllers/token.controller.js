@@ -41,7 +41,7 @@ class TokenController {
                     { userId: user.userId },
                     process.env.JWT_SECRET_KEY,
                     {
-                        expiresIn: '15m',
+                        expiresIn: '10s',
                     }
                 );
 
