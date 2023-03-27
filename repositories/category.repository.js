@@ -22,50 +22,79 @@ class CategoryRepository {
         leftLongitude,
         leftLatitude
     ) => {
-        return await this.categoryModel.findOne({
-            where: { department },
-            include: [
-                {
-                    model: this.doctorCategoryMappingModel,
-                    as: 'categoriesMapping',
-                    include: [
-                        {
-                            model: this.doctorModel,
-                            as: 'doctors',
-                            required: false,
-                            attributes: ['name'],
-                            include: [
-                                {
-                                    model: this.hospitalModel,
-                                    as: 'hospitals',
-                                    where: {
-                                        longitude: {
-                                            [Op.and]: [
-                                                { [Op.gte]: leftLongitude },
-                                                { [Op.lte]: rightLongitude },
-                                            ],
+        try {
+            return await this.categoryModel.findOne({
+                where: { department },
+                include: [
+                    {
+                        model: this.doctorCategoryMappingModel,
+                        as: 'categoriesMapping',
+                        include: [
+                            {
+                                model: this.doctorModel,
+                                as: 'doctors',
+                                required: false,
+                                attributes: ['name'],
+                                include: [
+                                    {
+                                        model: this.hospitalModel,
+                                        as: 'hospitals',
+                                        where: {
+                                            longitude: {
+                                                [Op.and]: [
+                                                    { [Op.gte]: leftLongitude },
+                                                    { [Op.lte]: rightLongitude },
+                                                ],
+                                            },
+                                            latitude: {
+                                                [Op.and]: [
+                                                    { [Op.gte]: leftLatitude },
+                                                    { [Op.lte]: rightLatitude },
+                                                ],
+                                            },
                                         },
-                                        latitude: {
-                                            [Op.and]: [
-                                                { [Op.gte]: leftLatitude },
-                                                { [Op.lte]: rightLatitude },
-                                            ],
-                                        },
+                                        required: false,
+                                        include: [
+                                            {
+                                                model: this.hospitalImageFileModel,
+                                                as: 'hospitalImageFiles',
+                                            },
+                                        ],
                                     },
-                                    required: false,
-                                    include: [
-                                        {
-                                            model: this.hospitalImageFileModel,
-                                            as: 'hospitalImageFiles',
-                                        },
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        });
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    searchHospitalInfo = async (id) => {
+        try {
+            const hospitals = await this.hospitalModel.findByPk(id, {
+                attributes: ['hospitalId', 'name', 'address', 'phone'],
+                include: [
+                    { model: this.hospitalImageFileModel, as: 'hospitalImageFiles' },
+                    {
+                        model: this.doctorModel,
+                        as: 'doctors',
+                        include: [
+                            {
+                                model: this.doctorCategoryMappingModel,
+                                as: 'doctorCategoryMappings',
+                                include: [{ model: this.categoryModel, as: 'categories' }],
+                            },
+                        ],
+                    },
+                ],
+            });
+            return hospitals;
+        } catch (err) {
+            throw err;
+        }
     };
 }
 
