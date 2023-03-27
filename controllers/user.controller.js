@@ -17,6 +17,7 @@ class UserController {
         try {
             const pageNum = req.query.page || 1;
             const type = req.query.type;
+            console.log('컨트롤러의: pageNum: ', pageNum, 'type: ', type);
             const PaginationByRole = await this.userService.PaginationByRole(pageNum, type);
             return res.status(200).json(PaginationByRole);
         } catch (err) {
@@ -24,10 +25,25 @@ class UserController {
         }
     };
 
+    // (admin) role별 조회
+    // getRoleUser = async (req, res, next) => {
+    //     try {
+    //         const { role } = req.params;
+    //         const pageNum = req.query.page || 1;
+    //         const type = req.query.type;
+
+    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
+    //         return res.status(200).send(roleUserInfo);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // };
+
     getAllSearch = async (req, res) => {
         const search = req.query.search;
         const pageNum = req.query.page || 1;
         const type = req.query.type;
+        console.log('컨트롤러의 search: : ', search, 'pageNum: ', pageNum, 'type: ', type);
         const getSearchList = await this.userService.getSearchList(search, pageNum, type);
         return res.status(200).json(getSearchList);
     };
@@ -165,6 +181,7 @@ class UserController {
                 process.env.JWT_SECRET_KEY
             );
             const reservation = await this.reservationService.findReservationById(reservationId);
+            console.log(reservation.userId != accessToken.userId);
             if (reservation.userId != accessToken.userId) {
                 throw this.createError.notAuthorized();
             }
@@ -179,6 +196,20 @@ class UserController {
             next(err);
         }
     };
+
+    getMyReview = async (req, res, next) =>{
+        try{
+            const reservationId = req.params.id
+            
+            const review = await this.UserController.getMyReview(reservationId)
+
+            console.log(review)
+            return res.status(200).json(review)
+
+        }catch(err){
+
+        }
+    }
 
     partnerSignup = async (req, res) => {
         const role = 'waiting';
@@ -199,12 +230,13 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err);
+            res.status(500).json({ message: err.message });
         }
     };
 
-    customerSignup = async (req, res, next) => {
+    customerSignup = async (req, res) => {
         const role = 'customer';
+        console.log(req.body);
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
@@ -222,7 +254,7 @@ class UserController {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
             }
-            next(err);
+            res.status(500).json({ message: err.message });
         }
     };
 
@@ -232,7 +264,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '24h',
+                expiresIn: '10s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
@@ -258,8 +290,8 @@ class UserController {
 
     logout = async (req, res) => {
         try {
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
+            res.cookie('accessToken', '');
+            res.cookie('refreshToken', '');
             res.status(200).json({ message: '로그아웃 되었습니다.' });
         } catch (error) {
             res.status(500).json(error);
@@ -362,3 +394,4 @@ class UserController {
 }
 
 module.exports = UserController;
+

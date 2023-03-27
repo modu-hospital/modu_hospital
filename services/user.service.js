@@ -69,6 +69,12 @@ class UserService {
         return canceled;
     };
 
+    getMyReview = async (reservationId) => {
+        const review = await this.reservationRepository.findReviewByReservationId(reservationId)
+
+        return review
+    }
+
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
 

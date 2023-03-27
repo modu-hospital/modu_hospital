@@ -21,6 +21,8 @@ router.patch('/mypage/cancel/:id', auth, userController.cancelReservation);
 
 router.post('/mypage/review/:id', auth, userController.createReview);
 
+router.get('/mypage/review/:id', userController.getMyReview)
+
 router.post('/signup/partner', userController.partnerSignup);
 router.post('/signup/customer', userController.customerSignup);
 router.post('/login', userController.login);

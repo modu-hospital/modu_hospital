@@ -154,6 +154,24 @@ class ReservationRepository {
         return doneOrReviewed;
     };
 
+    findReviewByReservationId = async (reservationId) =>{
+        const review = await this.models.Reservation.findOne({
+            attributes:[],
+            include:[{
+                paranoid:false,
+                model:this.models.Review,
+                as:'reviews',
+                attributes:[
+                    'star',
+                    'content',
+                    'createdAt',
+                    'updatedAt'
+                ]
+            }],
+            where:{id:reservationId},
+        })
+    }
+
     findHospitalByReservationId = async (reservationId) => {
         // const query = `SELECT DISTINCT h.hospitalId, h.userId, h.name, h.address, h.phone, h.createdAt, h.updatedAt FROM reservations as r
         // inner join doctors as d on r.doctorId = d.doctorId
