@@ -129,7 +129,7 @@
                                 <div id="approved-list" class="">
                                     <h>현재 예약된 진료</h>
                                     <hr class="mt-0 mb-4" />
-                                    <div id="approved" class="row pt-1"></div>
+                                    <div id="approved" class=""></div>
 
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination" id="pages-approved">
@@ -167,7 +167,7 @@
                                 <div id="waiting-list" class="">
                                     <h>예약 확정 대기중</h>
                                     <hr class="mt-0 mb-4" />
-                                    <div id="waiting" class="row pt-1"></div>
+                                    <div id="waiting" class=""></div>
 
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination" id="pages-waiting">
@@ -205,7 +205,7 @@
                                 <div id="doneOrReviewed-list" class="">
                                     <h>진료 내역</h>
                                     <hr class="mt-0 mb-4" />
-                                    <div id="doneOrReviewed" class="row pt-1"></div>
+                                    <div id="doneOrReviewed" class=""></div>
 
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination" id="pages-doneOrReviewed">
@@ -243,7 +243,7 @@
                                 <div id="canceled-list" class="">
                                     <h>취소된 예약</h>
                                     <hr class="mt-0 mb-4" />
-                                    <div id="canceled" class="row pt-1"></div>
+                                    <div id="canceled" class=""></div>
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination" id="pages-canceled">
                                             <li class="page-item">
@@ -462,22 +462,22 @@
                 $(`#approved`).empty();
                 for (let i = 0; i < approved.length; i++) {
                     let temp_html = `
-                    <div class="row align-items-start"> 
-                <div class="col mb-3" float="left" width="60px">
-                <img width="60px" src='${approved[i].doctorImage}'>
-                </div>
-                <div class="col float="left" mb-3">
-                    <a href="/hospitals/${approved[i].hospitalId}">${approved[i].hospitalName} ${
-                        approved[i].doctorName
-                    }</a>
-                    <p class="text-muted">${approved[i].date.replaceAll('T', ' ').split('.')[0]}</p>
-                </div>
-                <div class="col">
-                <button data-reservationId="${
-                    approved[i].id
-                }" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
-                </div>
-            </div>`;
+                    <div class="row">
+                        <div class="col-2 mb-3" float="left" width="60px">
+                            <img width="60px" src='${approved[i].doctorImage}'>
+                        </div>
+                        <div class="col float="left" mb-3">
+                            <a href="/hospitals/${approved[i].hospitalId}">${approved[i].hospitalName} ${
+                                approved[i].doctorName
+                            }</a>
+                            <p class="text-muted">${approved[i].date.replaceAll('T', ' ').split('.')[0]}</p>
+                        </div>
+                        <div class="col-4">
+                            <button data-reservationId="${
+                                approved[i].id
+                            }" onclick="showCancelModal()" type="button" class="btn btn-info float-right mr-4">취소하기</button>
+                        </div>
+                    </div>`;
                     $('#approved').append(temp_html);
                 }                
                 $(`#approved-page`).html(Number(page));
@@ -512,23 +512,23 @@
                 for (let i = 0; i < waiting.length; i++) {
                     let temp_html = `
                     <div class="row">
-                    <div class=" mb-3" float="'left" width="60px">
-                    <img width="60px" src='${waiting[i].doctorImage}'>
-                    </div>
-                    <div class=" mb-3">
-                        <a href="/hospitals/${waiting[i].hospitalId}">${waiting[i].hospitalName} ${
-                        waiting[i].doctorName
-                    }</a>
-                        <p class="text-muted">${
-                            waiting[i].date.replaceAll('T', ' ').split('.')[0]
-                        }</p>
-                    </div>
-                    <div class="">
-                    <button data-reservationId="${
-                        waiting[i].id
-                    }" onclick="showCancelModal()" type="button" class="btn btn-info">취소하기</button>
-                    </div>
-                </div>`;
+                        <div class="col-2 mb-3" float="'left" width="60px">
+                            <img width="60px" src='${waiting[i].doctorImage}'>
+                        </div>
+                        <div class="col mb-3">
+                            <a href="/hospitals/${waiting[i].hospitalId}">${waiting[i].hospitalName} ${
+                            waiting[i].doctorName
+                            }</a>
+                            <p class="text-muted">${
+                                waiting[i].date.replaceAll('T', ' ').split('.')[0]
+                            }</p>
+                        </div>
+                        <div class="col-4">
+                            <button data-reservationId="${
+                            waiting[i].id
+                        }" onclick="showCancelModal()" type="button" class="btn btn-info float-right mr-4">취소하기</button>
+                        </div>
+                    </div>`;
                     $('#waiting').append(temp_html);
                 }
                 $(`#waiting-page`).html(Number(page));
@@ -565,10 +565,10 @@
                     if (doneOrReviewed[i].status == 'done') {
                         let temp_html = `
                         <div class="row"> 
-                        <div class=" mb-3" float="'left" width="60px">
+                        <div class="col-2 mb-3" float="'left" width="60px">
                         <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
                         </div>
-                        <div class=" mb-3">
+                        <div class="col mb-3">
                             <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${
                             doneOrReviewed[i].hospitalName
                         } ${doneOrReviewed[i].doctorName}</a>
@@ -576,10 +576,10 @@
                                 doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]
                             }</p>
                         </div>
-                        <div class="">
+                        <div class="col-4">
                         <button data-reservationId="${
                             doneOrReviewed[i].id
-                        }" onclick="showReviewModal()" type="button" class="btn btn-info">리뷰 남기기</button>
+                        }" onclick="showReviewModal()" type="button" class="btn btn-info float-right mr-4">리뷰 남기기</button>
                         </div>
                     </div>`;
 
@@ -587,10 +587,10 @@
                     } else {
                         let temp_html = `
                         <div class="row">
-                        <div class=" mb-3" float="'left" width="60px">
+                        <div class="col-2 mb-3" float="'left" width="60px">
                         <img width="60px" src='${doneOrReviewed[i].doctorImage}'>
                         </div>
-                        <div class=" mb-3">
+                        <div class="col mb-3">
                             <a href="/hospitals/${doneOrReviewed[i].hospitalId}">${
                             doneOrReviewed[i].hospitalName
                         } ${doneOrReviewed[i].doctorName}</a>
@@ -598,11 +598,11 @@
                                 doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0]
                             }</p>
                         </div>
-                        <div class="">
+                        <div class="col-4">
 
                         <button data-reservationId="${
                             doneOrReviewed[i].id
-                        }" type="button" class="btn btn-dark" disabled>리뷰 작성됨</button>
+                        }" type="button" class="btn btn-dark float-right mr-4" disabled>리뷰 작성됨</button>
                         </div>
                     </div>`;
 
@@ -640,7 +640,7 @@
                 for (let i = 0; i < canceled.length; i++) {
                     let temp_html = ` 
                     <div class="row"> 
-                        <div class="col mb-3" float="'left" width="60px">
+                        <div class="col-2 mb-3" float="'left" width="60px">
                             <img width="60px" src='${canceled[i].doctorImage}'>
                         </div>
                         <div class="col mb-3">
