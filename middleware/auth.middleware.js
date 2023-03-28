@@ -45,14 +45,12 @@ const authMiddleware = async (req, res, next) => {
         return res.status(400).json({ message: 'refreshToken 만료' });
     }
 
-    
-
     // access 검증 후, expired 만료시
     // 만료가 되면 재발급
     if (!accessTokenValidate) {
         //accessToken만료시
-        
-        console.log("accessToken 만료시간: ", new Date(Date.now()))
+
+        console.log('accessToken 만료시간: ', new Date(Date.now()));
 
         // return res.status(400).json({ message: 'accessToken 만료' });
         //만료시 에러를 받고

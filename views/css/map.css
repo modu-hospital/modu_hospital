@@ -7,6 +7,7 @@ button {
     background-color: #216cad;
     color: #ffffff;
     border: none;
+    cursor: pointer;
 }
 
 button:hover {
@@ -36,7 +37,6 @@ a {
     color: #216cad;
     font-size: 3.5vh;
     font-weight: bold;
-    border: 1px solid #22222222;
 }
 
 #listBtn {

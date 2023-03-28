@@ -31,7 +31,7 @@ const whenExpiredToken = function () {
                 //console.log("if response")
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 597000);//72000000 //840000
+                }, 597000); //72000000 //840000
             }
 
             // console.log("if response 후")
@@ -51,7 +51,7 @@ const whenExpiredToken = function () {
             // const refreshToken =  document.cookie.split(';')[1].split('=')[1]
         },
         error: function (error) {
-            console.log("재발급 실패", new Date(Date.now()))
+            console.log('재발급 실패', new Date(Date.now()));
 
             console.log('error.responseJSON.message', error.responseJSON);
         },
