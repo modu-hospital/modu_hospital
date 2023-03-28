@@ -607,10 +607,16 @@ class HospitalService {
                 //workingTime은 함수가 아니라서?..
                 //categories는..
                 const workTime = doctor.workingTimes.map((work) => {
+                    // const currentMonth = new Date().getMonth() + 1
+                    // console.log(currentMonth)
+                    // console.log(work.startDate)
+             
                     return {
                         day: work.dayOfTheWeek,
                         start: work.startTime,
                         end: work.endTime,
+                        startDate: work.startDate,
+                        endDate: work.endDate
                     };
                 });
 

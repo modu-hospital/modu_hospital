@@ -329,7 +329,10 @@
                                 break;
                         }
 
-                        workTimeSum = `${day} ${start}~${end}`;
+                        let start_minutes = start.substr(0, 5);
+                        let end_minutes = end.substr(0, 5);
+
+                        workTimeSum = `${day} ${start_minutes}~${end_minutes}`;
 
                         document.getElementById(
                             `${doctors}`
