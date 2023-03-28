@@ -158,7 +158,6 @@
                     // .then(res => res.json())
                     .then((response) => {
                         //response= data
-                        console.log(response);
                         if (response.status === 412) {
                             throw new Error('이미 존재하는 이메일 입니다.');
                         }
@@ -179,7 +178,7 @@
                             text: err.message,
                             icon: 'error',
                         }).then(() => {
-                            window.location.reload();
+                            return;
                         });
                     });
             });
