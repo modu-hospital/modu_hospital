@@ -81,7 +81,7 @@ router.get('/findmypassword', (req, res) => {
 });
 
 // 비밀번호 재설정 페이지
-router.get('/users/resetpassword/:params', (req, res) => {
+router.get('/users/resetpassword/:token', (req, res) => {
     let userRole = null;
 
     return res.render('index.ejs', {
