@@ -1,5 +1,6 @@
 const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
+const moment = require('moment')
 
 const formatterdDate = '%Y-%m-%d %H:%i';
 
@@ -447,7 +448,14 @@ class HospitalRepository {
                             {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes',
-                                attributes: ['dayOfTheWeek', 'startTime', 'endTime'],
+                                attributes: ['dayOfTheWeek', 'startTime', 'endTime', 'startDate', 'endDate'],
+                                where: {
+                                    // 현재 월의 데이터만 추출하도록 조건 추가
+                                    startDate: {
+                                      [Op.gte]: moment().startOf('month').toDate(),
+                                      [Op.lte]: moment().endOf('month').toDate(),
+                                    },
+                                  },
                             },
                             {
                                 model: this.doctorCategoryMappingModel,
