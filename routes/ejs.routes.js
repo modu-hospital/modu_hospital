@@ -1,14 +1,26 @@
 const express = require('express');
 const router = express.Router();
+const cookieParser = require('cookie-parser');
 const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
-    if (!req.cookies.accessToken) {
+    if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
         let userRole = null;
+
+        res.cookie('wrapperExecuted', 'first');
         return res.render('index.ejs', {
             components: 'main',
             user: userRole,
+            isOpen: true,
+        });
+    } else if (!req.cookies.accessToken && req.cookies.wrapperExecuted) {
+        let userRole = null;
+        res.cookie('wrapperExecuted', 'second');
+        return res.render('index.ejs', {
+            components: 'main',
+            user: userRole,
+            isOpen: false,
         });
     } else if (res.locals.user) {
         userRole = res.locals.user.role;
