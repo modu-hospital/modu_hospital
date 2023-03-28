@@ -22,12 +22,14 @@ router.get('/', auth, (req, res) => {
             user: userRole,
             isOpen: false,
         });
-    } else if (res.locals.user) {
+    } else if (res.locals.user && req.cookies.wrapperExecuted) {
         userRole = res.locals.user.role;
 
+        res.cookie('wrapperExecuted', 'second');
         return res.render('index.ejs', {
             components: 'main',
             user: userRole,
+            isOpen: false,
         });
     }
 });
