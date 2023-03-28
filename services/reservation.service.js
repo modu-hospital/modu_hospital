@@ -41,11 +41,10 @@ class ReservationService {
             const err = this.createError.reservationStatusIsNotDone();
             throw err;
         }
-        //추가예정 : token의 userId와 reservation.userId가 일치하는지 확인
         const hospital = await this.reservationRepository.findHospitalByReservationId(
             reservationId
         );
-        const hospitalId = hospital.hospitalId;
+        const hospitalId = hospital.dataValues.hospitalId;
         const userId = reservation.userId;
 
         const review = await this.reservationRepository.createReview(

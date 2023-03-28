@@ -22,7 +22,7 @@ class CategoryController {
 
             res.json(hospitals);
         } catch (err) {
-            next(err);
+            throw err;
         }
     };
 }
