@@ -50,131 +50,131 @@ describe('Layered Architecture Pattern Hospital Service Unit Test', () => {
     test('Hospital Service findNearHospitalsInfo Method', async () => {
         const returnValue = [
             {
-                "hospitalId": 3,
-                "name": "삼성서울병원",
-                "address": "서울특별시 강남구 일원로 81",
-                "phone": "0215993115",
-                "hospitalImageFiles": [
-                  {
-                    "id": 20,
-                    "hospitalId": 3,
-                    "url": "https://moduhospital.s3.amazonaws.com/doctors/1679565728605_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%902.png",
-                    "createdAt": "2023-03-23T10:02:10.000Z",
-                    "updatedAt": "2023-03-23T10:02:10.000Z"
-                  },
-                  {
-                    "id": 19,
-                    "hospitalId": 3,
-                    "url": "https://moduhospital.s3.amazonaws.com/doctors/1679565728407_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%901.png",
-                    "createdAt": "2023-03-23T10:02:10.000Z",
-                    "updatedAt": "2023-03-23T10:02:10.000Z"
-                  }
+                hospitalId: 3,
+                name: '삼성서울병원',
+                address: '서울특별시 강남구 일원로 81',
+                phone: '0215993115',
+                hospitalImageFiles: [
+                    {
+                        id: 20,
+                        hospitalId: 3,
+                        url: 'https://moduhospital.s3.amazonaws.com/doctors/1679565728605_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%902.png',
+                        createdAt: '2023-03-23T10:02:10.000Z',
+                        updatedAt: '2023-03-23T10:02:10.000Z',
+                    },
+                    {
+                        id: 19,
+                        hospitalId: 3,
+                        url: 'https://moduhospital.s3.amazonaws.com/doctors/1679565728407_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%901.png',
+                        createdAt: '2023-03-23T10:02:10.000Z',
+                        updatedAt: '2023-03-23T10:02:10.000Z',
+                    },
                 ],
-                "doctors": [
-                  {
-                    "doctorId": 141,
-                    "hospitalId": 3,
-                    "name": "김나래",
-                    "image": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679566129648_doctor3.png",
-                    "contents": "안녕하세요 내과전문의 입니다. 잘 부탁드려요~",
-                    "createdAt": "2023-03-23T10:08:49.000Z",
-                    "updatedAt": "2023-03-23T10:08:49.000Z",
-                    "deletedAt": null,
-                    "doctorCategoryMappings": [
-                      {
-                        "id": 78,
-                        "doctorId": 141,
-                        "categoryId": 22,
-                        "createdAt": "2023-03-23T10:09:40.000Z",
-                        "updatedAt": "2023-03-23T10:09:40.000Z",
-                        "categories": {
-                          "id": 22,
-                          "department": "흉부외과",
-                          "createdAt": "2023-03-15T00:54:10.000Z",
-                          "updatedAt": "2023-03-15T00:54:10.000Z"
-                        }
-                      },
-                      {
-                        "id": 77,
-                        "doctorId": 141,
-                        "categoryId": 17,
-                        "createdAt": "2023-03-23T10:09:40.000Z",
-                        "updatedAt": "2023-03-23T10:09:40.000Z",
-                        "categories": {
-                          "id": 17,
-                          "department": "정형외과",
-                          "createdAt": "2023-03-15T00:00:19.000Z",
-                          "updatedAt": "2023-03-15T00:00:19.000Z"
-                        }
-                      },
-                      {
-                        "id": 76,
-                        "doctorId": 141,
-                        "categoryId": 14,
-                        "createdAt": "2023-03-23T10:09:40.000Z",
-                        "updatedAt": "2023-03-23T10:09:40.000Z",
-                        "categories": {
-                          "id": 14,
-                          "department": "외과",
-                          "createdAt": "2023-03-14T22:32:17.000Z",
-                          "updatedAt": "2023-03-14T22:32:17.000Z"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "doctorId": 140,
-                    "hospitalId": 3,
-                    "name": "허남기",
-                    "image": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679566180567_doctor4.png",
-                    "contents": "안녕하세요 외과 전문의 입니다. 잘 부탁드려요",
-                    "createdAt": "2023-03-23T10:09:40.000Z",
-                    "updatedAt": "2023-03-23T10:09:40.000Z",
-                    "deletedAt": null,
-                    "doctorCategoryMappings": [
-                      {
-                        "id": 75,
-                        "doctorId": 140,
-                        "categoryId": 28,
-                        "createdAt": "2023-03-23T10:08:50.000Z",
-                        "updatedAt": "2023-03-23T10:08:50.000Z",
-                        "categories": {
-                          "id": 28,
-                          "department": "류마티스내과",
-                          "createdAt": "2023-03-23T10:08:49.000Z",
-                          "updatedAt": "2023-03-23T10:08:49.000Z"
-                        }
-                      },
-                      {
-                        "id": 74,
-                        "doctorId": 140,
-                        "categoryId": 27,
-                        "createdAt": "2023-03-23T10:08:50.000Z",
-                        "updatedAt": "2023-03-23T10:08:50.000Z",
-                        "categories": {
-                          "id": 27,
-                          "department": "내분비내과",
-                          "createdAt": "2023-03-23T10:08:49.000Z",
-                          "updatedAt": "2023-03-23T10:08:49.000Z"
-                        }
-                      },
-                      {
-                        "id": 73,
-                        "doctorId": 140,
-                        "categoryId": 26,
-                        "createdAt": "2023-03-23T10:08:50.000Z",
-                        "updatedAt": "2023-03-23T10:08:50.000Z",
-                        "categories": {
-                          "id": 26,
-                          "department": "감염내과",
-                          "createdAt": "2023-03-23T10:08:49.000Z",
-                          "updatedAt": "2023-03-23T10:08:49.000Z"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
+                doctors: [
+                    {
+                        doctorId: 141,
+                        hospitalId: 3,
+                        name: '김나래',
+                        image: 'https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679566129648_doctor3.png',
+                        contents: '안녕하세요 내과전문의 입니다. 잘 부탁드려요~',
+                        createdAt: '2023-03-23T10:08:49.000Z',
+                        updatedAt: '2023-03-23T10:08:49.000Z',
+                        deletedAt: null,
+                        doctorCategoryMappings: [
+                            {
+                                id: 78,
+                                doctorId: 141,
+                                categoryId: 22,
+                                createdAt: '2023-03-23T10:09:40.000Z',
+                                updatedAt: '2023-03-23T10:09:40.000Z',
+                                categories: {
+                                    id: 22,
+                                    department: '흉부외과',
+                                    createdAt: '2023-03-15T00:54:10.000Z',
+                                    updatedAt: '2023-03-15T00:54:10.000Z',
+                                },
+                            },
+                            {
+                                id: 77,
+                                doctorId: 141,
+                                categoryId: 17,
+                                createdAt: '2023-03-23T10:09:40.000Z',
+                                updatedAt: '2023-03-23T10:09:40.000Z',
+                                categories: {
+                                    id: 17,
+                                    department: '정형외과',
+                                    createdAt: '2023-03-15T00:00:19.000Z',
+                                    updatedAt: '2023-03-15T00:00:19.000Z',
+                                },
+                            },
+                            {
+                                id: 76,
+                                doctorId: 141,
+                                categoryId: 14,
+                                createdAt: '2023-03-23T10:09:40.000Z',
+                                updatedAt: '2023-03-23T10:09:40.000Z',
+                                categories: {
+                                    id: 14,
+                                    department: '외과',
+                                    createdAt: '2023-03-14T22:32:17.000Z',
+                                    updatedAt: '2023-03-14T22:32:17.000Z',
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        doctorId: 140,
+                        hospitalId: 3,
+                        name: '허남기',
+                        image: 'https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679566180567_doctor4.png',
+                        contents: '안녕하세요 외과 전문의 입니다. 잘 부탁드려요',
+                        createdAt: '2023-03-23T10:09:40.000Z',
+                        updatedAt: '2023-03-23T10:09:40.000Z',
+                        deletedAt: null,
+                        doctorCategoryMappings: [
+                            {
+                                id: 75,
+                                doctorId: 140,
+                                categoryId: 28,
+                                createdAt: '2023-03-23T10:08:50.000Z',
+                                updatedAt: '2023-03-23T10:08:50.000Z',
+                                categories: {
+                                    id: 28,
+                                    department: '류마티스내과',
+                                    createdAt: '2023-03-23T10:08:49.000Z',
+                                    updatedAt: '2023-03-23T10:08:49.000Z',
+                                },
+                            },
+                            {
+                                id: 74,
+                                doctorId: 140,
+                                categoryId: 27,
+                                createdAt: '2023-03-23T10:08:50.000Z',
+                                updatedAt: '2023-03-23T10:08:50.000Z',
+                                categories: {
+                                    id: 27,
+                                    department: '내분비내과',
+                                    createdAt: '2023-03-23T10:08:49.000Z',
+                                    updatedAt: '2023-03-23T10:08:49.000Z',
+                                },
+                            },
+                            {
+                                id: 73,
+                                doctorId: 140,
+                                categoryId: 26,
+                                createdAt: '2023-03-23T10:08:50.000Z',
+                                updatedAt: '2023-03-23T10:08:50.000Z',
+                                categories: {
+                                    id: 26,
+                                    department: '감염내과',
+                                    createdAt: '2023-03-23T10:08:49.000Z',
+                                    updatedAt: '2023-03-23T10:08:49.000Z',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
         ];
 
         mockHospitalRepository.findNearHospitalsInfo.mockResolvedValue(returnValue);
@@ -188,20 +188,21 @@ describe('Layered Architecture Pattern Hospital Service Unit Test', () => {
 
         expect(infos).toEqual([
             {
-                "hospitalId": 3,
-                "name": "삼성서울병원",
-                "address": "서울특별시 강남구 일원로 81",
-                "phone": "0215993115",
-                "hospitalImage": "https://moduhospital.s3.amazonaws.com/doctors/1679565728605_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%902.png",
-                "departments": [
-                  "감염내과",
-                  "내분비내과",
-                  "류마티스내과",
-                  "외과",
-                  "정형외과",
-                  "흉부외과"
-                ]
-              },
+                hospitalId: 3,
+                name: '삼성서울병원',
+                address: '서울특별시 강남구 일원로 81',
+                phone: '0215993115',
+                hospitalImage:
+                    'https://moduhospital.s3.amazonaws.com/doctors/1679565728605_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%902.png',
+                departments: [
+                    '감염내과',
+                    '내분비내과',
+                    '류마티스내과',
+                    '외과',
+                    '정형외과',
+                    '흉부외과',
+                ],
+            },
         ]);
     });
 
