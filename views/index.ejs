@@ -25,12 +25,12 @@
         <!-- css -->
         <link rel="stylesheet" href="/css/hospitalRegister.css" />
         <link rel="stylesheet" href="/css/main.css" />
-        <link rel="stylesheet" href="/css/tabmenu.css" />
         <noscript> <link rel="stylesheet" href="/css/noscript.css" /> </noscript>
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
-        <% if (user === null && components === "main" ) { %> <%- include('wrapper.ejs') %> <% } %>
+        <% if (user === null && components === "main" && isOpen === true) { %> <%-
+        include('wrapper.ejs') %> <% } %>
         <!-- Wrapper -->
         <div id="wrapper">
             <!-- Header -->
@@ -65,5 +65,7 @@
         <script src="/js/util.js"></script>
         <script src="/js/main.js"></script>
         <script src="/js/tabmenu.js"></script>
+        <!-- <script defer src="/js/socket.js"></script> -->
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     </body>
 </html>

@@ -28,7 +28,7 @@ const whenExpiredToken = function () {
             if (response) {
                 setTimeout(() => {
                     whenExpiredToken();
-                }, 72000000);
+                }, 597000); //72000000 //840000
             }
 
             // while (document.cookie.length !== 0) {
@@ -36,6 +36,7 @@ const whenExpiredToken = function () {
             // }
             const newAccessToken = response.newAccessToken;
             $.ajaxSetup({ headers: { Authorization: 'Bearer ' + newAccessToken } });
+
             // 로그인 안했을 때
             // 로그인 했을 때
             // 로그인 중에 재발급 받았을 때
@@ -44,6 +45,8 @@ const whenExpiredToken = function () {
             // const refreshToken =  document.cookie.split(';')[1].split('=')[1]
         },
         error: function (error) {
+            console.log('재발급 실패', new Date(Date.now()));
+
             console.log('error.responseJSON.message', error.responseJSON);
         },
     });

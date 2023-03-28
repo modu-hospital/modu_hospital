@@ -24,6 +24,20 @@ class UserController {
         }
     };
 
+    // (admin) role별 조회
+    // getRoleUser = async (req, res, next) => {
+    //     try {
+    //         const { role } = req.params;
+    //         const pageNum = req.query.page || 1;
+    //         const type = req.query.type;
+
+    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
+    //         return res.status(200).send(roleUserInfo);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // };
+
     getAllSearch = async (req, res) => {
         const search = req.query.search;
         const pageNum = req.query.page || 1;
@@ -180,6 +194,16 @@ class UserController {
         }
     };
 
+    getMyReview = async (req, res, next) => {
+        try {
+            const reservationId = req.params.id;
+
+            const review = await this.UserController.getMyReview(reservationId);
+
+            return res.status(200).json(review);
+        } catch (err) {}
+    };
+
     partnerSignup = async (req, res) => {
         const role = 'waiting';
 
@@ -203,7 +227,7 @@ class UserController {
         }
     };
 
-    customerSignup = async (req, res, next) => {
+    customerSignup = async (req, res) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
@@ -232,7 +256,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '24h',
+                expiresIn: '600s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {

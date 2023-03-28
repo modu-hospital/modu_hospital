@@ -136,6 +136,7 @@
           <li class="tab-link" data-tab="tab-4">리뷰관리</li>
           <li class="tab-link" data-tab="tab-5">병원 정보</li>
           <li class="tab-link" data-tab="tab-6">의사 정보</li>
+          <li class="tab-link" data-tab="tab-7">실시간채팅</li>
         </ul>
 
         <div id="tab-1" class="tab-content current">
@@ -255,6 +256,10 @@
         </div>
 
       </div>
+      <div id="tab-7" class="tab-content">
+        <div id="room-list">
+        </div>
+      </div>
     </section>
   </div>
 </div>
@@ -268,6 +273,7 @@
     waitedreservationList();
     approvedreservationList();
     reviewList();
+    getRoomIds();
   });
 
 
@@ -795,4 +801,23 @@
     }
     return true;
   }
+
+  const hospitalId = "<%= userId %>";
+  console.log(hospitalId)
+  // 룸 리스트를 가져와서 처리하는 함수
+  async function getRoomIds(hospitalId) {
+  const response = await fetch('/hospital', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      hospitalId: hospitalId // 병원 ID
+    })
+  });
+  const data = await response.json();
+  return data.roomIds;
+  console.log(data)
+}
+
 </script>

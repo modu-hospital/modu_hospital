@@ -100,8 +100,8 @@
                 <table id="hospitalName">
                     <tr>
                         <th>병원이름</th>
-                        <th>전화번호</th>
                         <th>주소</th>
+                        <th>전화번호</th>
                     </tr>
                 </table>
             </div>
@@ -138,20 +138,14 @@
             </div>
             <div>
                 <button onclick="goToReservation()">예약하기</button>
+                <button id="chat-button">1대1 채팅 문의하기</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // setInterval(function () {
-    //     $('#slide1>ul').delay(2500);
-    //     $('#slide1>ul').animate({ marginLeft: '-1200px' });
-    //     $('#slide1>ul').delay(2500);
-    //     $('#slide1>ul').animate({ marginLeft: '-2400px' });
-    //     $('#slide1>ul').delay(2500);
-    //     $('#slide1>ul').animate({ marginLeft: '0px' });
-    // });
+
 
     $(document).ready(function () {
         getReview();
@@ -443,4 +437,54 @@
             });
         }
     }
+
+    const userId = "<%= userId %>";
+    console.log(userId)
+    const hopitalId = window.location.pathname.split('/')[2];
+    console.log(hopitalId)
+
+    // 채팅창 스크립트
+    const openChat = async () => {
+    // 팝업 창 열기
+    const popup = window.open('/chat', '_blank', 'width=420,height=518');
+
+    // 룸 생성 API 호출하여 새로운 룸 ID 받아오기
+    const response = await fetch('/create-room', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+    userId: userId, // 환자 ID
+    hospitalId: hopitalId // 병원 ID
+    })
+    });
+    const data = await response.json();
+    console.log("data 입니다",data)
+    const roomId = data.roomId;
+    console.log(roomId);
+    // 채팅창이 열리면 소켓 연결
+    popup.onload = () => {
+    // 소켓 연결
+    console.log("팝업창 오픈",roomId)
+    const socket = io('http://localhost:3000/chat', { query: { roomId } });
+        socket.on('connect', () => {
+            console.log('팝업창 소켓 연결')
+            socket.emit('createRoom'); // 새로운 룸 만들기 
+        });
+        socket.on('roomCreated', (roomId) => {
+            console.log(`새로운 룸이 생성됐어요! (ID: ${roomId})`);
+            // 새로운 룸 ID를 이용한 채팅창 오픈 
+            popup.location.href = `/chat/${roomId}`;
+        })
+        socket.on('disconnect', () => {
+        console.log("소켓 연결이 끊어졌어요 :(");
+    });
+
+    };
+    };
+
+    // 버튼 클릭 시 채팅창 열기
+    document.getElementById('chat-button').addEventListener('click', openChat);
+
 </script>

@@ -1,24 +1,27 @@
 const express = require('express');
 const router = express.Router();
+const cookieParser = require('cookie-parser');
 const auth = require('../middleware/auth.middleware');
-// const socketIOClient = require('socket.io-client');
-
-// const socket = socketIOClient('http://localhost:3000');
-
-//   router.post('/send', function(req, res) {
-//     console.log(req)
-//     const message = req.body.message;
-//     socket.emit('message', message);
-//     res.send('success');
-//   });
+const { v4: uuidv4 } = require('uuid');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
-    if (!req.cookies.accessToken) {
+    if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
         let userRole = null;
+
+        res.cookie('wrapperExecuted', 'first');
         return res.render('index.ejs', {
             components: 'main',
             user: userRole,
+            isOpen: true,
+        });
+    } else if (!req.cookies.accessToken && req.cookies.wrapperExecuted) {
+        let userRole = null;
+        res.cookie('wrapperExecuted', 'second');
+        return res.render('index.ejs', {
+            components: 'main',
+            user: userRole,
+            isOpen: false,
         });
     } else if (res.locals.user) {
         userRole = res.locals.user.role;
@@ -57,7 +60,7 @@ router.get('/users/reservation/:hospitalId', auth, (req, res) => {
     } else if (res.locals.user.role === 'customer') {
         return res.render('index.ejs', {
             components: 'reservation',
-            user: res.locals.user.role,
+            user: res.locals.user.role
         });
     } else if (res.locals.user.role === 'partner') {
         return res.send(
@@ -91,7 +94,7 @@ router.get('/findmypassword', (req, res) => {
 });
 
 // 비밀번호 재설정 페이지
-router.get('/users/resetpassword/:params', (req, res) => {
+router.get('/users/resetpassword/:token', (req, res) => {
     let userRole = null;
 
     return res.render('index.ejs', {
@@ -114,6 +117,7 @@ router.get('/hospital', auth, (req, res) => {
         return res.render('index.ejs', {
             components: 'hospital',
             user: res.locals.user.role,
+            userId: res.locals.user.userId
         });
     }
 });
@@ -175,6 +179,7 @@ router.get('/hospitals/:hospitalId', auth, (req, res) => {
         return res.render('index.ejs', {
             components: 'hospitaldetail',
             user: userRole,
+            userId:  res.locals.user.userId,
         });
     }
 });
@@ -231,15 +236,39 @@ router.get('/partner/signup', (req, res) => {
     });
 });
 
-router.get('/test',(req, res) => {
-    let userRole = null;
-    if (res.locals.user) {
-        userRole = res.locals.user.role;
-    }
-    res.render('index.ejs', {
-        components: 'test',
-        user: userRole,
-    });
-})
+router.get('/chat',(req, res) => {
+    res.render('test.ejs')
+});
+
+router.post('/create-room', (req, res) => {
+    const roomId = uuidv4();
+    const userId = req.body.userId;
+    const hospitalId = req.body.hospitalId;
+
+    // roomId, userId, hospitalId 정보를 이용하여 새로운 룸을 생성
+    const rooms=[]
+    const newRoom = {
+        id: roomId,
+        users: [userId, hospitalId],
+        messages: []
+    };
+     // 방 정보를 저장
+     // rooms.push(newRoom);
+     rooms[roomId] = newRoom;
+
+
+    // 생성된 룸의 ID를 클라이언트에게 반환
+    res.send({roomId});
+});
+
+router.post('/hospital', (req, res) => {
+    const hospitalId = req.body.hospitalId;
+    console.log(hospitalId)
+    // 병원 ID를 이용하여 해당 병원에 속한 룸 리스트를 검색
+    const rooms = rooms.filter(room => room.users.includes(hospitalId));
+    const roomIds = rooms.map(room => room.id);
+    // 클라이언트에게 해당 병원의 룸 리스트 전송
+    res.send({ roomIds });
+  });
 
 module.exports = router;

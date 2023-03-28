@@ -114,6 +114,15 @@ Element.prototype.setStyle = function (styles) {
     return this;
 };
 
+window.onclick = function (event) {
+    let background = document.getElementById('background');
+    let addressModal = document.getElementById('address_modal');
+    if (event.target === background) {
+        addressModal.style.display = 'none';
+        background.remove();
+    }
+};
+
 function reservationTime() {
     // 모달창 띄우기
     viewModal('my_modal');
@@ -435,6 +444,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 } else {
                                     resTime =
                                         Math.floor(reserveTime) +
@@ -500,6 +514,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 } else {
                                     resTime =
                                         Math.floor(reserveTime) +
@@ -581,6 +600,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 } else {
                                     resTime =
                                         Math.floor(reserveTime) +
@@ -644,6 +668,11 @@ function timeTableMaker(selectedYear, selectedMonth, selectedDate, dayWeek) {
                                     resDoctorForm = document.getElementById('selectedDoctor');
                                     resTimeForm.value = resTime;
                                     resDoctorForm.value = resDoctor;
+                                    swal(
+                                        '😁 도우미 출몰!',
+                                        '예약이 가능한 시간대입니다! 아래에 예약하기 버튼을 눌러주세요!',
+                                        'info'
+                                    );
                                 } else {
                                     resTime =
                                         Math.floor(reserveTime) +
@@ -944,8 +973,8 @@ function inputData() {
     let totalCnt = document.getElementById('totalCnt');
     let zipCode = document.getElementById('zipCode');
     let searchAddr = document.getElementById('searchAddr');
-    let resDateForm = document.getElementById('reservationAddress');
-    let resTimeForm = document.getElementById('detailAddress');
+    let reservationaddress = document.getElementById('reservationAddress');
+    let detailaddress = document.getElementById('detailAddress');
     let addressModal = document.getElementById('address_modal');
     let background = document.getElementById('background');
     const reservationAddress = $('#reservationAddress').val();
@@ -957,8 +986,8 @@ function inputData() {
         background.remove();
         addressModal.style.display = 'none';
 
-        resTimeForm.value = '';
-        resDateForm.value = '';
+        reservationaddress.value = '';
+        detailaddress.value = '';
         zipCode.value = '';
         searchAddr.value = '';
         totalCnt.style.display = 'none';
@@ -1017,7 +1046,7 @@ function reservaionCheck() {
                     text: '예약신청이 완료되었습니다.',
                     icon: 'success',
                 }).then(() => {
-                    location.href = `/users/reservation/${id}`;
+                    history.back();
                 });
             },
             error: function (error) {

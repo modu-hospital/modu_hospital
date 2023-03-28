@@ -9,24 +9,6 @@ const app = express();
 dotenv.config();
 
 const http = createServer(app);
-const io = socketio(http);
-  
-  io.on("connection", (socket) => {
-    console.log("새로운 소켓이 연결됐어요!");
-
-    socket.emit("RESERVATIONS", {
-      relationship:"본인",
-      name:'김크리스',
-      phone: '010-1111-1111',
-      reservationdate: '2023-03-30',
-      reservationtime: '10:30 ~ 11:00'
-    });
-    
-    socket.on('disconnect', () => {
-      console.log("김아무개가 연결을 끊어버림")
-    })
-  
-  });
 
 /* define router */
 const router = require('./routes');
@@ -47,6 +29,30 @@ app.use(errorHandler);
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname + '/views')));
+
+const io = socketio(http);
+
+
+io.on('connection', (socket) => {
+  console.log('새로운 소켓이 연결됐어요!');
+
+  socket.on('createRoom', () => {
+    const roomId = uuidv4(); // 새로운 룸 ID 생성
+    console.log(roomId)
+    socket.join(roomId); // 새로운 룸에 클라이언트 참여
+    socket.emit('roomCreated', roomId); // 클라이언트에게 새로운 룸 ID 전송
+    console.log(`새로운 룸이 생성됐어요! (ID: ${roomId})`);
+  });
+
+  socket.on('sendMessage', (msg) => {
+    console.log('message: ' + msg);
+    io.emit('receiveMessage', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('소켓 연결이 끊어졌어요 :(');
+  });
+});
 
 const server = http.listen(process.env.PORT, () =>
     console.log(`${process.env.PORT}번 포트가 열렸습니다.`)
