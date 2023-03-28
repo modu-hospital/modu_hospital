@@ -30,7 +30,8 @@
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
-        <% if (user === null && components === "main" ) { %> <%- include('wrapper.ejs') %> <% } %>
+        <% if (user === null && components === "main" && isOpen === true) { %> <%-
+        include('wrapper.ejs') %> <% } %>
         <!-- Wrapper -->
         <div id="wrapper">
             <!-- Header -->
