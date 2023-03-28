@@ -261,7 +261,7 @@ class UserController {
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10s',
+                expiresIn: '600s',
             });
 
             const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
