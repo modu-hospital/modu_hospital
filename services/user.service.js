@@ -61,7 +61,6 @@ class UserService {
             userId,
             page
         );
-        console.log(doneOrReviewed);
         return doneOrReviewed;
     };
     getCanceledReservation = async (userId, page) => {
