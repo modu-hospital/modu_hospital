@@ -78,8 +78,6 @@ class UserService {
     signup = async (name, loginId, password, phone, idNumber, role) => {
         const existUser = await this.userRepository.findUser(loginId);
 
-        console.log(existUser);
-
         if (existUser) {
             const err = await this.createError.UserAlreadyExist();
             throw err;
