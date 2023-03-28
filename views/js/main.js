@@ -146,8 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const arrow = document.querySelector('#arrow');
     const circleTest = document.querySelector('.circle-test');
     const wrapper = document.querySelector('#wrapper');
-
-    if (window.location.pathname === '/' && !document.cookie) {
+    if (window.location.pathname === '/' && getCookie('wrapperExecuted') === 'first') {
         wrapper.style.pointerEvents = 'none';
         wrapper.style.cursor = 'default';
         wrapper.style.opacity = 0.25;
@@ -160,5 +159,23 @@ document.addEventListener('DOMContentLoaded', () => {
             arrow.remove();
             circleTest.remove();
         });
+    } else if (window.location.pathname === '/' && getCookie('wrapperExecuted') === 'second') {
+        wrapper.style.opacity = 1;
     }
 });
+
+function getCookie(name) {
+    var nameOfCookie = name + '=';
+    var x = 0;
+    while (x <= document.cookie.length) {
+        var y = x + nameOfCookie.length;
+        if (document.cookie.substring(x, y) == nameOfCookie) {
+            if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
+                endOfCookie = document.cookie.length;
+            return unescape(document.cookie.substring(y, endOfCookie));
+        }
+        x = document.cookie.indexOf(' ', x) + 1;
+        if (x == 0) break;
+    }
+    return '';
+}

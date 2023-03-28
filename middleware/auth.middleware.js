@@ -45,14 +45,12 @@ const authMiddleware = async (req, res, next) => {
         return res.status(400).json({ message: 'refreshToken 만료' });
     }
 
-    
-
     // access 검증 후, expired 만료시
     // 만료가 되면 재발급
     if (!accessTokenValidate) {
         //accessToken만료시
-        
-        console.log("accessToken 만료시간: ", new Date(Date.now()))
+
+        console.log('accessToken 만료시간: ', new Date(Date.now()));
 
         // return res.status(400).json({ message: 'accessToken 만료' });
         //만료시 에러를 받고
@@ -64,7 +62,8 @@ const authMiddleware = async (req, res, next) => {
         // //userId를 어디서 가져올껀지
         // //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
-        return;
+        // return;
+        return (window.location.href = '/');
         // res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
 

@@ -595,6 +595,8 @@ class HospitalService {
                 return {};
             }
 
+            const currentMonth = new Date().getMonth() + 1
+
             const doctors = oneHospital.doctors.map((doctor) => {
                 const department = doctor.doctorCategoryMappings.map((category) => {
                     return category.categories.department;
@@ -606,7 +608,8 @@ class HospitalService {
 
                 //workingTime은 함수가 아니라서?..
                 //categories는..
-                const workTime = doctor.workingTimes.map((work) => {
+                const workTime = doctor.workingTimes.filter((work) => new Date(work.date).getMonth() + 1 === currentMonth)
+                .map((work) => {
                     return {
                         day: work.dayOfTheWeek,
                         start: work.startTime,
