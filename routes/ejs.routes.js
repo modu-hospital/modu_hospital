@@ -1,6 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth.middleware');
+// const socketIOClient = require('socket.io-client');
+
+// const socket = socketIOClient('http://localhost:3000');
+
+//   router.post('/send', function(req, res) {
+//     console.log(req)
+//     const message = req.body.message;
+//     socket.emit('message', message);
+//     res.send('success');
+//   });
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
@@ -220,5 +230,16 @@ router.get('/partner/signup', (req, res) => {
         user: userRole,
     });
 });
+
+router.get('/test',(req, res) => {
+    let userRole = null;
+    if (res.locals.user) {
+        userRole = res.locals.user.role;
+    }
+    res.render('index.ejs', {
+        components: 'test',
+        user: userRole,
+    });
+})
 
 module.exports = router;

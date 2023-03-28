@@ -3,11 +3,30 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const { createServer } = require('http');
 const path = require('path');
+const socketio = require('socket.io');
 
 const app = express();
 dotenv.config();
 
 const http = createServer(app);
+const io = socketio(http);
+  
+  io.on("connection", (socket) => {
+    console.log("새로운 소켓이 연결됐어요!");
+
+    socket.emit("RESERVATIONS", {
+      relationship:"본인",
+      name:'김크리스',
+      phone: '010-1111-1111',
+      reservationdate: '2023-03-30',
+      reservationtime: '10:30 ~ 11:00'
+    });
+    
+    socket.on('disconnect', () => {
+      console.log("김아무개가 연결을 끊어버림")
+    })
+  
+  });
 
 /* define router */
 const router = require('./routes');
