@@ -253,6 +253,7 @@ class UserController {
     login = async (req, res, next) => {
         try {
             const { loginId, password } = req.body;
+            console.log(password);
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {

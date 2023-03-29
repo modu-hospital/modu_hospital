@@ -6,8 +6,9 @@ const auth = require('../middleware/auth.middleware');
 // 메인페이지
 router.get('/', auth, (req, res) => {
     let userRole = null;
+
     if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
-        let userRole = null;
+        userRole = null;
 
         res.cookie('wrapperExecuted', 'first');
         return res.render('index.ejs', {
@@ -16,7 +17,7 @@ router.get('/', auth, (req, res) => {
             isOpen: true,
         });
     } else if (!req.cookies.accessToken && req.cookies.wrapperExecuted) {
-        let userRole = null;
+        userRole = null;
         res.cookie('wrapperExecuted', 'second');
         return res.render('index.ejs', {
             components: 'main',
