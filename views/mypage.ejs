@@ -405,37 +405,14 @@ img {
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            <div id="pages">
+                            <div id="page">
                                 <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('approved')"
-                                        class="page-link"
-                                        id="approved-page1"
-                                        data-page="1"
-                                        >1</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('approved')"
-                                        class="page-link"
-                                        id="approved-page2"
-                                        data-page="2"
-                                        >2</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('approved')"
-                                        class="page-link"
-                                        id="approved-page3"
-                                        data-page="3"
-                                        >3</a
-                                    >
+                                    <h id="approved-page">1</h>
                                 </li>
                             </div>
                             <li class="page-item">
                                 <a
+                                    id="approved-nextPage"
                                     class="page-link"
                                     data-status="approved"
                                     onclick="nextPage('approved')"
@@ -468,37 +445,14 @@ img {
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            <div id="pages">
+                            <div id="page">
                                 <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('waiting')"
-                                        class="page-link"
-                                        id="waiting-page1"
-                                        data-page="1"
-                                        >1</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('waiting')"
-                                        class="page-link"
-                                        id="waiting-page2"
-                                        data-page="2"
-                                        >2</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('waiting')"
-                                        class="page-link"
-                                        id="waiting-page3"
-                                        data-page="3"
-                                        >3</a
-                                    >
+                                    <h id="waiting-page">1</h>
                                 </li>
                             </div>
                             <li class="page-item">
                                 <a
+                                    id="waiting-nextPage"
                                     class="page-link"
                                     data-status="waiting"
                                     onclick="nextPage('waiting')"
@@ -530,37 +484,14 @@ img {
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            <div id="pages">
+                            <div id="page">
                                 <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('doneOrReviewed')"
-                                        class="page-link"
-                                        id="doneOrReviewed-page1"
-                                        data-page="1"
-                                        >1</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('doneOrReviewed')"
-                                        class="page-link"
-                                        id="doneOrReviewed-page2"
-                                        data-page="2"
-                                        >2</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('doneOrReviewed')"
-                                        class="page-link"
-                                        id="doneOrReviewed-page3"
-                                        data-page="3"
-                                        >3</a
-                                    >
+                                    <h id="doneOrReviewed-page">1</h>
                                 </li>
                             </div>
                             <li class="page-item">
                                 <a
+                                    id="doneOrReviewed-nextPage"
                                     class="page-link"
                                     data-status="doneOrReviewed"
                                     onclick="nextPage('doneOrReviewed')"
@@ -592,37 +523,14 @@ img {
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            <div id="pages">
+                            <div id="page">
                                 <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('canceled')"
-                                        class="page-link"
-                                        id="canceled-page1"
-                                        data-page="1"
-                                        >1</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('canceled')"
-                                        class="page-link"
-                                        id="canceled-page2"
-                                        data-page="2"
-                                        >2</a
-                                    >
-                                </li>
-                                <li class="page-item float-left">
-                                    <a
-                                        onclick="showPage('canceled')"
-                                        class="page-link"
-                                        id="canceled-page3"
-                                        data-page="3"
-                                        >3</a
-                                    >
+                                    <h id="canceled-page">1</h>
                                 </li>
                             </div>
                             <li class="page-item">
                                 <a
+                                    id="canceled-nextPage"
                                     class="page-link"
                                     data-status="canceled"
                                     onclick="nextPage('canceled')"
@@ -716,6 +624,8 @@ img {
         getCanceled(1);
     });
 
+    const contentsPerPage = 3;
+
     function getUserData() {
         $.ajax({
             type: 'GET',
@@ -748,46 +658,45 @@ img {
             url: `/api/users/mypage/approved?&page=${page}`,
             success: function (response) {
                 const approved = response;
-                if (response.length === 0) {
-                    $('#pages-approved').css('margin', '26.6em 0em 0em 0em');
-                    swal({
-                        title: '🤔 예약없음',
-                        text: '이 페이지에는 현재 예약이 완료된 진료가 없습니다.\n 이미 하셨다구요? 병원측에서 아직 확인하지 않았으니 기다리시거나 별도의 연락이 필요합니다.',
-                        icon: 'info',
-                    }).then(() => {
-                        return;
-                    });
-                }
-
+                
                 if (page == 1 && !response.length) {
                     $('#pages-approved').attr('class', 'pagination d-none');
                     
-                } else {
-                    for (let i = 0; i < approved.length; i++) {
-                        switch (approved.length) {
-                            case 1: $('#pages-approved').css('margin', '20.1em 0em 0em 0em');
-                            break
-                            case 2: $('#pages-approved').css('margin', '13.5em 0em 0em 0em');
-                            break
-                            case 3: $('#pages-approved').css('margin', '7em 0em 0em 0em');
-                            break
-                        }
-                        
-                        let temp_html = ` 
-                        <div class="reservationManagerPicture">
-                <img width="100px" src='${approved[i].doctorImage}'>
-                </div>
-                <div class="reservationManagerInfo">
-                    <span>${approved[i].hospitalName}</span><br>
-                    <span>${approved[i].doctorName} 의사</span><br>
-                    <span>${approved[i].date}</span>
-                </div>
-                <div>
-                    <a class="cancel_btn" data-reservationId="${approved[i].id}" onclick="showCancelModal()"></a>
-                </div>`;
-                        $('#approved').append(temp_html);
-                    }
+                    return                    
                 }
+
+                if(!approved.length){
+                    $('#approved-nextPage').attr('onclick', '');
+                    return
+                }
+                if(approved.length < contentsPerPage){
+                    $('#approved-nextPage').attr('onclick', '');
+                }
+                $(`#approved`).empty();
+                for (let i = 0; i < approved.length; i++) {
+                    switch (approved.length) {	
+                            case 1: $('#pages-approved').css('margin', '20.1em 0em 0em 0em');	
+                            break	
+                            case 2: $('#pages-approved').css('margin', '13.5em 0em 0em 0em');	
+                            break	
+                            case 3: $('#pages-approved').css('margin', '7em 0em 0em 0em');	
+                            break
+                    }
+                    let temp_html = `
+                        <div class="reservationManagerPicture">
+                            <img width="100px" height="100px" src='${approved[i].doctorImage}'>
+                        </div>
+                        <div class="reservationManagerInfo">
+                            <span><a href="/hospitals/${approved[i].hospitalId}" style="text-decoration: none">${approved[i].hospitalName}</span><br>
+                            <span>${approved[i].doctorName} 의사</a></span><br>
+                            <span>${approved[i].date.replaceAll('T', ' ').split('.')[0].substr(0, 16)}</span>
+                        </div>
+                        <div>	
+                            <a class="cancel_btn" data-reservationId="${approved[i].id}" onclick="showCancelModal()"></a>	
+                        </div>`;
+                    $('#approved').append(temp_html);
+                }                
+                $(`#approved-page`).html(Number(page));
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -804,42 +713,43 @@ img {
             url: `/api/users/mypage/waiting?&page=${page}`,
             success: function (response) {
                 const waiting = response;
-                if (response.length === 0) {
-                    $('#pages-waiting').css('margin', '26.6em 0em 0em 0em');
-                    swal({
-                        title: '🤔 예약없음',
-                        text: '이 페이지에는 현재 예약하신 진료가 없습니다.',
-                        icon: 'info',
-                    }).then(() => {
-                        return;
-                    });
-                }
+
                 if (page == 1 && !response.length) {
                     $('#pages-waiting').attr('class', 'pagination d-none');
-                } else {
-                    for (let i = 0; i < waiting.length; i++) {
-                        switch (waiting.length) {
-                            case 1: $('#pages-waiting').css('margin', '20.1em 0em 0em 0em');
-                            break
-                            case 2: $('#pages-waiting').css('margin', '13.5em 0em 0em 0em');
-                            break
-                            case 3: $('#pages-waiting').css('margin', '7em 0em 0em 0em');
-                            break
-                        }
-                        let temp_html = `<div class="reservationManagerPicture">
-            <img width="100px" src='${waiting[i].doctorImage}'>
-        </div>
-        <div class="reservationManagerInfo">
-            <span>${waiting[i].hospitalName}</span><br>
-            <span>${waiting[i].doctorName} 의사</span><br>
-            <span>${waiting[i].date}</span>
-        </div>
-        <div>
-            <a class="cancel_btn" data-reservationId="${waiting[i].id}" onclick="showCancelModal()"></a>
-        </div>`;
-                        $('#waiting').append(temp_html);
-                    }
                 }
+                if(!waiting.length){
+                    $('#waiting-nextPage').attr('onclick', '');
+                    return
+                }
+                if(waiting.length < contentsPerPage){
+                    $('#waiting-nextPage').attr('onclick', '');
+                }
+                $(`#waiting`).empty();
+                for (let i = 0; i < waiting.length; i++) {
+                    switch (waiting.length) {	
+                            case 1: $('#pages-waiting').css('margin', '20.1em 0em 0em 0em');	
+                            break	
+                            case 2: $('#pages-waiting').css('margin', '13.5em 0em 0em 0em');	
+                            break	
+                            case 3: $('#pages-waiting').css('margin', '7em 0em 0em 0em');	
+                            break
+                    }
+                    let temp_html = `
+                        <div class="reservationManagerPicture">	
+                            <img width="100px" height="100px" src='${waiting[i].doctorImage}'>	
+                        </div>
+                        <div class="reservationManagerInfo">
+                            <span><a href="/hospitals/${waiting[i].hospitalId}" style="text-decoration: none">${waiting[i].hospitalName}</span></br>
+                            <span>${waiting[i].doctorName} 의사</a></span><br>
+                            <span>${waiting[i].date.replaceAll('T', ' ').split('.')[0].substr(0, 16)}</span>
+                        </div>
+                        <div>
+                            <a class="cancel_btn" data-reservationId="${waiting[i].id}" onclick="showCancelModal()"></a>	
+                        </div>
+                    `;
+                    $('#waiting').append(temp_html);
+                }
+                $(`#waiting-page`).html(Number(page));
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -856,60 +766,60 @@ img {
             url: `/api/users/mypage/doneorreviewed?&page=${page}`,
             success: function (response) {
                 const doneOrReviewed = response;
-                if (response.length === 0) {
-                    $('#pages-doneOrReviewed').css('margin', '26.6em 0em 0em 0em');
-                    swal({
-                        title: '🤔 완료된 진료없음',
-                        text: '이 페이지에는 현재 진료를 마친 내역이 없습니다.',
-                        icon: 'info',
-                    }).then(() => {
-                        return;
-                    });
-                    
-                }
+                
                 if (page == 1 && !response.length) {
                     $('#pages-doneOrReviewed').attr('class', 'd-none');
-                } else {
-                    for (let i = 0; i < doneOrReviewed.length; i++) {
-                        switch (doneOrReviewed.length) {
-                            case 1: $('#pages-doneOrReviewed').css('margin', '18.5em 0em 0em 0em');
-                            break
-                            case 2: $('#pages-doneOrReviewed').css('margin', '10.3em 0em 0em 0em');
-                            break
-                            case 3: $('#pages-doneOrReviewed').css('margin', '2.2em 0em 0em 0em');
-                            break
-                        }
-                        if (doneOrReviewed[i].status == 'done') {
-                            let temp_html = `<div class="reservationManagerPicture">
-            <img width="100px" src='${doneOrReviewed[i].doctorImage}'>
-        </div>
-        <div class="reservationManagerInfo">
-            <span>${doneOrReviewed[i].hospitalName}</span><br>
-            <span>${doneOrReviewed[i].doctorName} 의사</span><br>
-            <span>${doneOrReviewed[i].date}</span>
-        </div>
-        <div class="col-2">
-        <button data-reservationId="${doneOrReviewed[i].id}" onclick="showReviewModal()" type="button" class="btn button-review">리뷰</button>
-        </div>`;
+                }
 
-                            $('#doneOrReviewed').append(temp_html);
-                        } else {
-                            let temp_html = `<div class="reservationManagerPicture">
-                <img width="100px" src='${doneOrReviewed[i].doctorImage}'>
-            </div>
-            <div class="reservationManagerInfo">
-                <span>${doneOrReviewed[i].hospitalName}</span><br>
-                <span>${doneOrReviewed[i].doctorName} 의사</span><br>
-                <span>${doneOrReviewed[i].date}</span>
-            </div>
-            <div class="col-2">
-            <button data-reservationId="${doneOrReviewed[i].id}" type="button" class="btn button-review" style="background-color: cornflowerblue;"disabled>완료</button>
-            </div>`;
-
-                            $('#doneOrReviewed').append(temp_html);
-                        }
+                if(!doneOrReviewed.length){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                    return
+                }
+                if(doneOrReviewed.length < contentsPerPage){
+                    $('#doneOrReviewed-nextPage').attr('onclick', '');
+                }
+                $(`#doneOrReviewed`).empty();
+                for (let i = 0; i < doneOrReviewed.length; i++) {
+                    switch (doneOrReviewed.length) {	
+                            case 1: $('#pages-doneOrReviewed').css('margin', '18.5em 0em 0em 0em');	
+                            break	
+                            case 2: $('#pages-doneOrReviewed').css('margin', '10.3em 0em 0em 0em');	
+                            break	
+                            case 3: $('#pages-doneOrReviewed').css('margin', '2.2em 0em 0em 0em');	
+                            break	
+                    }
+                    if (doneOrReviewed[i].status == 'done') {
+                        let temp_html = `
+                        <div class="reservationManagerPicture">	
+                            <img width="100px" height="100px" src='${doneOrReviewed[i].doctorImage}'>	
+                        </div>
+                        <div class="reservationManagerInfo">
+                            <span><a href="/hospitals/${doneOrReviewed[i].hospitalId}" style="text-decoration: none">${doneOrReviewed[i].hospitalName}</span><br>
+                            <span>${doneOrReviewed[i].doctorName} 의사</a></span><br>
+                            <span>${doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0].substr(0, 16)}</span>
+                        </div>
+                        
+                        <div class="col-2">	
+                            <button data-reservationId="${doneOrReviewed[i].id}" onclick="showReviewModal()" type="button" class="btn button-review">리뷰</button>	
+                        </div>`;
+                        $('#doneOrReviewed').append(temp_html);
+                    } else {
+                        let temp_html = `
+                        <div class="reservationManagerPicture">	
+                            <img width="100px" height="100px"src='${doneOrReviewed[i].doctorImage}'>	
+                        </div>
+                        <div class="reservationManagerInfo">
+                            <span><a href="/hospitals/${doneOrReviewed[i].hospitalId}" style="text-decoration: none">${doneOrReviewed[i].hospitalName}</span><br>
+                            <span>${doneOrReviewed[i].doctorName} 의사</a></span><br>
+                            <span>${doneOrReviewed[i].date.replaceAll('T', ' ').split('.')[0].substr(0, 16)}</span>
+                        </div>
+                        <div class="col-2">	
+                            <button data-reservationId="${doneOrReviewed[i].id}" type="button" class="btn button-review" style="background-color: cornflowerblue;"disabled>완료</button>	
+                        </div>`;
+                        $('#doneOrReviewed').append(temp_html);
                     }
                 }
+                $(`#doneOrReviewed-page`).html(Number(page));
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -925,42 +835,40 @@ img {
             url: `/api/users/mypage/canceled?&page=${page}`,
             success: function (response) {
                 const canceled = response;
-                if (response.length === 0) {
-                    $('#pages-canceled').css('margin', '26.6em 0em 0em 0em');
-                    swal({
-                        title: '🤔 취소된 진료없음',
-                        text: '이 페이지에는 현재 진료를 취소한 내역이 없습니다.',
-                        icon: 'info',
-                    }).then(() => {
-                        return;
-                    });
-                    
-                }
+                
                 if (page == 1 && !response.length) {
                     $('#pages-canceled').attr('class', 'd-none');
-                } else {
-                    for (let i = 0; i < canceled.length; i++) {
-                        switch (canceled.length) {
-                            case 1: $('#pages-canceled').css('margin', '20.1em 0em 0em 0em');
-                            break
-                            case 2: $('#pages-canceled').css('margin', '13.6em 0em 0em 0em');
-                            break
-                            case 3: $('#pages-canceled').css('margin', '7em 0em 0em 0em');
-                            break
-                        }
-                        let temp_html = ` 
-                        <div class="reservationManagerPicture">
-            <img width="100px" src='${canceled[i].doctorImage}'>
-            </div>
-            <div class="reservationManagerInfo">
-            <span>${canceled[i].hospitalName}</span><br>
-            <span>${canceled[i].doctorName} 의사</span><br>
-            <span class="text-muted">${canceled[i].date}</span>
-            </div>
-        `;
-                        $('#canceled').append(temp_html);
-                    }
                 }
+                
+                if(!canceled.length){
+                    $('#canceled-nextPage').attr('onclick', '');
+                    return
+                }
+                if(canceled.length < contentsPerPage){
+                    $('#canceled-nextPage').attr('onclick', '');
+                }
+                $(`#canceled`).empty();
+                for (let i = 0; i < canceled.length; i++) {
+                    switch (canceled.length) {	
+                            case 1: $('#pages-canceled').css('margin', '20.1em 0em 0em 0em');	
+                            break	
+                            case 2: $('#pages-canceled').css('margin', '13.6em 0em 0em 0em');	
+                            break	
+                            case 3: $('#pages-canceled').css('margin', '7em 0em 0em 0em');	
+                            break	
+                    }
+                    let temp_html = `
+                        <div class="reservationManagerPicture">	
+                            <img width="100px" height="100px" src='${canceled[i].doctorImage}'>	
+                        </div>
+                        <div class="reservationManagerInfo">
+                            <span><a href="/hospitals/${canceled[i].hospitalId}" style="text-decoration: none">${canceled[i].hospitalName}</span><br>
+                            <span>${canceled[i].doctorName} 의사</a><span><br>
+                            <span>${canceled[i].date.replaceAll('T', ' ').split('.')[0].substr(0, 16)}</span>
+                        </div>`;
+                    $('#canceled').append(temp_html);
+                }
+                $(`#canceled-page`).html(Number(page));
             },
             error: function (response) {
                 $('#alertModalLabel').html('알림');
@@ -1153,26 +1061,29 @@ img {
         });
     }
     function nextPage(status) {
-        const pages = 3;
-        for (let i = 0; i < pages; i++) {
-            $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) + 3);
-        }
+        const changedPage = Number($(`#${status}-page`).html()) +1;
+        const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
+        window[`get${upperCase}`](changedPage);
     }
     function previousPage(status) {
-        const pages = 3;
-        for (let i = 0; i < pages; i++) {
-            if ($(`#${status}-page${i + 1}`).html() < 3) {
-                return;
-            } else {
-                $(`#${status}-page${i + 1}`).html(Number($(`#${status}-page${i + 1}`).html()) - 3);
-            }
+        $(`#${status}-nextPage`).attr('onclick', `nextPage('${status}')`);
+        const presentPage = Number($(`#${status}-page`).html());
+        if (presentPage <= 1) {
+            $(`#${status}-page`).html('1');
+            return;
         }
+        $(`#${status}-page`).html(presentPage - 1);
+        const changedPage = Number($(`#${status}-page`).html());
+        const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
+        $(`#${status}`).empty();
+        window[`get${upperCase}`](changedPage);
     }
+    /*
     function showPage(status) {
         const page = $(`#${status}-page${event.target.dataset.page}`).html();
         const upperCase = status[0].toUpperCase() + status.slice(1, status.length);
         $(`#${status}`).empty();
-
         window[`get${upperCase}`](page);
     }
+    */
 </script>
