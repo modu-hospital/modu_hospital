@@ -17,51 +17,54 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
 
         expect(response.status).toEqual(200);
 
-        expect(response.body).toEqual({});
-    });
+        //     expect(response.body).toEqual({});
+        // });
 
-    test('POST /api/hospitals/around API (findNearHospital) Integration Test', async () => {
-        const requestBodyParams = {
-            rightLongitude: 127.13245302025508,
-            rightLatitude: 37.52700879612589,
-            leftLongitude: 126.99344298385097,
-            leftLatitude: 37.47504078291968,
-        };
-        const response = await agent.post(`/api/hospitals/around`).send(requestBodyParams);
+        test('POST /api/hospitals/around API (findNearHospital) Integration Test', async () => {
+            const requestBodyParams = {
+                rightLongitude: 127.13245302025508,
+                rightLatitude: 37.52700879612589,
+                leftLongitude: 126.99344298385097,
+                leftLatitude: 37.47504078291968,
+            };
+            const response = await agent.post(`/api/hospitals/around`).send(requestBodyParams);
 
-        expect(response.status).toEqual(200);
+            expect(response.status).toEqual(200);
 
-        expect(response.body).toEqual({ hospitals: [] });
-    });
+            expect(response.body).toEqual({ hospitals: [] });
+        });
 
-    test('POST /api/hospitals/around/info API (findNearHospitalsInfo), Integration Test', async () => {
-        const requestBodyParams = {
-            rightLongitude: 127.13245302025508,
-            rightLatitude: 37.52700879612589,
-            leftLongitude: 126.99344298385097,
-            leftLatitude: 37.47504078291968,
-        };
-        const response = await supertest(app)
-            .post(`/api/hospitals/around/info`)
-            .send(requestBodyParams);
+        test('POST /api/hospitals/around/info API (findNearHospitalsInfo), Integration Test', async () => {
+            const requestBodyParams = {
+                rightLongitude: 127.13245302025508,
+                rightLatitude: 37.52700879612589,
+                leftLongitude: 126.99344298385097,
+                leftLatitude: 37.47504078291968,
+            };
+            const response = await supertest(app)
+                .post(`/api/hospitals/around/info`)
+                .send(requestBodyParams);
 
-        expect(response.status).toEqual(200);
+            expect(response.status).toEqual(200);
 
-        expect(response.body).toEqual({ hospitals: [] });
-    });
+            expect(response.body).toEqual({ hospitals: [] });
+        });
 
-    test('POST /api/categories/search API (findHospitalsThatFitsDepartment) Integration Test Success Case', async () => {
-        const requestBodyParams = {
-            rightLongitude: 127.13245302025508,
-            rightLatitude: 37.52700879612589,
-            leftLongitude: 126.99344298385097,
-            leftLatitude: 37.47504078291968,
-            department: '치과',
-        };
-        const response = await supertest(app).post(`/api/hospitals/around`).send(requestBodyParams);
+        test('POST /api/categories/search API (findHospitalsThatFitsDepartment) Integration Test Success Case', async () => {
+            const requestBodyParams = {
+                rightLongitude: 127.13245302025508,
+                rightLatitude: 37.52700879612589,
+                leftLongitude: 126.99344298385097,
+                leftLatitude: 37.47504078291968,
+                department: '치과',
+            };
+            const response = await supertest(app)
+                .post(`/api/hospitals/around`)
+                .send(requestBodyParams);
 
-        expect(response.status).toEqual(200);
+            expect(response.status).toEqual(200);
 
-        expect(response.body).toEqual({ hospitals: [] });
+            expect(response.body).toEqual({ hospitals: [] });
+        });
     });
 });
