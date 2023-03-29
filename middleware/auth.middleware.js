@@ -51,6 +51,7 @@ const authMiddleware = async (req, res, next) => {
         //accessToken만료시
 
         console.log('accessToken 만료시간: ', new Date(Date.now()));
+        console.log('accessToken :', accessToken, 'refreshToken :', refreshToken) 
 
         // return res.status(400).json({ message: 'accessToken 만료' });
         //만료시 에러를 받고
@@ -62,10 +63,32 @@ const authMiddleware = async (req, res, next) => {
         // //userId를 어디서 가져올껀지
         // //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
-        // return;
+        const { userId } = refreshTokenValidate;
+
+        const user = await User.findByPk(userId);
+
+        const newAccessToken = jwt.sign(
+            { userId: user.userId },
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: '10s',
+            }
+        );
+        
+        res.cookie('accessToken', newAccessToken, {
+            secure: false,
+            httpOnly: false,
+        });
+
+        res.locals.user = user;
+
+        next()
+        return;
+
+        // return res.status(401).json({ message: 'accessToken 만료' });
         // return (window.location.href = '/');
-        res.clearCookie('accessToken');
-        return res.redirect('/');
+        // res.clearCookie('accessToken');
+        // return res.render('');
         // res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
 
