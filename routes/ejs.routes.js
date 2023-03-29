@@ -5,6 +5,7 @@ const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
+    let userRole = null;
     if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
         let userRole = null;
 
@@ -32,6 +33,13 @@ router.get('/', auth, (req, res) => {
             isOpen: false,
         });
     }
+    
+    return res.render('index.ejs', {
+        components: 'main',
+        user: userRole,
+        isOpen: false,
+    });
+
 });
 
 //유저 메인페이지
