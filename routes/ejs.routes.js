@@ -104,12 +104,18 @@ router.get('/users/resetpassword/:token', (req, res) => {
     });
 });
 
-router.get('/map/hospitals', (req, res) => {
-    res.render('hospital.map.ejs');
-});
+router.get('/map/:aboutMap', (req, res) => {
+    const {aboutMap} = req.params
+    
+    if (aboutMap === "hospitals") {
+        return res.render('hospital.map.ejs');
+    }
 
-router.get('/map/pharmacies', (req, res) => {
-    res.render('pharmacy.map.ejs');
+    if (aboutMap === "pharmacies") {
+        return res.render('pharmacy.map.ejs');
+    }
+
+    res.render('map.toHome.ejs')
 });
 
 //원장님의 공간
