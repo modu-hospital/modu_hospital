@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
             });
             this.belongsTo(Hospital, { foreignKey: 'hospitalId', as: 'hospitals' });
             this.hasMany(WorkingTime, { foreignKey: 'doctorId', as: 'workingTimes' });
-            this.belongsTo(Reservation, { foreignKey: 'doctorId', as: 'reservations' });
+            this.hasMany(Reservation, { foreignKey: 'doctorId', as: 'reservations' });
         }
     }
 
@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             doctorId: {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
+                autoIncrement: true,
             },
             hospitalId: DataTypes.INTEGER,
             name: DataTypes.STRING,
@@ -32,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
+            autoIncrement: true,
             timestamps: true, // createAt & updateAt 활성화
             paranoid: true, //timestamps 가 활성화 되어야 사용 가능 > deleteAt 옵션 on
             tableName: 'doctors',

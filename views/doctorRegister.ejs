@@ -1,3 +1,34 @@
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: #fff;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        text-align: left;
+    }
+
+    table th,
+    table td {
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
 <h1>의사 정보 등록</h1>
 <form id="form">
     <div>
@@ -5,13 +36,154 @@
         <input type="text" id="name" name="name">
     </div>
     <div>
-        <label for="contents">내용:</label>
+        <label for="contents">소개글:</label>
         <textarea id="contents" name="contents"></textarea>
     </div>
     <div>
         <label for="image">프로필 이미지:</label>
         <input type="file" id="image" name="image">
     </div>
+    <div class="checkbox-grid">
+        <label for="categories">카테고리:</label>
+        <table class="table" id="checkbox-grid">
+            <tr>
+                <td><input type="checkbox" id="category1" name="categories" value="감염내과">
+                    <label for="category1">감염내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category2" name="categories" value="내분비내과">
+                    <label for="category2">내분비내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category3" name="categories" value="류마티스내과">
+                    <label for="category3">류마티스내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category4" name="categories" value="순환기내과">
+                    <label for="category4">순환기내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category5" name="categories" value="신장내과">
+                    <label for="category5">신장내과</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category6" name="categories" value="알레르기내과">
+                    <label for="category6">알레르기내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category7" name="categories" value="혈액종양내과">
+                    <label for="category7">혈액종양내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category8" name="categories" value="호흡기내과">
+                    <label for="category8">호흡기내과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category9" name="categories" value="대장항문">
+                    <label for="category9">대장항문</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category10" name="categories" value="성형외과">
+                    <label for="category10">성형외과</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category11" name="categories" value="신경외과">
+                    <label for="category11">신경외과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category12" name="categories" value="외과">
+                    <label for="category12">외과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category13" name="categories" value="정형외과">
+                    <label for="category13">정형외과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category14" name="categories" value="흉부외과">
+                    <label for="category14">흉부외과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category15" name="categories" value="산부인과">
+                    <label for="category15">산부인과</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category16" name="categories" value="피부과">
+                    <label for="category16">피부과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category17" name="categories" value="비뇨기과">
+                    <label for="category17">비뇨기과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category18" name="categories" value="안과">
+                    <label for="category18">안과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category19" name="categories" value="이비인후과">
+                    <label for="category19">이비인후과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category20" name="categories" value="정신과">
+                    <label for="category20">정신과</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category21" name="categories" value="마취통증의학과">
+                    <label for="category21">마취통증의학과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category22" name="categories" value="가정의학과">
+                    <label for="category22">가정의학과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category23" name="categories" value="응급의학과">
+                    <label for="category23">응급의학과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category24" name="categories" value="재활의학과">
+                    <label for="category24">재활의학과</label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category25" name="categories" value="영상의학과">
+                    <label for="category25">영상의학과 </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category26" name="categories" value="방사선종양학과">
+                    <label for="category26">방사선종양학과  </label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category27" name="categories" value="핵의학과">
+                    <label for="category27">핵의학과  </label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category28" name="categories" value="진단검사의학과">
+                    <label for="category28">진단검사의학과  </label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category29" name="categories" value="병리과">
+                    <label for="category29">병리과  </label>
+                </td>
+                <td>
+                    <input type="checkbox" id="category30" name="categories" value="의공학과">
+                    <label for="category30">의공학과  </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="category31" name="categories" value="한방과">
+                    <label for="category31">한방과  </label>
+                </td>
+            </tr>
+        </table>
     <div>
         <button type="submit">등록</button>
     </div>
@@ -26,14 +198,26 @@
         const imageFile = imageInput.files[0];
 
         if (!imageFile) {
-            alert('파일을 선택해주세요.');
-            return;
+            swal({
+                title: '✍ 입력정보 추가요망!',
+                text: '파일을 선택해주세요.',
+                icon: 'info',
+            }).then(() => {
+                return;
+            });
         }
         
         const formData = new FormData();
               formData.append('name', name);
               formData.append('contents', contents);
               formData.append('image', imageFile);
+                const categories = document.querySelectorAll('input[name="categories"]:checked');
+                const categoryValues = Array.from(categories).map(category => category.value);
+                // formData.append('categories[]', ...categoryValues);
+               //  formData.append('categories[]', categoryValues.join(','));
+               categoryValues.forEach(category => {
+                        formData.append('categories[]', category);
+                });
 
 
         try {
@@ -42,11 +226,16 @@
                 body: formData,
             });
             if (response.ok) {
-                alert('의사 정보 등록 성공');
                 const data = await response.json();
-                console.log(data);
+                swal({
+                    title: '😊 의사 등록 성공!',
+                    text: '의사 정보 등록 성공',
+                    icon: 'success',
+                }).then(() => {
+                    window.location.href = '/hospital';
+                });
             } else {
-                alert('의사 정보 등록 실패');
+                swal('😭 의사 등록 실패', '의사 정보 등록 실패', 'error');
             }
         } catch (error) {
             console.error(error);

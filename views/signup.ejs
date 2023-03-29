@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>회원가입</title>
+    </head>
+
+    <body>
+        <div id="main">
+            <div class="inner">
+                <div style="margin-top: 100px">
+                    <form action="" method="post">
+                        <table style="width: 700px; margin: 0 auto">
+                            <tr>
+                                <td>성함 :</td>
+                                <td>
+                                    <input type="text" id="name" name="name" placeholder="Name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>이메일 :</td>
+                                <td>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="email@naver.com"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 :</td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        oninput="check_pw()"
+                                        placeholder="6글자 이상, 특수문자가 포함되어야 합니다."
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호확인 :</td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        id="confirm"
+                                        name="confirm"
+                                        oninput="check_pw()"
+                                    />&nbsp;<span id="check"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>전화번호 :</td>
+                                <td>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        placeholder="010-0000-0000 형식으로 적어주세요"
+                                        pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>주민등록번호 :</td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        id="idNumber"
+                                        name="idNumber"
+                                        placeholder="13자리 - 를 포함해주세요"
+                                        pattern="[0-9]{6}-[0-9]{7}"
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="text-align: center; margin-top: 40px">
+                            <button style="width: 150px" class="button signup__submit" id="signup">
+                                회원가입
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function check_pw() {
+                var pw = document.getElementById('password').value;
+                var SC = ['!', '@', '#', '$', '%', '*', '^', '&', '(', ')', ':'];
+                var check_SC = 0;
+
+                if (pw.length < 6 || pw.length > 16) {
+                    swal({
+                        title: '😓 죄송합니다.',
+                        text: '비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.',
+                        icon: 'warning',
+                    }).then(() => {
+                        document.getElementById('password').value = '';
+                    });
+                }
+                for (var i = 0; i < SC.length; i++) {
+                    if (pw.indexOf(SC[i]) != -1) {
+                        check_SC = 1;
+                    }
+                }
+                if (check_SC == 0) {
+                    swal({
+                        title: '😓 죄송합니다.',
+                        text: '!,@,#,$,%,*,^,&,(,),: 의 특수문자가 들어가 있지 않습니다.',
+                        icon: 'warning',
+                    }).then(() => {
+                        document.getElementById('password').value = '';
+                    });
+                }
+                if (
+                    document.getElementById('password').value != '' &&
+                    document.getElementById('confirm').value != ''
+                ) {
+                    if (
+                        document.getElementById('password').value ==
+                        document.getElementById('confirm').value
+                    ) {
+                        document.getElementById('check').innerHTML = '비밀번호가 일치합니다.';
+                        document.getElementById('check').style.color = 'blue';
+                    } else {
+                        document.getElementById('check').innerHTML =
+                            '비밀번호가 일치하지 않습니다.';
+                        document.getElementById('check').style.color = 'red';
+                    }
+                }
+            }
+
+            document.getElementById('signup').addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const data = {
+                    name: document.getElementById('name').value,
+                    loginId: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    confirm: document.getElementById('confirm').value,
+                    phone: document.getElementById('phone').value,
+                    idNumber: document.getElementById('idNumber').value,
+                };
+
+                fetch('/api/users/signup/customer', {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                    // .then(res => res.json())
+                    .then((response) => {
+                        //response= data
+                        if (response.status === 412) {
+                            throw new Error('이미 존재하는 이메일 입니다.');
+                        }
+                        if (response.status === 422) {
+                            throw new Error('잘못된 형식입니다.');
+                        }
+                        swal({
+                            title: '😊 회원가입 성공!',
+                            text: '모두의 병원에 오신 것을 환영합니다.',
+                            icon: 'success',
+                        }).then(() => {
+                            location.href = '/';
+                        });
+                    })
+                    .catch((err) => {
+                        swal({
+                            title: '😭 회원가입 실패',
+                            text: err.message,
+                            icon: 'error',
+                        }).then(() => {
+                            return;
+                        });
+                    });
+            });
+        </script>
+    </body>
+</html>

@@ -1,5 +1,8 @@
-const { describe, beforeEach } = require('node:test');
 const UserController = require('../../../controllers/user.controller');
+const jwt = require('jsonwebtoken');
+const env = process.env;
+const CreateError = require('../../../lib/errors');
+const createError = new CreateError();
 
 let mockUserService = {
     getUserProfile: jest.fn(),
@@ -8,256 +11,461 @@ let mockUserService = {
     getWaitingReservation: jest.fn(),
     getDoneOrReviewedReservation: jest.fn(),
     getCanceledReservation: jest.fn(),
-};
-let mockReservationService = {
-    cancelReservation: jest.fn(),
+    sendEmailForResetPassword: jest.fn(),
+    resetPassword: jest.fn(),
+    findResetCase: jest.fn(),
+    editPassword: jest.fn(),
 };
 
-let mockRequest = {
+let mockReservationService = {
+    cancelReservation: jest.fn(),
+    findReservationById: jest.fn(),
+    createReview: jest.fn(),
+};
+
+let mockReq = {
     body: jest.fn(),
     params: jest.fn(),
     query: jest.fn(),
 };
 
-let mockResponse = {
+let mockRes = {
+    status: jest.fn().mockReturnThis(),
     json: jest.fn(),
 };
 
 let mockNext = jest.fn();
 
-const userController = new UserController();
-userController.userService = mockUserService;
-userController.reservationService = mockReservationService;
+let controller = new UserController();
+controller.userService = mockUserService;
+controller.reservationService = mockReservationService;
+
+const userId = 1;
 
 describe('User Controller Unit Test', () => {
     beforeEach(() => {
         jest.resetAllMocks();
+        mockReq = {
+            body: jest.fn(),
+            params: jest.fn(),
+            query: jest.fn(),
+        };
+        mockReq.cookies = { accessToken: jwt.sign({ userId: userId }, env.JWT_SECRET_KEY) };
+        mockRes = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
     });
-
     describe('getUserProfile', () => {
-        async function beforeEachTest() {
-            mockRequest.params = { userId: 1 };
-            userProfile = {
-                userId: 1,
-                loginId: 'abcd',
-                name: '김상철',
-                phone: '010-1234-1235',
-                address: '서울특별시 관악구 봉천동 남부순환로 1814 대연빌딩 1층 2층 6층',
-            };
-            mockUserService.getUserProfile.mockResolvedValue(userProfile);
-            await userController.getUserProfile(mockRequest, mockResponse, mockNext);
-        }
+        it('should call userService.getUserProfile once with proper argument', async () => {
+            await controller.getUserProfile(mockReq, mockRes, mockNext);
 
-        it('should call service method once', async () => {
-            await beforeEachTest();
-            expect(userController.userService.getUserProfile).toHaveBeenCalledTimes(1);
-        });
-        it('should call service method with proper argument', async () => {
-            await beforeEachTest();
-            expect(userController.userService.getUserProfile).toHaveBeenCalledWith(
-                mockRequest.params.userId
+            expect(mockUserService.getUserProfile).toHaveBeenCalledTimes(1);
+            expect(mockUserService.getUserProfile).toHaveBeenCalledWith(
+                jwt.decode(mockReq.cookies.accessToken, env.JWT_SECRET_KEY).userId
             );
         });
-        // it('should call middleware with proper argument when it catches error', async ()=>{
-        //     mockUserService.getUserProfile = () => {throw Error('a')}
-        //     expect(mockNext).toHaveBeenCalledWith(
-        //         Error('b')
-        //     );
-        // })
+        it('should return proper response', async () => {
+            const serviceResult = { mock: 'mock' };
+            mockUserService.getUserProfile.mockResolvedValue(serviceResult);
+            await controller.getUserProfile(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith(serviceResult);
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.getUserProfile.mockRejectedValueOnce(error);
+            await controller.getUserProfile(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
     });
     describe('editUserProfile', () => {
-        it('should call service method once', async () => {
-            mockRequest.params = { userId: 1 };
-            mockRequest.body = { name: '김김김', address: '서울시', phone: '010' };
-            await userController.editUserProfile(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.editUserProfile).toHaveBeenCalledTimes(1);
+        beforeEach(() => {
+            mockReq.body = {
+                name: 'john',
+                phone: '010-1234-1234',
+                address: '서울시 강남구',
+            };
         });
-        it('should call service with proper arguments', async () => {
-            mockRequest.params = { userId: 1 };
-            mockRequest.body = { name: '김김김', address: '서울시', phone: '010' };
-            await userController.editUserProfile(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.editUserProfile).toHaveBeenCalledWith(
-                mockRequest.params.userId,
-                mockRequest.body.address,
-                mockRequest.body.phone,
-                mockRequest.body.name
+        it('should call userService.editUserProfile one with proper argument', async () => {
+            await controller.editUserProfile(mockReq, mockRes, mockNext);
+            expect(mockUserService.editUserProfile).toHaveBeenCalledTimes(1);
+            expect(mockUserService.editUserProfile).toHaveBeenCalledWith(
+                userId,
+                mockReq.body.address,
+                mockReq.body.phone,
+                mockReq.body.name
             );
+        });
+        it('should return proper response', async () => {
+            await controller.editUserProfile(mockReq, mockRes, mockNext);
+            expect(mockRes.status).toHaveBeenCalledWith(201);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: '내 정보 수정이 완료되었습니다.',
+            });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.editUserProfile.mockRejectedValueOnce(error);
+            await controller.editUserProfile(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
-    describe(getApprovedReservation, () => {
-        it('should call service method once', async () => {
-            await userController.getApprovedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getApprovedReservation).toHaveBeenCalledTimes(1);
+    describe('get Reservations', () => {
+        beforeEach(() => {
+            mockReq.query = { page: 1 };
         });
-        it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            await userController.getApprovedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getApprovedReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
-                mockRequest.query.page
-            );
+        describe('getApprovedReservation', () => {
+            it('should call userService.getApprovedReservation once with proper argument', async () => {
+                await controller.getApprovedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockUserService.getApprovedReservation).toHaveBeenCalledTimes(1);
+                expect(mockUserService.getApprovedReservation).toHaveBeenCalledWith(
+                    jwt.decode(mockReq.cookies.accessToken, env.JWT_SECRET_KEY).userId,
+                    mockReq.query.page
+                );
+            });
+            it('should return proper response', async () => {
+                const serviceResult = { mock: 'mock' };
+                mockUserService.getApprovedReservation.mockResolvedValue(serviceResult);
+                await controller.getApprovedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).toHaveBeenCalledWith(200);
+                expect(mockRes.json).toHaveBeenCalledWith(serviceResult);
+                expect(mockNext).not.toHaveBeenCalled();
+            });
+            it('should call next() when service throws an error', async () => {
+                const error = new Error();
+                mockUserService.getApprovedReservation.mockRejectedValueOnce(error);
+                await controller.getApprovedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).not.toHaveBeenCalled();
+                expect(mockRes.json).not.toHaveBeenCalled();
+                expect(mockNext).toHaveBeenCalledWith(error);
+            });
         });
-        it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            const approved = [
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-06T06:50:00.000Z',
-                    id: 6,
-                    status: 'approved',
-                },
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-05T09:50:00.000Z',
-                    id: 5,
-                    status: 'approved',
-                },
-            ];
-            mockUserService.getApprovedReservation.mockResolvedValue(approved);
-            await userController.getApprovedReservation(mockRequest, mockResponse, mockNext);
-            expect(mockResponse.json).toMatchObject(approved);
+        describe('getWaitingReservation', () => {
+            it('should call userService.getWaitingReservation once with proper argument', async () => {
+                await controller.getWaitingReservation(mockReq, mockRes, mockNext);
+
+                expect(mockUserService.getWaitingReservation).toHaveBeenCalledTimes(1);
+                expect(mockUserService.getWaitingReservation).toHaveBeenCalledWith(
+                    jwt.decode(mockReq.cookies.accessToken, env.JWT_SECRET_KEY).userId,
+                    mockReq.query.page
+                );
+            });
+            it('should return proper response', async () => {
+                const serviceResult = { mock: 'mock' };
+                mockUserService.getWaitingReservation.mockResolvedValue(serviceResult);
+                await controller.getWaitingReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).toHaveBeenCalledWith(200);
+                expect(mockRes.json).toHaveBeenCalledWith(serviceResult);
+                expect(mockNext).not.toHaveBeenCalled();
+            });
+            it('should call next() when service throws an error', async () => {
+                const error = new Error();
+                mockUserService.getWaitingReservation.mockRejectedValueOnce(error);
+                await controller.getWaitingReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).not.toHaveBeenCalled();
+                expect(mockRes.json).not.toHaveBeenCalled();
+                expect(mockNext).toHaveBeenCalledWith(error);
+            });
         });
-    });
-    describe(getWaitingReservation, () => {
-        it('should call service method once', async () => {
-            await userController.getWaitingReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getWaitingReservation).toHaveBeenCalledTimes(1);
+        describe('getDoneOrReviewedReservation', () => {
+            it('should call userService.getDoneOrReviewedReservation once with proper argument', async () => {
+                await controller.getDoneOrReviewedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockUserService.getDoneOrReviewedReservation).toHaveBeenCalledTimes(1);
+                expect(mockUserService.getDoneOrReviewedReservation).toHaveBeenCalledWith(
+                    jwt.decode(mockReq.cookies.accessToken, env.JWT_SECRET_KEY).userId,
+                    mockReq.query.page
+                );
+            });
+            it('should return proper response', async () => {
+                const serviceResult = { mock: 'mock' };
+                mockUserService.getDoneOrReviewedReservation.mockResolvedValue(serviceResult);
+                await controller.getDoneOrReviewedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).toHaveBeenCalledWith(200);
+                expect(mockRes.json).toHaveBeenCalledWith(serviceResult);
+                expect(mockNext).not.toHaveBeenCalled();
+            });
+            it('should call next() when service throws an error', async () => {
+                const error = new Error();
+                mockUserService.getDoneOrReviewedReservation.mockRejectedValueOnce(error);
+                await controller.getDoneOrReviewedReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).not.toHaveBeenCalled();
+                expect(mockRes.json).not.toHaveBeenCalled();
+                expect(mockNext).toHaveBeenCalledWith(error);
+            });
         });
-        it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            await userController.getWaitingReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getWaitingReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
-                mockRequest.query.page
-            );
-        });
-        it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            const waiting = [
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-06T06:50:00.000Z',
-                    id: 6,
-                    status: 'waiting',
-                },
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-05T09:50:00.000Z',
-                    id: 5,
-                    status: 'waiting',
-                },
-            ];
-            mockUserService.getWaitingReservation.mockResolvedValue(waiting);
-            await userController.getWaitingReservation(mockRequest, mockResponse, mockNext);
-            expect(mockResponse.json).toMatchObject(waiting);
-        });
-    });
-    describe(getDoneOrReviewedReservation, () => {
-        it('should call service method once', async () => {
-            await userController.getDoneOrReviewedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getDoneOrReviewedReservation).toHaveBeenCalledTimes(
-                1
-            );
-        });
-        it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            await userController.getDoneOrReviewedReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getDoneOrReviewedReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
-                mockRequest.query.page
-            );
-        });
-        it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            const doneOrReviewed = [
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-06T06:50:00.000Z',
-                    id: 6,
-                    status: 'doneOrReviewed',
-                },
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-05T09:50:00.000Z',
-                    id: 5,
-                    status: 'doneOrReviewed',
-                },
-            ];
-            mockUserService.getDoneOrReviewedReservation.mockResolvedValue(doneOrReviewed);
-            await userController.getDoneOrReviewedReservation(mockRequest, mockResponse, mockNext);
-            expect(mockResponse.json).toMatchObject(doneOrReviewed);
-        });
-    });
-    describe(getCanceledReservation, () => {
-        it('should call service method once', async () => {
-            await userController.getCanceledReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getCanceledReservation).toHaveBeenCalledTimes(1);
-        });
-        it('should call service method with proper arguments', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            await userController.getCanceledReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.userService.getCanceledReservation).toHaveBeenCalledWith(
-                mockRequest.query.userId,
-                mockRequest.query.page
-            );
-        });
-        it('should return proper Data', async () => {
-            mockRequest.query = { userId: 1, page: 1 };
-            const canceled = [
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-06T06:50:00.000Z',
-                    id: 6,
-                    status: 'canceled',
-                },
-                {
-                    hospitalName: '삼성서울병원',
-                    doctorName: '김닥터',
-                    doctorImage:
-                        'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-                    date: '2023-03-05T09:50:00.000Z',
-                    id: 5,
-                    status: 'canceled',
-                },
-            ];
-            mockUserService.getCanceledReservation.mockResolvedValue(canceled);
-            await userController.getCanceledReservation(mockRequest, mockResponse, mockNext);
-            expect(mockResponse.json).toMatchObject(canceled);
+        describe('getCanceledReservation', () => {
+            it('should call userService.getCanceledReservation once with proper argument', async () => {
+                await controller.getCanceledReservation(mockReq, mockRes, mockNext);
+
+                expect(mockUserService.getCanceledReservation).toHaveBeenCalledTimes(1);
+                expect(mockUserService.getCanceledReservation).toHaveBeenCalledWith(
+                    jwt.decode(mockReq.cookies.accessToken, env.JWT_SECRET_KEY).userId,
+                    mockReq.query.page
+                );
+            });
+            it('should return proper response', async () => {
+                const serviceResult = { mock: 'mock' };
+                mockUserService.getCanceledReservation.mockResolvedValue(serviceResult);
+                await controller.getCanceledReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).toHaveBeenCalledWith(200);
+                expect(mockRes.json).toHaveBeenCalledWith(serviceResult);
+                expect(mockNext).not.toHaveBeenCalled();
+            });
+            it('should call next() when service throws an error', async () => {
+                const error = new Error();
+                mockUserService.getCanceledReservation.mockRejectedValueOnce(error);
+                await controller.getCanceledReservation(mockReq, mockRes, mockNext);
+
+                expect(mockRes.status).not.toHaveBeenCalled();
+                expect(mockRes.json).not.toHaveBeenCalled();
+                expect(mockNext).toHaveBeenCalledWith(error);
+            });
         });
     });
     describe('cancelReservation', () => {
-        it('should call service method once', async () => {
-            mockRequest.params = { id: 1 };
-            await userController.cancelReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.reservationService.cancelReservation).toHaveBeenCalledTimes(1);
+        beforeEach(() => {
+            const reservationId = 1;
+            mockReq.params = { id: reservationId };
         });
-        it('should call service with proper arguments', async () => {
-            mockRequest.params = { id: 1 };
-            await userController.cancelReservation(mockRequest, mockResponse, mockNext);
-            expect(userController.reservationService.cancelReservation).toHaveBeenCalledWith(
-                mockRequest.params.id
+        it('should call reservationService.findReservationById once with proper argument', async () => {
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+            expect(mockReservationService.findReservationById).toHaveBeenCalledTimes(1);
+            expect(mockReservationService.findReservationById).toHaveBeenCalledWith(
+                mockReq.params.id
             );
+        });
+        it('should call reservationService.cancelReservation once with proper argument', async () => {
+            const serviceResult = {
+                userId: userId,
+            };
+            mockReservationService.findReservationById.mockResolvedValue(serviceResult);
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+            expect(mockReservationService.cancelReservation).toHaveBeenCalledTimes(1);
+            expect(mockReservationService.cancelReservation).toHaveBeenCalledWith(
+                mockReq.params.id
+            );
+        });
+        it('should return proper response', async () => {
+            const serviceResult = {
+                userId: userId,
+            };
+            mockReservationService.findReservationById.mockResolvedValue(serviceResult);
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(201);
+            expect(mockRes.json).toHaveBeenCalledWith({ message: '예약 취소가 완료되었습니다.' });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() with NotAuthorized error', async () => {
+            const serviceResult = {
+                userId: 1238912,
+            };
+            mockReservationService.findReservationById.mockResolvedValue(serviceResult);
+
+            const error = createError.notAuthorized();
+            mockReservationService.cancelReservation.mockRejectedValueOnce(error);
+
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+        it('should call next() when service throws an error', async () => {
+            const serviceResult = {
+                userId: userId,
+            };
+            mockReservationService.findReservationById.mockResolvedValue(serviceResult);
+
+            const error = new Error();
+            mockReservationService.cancelReservation.mockRejectedValueOnce(error);
+
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
+    describe('createReview', () => {
+        beforeEach(() => {
+            const reservationId = 1;
+            mockReq.params = { id: reservationId };
+            mockReq.body = { star: 5, contents: '최고예요' };
+        });
+        it('should call reservationService.findReservationById once with proper argument', async () => {
+            await controller.cancelReservation(mockReq, mockRes, mockNext);
+            expect(mockReservationService.findReservationById).toHaveBeenCalledTimes(1);
+            expect(mockReservationService.findReservationById).toHaveBeenCalledWith(
+                mockReq.params.id
+            );
+        });
+        // it('should call reservationService.createReview once with proper argument', async ()=>{
+        //     const serviceResult = {
+        //         userId : userId
+        //     }
+        //     mockReservationService.findReservationById.mockResolvedValue(serviceResult)
+
+        //     await controller.cancelReservation(mockReq, mockRes, mockNext);
+        //     expect(mockReservationService.createReview).toHaveBeenCalledTimes(1)
+        //     expect(mockReservationService.createReview).toHaveBeenCalledWith(
+        //         mockReq.params.id,
+        //         mockReq.body.star,
+        //         mockReq.body.contents
+        //         )
+        // })
+    });
+    describe('sendEmailForResetPassword', () => {
+        beforeEach(() => {
+            mockReq.query = { email: 'abc@abc.com' };
+        });
+        it('should call userService.sendEmailForResetPassword once with proper argument', async () => {
+            await controller.sendEmailForResetPassword(mockReq, mockRes, mockNext);
+            expect(mockUserService.sendEmailForResetPassword).toHaveBeenCalledTimes(1);
+            expect(mockUserService.sendEmailForResetPassword).toHaveBeenCalledWith(
+                mockReq.query.email
+            );
+        });
+        it('should return proper response', async () => {
+            await controller.sendEmailForResetPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({ message: '이메일이 발송되었습니다.' });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.sendEmailForResetPassword.mockRejectedValueOnce(error);
+
+            await controller.sendEmailForResetPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
+    describe('resetPassword', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                email: 'abc@abc.com',
+                password: 'password',
+                confirm: 'password',
+                token: 'token',
+            };
+        });
+        it('should call userService.resetPassword once with proper argument', async () => {
+            await controller.resetPassword(mockReq, mockRes, mockNext);
+            expect(mockUserService.resetPassword).toHaveBeenCalledTimes(1);
+            expect(mockUserService.resetPassword).toHaveBeenCalledWith(
+                mockReq.body.email,
+                mockReq.body.password,
+                mockReq.body.confirm,
+                mockReq.body.token
+            );
+        });
+        it('should return proper response', async () => {
+            await controller.resetPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(201);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: '비밀번호 재설정이 완료되었습니다.',
+            });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.resetPassword.mockRejectedValueOnce(error);
+
+            await controller.resetPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
+    describe('findResetCase', () => {
+        beforeEach(() => {
+            mockReq.params = {
+                token: 'token',
+            };
+        });
+        it('should call userService.findResetCase once with proper argument', async () => {
+            await controller.findResetCase(mockReq, mockRes, mockNext);
+            expect(mockUserService.findResetCase).toHaveBeenCalledTimes(1);
+            expect(mockUserService.findResetCase).toHaveBeenCalledWith(mockReq.params.token);
+        });
+        it('should return proper response', async () => {
+            mockUserService.findResetCase.mockResolvedValue(true);
+            await controller.findResetCase(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({ isCaseExist: true });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.findResetCase.mockRejectedValueOnce(error);
+
+            await controller.findResetCase(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
+    describe('editUserPassword', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                password: 'password',
+                confirm: 'password',
+            };
+        });
+        it('should call userService.editPassword once with proper argument', async () => {
+            await controller.editUserPassword(mockReq, mockRes, mockNext);
+            expect(mockUserService.editPassword).toHaveBeenCalledTimes(1);
+            expect(mockUserService.editPassword).toHaveBeenCalledWith(
+                userId,
+                mockReq.body.password,
+                mockReq.body.confirm
+            );
+        });
+        it('should return proper response', async () => {
+            await controller.editUserPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(201);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: '비밀번호 변경이 완료되었습니다',
+            });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.editPassword.mockRejectedValueOnce(error);
+
+            await controller.editUserPassword(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
 });

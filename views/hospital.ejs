@@ -1,434 +1,636 @@
-<div class="inner">
+<style>
+  body {
+    margin-top: 100px;
+    line-height: 1.6;
+  }
+
+  .container1 {
+    width: 1700px;
+    margin: 0px 0px 0px -180px;
+  }
+
+  ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+  }
+
+  ul.tabs li {
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+    font-weight: bold;
+    background: none;
+    color: #222;
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+
+  ul.tabs li.current {
+    background: #ededed;
+    color: #222;
+  }
+
+  .tab-content {
+    display: none;
+    background: #ededed;
+    padding: 15px;
+  }
+
+  .tab-content.current {
+    display: inherit;
+  }
+
+  .list-MS {
+    font-family: 'Trebuchet MS', serif;
+    font-weight: 900;
+  }
+
+  .list-name {
+    font-weight: 900;
+  }
+
+  #select {
+    width: 200px;
+  }
+
+  #filter-content {
+    width: 250px;
+  }
+
+  #filter-value {
+    border-radius: 7.5px;
+    border: 2px solid gainsboro;
+    padding-left: 20px;
+    margin: 0px 0px 20px 20px;
+  }
+
+  #btn_init {
+    font-size: 0.7em;
+    width: 120px;
+    height: 48px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 0px 0px 0px 0px;
+    border-color: gainsboro;
+    border-radius: 7.5px;
+  }
+
+  /* 의사 프로필 카드*/
+  .profile-card {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
+    margin: 50px auto;
+  }
+
+  .profile-card img {
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .profile-card h1 {
+    font-size: 24px;
+    margin-top: 0;
+  }
+
+  .profile-card p {
+    font-size: 16px;
+    color: #777;
+  }
+
+
+
+
+  #content-image {
+    padding: 30px;
+    text-align: center;
+  }
+
+  #bigimages {
+    margin-bottom: 10px;
+  }
+
+  #bigimage {
+    width: 310px;
+    height: 310;
+  }
+
+  .small {
+    width: 100px;
+    height: 100px;
+  }
+</style>
+<div id="main">
+  <div class="inner">
     <h1>백오피스</h1>
 
-    <section class="ftco-section">
-        <div class="container">
-            <ul class="tabs">
-                <li class="tab-link current" data-tab="tab-1">전체 예약관리</li>
-                <li class="tab-link" data-tab="tab-2">예약확정</li>
-                <li class="tab-link" data-tab="tab-3">예약대기</li>
-                <li class="tab-link" data-tab="tab-4">리뷰관리</li>
-                <li class="tab-link" data-tab="tab-5">병원 정보</li>
-                <li class="tab-link" data-tab="tab-6">의사 정보</li>
-            </ul>
 
-            <div id="tab-1" class="tab-content current">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table" id="reservationList">
-                                <thead class="thead-primary">
-                                        </div>
-                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">당담의사</th>                                                                           
-                                                <th scope="col">환자</th>
-                                                <th scope="col">주민번호</th>
-                                                <th scope="col">전화</th>
-                                                <th scope="col">증상</th>
-                                                <th scope="col">예약날짜</th>                                                                                                                     
-                                                <th scope="col">승인</th>                                               
-                                            </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    <section class="ftco-section">
+      <div class="container">
+        <ul class="tabs">
+          <li class="tab-link current" data-tab="tab-1">전체 예약관리</li>
+          <li class="tab-link" data-tab="tab-2">예약확정</li>
+          <li class="tab-link" data-tab="tab-3">예약대기</li>
+          <li class="tab-link" data-tab="tab-4">리뷰관리</li>
+          <li class="tab-link" data-tab="tab-5">병원 정보</li>
+          <li class="tab-link" data-tab="tab-6">의사 정보</li>
+        </ul>
+
+        <div id="tab-1" class="tab-content current">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="table-wrap">
+                <table class="table" id="reservationList">
+                  <thead class="thead-primary">
+              </div>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">당담의사</th>
+                <th scope="col">환자</th>
+                <th scope="col">전화</th>
+                <th scope="col">증상</th>
+                <th scope="col">예약날짜</th>
+                <th scope="col">승인</th>
+                <th scope="col">버튼</th>
+              </tr>
+              </thead>
+              </table>
             </div>
-            <div id="tab-2" class="tab-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table" id="approvedreservationList">
-                                <thead class="thead-primary">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">당담의사</th>                                                                           
-                                        <th scope="col">환자</th>
-                                        <th scope="col">주민번호</th>
-                                        <th scope="col">전화</th>
-                                        <th scope="col">증상</th>
-                                        <th scope="col">예약날짜</th>                                                                                                                     
-                                        <th scope="col">승인</th>    
-                                    </tr>
-                                </thead>                          
-                            </table>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-2" class="tab-content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-wrap">
+              <table class="table" id="approvedreservationList">
+                <thead class="thead-primary">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">당담의사</th>
+                    <th scope="col">환자</th>
+                    <th scope="col">전화</th>
+                    <th scope="col">증상</th>
+                    <th scope="col">예약날짜</th>
+                    <th scope="col">승인</th>
+                    <th scope="col">버튼</th>
+                  </tr>
+                </thead>
+              </table>
             </div>
-            <div id="tab-3" class="tab-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table" id="waitingreservationList">
-                                <thead class="thead-primary">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">당담의사</th>                                                                           
-                                        <th scope="col">환자</th>
-                                        <th scope="col">주민번호</th>
-                                        <th scope="col">전화</th>
-                                        <th scope="col">증상</th>
-                                        <th scope="col">예약날짜</th>                                                                                                                     
-                                        <th scope="col">승인</th> 
-                                    </tr>
-                                </thead>                          
-                            </table>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-3" class="tab-content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-wrap">
+              <table class="table" id="waitingreservationList">
+                <thead class="thead-primary">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">당담의사</th>
+                    <th scope="col">환자</th>
+                    <th scope="col">전화</th>
+                    <th scope="col">증상</th>
+                    <th scope="col">예약날짜</th>
+                    <th scope="col">승인</th>
+                    <th scope="col">버튼</th>
+                  </tr>
+                </thead>
+              </table>
             </div>
-            <div id="tab-4" class="tab-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table" id="reviewList">
-                                <thead class="thead-primary">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>작성자</th>
-                                        <th>내용</th>
-                                        <th>평점</th>
-                                        <th>작성날짜</th>                                        
-                                    </tr>
-                                </thead>                          
-                            </table>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-4" class="tab-content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-wrap">
+              <table class="table" id="reviewList">
+                <thead class="thead-primary">
+                  <tr>
+                    <th>#</th>
+                    <th>작성자</th>
+                    <th>내용</th>
+                    <th>평점</th>
+                    <th>작성날짜</th>
+                  </tr>
+                </thead>
+              </table>
             </div>
-            <div id="tab-5" class="tab-content">
-                <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">[name]</h5>
-                      <p class="card-text">주소: [address]</p>
-                      <p class="card-text">전화번호: [phone]</p>
-                      <p class="card-text">위도: [latitude]</p>
-                      <p class="card-text">경도: [longitude]</p>
-                      <p class="card-text">생성 날짜: [createdAt]</p>
-                      <p class="card-text">업데이트 날짜: [updatedAt]</p>
-                      <button onclick="location.href='/register'">우리 병원 등록하기</button>
-                      <button onclick="location.href='/edit'">우리 병원 수정하기</button>
-                    </div>
-                </div>
-            </div>
-            <div id="tab-6" class="tab-content">
-                      <button onclick="location.href='/doctorRegister'">의사 등록하기</button>
-                      <button onclick="location.href='/doctorEdit'">의사 수정하기</button>
-                    </div>
-                </div>
-            </div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-5" class="tab-content">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title">[name]</h1>
+            <p class="card-text">주소: [address]</p>
+            <p class="card-text">전화번호: [phone]</p>
+            <p class="card-text">위도: [latitude]</p>
+            <p class="card-text">경도: [longitude]</p>
+            <p class="card-text">생성 날짜: [createdAt]</p>
+            <p class="card-text">업데이트 날짜: [updatedAt]</p>
+            <button onclick="location.href='/register'">우리 병원 등록하기</button>
+            <button onclick="location.href='/edit'">우리 병원 수정하기</button>
+          </div>
+          <div id="content-image">
+            <h3>병원 이미지 미리보기</h3>
+          </div>
+
+          <form id="imageForm" action="/api/hospitals/register/image" method="POST" enctype="multipart/form-data">
+            <input type="file" name="images" multiple>
+            <input type="submit" value="Upload">
+          </form>
+        </div>
+      </div>
+      <div id="tab-6" class="tab-content">
+        <div id="cards-container">
+        </div>
+        <div>
+          <button onclick="location.href='/doctorRegister'">의사 등록하기</button>
+        </div>
+
+      </div>
     </section>
+  </div>
 </div>
 
 
 
-<script>
 
-$(document).ready(function () {
+<script>
+  $(document).ready(function () {
     reservationList();
     waitedreservationList();
     approvedreservationList();
     reviewList();
-});
+  });
 
-// {
-//     "reservationdata": [
-//       {
-//         "hospitalId": 4,
-//         "name": "담소유병원",
-//         "doctors": [
-//           {
-//             "name": "이희찬",
-//             "doctorId": 2,
-//             "reservations": {
-//               "id": 2,
-//               "doctorId": 1,
-//               "userId": 1,
-//               "relationship": "0",
-//               "name": "김용철",
-//               "phone": "010-1234-5678",
-//               "date": "2023-03-02 06:50",
-//               "contents": "복통",
-//               "idNumber": "600312-1000000",
-//               "status": "waiting",
-//               "createdAt": "2021-04-18T16:30:00.000Z",
-//               "updatedAt": "2023-03-01T09:33:28.000Z"
-//             }
-//           },
-//           {
-//             "name": "김범석",
-//             "doctorId": 3,
-//             "reservations": {
-//               "id": 3,
-//               "doctorId": 3,
-//               "userId": 6,
-//               "relationship": "0",
-//               "name": "김광덕",
-//               "phone": "010-2345-1234",
-//               "date": "2021-04-18 16:50",
-//               "contents": "역류성식도염",
-//               "idNumber": "701002-1000000",
-//               "status": "approved",
-//               "createdAt": "2021-04-18T16:50:43.000Z",
-//               "updatedAt": "2021-04-18T16:50:43.000Z"
-//             }
-//           }
-//         ]
-//       }
-//     ]
-//   }
 
-function extractReservations(reservationData) {
+  // 전체 예약관리 
+  function extractReservations(reservationData) {
     let reservations = [];
 
     for (let i = 0; i < reservationData.length; i++) {
-        let hospitalId = reservationData[i]['hospitalId'];
-        let hospitalName = reservationData[i]['name'];
+      let hospitalId = reservationData[i]['hospitalId'];
+      let hospitalName = reservationData[i]['name'];
 
-        let doctors = reservationData[i]['doctors'];
-        for (let j = 0; j < doctors.length; j++) {
-            let doctorId = doctors[j]['doctorId'];
-            let doctorName = doctors[j]['name'];
-
-            let reservation = doctors[j]['reservations'];
-            if (reservation) {
-                reservations.push({
-                    hospitalId: hospitalId,
-                    hospitalName: hospitalName,
-                    doctorId: doctorId,
-                    doctorName: doctorName,
-                    reservationId: reservation['id'],
-                    name: reservation['name'],
-                    idNumber: reservation['idNumber'],
-                    phone: reservation['phone'],
-                    contents: reservation['contents'],
-                    date: reservation['date'],
-                    status: reservation['status'],
-                });
-            }
+      let doctors = reservationData[i]['doctors'];
+      for (let j = 0; j < doctors.length; j++) {
+        let doctorId = doctors[j]['doctorId'];
+        let doctorName = doctors[j]['name'];
+        let reservationsOfDoctor = doctors[j]['reservations'];
+        if (reservationsOfDoctor) {
+          for (let k = 0; k < reservationsOfDoctor.length; k++) {
+            let reservation = reservationsOfDoctor[k];
+            reservations.push({
+              hospitalId: hospitalId,
+              hospitalName: hospitalName,
+              doctorId: doctorId,
+              doctorName: doctorName,
+              id: reservation['id'],
+              name: reservation['name'],
+              // idNumber: reservation['idNumber'],
+              phone: reservation['phone'],
+              contents: reservation['contents'],
+              date: reservation['date'],
+              status: reservation['status'],
+            });
+          }
         }
+      }
     }
-
     return reservations;
-}
+  }
 
-// 전체예약관리
-function reservationList() {
+  function reservationList() {
     $.ajax({
-        type: 'GET',
-        url: '/api/hospitals/reservation',
-        dataType: 'json',
-        success: function (response) {
-            let reservations = extractReservations(response['reservationdata']);
-            for (let i = 0; i < reservations.length; i++) {
-                let reservation = reservations[i];
+      type: 'GET',
+      url: '/api/hospitals/reservation',
+      dataType: 'json',
+      success: function (response) {
+        let reservations = extractReservations(response['reservationdata']);
+        for (let i = 0; i < reservations.length; i++) {
+          let reservation = reservations[i];
+          if (reservation.status === "done" || reservation.status === "canceled") {
+            let temp_html = `<tbody>
+          <tr>
+            <th scope="row">${i + 1}</th>
+            <td>${reservation.doctorName}</td>
+            <td>${reservation.name}</td>
+            <td>${reservation.phone}</td>                              
+            <td>${reservation.contents}</td>
+            <td>${reservation.date}</td>
+            <td>
+                <select disabled class="form-select" id="statusSelect-${reservation.id}" data-reservation-id="${reservation.id}">
+                <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
+                <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
+                <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
+                </select>
+            </td>                  
+            <td><button class="btn btn-primary" id="approveButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                               
+          </tr>
+        </tbody>`;
+            $('#reservationList').append(temp_html);
+          } else {
+            let temp_html = `<tbody>
+          <tr>
+            <th scope="row">${i + 1}</th>
+            <td>${reservation.doctorName}</td>
+            <td>${reservation.name}</td>
+            <td>${reservation.phone}</td>                              
+            <td>${reservation.contents}</td>
+            <td>${reservation.date}</td>
+            <td>
+                <select class="form-select" id="statusSelect-${reservation.id}" data-reservation-id="${reservation.id}">
+                <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
+                <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
+                <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
+                </select>
+            </td>                  
+            <td><button class="btn btn-primary" id="approveButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                               
+          </tr>
+        </tbody>`;
+            $('#reservationList').append(temp_html);
+          }
+        }
 
-                let temp_html = `<tbody>
-                            <tr>
-                                <th scope="row">${i + 1}</th>
-                                <td>${reservation.doctorName}</td>
-                                <td>${reservation.name}</td>
-                                <td>${reservation.idNumber}</td 
-                                <td>${reservation.phone}</td>                              
-                                <td>${reservation.phone}</td>
-                                <td>${reservation.contents}</td>
-                                <td>${reservation.date}</td>
-                                <td>${
-                                    reservation.status
-                                }</td>                                                            
-                            </tr>
-                        </tbody>`;
-                $('#reservationList').append(temp_html);
+        // 승인 버튼 클릭 이벤트
+        $(document).on('click', 'button[id^="approveButton-"]', function () {
+          let id = $(this).data('reservation-id');
+          let statusSelect = $(`#statusSelect-${id}`).val();
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
             }
-        },
-    });
-}
+          });
+        });
 
-function extractwaitedReservations(waitingdata) {
+      },
+      error: function (xhr, status, error) {
+        // 에러가 발생했을 때 실행할 코드를 작성합니다.
+        // alert(xhr.responseJSON.message);
+      }
+    });
+  }
+
+
+  // 예약대기
+  function extractWaitingReservations(waitingdata) {
+
     let reservations = [];
 
     for (let i = 0; i < waitingdata.length; i++) {
-        let hospitalId = waitingdata[i]['hospitalId'];
-        let hospitalName = waitingdata[i]['name'];
+      let hospitalId = waitingdata[i]['hospitalId'];
+      let hospitalName = waitingdata[i]['name'];
 
-        let doctors = waitingdata[i]['doctors'];
-        for (let j = 0; j < doctors.length; j++) {
-            let doctorId = doctors[j]['doctorId'];
-            let doctorName = doctors[j]['name'];
-
-            let reservation = doctors[j]['reservations'];
-            if (reservation) {
-                reservations.push({
-                    hospitalId: hospitalId,
-                    hospitalName: hospitalName,
-                    doctorId: doctorId,
-                    doctorName: doctorName,
-                    reservationId: reservation['id'],
-                    name: reservation['name'],
-                    idNumber: reservation['idNumber'],
-                    phone: reservation['phone'],
-                    contents: reservation['contents'],
-                    date: reservation['date'],
-                    status: reservation['status'],
-                });
-            }
+      let doctors = waitingdata[i]['doctors'];
+      for (let j = 0; j < doctors.length; j++) {
+        let doctorId = doctors[j]['doctorId'];
+        let doctorName = doctors[j]['name'];
+        let reservationsOfDoctor = doctors[j]['reservations'];
+        if (reservationsOfDoctor) {
+          for (let k = 0; k < reservationsOfDoctor.length; k++) {
+            let reservation = reservationsOfDoctor[k];
+            reservations.push({
+              hospitalId: hospitalId,
+              hospitalName: hospitalName,
+              doctorId: doctorId,
+              doctorName: doctorName,
+              id: reservation['id'],
+              name: reservation['name'],
+              // idNumber: reservation['idNumber'],
+              phone: reservation['phone'],
+              contents: reservation['contents'],
+              date: reservation['date'],
+              status: reservation['status'],
+            });
+          }
         }
+      }
     }
-
     return reservations;
-}
+  }
 
-// 승인대기 불러오기
-function waitedreservationList() {
+  function waitedreservationList() {
     $.ajax({
-        type: 'GET',
-        url: '/api/hospitals/reservation/status',
-        dataType: 'json',
-        success: function (response) {
-            let reservations = extractwaitedReservations(response['waitingdata']);
-            for (let i = 0; i < reservations.length; i++) {
-                let reservation = reservations[i];
+      type: 'GET',
+      url: '/api/hospitals/reservation/status',
+      dataType: 'json',
+      success: function (response) {
 
-                let temp_html = `<tbody>
-                            <tr>
-                                <th scope="row">${i + 1}</th>
-                                <td>${reservation.doctorName}</td>
-                                <td>${reservation.name}</td>
-                                <td>${reservation.idNumber}</td 
-                                <td>${reservation.phone}</td>                              
-                                <td>${reservation.phone}</td>
-                                <td>${reservation.contents}</td>
-                                <td>${reservation.date}</td>
-                                <td>${
-                                    reservation.status
-                                }</td>                                                            
-                            </tr>
-                        </tbody>`;
-                $('#waitingreservationList').append(temp_html);
-            }
-        },
-    });
-}
+        let waitingreservations = extractWaitingReservations(response['waitingdata']);
+        for (let i = 0; i < waitingreservations.length; i++) {
+          let reservation = waitingreservations[i];
 
-function extractwaitedReservations(waitingdata) {
-    let reservations = [];
-
-    for (let i = 0; i < waitingdata.length; i++) {
-        let hospitalId = waitingdata[i]['hospitalId'];
-        let hospitalName = waitingdata[i]['name'];
-
-        let doctors = waitingdata[i]['doctors'];
-        for (let j = 0; j < doctors.length; j++) {
-            let doctorId = doctors[j]['doctorId'];
-            let doctorName = doctors[j]['name'];
-
-            let reservation = doctors[j]['reservations'];
-            if (reservation) {
-                reservations.push({
-                    hospitalId: hospitalId,
-                    hospitalName: hospitalName,
-                    doctorId: doctorId,
-                    doctorName: doctorName,
-                    reservationId: reservation['id'],
-                    name: reservation['name'],
-                    idNumber: reservation['idNumber'],
-                    phone: reservation['phone'],
-                    contents: reservation['contents'],
-                    date: reservation['date'],
-                    status: reservation['status'],
-                });
-            }
+          let temp_html = `<tbody>
+          <tr>
+            <th scope="row">${i + 1}</th>
+            <td>${reservation.doctorName}</td>
+            <td>${reservation.name}</td>
+            <td>${reservation.phone}</td>                              
+            <td>${reservation.contents}</td>
+            <td>${reservation.date}</td>
+            <td>
+                <select class="form-select" id="statusSelect-${reservation.id}" data-reservation-id="${reservation.id}">
+                <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
+                <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
+                <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
+                
+                </select>
+            </td>                  
+            <td><button class="btn btn-primary" id="waitingButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                                                                                        
+          </tr>
+        </tbody>`;
+          $('#waitingreservationList').append(temp_html);
         }
-    }
 
-    return reservations;
-}
+        // 승인 버튼 클릭 이벤트
+        $(document).on('click', 'button[id^="waitingButton-"]', function () {
+          let id = $(this).data('reservation-id');
+          let statusSelect = $(this).closest('tr').find('select').val();
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
+            }
+          });
+        });
 
-function extractapprovedReservations(approveddata) {
+      },
+    });
+  }
+
+  // 예약확정 불러오기 
+  function extractApprovedReservations(approveddata) {
+
     let reservations = [];
 
     for (let i = 0; i < approveddata.length; i++) {
-        let hospitalId = approveddata[i]['hospitalId'];
-        let hospitalName = approveddata[i]['name'];
+      let hospitalId = approveddata[i]['hospitalId'];
+      let hospitalName = approveddata[i]['name'];
 
-        let doctors = approveddata[i]['doctors'];
-        for (let j = 0; j < doctors.length; j++) {
-            let doctorId = doctors[j]['doctorId'];
-            let doctorName = doctors[j]['name'];
-
-            let reservation = doctors[j]['reservations'];
-            if (reservation) {
-                reservations.push({
-                    hospitalId: hospitalId,
-                    hospitalName: hospitalName,
-                    doctorId: doctorId,
-                    doctorName: doctorName,
-                    reservationId: reservation['id'],
-                    name: reservation['name'],
-                    idNumber: reservation['idNumber'],
-                    phone: reservation['phone'],
-                    contents: reservation['contents'],
-                    date: reservation['date'],
-                    status: reservation['status'],
-                });
-            }
+      let doctors = approveddata[i]['doctors'];
+      for (let j = 0; j < doctors.length; j++) {
+        let doctorId = doctors[j]['doctorId'];
+        let doctorName = doctors[j]['name'];
+        let reservationsOfDoctor = doctors[j]['reservations'];
+        if (reservationsOfDoctor) {
+          for (let k = 0; k < reservationsOfDoctor.length; k++) {
+            let reservation = reservationsOfDoctor[k];
+            reservations.push({
+              hospitalId: hospitalId,
+              hospitalName: hospitalName,
+              doctorId: doctorId,
+              doctorName: doctorName,
+              id: reservation['id'],
+              name: reservation['name'],
+              // idNumber: reservation['idNumber'],
+              phone: reservation['phone'],
+              contents: reservation['contents'],
+              date: reservation['date'],
+              status: reservation['status'],
+            });
+          }
         }
+      }
     }
-
     return reservations;
-}
+  }
 
-// 예약완료 불러오기
-function approvedreservationList() {
+  function approvedreservationList() {
     $.ajax({
-        type: 'GET',
-        url: '/api/hospitals/reservation/approved',
-        dataType: 'json',
-        success: function (response) {
-            let reservations = extractapprovedReservations(response['approveddata']);
-            for (let i = 0; i < reservations.length; i++) {
-                let reservation = reservations[i];
+      type: 'GET',
+      url: '/api/hospitals/reservation/approved',
+      dataType: 'json',
+      success: function (response) {
 
-                let temp_html = `<tbody>
-                            <tr>
-                                <th scope="row">${i + 1}</th>
-                                <td>${reservation.doctorName}</td>
-                                <td>${reservation.name}</td>
-                                <td>${reservation.idNumber}</td 
-                                <td>${reservation.phone}</td>                              
-                                <td>${reservation.phone}</td>
-                                <td>${reservation.contents}</td>
-                                <td>${reservation.date}</td>
-                                <td>${
-                                    reservation.status
-                                }</td>                                                            
-                            </tr>
-                        </tbody>`;
-                $('#approvedreservationList').append(temp_html);
+        let approvedreservations = extractApprovedReservations(response['approveddata']);
+        for (let i = 0; i < approvedreservations.length; i++) {
+          let reservation = approvedreservations[i];
+
+          let temp_html = `<tbody>
+          <tr>
+            <th scope="row">${i + 1}</th>
+            <td>${reservation.doctorName}</td>
+            <td>${reservation.name}</td> 
+            <td>${reservation.phone}</td>                              
+            <td>${reservation.contents}</td>
+            <td>${reservation.date}</td>
+            <td>
+                <select class="form-select" id="statusSelect-${reservation.id}" data-reservation-id="${reservation.id}">
+                <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
+                <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
+                <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
+                </select>
+            </td>                  
+            <td><button class="btn btn-primary" id="clearButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                                                                                        
+          </tr>
+        </tbody>`;
+          $('#approvedreservationList').append(temp_html);
+        }
+
+        // 승인 버튼 클릭 이벤트
+        $(document).on('click', 'button[id^="clearButton-"]', function () {
+          let id = $(this).data('reservation-id');
+          let statusSelect = $(this).closest('tr').find('select').val();
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
             }
-        },
+          });
+        });
+      },
+      error: function (xhr, status, error) {
+        // 실패 시 알림 메시지 출력
+        // alert(xhr.responseJSON.message);
+      }
     });
-}
+  }
 
-//리뷰관리
-function reviewList() {
+  //리뷰관리
+  function reviewList() {
     $.ajax({
-        type: 'GET',
-        url: '/api/hospitals/reviews',
-        dataType: 'json',
-        success: function (response) {
-            let reviews = response['data'];
+      type: 'GET',
+      url: '/api/hospitals/reviews',
+      dataType: 'json',
+      success: function (response) {
+        let reviews = response['data'];
 
-            for (let i = 0; i < reviews.length; i++) {
-                let userId = reviews[i]['userId'];
-                let name = reviews[i]['name'];
-                let contents = reviews[i]['reviews'][0]['contents'];
-                let star = reviews[i]['reviews'][0]['star'];
-                let reviewCreatedAt = reviews[i]['reviews'][0]['reviewCreatedAt'];
+        for (let i = 0; i < reviews.length; i++) {
+          let userId = reviews[i]['userId'];
+          let name = reviews[i]['name'];
+          let contents = reviews[i]['reviews'][0]['contents'];
+          let star = reviews[i]['reviews'][0]['star'];
+          let reviewCreatedAt = reviews[i]['reviews'][0]['reviewCreatedAt'];
 
-                let temp_html = `<tbody>
+          let temp_html = `<tbody>
             <tr>
               <th scope="row">${i + 1}</th>
               <td>${name}</td>
@@ -438,39 +640,238 @@ function reviewList() {
             </tr>
           </tbody>`;
 
-                $('#reviewList').append(temp_html);
-            }
-        },
+          $('#reviewList').append(temp_html);
+        }
+      },
+      error: function (xhr, status, error) {
+        // 실패 시 알림 메시지 출력
+        // alert(xhr.responseJSON.message);
+      }
     });
-}
+  }
 
-// html이 로드 되면 자동으로 informationHospital() -> (병원 정보)함수를 불러옴. 
-    $(document).ready(function () {
+  // html이 로드 되면 자동으로 informationHospital() -> (병원 정보)함수를 불러옴. 
+  $(document).ready(function () {
     informationHospital();
-});
+    getImageHospital();
+  });
 
-function informationHospital() {
+  function informationHospital() {
     $.ajax({
-        type: 'GET',
-        url: '/api/hospitals/information',
-        dataType: 'json',
-        success: function (response) {
-            const hospital = response.data;
+      type: 'GET',
+      url: '/api/hospitals/information',
+      dataType: 'json',
+      success: function (response) {
+        const hospital = response.data;
 
-            $('.card-title').text(hospital.name);
-            $('.card-text:eq(0)').text('주소: ' + hospital.address);
-            $('.card-text:eq(1)').text('전화번호: ' + hospital.phone);
-            $('.card-text:eq(2)').text('위도: ' + hospital.latitude);
-            $('.card-text:eq(3)').text('경도: ' + hospital.longitude);
-            $('.card-text:eq(4)').text('생성 날짜: ' + hospital.createdAt);
-            $('.card-text:eq(5)').text('업데이트 날짜: ' + hospital.updatedAt);
-        },
+        $('.card-title').text(hospital.name);
+        $('.card-text:eq(0)').text('주소: ' + hospital.address);
+        $('.card-text:eq(1)').text('전화번호: ' + hospital.phone);
+        $('.card-text:eq(2)').text('위도: ' + hospital.latitude);
+        $('.card-text:eq(3)').text('경도: ' + hospital.longitude);
+        $('.card-text:eq(4)').text('생성 날짜: ' + hospital.createdAt);
+        $('.card-text:eq(5)').text('업데이트 날짜: ' + hospital.updatedAt);
+      },
+      error: function (xhr, status, error) {
+        // 실패 시 알림 메시지 출력
+        // alert(xhr.responseJSON.message);
+      }
     });
-}
+  }
 
+  // 병원 이미지 호출 
+  function getImageHospital() {
+    $.ajax({
+      type: 'GET',
+      url: '/api/hospitals/information/hospitalImage',
+      dataType: 'json',
+      success: function (response) {
+        const imagehospital = response;
+        let temp_html = `
+          <div id="bigimages">
+            <img id="bigimage"
+              src="${imagehospital[0].url}">
+          </div>
+          <div id="smallimages">
+            ${imagehospital.map(image => `<img class="small" src="${image.url}">`).join('')}
+          </div>`;
+        $('#content-image').append(temp_html);
+        var bigPic = document.querySelector("#bigimage");
+        var smallPics = document.querySelectorAll(".small");
+
+        for (let i = 0; i < smallPics.length; i++) {
+          smallPics[i].addEventListener("click", changepic);
+          smallPics[i].onclick = changepic;
+        }
+
+        function changepic() {
+          let smallPicAttribute = this.getAttribute("src");
+          bigPic.setAttribute("src", smallPicAttribute);
+        }
+      }
+    })
+  }
+
+  // AJAX를 통해 데이터를 불러오는 함수
+  // function loadProfileCards() {
+  // 	var xhttp = new XMLHttpRequest();
+  // 	xhttp.onreadystatechange = function() {
+  // 		if (this.readyState == 4 && this.status == 200) {
+  // 			// 데이터를 JSON 객체로 파싱
+  // 			var data = JSON.parse(this.responseText);
+  // 			// 카드 생성 함수 호출
+  // 			createProfileCards(data);
+  // 		}
+  // 	};
+  // 	xhttp.open("GET", "/api/hospitals/information/doctor", true);
+  // 	xhttp.send();
+  // }
+
+  function loadProfileCards() {
+    $.ajax({
+      url: "/api/hospitals/information/doctor",
+      method: "GET",
+      success: function (data) {
+        // 카드 생성 함수 호출
+        createProfileCards(data);
+      },
+      error: function (xhr, status, error) {
+        // 실패 시 알림 메시지 출력
+        // alert(xhr.responseJSON.message);
+      }
+    });
+  }
+
+  // 카드를 생성하는 함수
+  function createProfileCards(data) {
+    var container = document.getElementById("cards-container");
+    for (let i = 0; i < data.length; i++) {
+      var card = document.createElement("div");
+      card.className = "profile-card";
+      var image = document.createElement("img");
+      image.src = data[i].image;
+      image.alt = "프로필 사진";
+      var name = document.createElement("h1");
+      name.textContent = data[i].name;
+      var contents = document.createElement("p");
+      contents.textContent = data[i].contents;
+      var editButton = document.createElement("button");
+      editButton.textContent = "수정 하기";
+      editButton.onclick = function () {
+        location.href = `/doctorEdit/?doctorId=${data[i].doctorId}`
+      };
+      var createButton = document.createElement("button");
+      createButton.textContent = "시간 등록";
+      createButton.onclick = function () {
+        location.href = `/doctorTime/?doctorId=${data[i].doctorId}`
+      }
+      card.appendChild(image);
+      card.appendChild(name);
+      card.appendChild(contents);
+      card.appendChild(editButton);
+      card.appendChild(createButton);
+      container.appendChild(card);
+    }
+  }
+
+  // 페이지 로드 시 카드를 로드하는 함수 호출
+  loadProfileCards();
+
+  // 이미지 유효성 검사 및 업로드 
+  $(document).ready(function () {
+    $('#imageForm').submit(function (e) {
+      e.preventDefault();
+      const files = document.querySelector('input[type="file"]').files;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!validateFile(file)) {
+          return;
+        }
+      }
+
+      var formData = new FormData(this);
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          swal({
+            title: '😊 업로드 성공!',
+            text: '파일 업로드가 완료되었습니다!',
+            icon: 'success',
+          }).then(() => {
+            window.location.href = "/hospital"
+          });
+        },
+        error: function (xhr, status, error) {
+          swal('😭 업로드 실패', '파일 업로드 중 오류가 발생했습니다.', error);
+        }
+      });
+    });
+  });
+
+  function validateFile(file) {
+    const fileSize = file.size;
+    const fileName = file.name;
+    const maxSize = 5242880; // 5MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // 허용 가능한 파일 유형
+
+    if (!allowedTypes.includes(file.type)) {
+      swal({
+        title: '😓 죄송합니다.',
+        text: '이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.',
+        icon: 'warning',
+      }).then(() => {
+        event.preventDefault();
+        return false;
+      });
+    }
+
+    if (fileSize > maxSize) {
+      swal({
+        title: '😓 죄송합니다.',
+        text: `파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`,
+        icon: 'warning',
+      }).then(() => {
+        event.preventDefault();
+        return false;
+      });
+    }
+    return true;
+  }
+
+
+  $("#reservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="done"]').prop('disabled', false);
+    }
+
+    console.log("ㅎㅎ");
+
+  });
+
+
+
+  $("#approvedreservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="done"]').prop('disabled', false);
+      $(this).find('option[value="canceled"]').prop('disabled', true);
+    }
+  })
+
+  $("#waitingreservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="canceled"]').prop('disabled', true);
+    }
+  })
 </script>
-
-
-
-
-

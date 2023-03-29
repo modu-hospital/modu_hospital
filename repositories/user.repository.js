@@ -1,14 +1,32 @@
+const { Op } = require('sequelize');
+
 class UserRepository {
-    constructor(UserModel, HospitalModel, DoctorModel, RefreshTokenModel) {
+    constructor(
+        UserModel,
+        HospitalModel,
+        DoctorModel,
+        RefreshTokenModel,
+        PasswordResetCaseModel,
+        sequelize
+    ) {
         this.userModel = UserModel;
         this.hospitalModel = HospitalModel;
         this.doctorModel = DoctorModel;
         this.refreshTokenModel = RefreshTokenModel;
+        this.passwordResetCaseModel = PasswordResetCaseModel;
+        this.sequelize = sequelize;
     }
 
     findUserById = async (userId) => {
         const user = await this.userModel.findOne({
             where: { userId: userId },
+        });
+        return user;
+    };
+
+    findUserByEmail = async (email) => {
+        const user = await this.userModel.findOne({
+            where: { loginId: email },
         });
         return user;
     };
@@ -53,12 +71,9 @@ class UserRepository {
         return await this.doctorModel.destroy({ where: { doctorId } });
     };
 
+    //계정검사
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
-    };
-
-    tokenSave = async (userId, token) => {
-        return await this.refreshTokenModel.create({ userId, token });
     };
 
     // 병원삭제
@@ -111,18 +126,129 @@ class UserRepository {
         return users;
     };
 
-    PaginationByRole = async (limit, offset, role, type) => {
+    getSearchList = async (search, limit, offset, type) => {
         let users;
         const tabType = { offset, limit };
-        users = await this.userModel.findAndCountAll({
-            ...tabType,
-            where: { role },
-        });
+        if (type === 'customer') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
+                        { role: 'customer' },
+                    ],
+                },
+            });
+        } else if (type === 'partner') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
+                        { role: 'partner' },
+                    ],
+                },
+            });
+        } else if (type === 'waiting') {
+            users = await this.userModel.findAndCountAll({
+                ...tabType,
+                where: {
+                    [Op.and]: [
+                        {
+                            [Op.or]: [
+                                { name: { [Op.substring]: search } },
+                                { loginId: { [Op.substring]: search } },
+                                { phone: { [Op.substring]: search } },
+                                { address: { [Op.substring]: search } },
+                                { createdAt: { [Op.substring]: search } },
+                            ],
+                        },
+                        { role: 'waiting' },
+                    ],
+                },
+            });
+        } else {
+            users = await this.userModel.findAndCountAll({
+                offset,
+                limit,
+                where: {
+                    [Op.or]: [
+                        { name: { [Op.substring]: search } },
+                        { loginId: { [Op.substring]: search } },
+                        { phone: { [Op.substring]: search } },
+                        { address: { [Op.substring]: search } },
+                        { createdAt: { [Op.substring]: search } },
+                    ],
+                },
+            });
+        }
         return users;
     };
 
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
+    };
+    updatePassword = async (userId, password) => {
+        const updated = await this.userModel.update(
+            {
+                password: password,
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+        return updated;
+    };
+
+    findResetCaseByUserId = async (userId) => {
+        return await this.passwordResetCaseModel.findOne({ where: { userId } });
+    };
+    findResetCaseByToken = async (token) => {
+        return await this.passwordResetCaseModel.findOne({ where: { token } });
+    };
+    createPasswordResetCase = async (userId, token) => {
+        return await this.passwordResetCaseModel.create({ userId, token });
+    };
+    updatePasswordResetCase = async (userId, token) => {
+        return await this.passwordResetCaseModel.update(
+            {
+                token: token,
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+    };
+
+    //토큰 저장
+    tokenSave = async (userId, token) => {
+        return await this.refreshTokenModel.create({ userId, token });
+    };
+
+    //userId로 refreshtoken 찾기
+    findToken = async (userId) => {
+        return await this.refreshTokenModel.findAll({ where: { userId } });
+    };
+
+    //token 수정
+    updateToken = async (userId, token) => {
+        return await this.refreshTokenModel.update({ token }, { where: { userId } });
     };
 }
 

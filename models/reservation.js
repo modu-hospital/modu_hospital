@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate({ Doctor, User }) {
             // define association here
-            this.hasMany(Doctor, { foreignKey: 'DoctorId', as: 'doctors' });
+            this.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctors' });
             this.hasMany(User, { foreignKey: 'userId', as: 'users' });
         }
     }
@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
             userId: DataTypes.INTEGER,
             relationship: DataTypes.STRING,
             name: DataTypes.STRING,
+            proxyName: DataTypes.STRING,
+            address: DataTypes.STRING,
             phone: DataTypes.STRING,
             date: DataTypes.DATE,
             contents: DataTypes.STRING,

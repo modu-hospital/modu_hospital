@@ -1,11 +1,13 @@
 const TokenRepository = require('../repositories/token.repository');
-const { Refreshtoken } = require('../models/refreshtoken');
-
+const { User, RefreshToken } = require('../models');
 class TokenService {
-    tokenRepository = new TokenRepository(Refreshtoken);
+    tokenRepository = new TokenRepository(User, RefreshToken);
+    findUserId = async (userId) => {
+        return await this.tokenRepository.findUserId(userId);
+    };
 
-    findUserId = async (loginId) => {
-        return await this.tokenRepository.findUserId(loginId);
+    findToken = async (refreshToken) => {
+        return await this.tokenRepository.findToken(refreshToken);
     };
 }
 

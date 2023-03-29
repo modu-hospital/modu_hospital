@@ -3,6 +3,7 @@ $(document).ready(function () {
     const urlSearch = new URLSearchParams(location.search);
     const page = Number(urlSearch.get('page'));
     const type = urlSearch.get('type');
+    const search = urlSearch.get('search');
 
     if (type === 'customer') {
         $('.active').removeClass('active');
@@ -18,40 +19,26 @@ $(document).ready(function () {
         $('#allUserListTab').addClass('active');
     }
 
-    $('#customerTab').click(function (role) {
-        if (document.querySelector('#customUserList td') === null) {
-            getCustomUserInfo(role);
-        } else {
-            return;
-        }
-    });
+    let ajaxURL = '';
 
-    $('#partnerTab').click(function (role) {
-        if (document.querySelector('#partnerUserList td') === null) {
-            getPartnerUserInfo(role);
-        } else {
-            return;
-        }
-    });
-
-    $('#waitingTab').click(function (role) {
-        if (document.querySelector('#waitingUserList td') === null) {
-            getWaitingUserInfo(role);
-        } else {
-            return;
-        }
-    });
+    if (search) {
+        ajaxURL = `/api/admin/search?page=${page || 1}&type=${type}&search=${search}`;
+        searchURL = `&search=${search}`;
+    } else {
+        ajaxURL = `/api/admin/all?page=${page || 1}&type=${type}`;
+        searchURL = ``;
+    }
 
     $.ajax({
         type: 'GET',
-        url: `/api/admin?page=${page || 1}&type=${type}`,
+        url: `${ajaxURL}`,
         async: false,
         success: function (response) {
             const lastPage = response.lastPage;
             const allUser = response.allUser;
             for (let i = 1; i <= lastPage; i++) {
                 let temp_html = `<li class="page-item">
-                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
+                    <a class="page-link" href="?page=${i}&type=${type}${searchURL}">${i}</a>
                 </li>`;
                 $('#Allpagination').append(temp_html);
             }
@@ -96,178 +83,80 @@ $(document).ready(function () {
                 }
             }
         },
-    });
-});
-
-// 일반회원목록 조회
-
-$(document).ready(function getCustomUserInfo() {
-    const urlSearch = new URLSearchParams(location.search);
-    const page = Number(urlSearch.get('page'));
-    const type = urlSearch.get('type');
-    $.ajax({
-        type: 'GET',
-        url: `/api/admin/customer?page=${page || 1}&type=${type}`,
-        async: false,
-        success: function (response) {
-            const lastPage = response.lastPage;
-            const allUser = response.allUser;
-            for (let i = 1; i <= lastPage; i++) {
-                let temp_html = `<li class="page-item">
-                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-                </li>`;
-                $('#paginationCustomer').append(temp_html);
-            }
-            for (let i = 0; i < allUser.rows.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    allUser.rows[i];
-
-                let temp_html = `<tr id="userId${userId}">
-                                    <th scope="row" class="list-MS">${userId}</th>
-                                    <td class="list-name">${name}</td>
-                                    <td class="list-name">${getGender(idNumber)}</td>
-                                    <td class="list-MS">${loginId}</td>
-                                    <td class="list-MS">${phone}</td>
-                                    <td class="list-name">${editaddress(address)}</td>
-                                    <td class="list-MS"">${editDate(createdAt)}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
-                                            >회원삭제</a
-                                        >
-                                    </td>
-                                </tr>`;
-                $('#customUserList').append(temp_html);
-            }
+        error: function (err) {
+            swal('😭 조회 실패', '목록을 불러오는 데 실패하였습니다.', 'error');
         },
     });
 });
 
-// 파트너회원목록 조회
-function getPartnerUserInfo() {
-    const urlSearch = new URLSearchParams(location.search);
-    const page = Number(urlSearch.get('page'));
-    const type = urlSearch.get('type');
+let debouncingTime = null;
+$('#filter-value').on('keyup', function searchInput() {
+    if (debouncingTime) clearTimeout(debouncingTime);
+    debouncingTime = setTimeout(() => {
+        const urlSearch = new URLSearchParams(location.search);
+        const page = Number(urlSearch.get('page'));
+        const type = urlSearch.get('type');
 
-    $.ajax({
-        type: 'GET',
-        url: `/api/admin/partner?page=${page || 1}&type=partner`,
-        async: false,
-        success: function (response) {
-            const lastPage = response.lastPage;
-            const allUser = response.allUser;
-            for (let i = 1; i <= lastPage; i++) {
-                let temp_html = `<li class="page-item">
-                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-                </li>`;
-                $('#paginationPartner').append(temp_html);
-            }
-            for (let i = 0; i < allUser.rows.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    allUser.rows[i];
+        const url = new URL(window.location);
+        const search = url.searchParams.set('search', $('#filter-value').val());
 
-                let temp_html = `<tr id="userId${userId}">
-                                    <th scope="row" class="list-MS">${userId}</th>
-                                    <td class="list-name">${name}</td>
-                                    <td class="list-name">${getGender(idNumber)}</td>
-                                    <td class="list-MS">${loginId}</td>
-                                    <td class="list-MS">${phone}</td>
-                                    <td class="list-name">${editaddress(address)}</td>
-                                    <td class="list-MS"">${editDate(createdAt)}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-secondary" style="width:162.5px; height:35px" onclick="userDelete(${userId})"
-                                            >회원삭제</a
-                                        >
-                                    </td>
-                                </tr>`;
-                $('#partnerUserList').append(temp_html);
-            }
-        },
-    });
-}
-
-// 승인대기회원목록 조회
-function getWaitingUserInfo() {
-    const urlSearch = new URLSearchParams(location.search);
-    const page = Number(urlSearch.get('page'));
-    const type = urlSearch.get('type');
-
-    $.ajax({
-        type: 'GET',
-        url: `/api/admin/waiting?page=${page || 1}&type=waiting`,
-        async: false,
-        success: function (response) {
-            const lastPage = response.lastPage;
-            const allUser = response.allUser;
-            for (let i = 1; i <= lastPage; i++) {
-                let temp_html = `<li class="page-item">
-                    <a class="page-link" href="?page=${i}&type=${type}">${i}</a>
-                </li>`;
-                $('#paginationWaiting').append(temp_html);
-            }
-            for (let i = 0; i < allUser.rows.length; i++) {
-                let { userId, loginId, name, phone, idNumber, address, createdAt, role } =
-                    allUser.rows[i];
-
-                let temp_html = `<tr id="userId${userId}">
-                                    <th scope="row" class="list-MS">${userId}</th>
-                                    <td class="list-name">${name}</td>
-                                    <td class="list-name">${getGender(idNumber)}</td>
-                                    <td class="list-MS">${loginId}</td>
-                                    <td class="list-MS">${phone}</td>
-                                    <td class="list-name">${editaddress(address)}</td>
-                                    <td class="list-MS"">${editDate(createdAt)}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-secondary" id="approve${userId}" style="width:80px; height:35px" onclick="approveUpdate(${userId})"
-                                            >승인</a
-                                        >
-                                        <a href="#" class="btn btn-secondary" id="unapprove${userId}" style="width:80px; height:35px" onclick="userDelete(${userId})"
-                                            >미승인</a
-                                        >
-                                    </td>
-                                </tr>`;
-                $('#waitingUserList').append(temp_html);
-            }
-        },
-    });
-}
+        location.href = url;
+    }, 500);
+});
 
 // 일반회원삭제 버튼을 누를 시
 function userDelete(userId) {
-    let result = confirm('정말로 삭제하시겠습니까?');
-    if (result) {
-        $.ajax({
-            type: 'DELETE',
-            url: `/api/admin/${userId}`,
-            async: false,
-            success: function (success) {
-                alert('정상적으로 삭제되었습니다.');
-                $(`#userId${userId}`).remove();
-                location.reload();
-            },
-        });
-    } else {
-        alert('취소합니다.');
-    }
+    swal({
+        title: '회원삭제',
+        text: '정말로 삭제하시겠습니까?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+    }).then((result) => {
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/admin/${userId}`,
+                async: false,
+                success: function (success) {
+                    swal('😊 삭제 성공!', '정상적으로 삭제되었습니다.', 'success').then(() => {
+                        $(`#userId${userId}`).remove();
+                        location.reload();
+                    });
+                },
+            });
+        } else {
+            swal('😁 삭제 취소', '취소되었습니다.', 'info');
+        }
+    });
 }
 
 // 승인대기 파트너회원 승인 버튼 누를시
 function approveUpdate(userId) {
-    let result = confirm('해당 회원을 파트너회원으로 승인하시겠습니까?');
-    if (result) {
-        $.ajax({
-            type: 'PATCH',
-            url: `/api/admin/${userId}`,
-            async: false,
-            data: { role: 'partner' },
-            success: function (success) {
-                alert('정상적으로 승인되었습니다.');
-                $(`#userId${userId}`).remove();
-                location.reload();
-            },
-        });
-    } else {
-        alert('취소합니다.');
-    }
+    swal({
+        title: '파트너회원 승인',
+        text: '해당 회원을 파트너회원으로 승인하시겠습니까?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+    }).then((result) => {
+        if (result) {
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/admin/${userId}`,
+                async: false,
+                data: { role: 'partner' },
+                success: function (success) {
+                    swal('😊 승인 성공!', '정상적으로 승인되었습니다.', 'success').then(() => {
+                        $(`#userId${userId}`).remove();
+                        location.reload();
+                    });
+                },
+            });
+        } else {
+            swal('😁 승인 취소', '취소되었습니다.', 'info');
+        }
+    });
 }
 
 // 주소가 없으면 null 이 아닌 공백으로
@@ -305,13 +194,3 @@ function editDate(date) {
     let YearMonthDate = `${year}-${month}-${day}`;
     return YearMonthDate;
 }
-
-// 검색
-$(document).ready(function () {
-    $('#filter-value').on('keyup', function searchInput() {
-        const value = $(this).val().toLowerCase();
-        $('.userList tr').filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
-});

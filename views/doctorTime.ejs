@@ -1,0 +1,108 @@
+<form>
+    <div class="schedule-group">
+        <div class="form-group">
+            <label for="dayOfTheWeek">요일</label>
+            <select class="form-control" name="dayOfTheWeek">
+                <option value="1">월요일</option>
+                <option value="2">화요일</option>
+                <option value="3">수요일</option>
+                <option value="4">목요일</option>
+                <option value="5">금요일</option>
+                <option value="6">토요일</option>
+                <option value="7">일요일</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="startTime">시작 시간</label>
+            <input type="time" class="form-control" name="startTime" step="1800" />
+        </div>
+        <div class="form-group">
+            <label for="endTime">종료 시간</label>
+            <input type="time" class="form-control" name="endTime" step="1800" />
+        </div>
+        <div class="form-group">
+            <label for="startDate">시작 날짜</label>
+            <input type="date" class="form-control" name="startDate" />
+        </div>
+        <div class="form-group">
+            <label for="endDate">종료 날짜</label>
+            <input type="date" class="form-control" name="endDate" />
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary add-schedule">일정 추가</button>
+    <button type="submit" class="btn btn-primary">제출</button>
+</form>
+
+<script>
+    $(function () {
+        $('.add-schedule').click(function () {
+            let scheduleGroup = $('.schedule-group').first().clone();
+            scheduleGroup.find('select, input').val('');
+            $('.schedule-group').last().after(scheduleGroup);
+        });
+    });
+
+    const form = document.querySelector('form');
+
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            // 기본 제출 이벤트 막기
+            event.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            const doctorId = urlParams.get('doctorId');
+
+            var data = [];
+
+            $('.schedule-group').each(function () {
+                var dayOfTheWeek = $(this).find('select[name=dayOfTheWeek]').val();
+                var startTime = $(this).find('input[name=startTime]').val();
+                var endTime = $(this).find('input[name=endTime]').val();
+                var startDate = $(this).find('input[name=startDate]').val();
+                var endDate = $(this).find('input[name=endDate]').val();
+                var status = $(this).find('input[name=status]:checked').val();
+
+                data.push({
+                    dayOfTheWeek: dayOfTheWeek,
+                    startTime: startTime,
+                    endTime: endTime,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: status,
+                });
+            });
+
+            // JSON 형식으로 데이터 구성
+            var Data = {
+                doctorId: doctorId,
+                workingTimes: data,
+            };
+
+            // AJAX 요청 보내기
+            $.ajax({
+                type: 'POST',
+                url: '/api/hospitals/register/doctor/workingtime',
+                data: JSON.stringify(Data),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    swal({
+                        title: '😊 진료시간등록 성공!',
+                        text: '성공적으로 제출 되었습니다.',
+                        icon: 'success',
+                    }).then(() => {
+                        // 성공적으로 제출된 경우, 입력된 데이터 초기화
+                        $('form')[0].reset();
+                        window.location.href = '/hospital';
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal(
+                        '😭 진료시간등록 실패',
+                        '제출에 실패했습니다. 오류 상태 코드: ' + jqXHR.status,
+                        'error'
+                    );
+                },
+            });
+        });
+    });
+</script>
