@@ -144,8 +144,6 @@
 </div>
 
 <script>
-
-
     $(document).ready(function () {
         getReview();
         getdoctor();
@@ -418,10 +416,10 @@
     // });
 
     function goToReservation() {
-        if (document.cookie !== '') {
+        if (getCookie('accessToken') && getCookie('wrapperExecuted')) {
             const id = window.location.pathname.split('/')[2];
             location.href = `/users/reservation/${id}`;
-        } else if (document.cookie === '') {
+        } else if (!getCookie('accessToken') && getCookie('wrapperExecuted')) {
             swal({
                 title: '😓 죄송합니다.',
                 text: '모두의 병원 회원만 이용 가능합니다. 로그인 페이지로 이동할까요??',
@@ -438,5 +436,21 @@
                 }
             });
         }
+    }
+
+    function getCookie(name) {
+        var nameOfCookie = name + '=';
+        var x = 0;
+        while (x <= document.cookie.length) {
+            var y = x + nameOfCookie.length;
+            if (document.cookie.substring(x, y) == nameOfCookie) {
+                if ((endOfCookie = document.cookie.indexOf(';', y)) == -1)
+                    endOfCookie = document.cookie.length;
+                return unescape(document.cookie.substring(y, endOfCookie));
+            }
+            x = document.cookie.indexOf(' ', x) + 1;
+            if (x == 0) break;
+        }
+        return '';
     }
 </script>
