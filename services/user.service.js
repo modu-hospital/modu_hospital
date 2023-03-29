@@ -103,7 +103,11 @@ class UserService {
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
-        console.log(user)
+        console.log(user);
+
+        if (!user) {
+            throw new Error();
+        }
 
         const isPasswordCorrect = await bcrypt.compare(password, user[0].password);
 

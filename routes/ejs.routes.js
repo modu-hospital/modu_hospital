@@ -34,13 +34,12 @@ router.get('/', auth, (req, res) => {
             isOpen: false,
         });
     }
-        
+
     return res.render('index.ejs', {
         components: 'main',
         user: userRole,
         isOpen: false,
     });
-
 });
 
 //유저 메인페이지
