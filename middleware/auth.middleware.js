@@ -63,7 +63,8 @@ const authMiddleware = async (req, res, next) => {
         // //발급된 refreshToken의 조건으로 token를 찾는 그래서 그 해당하는 토큰의 id값과 userId 등..다 가지고 올 수 있는거
 
         // return;
-        return (window.location.href = '/');
+        // return (window.location.href = '/');
+        return res.redirect('/')
         // res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
 

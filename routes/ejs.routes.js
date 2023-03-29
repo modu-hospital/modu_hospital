@@ -5,6 +5,7 @@ const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
+    let userRole = null;
     if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
         let userRole = null;
 
