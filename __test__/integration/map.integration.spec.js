@@ -49,7 +49,7 @@ describe('Layered Architecture Pattern, Map Domain Integration Test', () => {
 
         expect(response.body).toEqual({ hospitals: [] });
     });
-
+ 
     test('POST /api/categories/search API (findHospitalsThatFitsDepartment) Integration Test Success Case', async () => {
         const requestBodyParams = {
             rightLongitude: 127.13245302025508,
