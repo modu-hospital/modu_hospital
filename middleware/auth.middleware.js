@@ -64,6 +64,7 @@ const authMiddleware = async (req, res, next) => {
 
         // return;
         // return (window.location.href = '/');
+        res.clearCookie('accessToken');
         return res.redirect('/');
         // res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
