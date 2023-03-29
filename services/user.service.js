@@ -103,6 +103,7 @@ class UserService {
 
     login = async (loginId, password) => {
         const user = await this.userRepository.emailPasswordCheck(loginId);
+        console.log(user);
 
         if (!user) {
             throw new Error();
