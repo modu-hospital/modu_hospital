@@ -56,7 +56,7 @@ const whenExpiredToken = function () {
     });
 };
 
-whenExpiredToken()
+whenExpiredToken();
 
 // 응답이 null 이면 그다음 코드가 실행이 안되게 하면 될거같다~
 // 만약 있으면 (로그인 됬다는거)셋타임 시작 그 셋타임 안에 whenExpiredToken()

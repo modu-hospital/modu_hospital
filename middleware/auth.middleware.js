@@ -67,14 +67,10 @@ const authMiddleware = async (req, res, next) => {
 
         const user = await User.findByPk(userId);
 
-        const newAccessToken = jwt.sign(
-            { userId: user.userId },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: '10s',
-            }
-        );
-        
+        const newAccessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '10s',
+        });
+
         res.cookie('accessToken', newAccessToken, {
             secure: false,
             httpOnly: false,
@@ -82,7 +78,7 @@ const authMiddleware = async (req, res, next) => {
 
         res.locals.user = user;
 
-        next()
+        next();
         return;
 
         // return res.status(401).json({ message: 'accessToken 만료' });

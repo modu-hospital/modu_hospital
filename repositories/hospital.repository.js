@@ -265,7 +265,20 @@ class HospitalRepository {
     findOneHospital = async (userId) => {
         try {
             const findData = await this.hospitalModel.findOne({
-                where: { userId },
+                where: {
+                    userId,
+                },
+                attributes: [
+                    'hospitalId',
+                    'userId',
+                    'name',
+                    'address',
+                    'phone',
+                    'longitude',
+                    'latitude',
+                    [sequelize.literal(`DATE_FORMAT(createdAt, '${formatterdDate}')`), 'createdAt'],
+                    [sequelize.literal(`DATE_FORMAT(updatedAt, '${formatterdDate}')`), 'updatedAt'],
+                ],
             });
             return findData;
         } catch (error) {
@@ -297,6 +310,15 @@ class HospitalRepository {
         try {
             const findData = await this.doctorModel.findOne({
                 where: { doctorId: doctorId },
+                attributes: [
+                    'doctorId',
+                    'hospitalId',
+                    'name',
+                    'image',
+                    'contents',
+                    [sequelize.literal(`DATE_FORMAT(createdAt, '${formatterdDate}')`), 'createdAt'],
+                    [sequelize.literal(`DATE_FORMAT(updatedAt, '${formatterdDate}')`), 'updatedAt'],
+                ],
             });
             return findData;
         } catch (error) {
