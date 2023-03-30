@@ -15,6 +15,10 @@ let mockUserService = {
     resetPassword: jest.fn(),
     findResetCase: jest.fn(),
     editPassword: jest.fn(),
+    //여기서부터 내가 추가한
+    login: jest.fn(),
+    saveToken: jest.fn(),
+
 };
 
 let mockReservationService = {
@@ -468,4 +472,49 @@ describe('User Controller Unit Test', () => {
             expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
+
+    describe('login', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                loginId:"sij@naver.com",
+                password:"1111"
+            };
+            mockRes.cookie = jest.fn()
+        });
+        it('should call userService.login one with proper argument', async () => {
+            await controller.login(mockReq, mockRes, mockNext);
+            expect(mockUserService.login).toHaveBeenCalledTimes(1);
+            expect(mockUserService.login).toHaveBeenCalledWith(
+                mockReq.body.loginId,
+                mockReq.body.password
+            );
+        });
+
+        it('should return proper response', async () => {
+            mockUserService.login.mockResolvedValue( 
+                {
+                    userId: 176
+                }
+            );
+            const saveToken = {mock:'mock'}
+            mockUserService.saveToken.mockResolvedValue(saveToken)
+
+            await controller.login(mockReq, mockRes, mockNext);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.cookie).toHaveBeenCalledTimes(2);
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.login.mockRejectedValueOnce(error);
+
+            await controller.login(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockRes.cookie).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
 });
+    

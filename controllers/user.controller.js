@@ -263,7 +263,6 @@ class UserController {
             const refreshToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '7d',
             });
-
             res.cookie('accessToken', accessToken, {
                 secure: false,
                 httpOnly: false,
@@ -272,9 +271,7 @@ class UserController {
                 secure: false,
                 httpOnly: false,
             });
-
             const save = await this.userService.saveToken(user.userId, refreshToken);
-
             return res.status(200).json({ accessToken, refreshToken, save });
         } catch (err) {
             next(err);
