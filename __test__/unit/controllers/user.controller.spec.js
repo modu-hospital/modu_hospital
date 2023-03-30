@@ -17,6 +17,7 @@ let mockUserService = {
     editPassword: jest.fn(),
     //여기서부터 내가 추가한
     login: jest.fn(),
+    signup: jest.fn(),
     saveToken: jest.fn(),
 
 };
@@ -540,6 +541,7 @@ describe('User Controller Unit Test', () => {
                 mockReq.body.idNumber
             );
         });
+        console.log(11)
 
         it('should return proper response', async () => {
             await controller.customerSignup(mockReq, mockRes, mockNext);
