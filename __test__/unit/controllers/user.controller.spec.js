@@ -516,5 +516,48 @@ describe('User Controller Unit Test', () => {
             expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
+
+    describe('customerSignup', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                name:"김신우",
+                loginId:"wooss@naver.com",
+                password:"1111",
+                confirm:"1111",
+                phone:"010-0000-0000",
+                idNumber:"000000-5555555"
+            };
+        });
+        it('should call userService.customerSignup one with proper argument', async () => {
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+            expect(mockUserService.customerSignup).toHaveBeenCalledTimes(1);
+            expect(mockUserService.customerSignup).toHaveBeenCalledWith(
+                mockReq.body.name,
+                mockReq.body.loginId,
+                mockReq.body.password,
+                mockReq.body.confirm,
+                mockReq.body.phone,
+                mockReq.body.idNumber
+            );
+        });
+
+        it('should return proper response', async () => {
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({ message: '회원가입이 완료되었습니다' });
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.customerSignup.mockRejectedValueOnce(error);
+
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
 });
     
