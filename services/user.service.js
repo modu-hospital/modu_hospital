@@ -190,6 +190,24 @@ class UserService {
         return roleUpdate;
     };
 
+    getSelfInfo = async (userId) => {
+        const getSelfInformation = await this.findAUserByUserId(userId);
+        const getSelfInformations = {
+            userId: getSelfInformation.userId,
+            name: getSelfInformation.name,
+            idNumber: getSelfInformation.idNumber,
+            phone: getSelfInformation.phone,
+            address: getSelfInformation.address,
+        };
+
+        return getSelfInformations;
+    };
+
+    editUserAddress = async (userId, address) => {
+        const editUserAddress = await this.userRepository.editUserAddress(userId, address);
+        return editUserAddress;
+    };
+
     saveToken = async (userId, token) => {
         return await this.userRepository.tokenSave(userId, token);
     };

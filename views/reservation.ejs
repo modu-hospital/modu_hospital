@@ -246,7 +246,7 @@ color: #505050;
                             placeholder="연락처( - 를 포함해주세요 )"
                         />
                     </div>
-                    <div class="col-6 col-12-xsmall">
+                    <div class="col-6 col-12-xsmall" id="addressDiv">
                         <input
                             type="text"
                             name="address"
@@ -427,7 +427,7 @@ color: #505050;
         <input type="text" id="reservationAddress" value="" style="width:500px;" onClick="addressWindowOpen()" placeholder="도로명 주소, 지번 주소" readonly/>
         <div style="height:5px;"></div>
         <input type="text" id="detailAddress" style="width:500px;" onkeypress="javascript:if(event.keyCode===13) {inputData()}" value="" placeholder="상세 주소지 입력(필수)"/>
-        <input type="button" value="입력" onclick="inputData()" />
+        <input type="button" id="inputData" value="입력" onclick="inputData()" />
         </div>
     </div>
     <a class="modal_close_btn" id="address_modal_close"></a>

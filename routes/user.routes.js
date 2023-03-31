@@ -53,6 +53,11 @@ router.get('/email/resetpassword/send', userController.sendEmailForResetPassword
 //비밀번호 재설정
 router.patch('/resetpassword', userController.resetPassword);
 
+//예약페이지 본인 선택시 정보 조회
+router.get('/reservation', auth, userController.getSelfInfo);
+
+//예약하기
 router.post('/reservation/:hospitalId/:doctorId', auth, userController.reservaionInput);
+router.patch('/reservation/editAddress', auth, userController.editAddress);
 
 module.exports = router;

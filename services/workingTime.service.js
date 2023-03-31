@@ -30,11 +30,13 @@ class WorkingtimeService {
             selectedYMD,
             week
         );
+
         const reservaionObj = calculationTime(workingTimeDate, reservationDate);
         // 바깥으로 보내줘야하는 정보는 병원이름, 의사이름, timeObj 에서 선별된 밸류값이 "" 인 키:밸류 값을 빼면 될듯?
         // timeObj 에서 뺀 키밸류값은 무조건 startTime으로 인식되어야 하고 success 시 자동으로 30분 추가된 endTime이 만들어질 수 있게 해야됨
 
         // DB에 등록된 waiting은 의사들의 예약 가능 시간을 염두하지 않은 등록이었기 때문에 안맞을 수 있음
+
         return reservaionObj;
     };
 }

@@ -201,6 +201,18 @@ class UserRepository {
         return users;
     };
 
+    editUserAddress = async (userId, address) => {
+        const editedAddress = await this.userModel.update(
+            {
+                address: address,
+            },
+            {
+                where: { userId: userId },
+            }
+        );
+        return editedAddress;
+    };
+
     emailPasswordCheck = async (loginId) => {
         return await this.userModel.findAll({ where: { loginId } });
     };
