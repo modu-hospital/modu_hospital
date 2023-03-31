@@ -100,6 +100,7 @@ const authMiddleware = async (req, res, next) => {
 
     res.locals.user = user;
 
+    
     next();
 };
 module.exports = authMiddleware;

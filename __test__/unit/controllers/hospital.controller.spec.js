@@ -131,4 +131,83 @@ describe('Layered Architecture Pattern Hospital Controller Unit Test', () => {
 
         expect(mockResponse.json).toHaveBeenCalledWith(hospitalInfo);
     });
+
+    test('Hospital Controller getOneHospital Method', async () => {
+        const hospitalReqparams = 'http://localhost:3000/api/hospitals/detail/3';
+
+        mockRequest.params = hospitalReqparams;
+
+        const oneHospital = {
+            "hospitalId": 3,
+            "hospitalName": "삼성서울병원",
+            "hospitalAddress": "서울특별시 강남구 일원로 81",
+            "hospitalphone": "0215993115",
+            "hospitalImage": [
+                {
+                    "url": "https://moduhospital.s3.amazonaws.com/doctors/1679565728407_%C3%AC%C2%82%C2%BC%C3%AC%C2%84%C2%B1%C3%AB%C2%B3%C2%91%C3%AC%C2%9B%C2%901.png"
+                }
+            ],
+            "reviews": [
+                {
+                    "userId": 2,
+                    "star": 5,
+                    "contents": "sdf",
+                    "name": {
+                    "name": "허남기"
+                    },
+                    "createdAt": "2023-03-14T02:06:49.000Z"
+                }
+            ],
+            "doctors": [
+                {
+                    "doctors": "허남기",
+                    "doctorImage": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679566180567_doctor4.png",
+                    "doctorContent": "안녕하세요 외과 전문의 입니다. 잘 부탁드려요",
+                    "department": "감염내과,내분비내과,류마티스내과",
+                    "workTime": [
+                        {
+                            "day": 1,
+                            "start": "10:00:00",
+                            "end": "17:00:00",
+                            "startDate": "2023-03-01T00:00:00.000Z",
+                            "endDate": "2023-03-31T00:00:00.000Z"
+                        },
+                        {
+                            "day": 2,
+                            "start": "10:00:00",
+                            "end": "17:00:00",
+                            "startDate": "2023-03-01T00:00:00.000Z",
+                            "endDate": "2023-03-31T00:00:00.000Z"
+                        },
+                        {
+                            "day": 4,
+                            "start": "10:00:00",
+                            "end": "17:00:00",
+                            "startDate": "2023-03-01T00:00:00.000Z",
+                            "endDate": "2023-03-31T00:00:00.000Z"
+                        },
+                        {
+                            "day": 5,
+                            "start": "10:00:00",
+                            "end": "17:00:00",
+                            "startDate": "2023-03-01T00:00:00.000Z",
+                            "endDate": "2023-03-31T00:00:00.000Z"
+                        }
+                    ]
+                }
+            
+            ]
+        };
+
+        mockHospitalService.getOneHospital = jest.fn(() => oneHospital);
+
+        await hospitalController.getOneHospital(mockRequest, mockResponse);
+
+        expect(mockHospitalService.getOneHospital).toHaveBeenCalledTimes(1);
+        expect(mockHospitalService.getOneHospital).toHaveBeenCalledWith(
+            hospitalReqparams.params
+        );
+
+        expect(mockResponse.json).toHaveBeenCalledWith({oneHospital});
+    })
 });

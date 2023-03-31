@@ -14,6 +14,8 @@ const mockUserRepository = {
     createPasswordResetCase: jest.fn(),
     updatePasswordResetCase: jest.fn(),
     updatePassword: jest.fn(),
+    signup: jest.fn(),
+    emailPasswordCheck: jest.fn()
 };
 const mockReservationRepository = {
     getApprovedReservation: jest.fn(),
@@ -247,4 +249,58 @@ describe('User Service Unit Test', () => {
             }).rejects.toThrow(createError.passwordNotMatched());
         });
     });
+
+    // editPassword = async (userId, password, confirm) => {
+    //     if (password != confirm) {
+    //         throw this.createError.passwordNotMatched();
+    //     }
+    //     const hashedPassword = await bcrypt.hash(password, 12);
+    //     const updated = await this.userRepository.updatePassword(userId, hashedPassword);
+    //     return updated;
+    // };
+
+    describe('signup', () => {
+        it('should call userRepository.signup once', async () => {
+            const { name, loginId, password, phone, idNumber, role } = 
+            { name: "김신", loginId: "kss@naver.com", password: '11111@1', phone:'010-0000-0000', idNumber:'000000-5555555', role:"partner" };
+            await userService.signup(name, loginId, password, phone, idNumber, role);
+        });
+        it('should throw UserAlreadyExist error', async () => {
+            const { name, loginId, password, phone, idNumber, role } = 
+            { name: "김신", loginId: "kss@naver.com", password: '11111@1', phone:'010-0000-0000', idNumber:'000000-5555555', role:"partner" };
+            expect(async () => {
+                await userService.signup(name, loginId, password, phone, idNumber, role);
+            }).rejects.toThrow(createError.UserAlreadyExist());
+        });
+    });
+
+    // describe('login', () => {
+    //     it("should throw an error if user does not exist", async () => {
+    //         // given
+    //         const { loginId, password } = 
+    //         { loginId: "kss@naver.com", password: '11111@1' };
+    //         mockUserRepository.emailPasswordCheck.mockResolvedValue(null);        
+    //         // when, then
+    //         expect(async () => {
+    //             await userService.login(loginId, password);
+    //         }).rejects.toThrow();
+    //     })
+    //     it("should throw an error if password is incorrect", async () => {
+    //         // given
+    //         const { loginId, password } = 
+    //         { loginId: "kss@naver.com", password: '11111@1' };
+    //         const mockUser = [{ password: "wrongPassword" }];
+    //         mockUserRepository.emailPasswordCheck.mockResolvedValue(mockUser)
+    //         expect(async () => {
+    //             await userService.login(loginId, password);
+    //         }).rejects.toThrow();
+    //       });
+
+    //     it('should call userRepository.emailPasswordCheck once', async () => {
+    //         const { loginId, password } = 
+    //         { loginId: "kss@naver.com", password: '11111@1' };
+    //         // mockUserRepository.emailPasswordCheck.mockResolvedValue(loginId, password)
+    //         await userService.login(loginId, password);
+    //     });
+    // });
 });
