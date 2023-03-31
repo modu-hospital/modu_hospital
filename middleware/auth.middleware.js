@@ -51,7 +51,7 @@ const authMiddleware = async (req, res, next) => {
         //accessToken만료시
 
         console.log('accessToken 만료시간: ', new Date(Date.now()));
-        console.log('accessToken :', accessToken, 'refreshToken :', refreshToken) 
+        console.log('accessToken :', accessToken, 'refreshToken :', refreshToken);
 
         // return res.status(400).json({ message: 'accessToken 만료' });
         //만료시 에러를 받고
@@ -87,7 +87,7 @@ const authMiddleware = async (req, res, next) => {
         // return res.render('');
         // res.status(401).json({ message: 'accessToken 만료' });
         // return await this.tokenController.newAccessToken()
-
+        return;
         //이 메세지값을 error.message, error.status===401
         // const newAccessToken = await tokenController.newAccessToken(req, res);
         // return newAccessToken;
@@ -100,7 +100,6 @@ const authMiddleware = async (req, res, next) => {
 
     res.locals.user = user;
 
-    
     next();
 };
 module.exports = authMiddleware;

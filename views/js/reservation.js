@@ -8,7 +8,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const category = document.querySelector('#relationCategory');
+    const patientname = document.querySelector('#patientName');
     const proxyname = document.querySelector('#proxyName');
+    const idnumber = document.querySelector('#idNumber');
+    const phone = document.querySelector('#phone');
+    const address = document.querySelector('#address');
     const divselfwrite = document.querySelector('#divSelfWrite');
     const textareaSpace = document.createElement('textarea');
     textareaSpace.setAttribute('value', 'selfWriteOff');
@@ -19,10 +23,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const value = options[index].value;
 
         if (textareaSpace.getAttribute('value') === 'selfWriteOff') {
-            if (value === '본인' || value === '미선택') {
-                selfCheck(value);
+            if (value === '미선택') {
+                proxyname.removeAttribute('disabled');
                 textareaSpace.setAttribute('value', 'selfWriteOff');
                 proxyname.setAttribute('disabled', 'disabled');
+
+                noSelfCheck();
+            } else if (value === '본인') {
+                proxyname.removeAttribute('disabled');
+                textareaSpace.setAttribute('value', 'selfWriteOff');
+                proxyname.setAttribute('disabled', 'disabled');
+                patientname.setAttribute('disabled', 'disabled');
+                idnumber.setAttribute('disabled', 'disabled');
+                phone.setAttribute('disabled', 'disabled');
+
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/users/reservation`,
+                    async: false,
+                    success: function (response) {
+                        const userData = response;
+                        userData.idNumber = '******-*******';
+                        $('#patientName').val(userData.name);
+                        $('#idNumber').val(userData.idNumber);
+                        $('#phone').val(userData.phone);
+                        $('#address').val(userData.address);
+                    },
+                });
             } else if (value === '기타') {
                 divselfwrite.appendChild(textareaSpace);
                 proxyname.removeAttribute('disabled');
@@ -31,13 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 textareaSpace.setAttribute('placeholder', '환자와의 관계(직접입력)');
                 textareaSpace.setAttribute('rows', '1');
                 textareaSpace.setAttribute('value', 'selfWriteOn');
+
+                noSelfCheck();
             } else {
                 proxyname.removeAttribute('disabled');
                 textareaSpace.setAttribute('value', 'selfWriteOff');
+                patientname.removeAttribute('disabled');
+                idnumber.removeAttribute('disabled');
+                phone.removeAttribute('disabled');
+
+                noSelfCheck();
             }
         } else {
             if (value === '본인' || value === '미선택') {
-                selfCheck(value);
+                proxyname.removeAttribute('disabled');
                 textareaSpace.setAttribute('value', 'selfWriteOff');
                 divselfwrite.removeChild(textareaSpace);
                 proxyname.setAttribute('disabled', 'disabled');
@@ -57,10 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function selfCheck(value) {
-        if (value === '본인' || value === '미선택') {
-            return proxyname.removeAttribute('disabled');
-        }
+    function noSelfCheck() {
+        $('#patientName').val('');
+        $('#idNumber').val('');
+        $('#phone').val('');
+        $('#address').val('');
+        return;
     }
 });
 
@@ -977,10 +1013,20 @@ function inputData() {
     let detailaddress = document.getElementById('detailAddress');
     let addressModal = document.getElementById('address_modal');
     let background = document.getElementById('background');
+
     const reservationAddress = $('#reservationAddress').val();
     const detailAddress = $('#detailAddress').val();
 
     if (detailAddress.length > 0) {
+        $('#address').remove();
+        $('#addressDiv').append(
+            $('<input>').prop({
+                type: 'text',
+                name: 'address',
+                id: 'address',
+            })
+        );
+        $('#address').attr('onclick', 'reservationAddress()');
         $('input[name=address]').attr('value', `${reservationAddress} ${detailAddress}`);
 
         background.remove();
@@ -1057,6 +1103,18 @@ function reservaionCheck() {
                 );
             },
         });
+
+        if ($('#relationCategory option:selected').val() === '본인') {
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/users/reservation/editAddress`,
+                data: {
+                    address: address,
+                },
+                success: function (response) {},
+                error: function (err) {},
+            });
+        }
     }
 }
 
