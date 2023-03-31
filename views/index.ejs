@@ -21,6 +21,7 @@
         />
 
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vanilla-smoothie@2.2.5/dist/vanilla-smoothie.min.js"></script>
 
         <!-- css -->
         <link rel="stylesheet" href="/css/hospitalRegister.css" />
@@ -30,7 +31,6 @@
 
         <script src="/js/token.js"></script>
 
-        
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
@@ -43,8 +43,8 @@
 
             <!-- page -->
             <% if (components === "main") { %> <%- include('main.ejs') %> <% } else if (components
-            === "mypage") { %> <%- include('mypage-vertical.ejs') %> <% } else if (components === "map") { %>
-            <%- include('map.ejs') %> <% } else if (components === "hospital") { %> <%-
+            === "mypage") { %> <%- include('mypage-vertical.ejs') %> <% } else if (components ===
+            "map") { %> <%- include('map.ejs') %> <% } else if (components === "hospital") { %> <%-
             include('hospital.ejs') %> <% } else if (components === "hospitalRegister") { %> <%-
             include('hospitalRegister.ejs') %> <% } else if (components === "hospitalEdit") { %> <%-
             include('hospitalEdit.ejs') %> <% } else if (components === "doctorRegister") { %> <%-

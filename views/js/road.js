@@ -309,13 +309,6 @@ function inputData() {
     const detailAddress = $('#detailAddress').val();
 
     if (detailAddress.length > 0) {
-        $('#input-user-address').remove();
-        $('#input-user-data').append(
-            $('<input>').prop({
-                id: 'input-user-address',
-            })
-        );
-        $('#input-user-address').attr('onclick', 'openAddressModal()');
         $('#input-user-address').attr('value', `${roadAddress} ${detailAddress}`);
 
         background.remove();
