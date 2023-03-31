@@ -273,34 +273,4 @@ describe('User Service Unit Test', () => {
             }).rejects.toThrow(createError.UserAlreadyExist());
         });
     });
-
-    // describe('login', () => {
-    //     it("should throw an error if user does not exist", async () => {
-    //         // given
-    //         const { loginId, password } = 
-    //         { loginId: "kss@naver.com", password: '11111@1' };
-    //         mockUserRepository.emailPasswordCheck.mockResolvedValue(null);        
-    //         // when, then
-    //         expect(async () => {
-    //             await userService.login(loginId, password);
-    //         }).rejects.toThrow();
-    //     })
-    //     it("should throw an error if password is incorrect", async () => {
-    //         // given
-    //         const { loginId, password } = 
-    //         { loginId: "kss@naver.com", password: '11111@1' };
-    //         const mockUser = [{ password: "wrongPassword" }];
-    //         mockUserRepository.emailPasswordCheck.mockResolvedValue(mockUser)
-    //         expect(async () => {
-    //             await userService.login(loginId, password);
-    //         }).rejects.toThrow();
-    //       });
-
-    //     it('should call userRepository.emailPasswordCheck once', async () => {
-    //         const { loginId, password } = 
-    //         { loginId: "kss@naver.com", password: '11111@1' };
-    //         // mockUserRepository.emailPasswordCheck.mockResolvedValue(loginId, password)
-    //         await userService.login(loginId, password);
-    //     });
-    // });
 });

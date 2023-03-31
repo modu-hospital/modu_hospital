@@ -281,77 +281,115 @@ describe('Layered Architecture Pattern Hospital Service Unit Test', () => {
         });
     });
 
-    // //내가작성한코드
-    // test('Hospital Service getHospitalInfo Method', async () => {
-    //     const returnValue = {
-    //         hospitalId: 3,
-    //         userId: 1,
-    //         name: '삼성서울병원',
-    //         address: '서울특별시 강남구 일원로 81',
-    //         phone: '0215993115',
-    //         longitude: 127.08303697984,
-    //         latitude: 37.486868162882,
-    //         createdAt: '2023-03-01T11:27:37.000Z',
-    //         updatedAt: '2023-03-01T17:02:32.000Z',
-    //         deletedAt: null,
-    //         hospitalImageFiles: [
-    //             {
-    //                 id: 1,
-    //                 hospitalId: 3,
-    //                 url: 'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-    //                 createdAt: null,
-    //                 updatedAt: null,
-    //             },
-    //         ],
-    //         doctors: [
-    //             {
-    //                 name: '김닥터',
-    //                 image: 'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-    //                 doctorCategoryMappings: [
-    //                     {
-    //                         id: 2,
-    //                         doctorId: 1,
-    //                         categoryId: 2,
-    //                         createdAt: null,
-    //                         updatedAt: null,
-    //                         categories: {
-    //                             department: '비뇨기과',
-    //                         },
-    //                     },
-    //                     {
-    //                         id: 1,
-    //                         doctorId: 1,
-    //                         categoryId: 1,
-    //                         createdAt: null,
-    //                         updatedAt: null,
-    //                         categories: {
-    //                             department: '내과',
-    //                         },
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     };
+    //내가작성한코드
+    test('Hospital Service getHospitalInfo Method By Success', async () => {
 
-    //     mockHospitalRepository.searchHospitalInfo.mockResolvedValue(returnValue);
+        
+        const oneHospitalReturnValue = {
+            "oneHospital": {
+            "hospitalId": 25,
+            "hospitalName": "침착맨  스튜디오",
+            "hospitalAddress": "서울특별시 용산구 서빙고로 17(한강로3가)",
+            "hospitalphone": "01012346549",
+            "hospitalImage": [
+                {
+                "url": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679023829510_moduhospital%20%282%29.png"
+                },
+            ],
+            "doctors": [
+                {
+                "doctors": "주호민",
+                "doctorImage": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1678695604219_HominJoo.jpg",
+                "doctorContent": "안녕하세요 주펄입니다~",
+                "department": "흉부외과",
+                "workTime": [
+                    {
+                    "day": 1,
+                    "start": "10:00:00",
+                    "end": "23:00:00",
+                    "startDate": "2023-03-16T00:00:00.000Z",
+                    "endDate": "2023-03-31T00:00:00.000Z"
+                    }
+                ]
+                }
+            ]
+            }
+        }
+        mockHospitalRepository.getHospitalInfo.mockResolvedValue(oneHospitalReturnValue);
 
-    //     const hospitalInfo = await hospitalService.searchHospitalInfo(3);
+        const reviewsReturnValue = {
+            "userId": 178,
+            "star": 4,
+            "contents": "침착맨 잘생겼어요",
+            "name": {
+                "name": "김우리"
+            },
+            "createdAt": "2023-03-11T10:46:09.000Z"
+        }
 
-    //     expect(hospitalInfo).toEqual({
-    //         hospitalId: 3,
-    //         hospitalName: '삼성서울병원',
-    //         hospitalAddress: '서울특별시 강남구 일원로 81',
-    //         hospitalphone: '0215993115',
-    //         hospitalImage:
-    //             'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-    //         doctors: [
-    //             {
-    //                 doctor: '김닥터',
-    //                 doctorImage:
-    //                     'https://mblogthumb-phinf.pstatic.net/MjAxOTA0MjFfNzEg/MDAxNTU1ODUyNjA1ODMx.S717xo_KomAdcNK5hCSua-Cz7gDpUyf1oXxj_vfVm44g.lFLDNYIdZnbU2n4_qyhODB4bKY_i7zsS4z8RHdlELOYg.JPEG.akswp1224/1.jpg?type=w2',
-    //                 department: '비뇨기과,내과',
-    //             },
-    //         ],
-    //     });
-    // });
+        mockHospitalRepository.findReview.mockResolvedValue(reviewsReturnValue);
+
+        await hospitalService.getOneHospital(3);
+        expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledTimes(1);
+        expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledWith(3)
+
+    
+
+        expect(mockHospitalRepository.findReview).toHaveBeenCalledTimes(1);
+        expect(mockHospitalRepository.findReview).toHaveBeenCalledWith(3)
+
+        // expect(mockHospitalRepository.findReview).toHaveBeenCalledTimes(1)
+        // expect(mockHospitalRepository.findReview).toHaveBeenCalledWith(3)
+
+        // const getHospitalInfo = await hospitalService.getHospitalInfo(3);
+        // expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledTimes(1);
+        // expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledWith(3)
+
+        // expect(mockHospitalRepository.getOne)
+        // const getOneHospital = await postService.deletePost(3)
+
+        // expect(getOneHospital).toEqual(
+        //     {
+        //         "oneHospital": {
+        //           "hospitalId": 25,
+        //           "hospitalName": "침착맨  스튜디오",
+        //           "hospitalAddress": "서울특별시 용산구 서빙고로 17(한강로3가)",
+        //           "hospitalphone": "01012346549",
+        //           "hospitalImage": [
+        //             {
+        //               "url": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679023829510_moduhospital%20%282%29.png"
+        //             }
+        //           ],
+        //           "reviews": [
+        //             {
+        //               "userId": 178,
+        //               "star": 4,
+        //               "contents": "침착맨 잘생겼어요",
+        //               "name": {
+        //                 "name": "김우리"
+        //               },
+        //               "createdAt": "2023-03-11T10:46:09.000Z"
+        //             }
+        //           ],
+        //           "doctors": [
+        //             {
+        //               "doctors": "주호민",
+        //               "doctorImage": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1678695604219_HominJoo.jpg",
+        //               "doctorContent": "안녕하세요 주펄입니다~",
+        //               "department": "흉부외과",
+        //               "workTime": [
+        //                 {
+        //                   "day": 1,
+        //                   "start": "10:00:00",
+        //                   "end": "23:00:00",
+        //                   "startDate": "2023-03-16T00:00:00.000Z",
+        //                   "endDate": "2023-03-31T00:00:00.000Z"
+        //                 }
+        //               ]
+        //             }
+        //           ]
+        //         }
+        //     }
+        // );
+    });
 });
