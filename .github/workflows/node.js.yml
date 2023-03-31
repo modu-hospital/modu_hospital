@@ -28,6 +28,13 @@ jobs:
       MYSQL_AWS_DATABASE_TEST_DB: ${{ secrets.MYSQL_AWS_DATABASE_TEST_DB }}
       MYSQL_AWS_DATABASE: ${{ secrets.MYSQL_AWS_DATABASE }}
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AKIA6O5UU7XJYOZOQYOB }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+      AWS_END_POINT: ${{ secrets.AWS_END_POINT }}
+      GOOGLE_MAIL_PASS: ${{ secrets.GOOGLE_MAIL_PASS }}
+      TWO_WAY_ENCRYPTION: ${{ secrets.TWO_WAY_ENCRYPTION }}
 
     strategy:
       matrix:
