@@ -190,7 +190,7 @@ class UserController {
         } catch (err) {}
     };
 
-    partnerSignup = async (req, res) => {
+    partnerSignup = async (req, res, next) => {
         const role = 'waiting';
 
         try {
@@ -204,7 +204,7 @@ class UserController {
                 idNumber,
                 role
             );
-            return res.json(user);
+            return res.status(200).json({message: "회원가입이 완료되었습니다"});
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -213,7 +213,7 @@ class UserController {
         }
     };
 
-    customerSignup = async (req, res) => {
+    customerSignup = async (req, res, next) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
@@ -227,7 +227,7 @@ class UserController {
                 idNumber,
                 role
             );
-            return res.json({ user });
+            return res.status(200).json({ user });
         } catch (err) {
             if (err.isJoi) {
                 return res.status(422).json({ message: err.details[0].message });
@@ -239,16 +239,16 @@ class UserController {
     login = async (req, res, next) => {
         try {
             const { loginId, password } = req.body;
+            
             const user = await this.userService.login(loginId, password);
 
             const accessToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
-                expiresIn: '600s',
+                expiresIn: '600s', //600s
             });
 
-            const refreshToken = jwt.sign({}, process.env.JWT_SECRET_KEY, {
+            const refreshToken = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
                 expiresIn: '7d',
             });
-
             res.cookie('accessToken', accessToken, {
                 secure: false,
                 httpOnly: false,
@@ -257,9 +257,7 @@ class UserController {
                 secure: false,
                 httpOnly: false,
             });
-
             const save = await this.userService.saveToken(user.userId, refreshToken);
-
             return res.status(200).json({ accessToken, refreshToken, save });
         } catch (err) {
             next(err);

@@ -5,8 +5,10 @@ const auth = require('../middleware/auth.middleware');
 
 // 메인페이지
 router.get('/', auth, (req, res) => {
+    let userRole = null;
+
     if (!req.cookies.accessToken && !req.cookies.wrapperExecuted) {
-        let userRole = null;
+        userRole = null;
 
         res.cookie('wrapperExecuted', 'first');
         return res.render('index.ejs', {
@@ -15,7 +17,7 @@ router.get('/', auth, (req, res) => {
             isOpen: true,
         });
     } else if (!req.cookies.accessToken && req.cookies.wrapperExecuted) {
-        let userRole = null;
+        userRole = null;
         res.cookie('wrapperExecuted', 'second');
         return res.render('index.ejs', {
             components: 'main',
@@ -32,6 +34,12 @@ router.get('/', auth, (req, res) => {
             isOpen: false,
         });
     }
+
+    return res.render('index.ejs', {
+        components: 'main',
+        user: userRole,
+        isOpen: false,
+    });
 });
 
 //유저 메인페이지
@@ -105,17 +113,17 @@ router.get('/users/resetpassword/:token', (req, res) => {
 });
 
 router.get('/map/:aboutMap', (req, res) => {
-    const {aboutMap} = req.params
-    
-    if (aboutMap === "hospitals") {
+    const { aboutMap } = req.params;
+
+    if (aboutMap === 'hospitals') {
         return res.render('hospital.map.ejs');
     }
 
-    if (aboutMap === "pharmacies") {
+    if (aboutMap === 'pharmacies') {
         return res.render('pharmacy.map.ejs');
     }
 
-    res.render('map.toHome.ejs')
+    res.render('map.toHome.ejs');
 });
 
 //원장님의 공간

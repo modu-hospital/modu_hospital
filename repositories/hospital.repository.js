@@ -1,6 +1,6 @@
 const { where, Op, QueryTypes } = require('sequelize');
 const { sequelize } = require('../models');
-const moment = require('moment')
+const moment = require('moment');
 
 const formatterdDate = '%Y-%m-%d %H:%i';
 
@@ -265,7 +265,20 @@ class HospitalRepository {
     findOneHospital = async (userId) => {
         try {
             const findData = await this.hospitalModel.findOne({
-                where: { userId },
+                where: {
+                    userId,
+                },
+                attributes: [
+                    'hospitalId',
+                    'userId',
+                    'name',
+                    'address',
+                    'phone',
+                    'longitude',
+                    'latitude',
+                    [sequelize.literal(`DATE_FORMAT(createdAt, '${formatterdDate}')`), 'createdAt'],
+                    [sequelize.literal(`DATE_FORMAT(updatedAt, '${formatterdDate}')`), 'updatedAt'],
+                ],
             });
             return findData;
         } catch (error) {
@@ -297,6 +310,15 @@ class HospitalRepository {
         try {
             const findData = await this.doctorModel.findOne({
                 where: { doctorId: doctorId },
+                attributes: [
+                    'doctorId',
+                    'hospitalId',
+                    'name',
+                    'image',
+                    'contents',
+                    [sequelize.literal(`DATE_FORMAT(createdAt, '${formatterdDate}')`), 'createdAt'],
+                    [sequelize.literal(`DATE_FORMAT(updatedAt, '${formatterdDate}')`), 'updatedAt'],
+                ],
             });
             return findData;
         } catch (error) {
@@ -448,14 +470,20 @@ class HospitalRepository {
                             {
                                 model: this.workingTimeModel,
                                 as: 'workingTimes',
-                                attributes: ['dayOfTheWeek', 'startTime', 'endTime', 'startDate', 'endDate'],
+                                attributes: [
+                                    'dayOfTheWeek',
+                                    'startTime',
+                                    'endTime',
+                                    'startDate',
+                                    'endDate',
+                                ],
                                 where: {
                                     // 현재 월의 데이터만 추출하도록 조건 추가
                                     startDate: {
-                                      [Op.gte]: moment().startOf('month').toDate(),
-                                      [Op.lte]: moment().endOf('month').toDate(),
+                                        [Op.gte]: moment().startOf('month').toDate(),
+                                        [Op.lte]: moment().endOf('month').toDate(),
                                     },
-                                  },
+                                },
                             },
                             {
                                 model: this.doctorCategoryMappingModel,

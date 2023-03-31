@@ -4,6 +4,8 @@ const mockHospitalRepository = {
     findNearHospitals: jest.fn(),
     findNearHospitalsInfo: jest.fn(),
     searchHospitalInfo: jest.fn(),
+    getHospitalInfo: jest.fn(),
+    findReview: jest.fn()
 };
 
 const hospitalService = new HospitalService();
@@ -277,5 +279,117 @@ describe('Layered Architecture Pattern Hospital Service Unit Test', () => {
                 },
             ],
         });
+    });
+
+    //내가작성한코드
+    test('Hospital Service getHospitalInfo Method By Success', async () => {
+
+        
+        const oneHospitalReturnValue = {
+            "oneHospital": {
+            "hospitalId": 25,
+            "hospitalName": "침착맨  스튜디오",
+            "hospitalAddress": "서울특별시 용산구 서빙고로 17(한강로3가)",
+            "hospitalphone": "01012346549",
+            "hospitalImage": [
+                {
+                "url": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679023829510_moduhospital%20%282%29.png"
+                },
+            ],
+            "doctors": [
+                {
+                "doctors": "주호민",
+                "doctorImage": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1678695604219_HominJoo.jpg",
+                "doctorContent": "안녕하세요 주펄입니다~",
+                "department": "흉부외과",
+                "workTime": [
+                    {
+                    "day": 1,
+                    "start": "10:00:00",
+                    "end": "23:00:00",
+                    "startDate": "2023-03-16T00:00:00.000Z",
+                    "endDate": "2023-03-31T00:00:00.000Z"
+                    }
+                ]
+                }
+            ]
+            }
+        }
+        mockHospitalRepository.getHospitalInfo.mockResolvedValue(oneHospitalReturnValue);
+
+        const reviewsReturnValue = {
+            "userId": 178,
+            "star": 4,
+            "contents": "침착맨 잘생겼어요",
+            "name": {
+                "name": "김우리"
+            },
+            "createdAt": "2023-03-11T10:46:09.000Z"
+        }
+
+        mockHospitalRepository.findReview.mockResolvedValue(reviewsReturnValue);
+
+        await hospitalService.getOneHospital(3);
+        expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledTimes(1);
+        expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledWith(3)
+
+    
+
+        expect(mockHospitalRepository.findReview).toHaveBeenCalledTimes(1);
+        expect(mockHospitalRepository.findReview).toHaveBeenCalledWith(3)
+
+        // expect(mockHospitalRepository.findReview).toHaveBeenCalledTimes(1)
+        // expect(mockHospitalRepository.findReview).toHaveBeenCalledWith(3)
+
+        // const getHospitalInfo = await hospitalService.getHospitalInfo(3);
+        // expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledTimes(1);
+        // expect(mockHospitalRepository.getHospitalInfo).toHaveBeenCalledWith(3)
+
+        // expect(mockHospitalRepository.getOne)
+        // const getOneHospital = await postService.deletePost(3)
+
+        // expect(getOneHospital).toEqual(
+        //     {
+        //         "oneHospital": {
+        //           "hospitalId": 25,
+        //           "hospitalName": "침착맨  스튜디오",
+        //           "hospitalAddress": "서울특별시 용산구 서빙고로 17(한강로3가)",
+        //           "hospitalphone": "01012346549",
+        //           "hospitalImage": [
+        //             {
+        //               "url": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1679023829510_moduhospital%20%282%29.png"
+        //             }
+        //           ],
+        //           "reviews": [
+        //             {
+        //               "userId": 178,
+        //               "star": 4,
+        //               "contents": "침착맨 잘생겼어요",
+        //               "name": {
+        //                 "name": "김우리"
+        //               },
+        //               "createdAt": "2023-03-11T10:46:09.000Z"
+        //             }
+        //           ],
+        //           "doctors": [
+        //             {
+        //               "doctors": "주호민",
+        //               "doctorImage": "https://moduhospital.s3.ap-northeast-2.amazonaws.com/doctors/1678695604219_HominJoo.jpg",
+        //               "doctorContent": "안녕하세요 주펄입니다~",
+        //               "department": "흉부외과",
+        //               "workTime": [
+        //                 {
+        //                   "day": 1,
+        //                   "start": "10:00:00",
+        //                   "end": "23:00:00",
+        //                   "startDate": "2023-03-16T00:00:00.000Z",
+        //                   "endDate": "2023-03-31T00:00:00.000Z"
+        //                 }
+        //               ]
+        //             }
+        //           ]
+        //         }
+        //     }
+        // );
     });
 });

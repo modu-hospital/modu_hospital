@@ -15,6 +15,10 @@ let mockUserService = {
     resetPassword: jest.fn(),
     findResetCase: jest.fn(),
     editPassword: jest.fn(),
+    //여기서부터 내가 추가한
+    login: jest.fn(),
+    signup: jest.fn(),
+    saveToken: jest.fn(),
 };
 
 let mockReservationService = {
@@ -468,4 +472,102 @@ describe('User Controller Unit Test', () => {
             expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
+
+    describe('login', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                loginId:"sij@naver.com",
+                password:"1111"
+            };
+            mockRes.cookie = jest.fn()
+        });
+        it('should call userService.login one with proper argument', async () => {
+            await controller.login(mockReq, mockRes, mockNext);
+            expect(mockUserService.login).toHaveBeenCalledTimes(1);
+            expect(mockUserService.login).toHaveBeenCalledWith(
+                mockReq.body.loginId,
+                mockReq.body.password
+            );
+        });
+
+        it('should return proper response', async () => {
+            mockUserService.login.mockResolvedValue( 
+                {
+                    userId: 176
+                }
+            );
+            const saveToken = {mock:'mock'}
+            mockUserService.saveToken.mockResolvedValue(saveToken)
+
+            await controller.login(mockReq, mockRes, mockNext);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.cookie).toHaveBeenCalledTimes(2);
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.login.mockRejectedValueOnce(error);
+
+            await controller.login(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockRes.cookie).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
+
+    describe('customerSignup', () => {
+        beforeEach(() => {
+            mockReq.body = {
+                name:"김신우",
+                loginId:"wooss@naver.com",
+                password:"1111",
+                confirm:"1111",
+                phone:"010-0000-0000",
+                idNumber:"000000-5555555",
+            };
+        });
+        
+        it('should call userService.signup one with proper argument', async () => {
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+            expect(mockUserService.signup).toHaveBeenCalledTimes(1);
+            expect(mockUserService.signup).toHaveBeenCalledWith(
+                mockReq.body.name,
+                mockReq.body.loginId,
+                mockReq.body.password,
+                mockReq.body.phone,
+                mockReq.body.idNumber,
+                "customer"
+            );
+        });
+
+        it('should return proper response', async () => {
+            const user = {
+                name: mockReq.body.name,
+                loginId:mockReq.body.loginId,
+                password:mockReq.body.password,
+                phone:mockReq.body.phone,
+                idNumber:mockReq.body.idNumber,
+
+            }
+            mockUserService.signup.mockResolvedValue(user);
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({user});
+            expect(mockNext).not.toHaveBeenCalled();
+        });
+        it('should call next() when service throws an error', async () => {
+            const error = new Error();
+            mockUserService.signup.mockRejectedValueOnce(error);
+
+            await controller.customerSignup(mockReq, mockRes, mockNext);
+
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(error);
+        });
+    });
 });
+    

@@ -27,6 +27,10 @@
         <link rel="stylesheet" href="/css/main.css" />
         <link rel="stylesheet" href="/css/tabmenu.css" />
         <noscript> <link rel="stylesheet" href="/css/noscript.css" /> </noscript>
+
+        <script src="/js/token.js"></script>
+
+        
         <title>모두의 병원</title>
     </head>
     <body class="is-preload">
@@ -39,7 +43,7 @@
 
             <!-- page -->
             <% if (components === "main") { %> <%- include('main.ejs') %> <% } else if (components
-            === "mypage") { %> <%- include('mypage.ejs') %> <% } else if (components === "map") { %>
+            === "mypage") { %> <%- include('mypage-vertical.ejs') %> <% } else if (components === "map") { %>
             <%- include('map.ejs') %> <% } else if (components === "hospital") { %> <%-
             include('hospital.ejs') %> <% } else if (components === "hospitalRegister") { %> <%-
             include('hospitalRegister.ejs') %> <% } else if (components === "hospitalEdit") { %> <%-

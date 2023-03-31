@@ -102,7 +102,7 @@
 
 
 
-  
+
   #content-image {
     padding: 30px;
     text-align: center;
@@ -316,8 +316,29 @@
         let reservations = extractReservations(response['reservationdata']);
         for (let i = 0; i < reservations.length; i++) {
           let reservation = reservations[i];
-
-          let temp_html = `<tbody>
+          if (reservation.status === "done" || reservation.status === "canceled") {
+            let temp_html = `<tbody>
+          <tr>
+            <th scope="row">${i + 1}</th>
+            <td>${reservation.doctorName}</td>
+            <td>${reservation.name}</td>
+            <td>${reservation.phone}</td>                              
+            <td>${reservation.contents}</td>
+            <td>${reservation.date}</td>
+            <td>
+                <select disabled class="form-select" id="statusSelect-${reservation.id}" data-reservation-id="${reservation.id}">
+                <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
+                <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
+                <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
+                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
+                </select>
+            </td>                  
+            <td><button class="btn btn-primary" id="approveButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                               
+          </tr>
+        </tbody>`;
+            $('#reservationList').append(temp_html);
+          } else {
+            let temp_html = `<tbody>
           <tr>
             <th scope="row">${i + 1}</th>
             <td>${reservation.doctorName}</td>
@@ -336,27 +357,37 @@
             <td><button class="btn btn-primary" id="approveButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                               
           </tr>
         </tbody>`;
-          $('#reservationList').append(temp_html);
+            $('#reservationList').append(temp_html);
+          }
         }
 
         // 승인 버튼 클릭 이벤트
         $(document).on('click', 'button[id^="approveButton-"]', function () {
           let id = $(this).data('reservation-id');
           let statusSelect = $(`#statusSelect-${id}`).val();
-          $.ajax({
-            type: 'PATCH',
-            url: `/api/hospitals/reservation/status/${id}`,
-            dataType: 'json',
-            data: {
-              status: statusSelect
-            },
-            success: function (response) {
-              // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
-              window.location.href = "/hospital"
-            },
-            error: function (xhr, status, error) {
-              // 에러가 발생했을 때 실행할 코드를 작성합니다.
-              // alert(xhr.responseJSON.message);
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
             }
           });
         });
@@ -431,7 +462,7 @@
                 <option value="waiting" ${reservation.status === 'waiting' ? 'selected' : ''}>대기</option>
                 <option value="approved" ${reservation.status === 'approved' ? 'selected' : ''}>승인</option>
                 <option value="canceled" ${reservation.status === 'canceled' ? 'selected' : ''}>거절</option>
-                <option value="done" ${reservation.status === 'done' ? 'selected' : ''}>진료완료</option>
+                
                 </select>
             </td>                  
             <td><button class="btn btn-primary" id="waitingButton-${reservation.id}" data-reservation-id="${reservation.id}">승인</button></td>                                                                                                        
@@ -444,24 +475,33 @@
         $(document).on('click', 'button[id^="waitingButton-"]', function () {
           let id = $(this).data('reservation-id');
           let statusSelect = $(this).closest('tr').find('select').val();
-          // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          $.ajax({
-            type: 'PATCH',
-            url: `/api/hospitals/reservation/status/${id}`,
-            dataType: 'json',
-            data: {
-              status: statusSelect
-            },
-            success: function (response) {
-              // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
-              window.location.href = "/hospital"
-            },
-            error: function (xhr, status, error) {
-              // 에러가 발생했을 때 실행할 코드를 작성합니다.
-              // alert(xhr.responseJSON.message);
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
             }
           });
         });
+
       },
     });
   }
@@ -540,21 +580,29 @@
         $(document).on('click', 'button[id^="clearButton-"]', function () {
           let id = $(this).data('reservation-id');
           let statusSelect = $(this).closest('tr').find('select').val();
-          // this로 data-reservation-id 속성의 값을 가져와서 => closest를 통해 tr 요소를 선태하고 select를 찾아서 그 값을 저장. 
-          $.ajax({
-            type: 'PATCH',
-            url: `/api/hospitals/reservation/status/${id}`,
-            dataType: 'json',
-            data: {
-              status: statusSelect
-            },
-            success: function (response) {
-              // 서버로부터 응답이 왔을 때 실행할 코드를 작성합니다.
-              window.location.href = "/hospital"
-            },
-            error: function (xhr, status, error) {
-              // 실패 시 알림 메시지 출력
-              // alert(xhr.responseJSON.message);
+          // 확인 메시지를 띄우고, 예를 선택하면 상태를 변경합니다.
+          swal({
+            title: '정말로 예약 상태를 변경 하시겠습니까?',
+            icon: 'warning',
+            buttons: ["아니오", "예"],
+            dangerMode: true,
+          }).then((willChange) => {
+            if (willChange) {
+              // 예를 선택한 경우, 선택된 상태로 예약 상태를 변경합니다.
+              $.ajax({
+                type: 'PATCH',
+                url: `/api/hospitals/reservation/status/${id}`,
+                dataType: 'json',
+                data: {
+                  status: statusSelect
+                },
+                success: function (response) {
+                  window.location.href = "/hospital";
+                },
+                error: function (xhr, status, error) {
+                  // 에러 처리 코드
+                }
+              });
             }
           });
         });
@@ -633,13 +681,13 @@
 
   // 병원 이미지 호출 
   function getImageHospital() {
-  $.ajax({
-    type: 'GET',
-    url: '/api/hospitals/information/hospitalImage',
-    dataType: 'json',
-    success: function (response) {
-      const imagehospital = response;
-      let temp_html = `
+    $.ajax({
+      type: 'GET',
+      url: '/api/hospitals/information/hospitalImage',
+      dataType: 'json',
+      success: function (response) {
+        const imagehospital = response;
+        let temp_html = `
           <div id="bigimages">
             <img id="bigimage"
               src="${imagehospital[0].url}">
@@ -647,22 +695,22 @@
           <div id="smallimages">
             ${imagehospital.map(image => `<img class="small" src="${image.url}">`).join('')}
           </div>`;
-      $('#content-image').append(temp_html);
-      var bigPic = document.querySelector("#bigimage");
-      var smallPics = document.querySelectorAll(".small");
+        $('#content-image').append(temp_html);
+        var bigPic = document.querySelector("#bigimage");
+        var smallPics = document.querySelectorAll(".small");
 
-      for (let i = 0; i < smallPics.length; i++) {
-        smallPics[i].addEventListener("click", changepic);
-        smallPics[i].onclick = changepic;
-      }
+        for (let i = 0; i < smallPics.length; i++) {
+          smallPics[i].addEventListener("click", changepic);
+          smallPics[i].onclick = changepic;
+        }
 
-      function changepic() {
-        let smallPicAttribute = this.getAttribute("src");
-        bigPic.setAttribute("src", smallPicAttribute);
+        function changepic() {
+          let smallPicAttribute = this.getAttribute("src");
+          bigPic.setAttribute("src", smallPicAttribute);
+        }
       }
-    }
-  })
-}
+    })
+  }
 
   // AJAX를 통해 데이터를 불러오는 함수
   // function loadProfileCards() {
@@ -752,11 +800,11 @@
         contentType: false,
         success: function (response) {
           swal({
-              title: '😊 업로드 성공!',
-              text: '파일 업로드가 완료되었습니다!',
-              icon: 'success',
+            title: '😊 업로드 성공!',
+            text: '파일 업로드가 완료되었습니다!',
+            icon: 'success',
           }).then(() => {
-              window.location.href = "/hospital"
+            window.location.href = "/hospital"
           });
         },
         error: function (xhr, status, error) {
@@ -774,25 +822,53 @@
 
     if (!allowedTypes.includes(file.type)) {
       swal({
-          title: '😓 죄송합니다.',
-          text: '이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.',
-          icon: 'warning',
+        title: '😓 죄송합니다.',
+        text: '이 파일 유형은 허용되지 않습니다. 이미지 파일만 업로드 가능합니다.',
+        icon: 'warning',
       }).then(() => {
-          event.preventDefault();
-          return false;
+        event.preventDefault();
+        return false;
       });
     }
 
     if (fileSize > maxSize) {
       swal({
-          title: '😓 죄송합니다.',
-          text: `파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`,
-          icon: 'warning',
+        title: '😓 죄송합니다.',
+        text: `파일 크기는 ${maxSize / 1000000}MB를 초과할 수 없습니다.`,
+        icon: 'warning',
       }).then(() => {
-          event.preventDefault();
-          return false;
+        event.preventDefault();
+        return false;
       });
     }
     return true;
   }
+
+
+  $("#reservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="done"]').prop('disabled', false);
+    }
+  });
+
+
+
+  $("#approvedreservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="done"]').prop('disabled', false);
+      $(this).find('option[value="canceled"]').prop('disabled', true);
+    }
+  })
+
+  $("#waitingreservationList").on('click', 'select[id^="statusSelect-"]', function () {
+    let selectedValue = $(this).val();
+    if (selectedValue === 'approved') {
+      $(this).find('option[value="waiting"]').prop('disabled', true);
+      $(this).find('option[value="canceled"]').prop('disabled', true);
+    }
+  })
 </script>
