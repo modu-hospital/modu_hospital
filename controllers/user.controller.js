@@ -24,20 +24,6 @@ class UserController {
         }
     };
 
-    // (admin) role별 조회
-    // getRoleUser = async (req, res, next) => {
-    //     try {
-    //         const { role } = req.params;
-    //         const pageNum = req.query.page || 1;
-    //         const type = req.query.type;
-
-    //         const roleUserInfo = await this.userService.findUserRole(role, pageNum, type);
-    //         return res.status(200).send(roleUserInfo);
-    //     } catch (err) {
-    //         next(err);
-    //     }
-    // };
-
     getAllSearch = async (req, res) => {
         const search = req.query.search;
         const pageNum = req.query.page || 1;
@@ -51,7 +37,7 @@ class UserController {
         try {
             const { userId } = req.params;
             const sequenceDelete = await this.userService.userHospitalDoctorDelete(userId);
-            return res.status(200).json(sequenceDelete);
+            return res.status(204).json({ message: '정상적으로 삭제되었습니다.' });
         } catch (err) {
             next(err);
         }
@@ -63,7 +49,7 @@ class UserController {
             const { userId } = req.params;
             const { role } = req.body;
             const roleUpdate = await this.userService.roleUpdate(userId, role);
-            return res.status(200).json(roleUpdate);
+            return res.status(200).json({ status: 200, message: '정상적으로 승인되었습니다.' });
         } catch (err) {
             next(err);
         }
@@ -345,6 +331,12 @@ class UserController {
         }
     };
 
+    getSelfInfo = async (req, res, next) => {
+        const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY).userId;
+        const getSelfInfo = await this.userService.getSelfInfo(userId);
+        return res.status(200).json(getSelfInfo);
+    };
+
     reservaionInput = async (req, res, next) => {
         try {
             const { doctorId } = req.params;
@@ -380,6 +372,13 @@ class UserController {
         } catch (err) {
             next(err);
         }
+    };
+
+    editAddress = async (req, res) => {
+        const userId = await jwt.decode(req.cookies.accessToken, process.env.JWT_SECRET_KEY).userId;
+        const { address } = await this.validation.editAddress.validateAsync(req.body);
+        const editedProfile = await this.userService.editUserAddress(userId, address);
+        return res.status(201).json({});
     };
 }
 
