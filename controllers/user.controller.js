@@ -204,7 +204,7 @@ class UserController {
         } catch (err) {}
     };
 
-    partnerSignup = async (req, res) => {
+    partnerSignup = async (req, res, next) => {
         const role = 'waiting';
 
         try {
@@ -221,20 +221,18 @@ class UserController {
             return res.status(200).json({message: "회원가입이 완료되었습니다"});
         } catch (err) {
             if (err.isJoi) {
-                console.log("err.isJoi", err.isJoi)
                 return res.status(422).json({ message: err.details[0].message });
             }
             next(err);
         }
     };
 
-    customerSignup = async (req, res) => {
+    customerSignup = async (req, res, next) => {
         const role = 'customer';
         try {
             const { name, loginId, password, confirm, phone, idNumber } =
                 await this.validation.signupValidation.validateAsync(req.body);
 
-            
             const user = await this.userService.signup(
                 name,
                 loginId,

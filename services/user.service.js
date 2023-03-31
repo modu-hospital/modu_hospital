@@ -86,9 +86,6 @@ class UserService {
         const encryptIdNumber = cryptor.encrypt(idNumber, TWO_WAY_ENCRYPTION);
         const decrytIdNumber = cryptor.decrypt(encryptIdNumber, TWO_WAY_ENCRYPTION);
 
-        // 추가 고민
-        // const hashedIdNumber = await bcrypt.hash(password, 12);
-
         const sign = await this.userRepository.signup(
             name,
             loginId,

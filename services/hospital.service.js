@@ -565,6 +565,8 @@ class HospitalService {
     getOneHospital = async (id) => {
         try {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
+
+            console.log("oneHospitaloneHospitaloneHospital", {oneHospital})
             const reviews = await this.hospitalRepository.findReview(id);
 
             if (!oneHospital.hospitalImageFiles) {

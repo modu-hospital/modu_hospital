@@ -19,7 +19,6 @@ let mockUserService = {
     login: jest.fn(),
     signup: jest.fn(),
     saveToken: jest.fn(),
-
 };
 
 let mockReservationService = {
@@ -526,33 +525,42 @@ describe('User Controller Unit Test', () => {
                 password:"1111",
                 confirm:"1111",
                 phone:"010-0000-0000",
-                idNumber:"000000-5555555"
+                idNumber:"000000-5555555",
             };
         });
-        it('should call userService.customerSignup one with proper argument', async () => {
+        
+        it('should call userService.signup one with proper argument', async () => {
             await controller.customerSignup(mockReq, mockRes, mockNext);
-            expect(mockUserService.customerSignup).toHaveBeenCalledTimes(1);
-            expect(mockUserService.customerSignup).toHaveBeenCalledWith(
+            expect(mockUserService.signup).toHaveBeenCalledTimes(1);
+            expect(mockUserService.signup).toHaveBeenCalledWith(
                 mockReq.body.name,
                 mockReq.body.loginId,
                 mockReq.body.password,
-                mockReq.body.confirm,
                 mockReq.body.phone,
-                mockReq.body.idNumber
+                mockReq.body.idNumber,
+                "customer"
             );
         });
-        console.log(11)
 
         it('should return proper response', async () => {
+            const user = {
+                name: mockReq.body.name,
+                loginId:mockReq.body.loginId,
+                password:mockReq.body.password,
+                phone:mockReq.body.phone,
+                idNumber:mockReq.body.idNumber,
+
+            }
+            mockUserService.signup.mockResolvedValue(user);
             await controller.customerSignup(mockReq, mockRes, mockNext);
 
             expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({ message: '회원가입이 완료되었습니다' });
+            expect(mockRes.json).toHaveBeenCalledWith({user});
             expect(mockNext).not.toHaveBeenCalled();
         });
         it('should call next() when service throws an error', async () => {
             const error = new Error();
-            mockUserService.customerSignup.mockRejectedValueOnce(error);
+            mockUserService.signup.mockRejectedValueOnce(error);
 
             await controller.customerSignup(mockReq, mockRes, mockNext);
 
