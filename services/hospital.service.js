@@ -565,8 +565,6 @@ class HospitalService {
     getOneHospital = async (id) => {
         try {
             const oneHospital = await this.hospitalRepository.getHospitalInfo(id);
-
-            console.log("oneHospitaloneHospitaloneHospital", {oneHospital})
             const reviews = await this.hospitalRepository.findReview(id);
 
             if (!oneHospital.hospitalImageFiles) {
@@ -605,13 +603,8 @@ class HospitalService {
                 doctor.workingTimes.sort((a, b) => {
                     return a.dayOfTheWeek - b.dayOfTheWeek;
                 });
-
-                //workingTime은 함수가 아니라서?..
-                //categories는..
+                
                 const workTime = doctor.workingTimes.map((work) => {
-                    // const currentMonth = new Date().getMonth() + 1
-                    // console.log(currentMonth)
-                    // console.log(work.startDate)
 
                     return {
                         day: work.dayOfTheWeek,
