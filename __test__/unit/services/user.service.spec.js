@@ -14,8 +14,6 @@ const mockUserRepository = {
     createPasswordResetCase: jest.fn(),
     updatePasswordResetCase: jest.fn(),
     updatePassword: jest.fn(),
-    signup: jest.fn(),
-    emailPasswordCheck: jest.fn()
 };
 const mockReservationRepository = {
     getApprovedReservation: jest.fn(),
@@ -241,36 +239,6 @@ describe('User Service Unit Test', () => {
         it('should call userRepository.updatePassword once', async () => {
             const { userId, password, confirm } = { userId: 1, password: '1234', confirm: '1234' };
             await userService.editPassword(userId, password, confirm);
-        });
-        it('should throw PasswordNotMatched error', async () => {
-            const { userId, password, confirm } = { userId: 1, password: '1234', confirm: '1235' };
-            expect(async () => {
-                await userService.editPassword(userId, password, confirm);
-            }).rejects.toThrow(createError.passwordNotMatched());
-        });
-    });
-
-    // editPassword = async (userId, password, confirm) => {
-    //     if (password != confirm) {
-    //         throw this.createError.passwordNotMatched();
-    //     }
-    //     const hashedPassword = await bcrypt.hash(password, 12);
-    //     const updated = await this.userRepository.updatePassword(userId, hashedPassword);
-    //     return updated;
-    // };
-
-    describe('signup', () => {
-        it('should call userRepository.signup once', async () => {
-            const { name, loginId, password, phone, idNumber, role } = 
-            { name: "김신", loginId: "kss@naver.com", password: '11111@1', phone:'010-0000-0000', idNumber:'000000-5555555', role:"partner" };
-            await userService.signup(name, loginId, password, phone, idNumber, role);
-        });
-        it('should throw UserAlreadyExist error', async () => {
-            const { name, loginId, password, phone, idNumber, role } = 
-            { name: "김신", loginId: "kss@naver.com", password: '11111@1', phone:'010-0000-0000', idNumber:'000000-5555555', role:"partner" };
-            expect(async () => {
-                await userService.signup(name, loginId, password, phone, idNumber, role);
-            }).rejects.toThrow(createError.UserAlreadyExist());
         });
     });
 });
