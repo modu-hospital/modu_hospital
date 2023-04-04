@@ -10,13 +10,10 @@
 모두의 병원 notion
 https://www.notion.so/7-0bb4df835a16441a9f343accd5f43215
 
-서비스 이용해기
+서비스 이용기
 https://modu-hospital.click
 
 ![image](https://user-images.githubusercontent.com/111362623/227514902-eb1ee38e-61d4-4860-9c3f-1dd29327ba77.png)
-
-아키텍처
-아키텍처 사진 나중에 올리기
 
 ## 기술스택
 
