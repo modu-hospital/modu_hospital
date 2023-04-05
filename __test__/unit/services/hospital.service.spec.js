@@ -282,9 +282,8 @@ describe('Layered Architecture Pattern Hospital Service Unit Test', () => {
     });
 
     //내가작성한코드
-    test('Hospital Service getHospitalInfo Method By Success', async () => {
+    test('Hospital Service getOneHospital Method By Success', async () => {
 
-        
         const oneHospitalReturnValue = {
             "oneHospital": {
             "hospitalId": 25,
