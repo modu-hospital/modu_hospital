@@ -4,14 +4,11 @@
 
 ## 프로젝트 설명
 
-내 주변 병원들을 손쉽게 찾을 수 있을 뿐만 아니라 리뷰를 통해 해당병원이 자신과 맞는지 알아볼 수 있는
+내 주변 병원들을 손쉽게 찾아 예약할 수 있을 뿐만 아니라 리뷰를 통해 해당병원이 자신과 맞는지 알아볼 수 있는
 플랫폼
 
 모두의 병원 notion
-https://www.notion.so/7-0bb4df835a16441a9f343accd5f43215
-
-서비스 이용기
-https://modu-hospital.click
+https://www.notion.so/12d97bfe3b564646a924fc9ba327f248
 
 ![image](https://user-images.githubusercontent.com/111362623/227514902-eb1ee38e-61d4-4860-9c3f-1dd29327ba77.png)
 
